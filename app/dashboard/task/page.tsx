@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { crm } from '@/lib/crm'
+import { crm, richiediSezione } from '@/lib/crm'
 import { formatoDataOra, TIPO_TASK, traduci } from '@/lib/formato'
 import { Avviso, Contatti, Persona, Vuoto } from '@/components/Ui'
 import { completaTask } from '../azioni'
@@ -17,6 +17,7 @@ const QUANDO = [
 ]
 
 export default async function Task({ searchParams }: { searchParams: { chi?: string; quando?: string; errore?: string } }) {
+  await richiediSezione('task')
   const chi = CHI.some((v) => v.chiave === searchParams.chi) ? searchParams.chi! : 'miei'
   const quando = QUANDO.some((v) => v.chiave === searchParams.quando) ? searchParams.quando! : 'oggi'
   const task = await crm.task(chi, quando)

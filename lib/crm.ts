@@ -1,5 +1,8 @@
 import 'server-only'
+import { cache } from 'react'
+import { redirect } from 'next/navigation'
 import { createSupabaseServerClient } from '@/lib/supabase/server'
+import { puoVedere, type Sezione } from '@/lib/permessi'
 
 // Le letture del CRM: una funzione qui per ogni funzione crm_* del database
 // (supabase/migrations/20260928i_crm_app.sql). Il database controlla da solo
@@ -17,7 +20,28 @@ export async function rpc<T>(funzione: string, parametri: Record<string, unknown
   return data as T
 }
 
-export type Io = { id: string; email: string; nome: string; cognome: string | null; ruolo: 'admin' | 'consulente' } | null
+export type Io = {
+  id: string
+  email: string
+  nome: string
+  cognome: string | null
+  ruolo: 'admin' | 'consulente'
+  sezioni: string[]
+  autorizzazioni: string[]
+} | null
+
+export type Utente = {
+  id: string
+  email: string | null
+  nome: string
+  cognome: string | null
+  ruolo: 'admin' | 'consulente'
+  attivo: boolean
+  sezioni: string[]
+  autorizzazioni: string[]
+  accesso: boolean
+  ultimo_accesso: string | null
+}
 export type Operatore = { id: string; nome: string; cognome: string | null; ruolo: string }
 
 export type Home = {
@@ -229,8 +253,53 @@ export type Trovato = {
   ultima_attivita: string | null
 }
 
+// La dashboard abbonamenti (supabase/migrations/20260928p_dashboard_abbonamenti.sql).
+export type Abbonamenti = {
+  oggi: string
+  aggiornato_il: string | null
+  kpi: Record<'oggi' | 'anno_fa' | 'due_anni_fa', { giorno: string; abbonamenti: number; pass: number; old: number }>
+  mesi: {
+    mese: string
+    in_corso: boolean
+    attivi: number
+    nuovi: number
+    rinnovi: number
+    scaduti: number
+    scaduti_provvisori: number
+    // Le prove: persone, non pass (chi ne attiva piu' d'uno conta una volta).
+    prove: number
+    prove_abbonati: number
+    prove_provvisori: number
+    prove_giorni: number | null
+    prove_guest: number
+    prove_guest_abbonati: number
+    prove_piu_pass: number
+    prove_pass: number
+  }[]
+  durata: {
+    trimestri: (DurataPeriodo & { trimestre: string; vincolo: Vincolo; in_corso: boolean })[]
+    riepilogo: {
+      vincolo: Vincolo
+      attivi: number
+      attivi_oltre: number
+      attivi_oltre_mesi: number | null
+      periodi: Record<'ultimi_12' | 'precedenti_12', DurataPeriodo>
+    }[]
+  }
+}
+export type Vincolo = 1 | 4 | 12
+export type DurataPeriodo = {
+  disdetti: number
+  durata_media: number | null
+  arrivati: number
+  oltre_medio: number | null
+  anticipati: number
+  con_cambio: number
+}
+
 export const crm = {
-  io: () => rpc<Io>('crm_io'),
+  // Una volta per richiesta: la chiedono il layout e la pagina.
+  io: cache(() => rpc<Io>('crm_io')),
   staff: () => rpc<Operatore[]>('crm_staff'),
   home: () => rpc<Home>('crm_home'),
   lead: (vista: string, fonte: string | null, testo: string | null) =>
@@ -241,6 +310,16 @@ export const crm = {
   task: (chi: string, quando: string) => rpc<Task[]>('crm_task', { p_chi: chi, p_quando: quando }),
   persona: (id: string) => rpc<Scheda | null>('crm_persona', { p_id: id }),
   cerca: (testo: string) => rpc<Trovato[]>('crm_cerca', { p_testo: testo }),
+  abbonamenti: () => rpc<Abbonamenti>('crm_abbonamenti'),
+  utenti: () => rpc<Utente[]>('crm_utenti'),
+}
+
+// In cima a ogni pagina di una sezione: chi non la vede torna alla home.
+// Il database fa lo stesso controllo sulle sue funzioni riservate.
+export async function richiediSezione(sezione: Sezione) {
+  const io = await crm.io()
+  if (!puoVedere(io, sezione)) redirect(`/dashboard?errore=${encodeURIComponent('Questa sezione non è abilitata per te.')}`)
+  return io
 }
 
 // Il socio su PerfectGym, per aprirlo nel gestionale.

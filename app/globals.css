@@ -839,3 +839,515 @@ select.piccola {
 .bottone:disabled {
   cursor: not-allowed;
 }
+
+/* --- La dashboard abbonamenti --------------------------------------------- */
+
+/* I colori dei grafici: un solo tono per le quantita' (blu), il rosso per il
+   saldo negativo. Il testo resta nei colori del testo, mai in quelli dei dati. */
+:root {
+  --serie: #2a78d6;
+  --serie-negativa: #e34948;
+  --griglia: #f3e4e4;
+  --asse: #d9c3c3;
+}
+
+.numeri-grandi {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  margin-bottom: 18px;
+}
+.numero.totale .valore {
+  font-size: 3rem;
+}
+.confronti {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 10px 0 0;
+  border-top: 1px solid var(--bordo);
+  font-size: 0.9rem;
+  display: grid;
+  gap: 6px;
+}
+.confronti strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.numeri-guest {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  margin-bottom: 6px;
+}
+.numeri-guest .numero {
+  background: var(--riga-alterna);
+}
+.sotto-titolo {
+  margin: -6px 0 14px;
+  max-width: 70ch;
+}
+.titoletto {
+  margin: 24px 0 14px;
+}
+.multipli {
+  display: grid;
+  gap: 18px 24px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+.multiplo h3 {
+  margin-bottom: 2px;
+}
+.multiplo p {
+  margin: 0 0 8px;
+}
+details.scheda summary {
+  cursor: pointer;
+}
+details.scheda[open] summary {
+  margin-bottom: 12px;
+}
+
+.grafico {
+  --altezza: 200px;
+  --colonna-min: 38px;
+  position: relative;
+  display: flex;
+  gap: 6px;
+}
+.grafico-y {
+  position: relative;
+  height: var(--altezza);
+  margin-top: 26px;
+  min-width: 32px;
+  flex-shrink: 0;
+}
+.grafico-y span {
+  position: absolute;
+  right: 0;
+  transform: translateY(50%);
+  font-size: 0.72rem;
+  color: var(--testo-attenuato);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+/* Sul telefono il grafico scorre di lato; su uno schermo largo riempie. */
+.grafico-scorre {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  padding-bottom: 6px;
+}
+.grafico-corpo {
+  min-width: calc(var(--colonne) * var(--colonna-min));
+}
+.grafico-area {
+  position: relative;
+  height: var(--altezza);
+  margin-top: 26px;
+}
+.grafico-griglia {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--griglia);
+}
+.grafico-griglia.zero {
+  background: var(--asse);
+}
+.grafico-colonne {
+  position: absolute;
+  inset: 0;
+  display: flex;
+}
+.grafico-colonna {
+  position: relative;
+  flex: 1 0 var(--colonna-min);
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 8px;
+  -webkit-tap-highlight-color: transparent;
+}
+.grafico-colonna.scelta {
+  background: rgba(0, 0, 0, 0.05);
+}
+.grafico-colonna:focus-visible {
+  outline: 2px solid var(--rosso);
+  outline-offset: -2px;
+}
+.grafico-barra {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(24px, calc(100% - 8px));
+  background: var(--serie);
+  border-radius: 4px 4px 0 0;
+  min-height: 1px;
+  transition: opacity 0.15s;
+}
+.grafico-barra.negativa {
+  background: var(--serie-negativa);
+  border-radius: 0 0 4px 4px;
+}
+/* Un numero che puo' ancora cambiare: la stessa colonna, a righe. */
+.grafico-barra.tratteggio {
+  background: repeating-linear-gradient(45deg, var(--serie) 0 3px, #9ec5f4 3px 6px);
+}
+.grafico-barra.negativa.tratteggio {
+  background: repeating-linear-gradient(45deg, var(--serie-negativa) 0 3px, #f3b1b0 3px 6px);
+}
+/* Le colonne a pezzi: 2px di bianco fra un pezzo e l'altro, arrotondata
+   solo la cima. */
+.grafico-barra.pezzo {
+  border-radius: 0;
+  box-shadow: inset 0 2px 0 var(--scheda);
+}
+.grafico-barra.pezzo:first-of-type {
+  box-shadow: none;
+}
+.grafico-barra.pezzo.cima {
+  border-radius: 4px 4px 0 0;
+}
+.grafico-barra.pezzo.tenue {
+  background: #9ec5f4;
+}
+.grafico-barra.pezzo.tenue.tratteggio {
+  background: repeating-linear-gradient(45deg, #9ec5f4 0 3px, #d7e7fb 3px 6px);
+}
+.legenda {
+  display: flex;
+  gap: 6px 16px;
+  flex-wrap: wrap;
+  margin: 10px 0 0 38px;
+  font-size: 0.84rem;
+  color: var(--testo-attenuato);
+}
+.legenda span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.legenda .quadratino {
+  margin-top: 0;
+}
+
+/* Scelta una colonna, le altre si fanno da parte. */
+.grafico:has(.scelta) .grafico-colonna:not(.scelta) .grafico-barra {
+  opacity: 0.45;
+}
+.grafico-cifra {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -3px);
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--testo);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.grafico-cifra.sotto {
+  transform: translate(-50%, 3px);
+}
+.grafico-nulla {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  color: var(--testo-attenuato);
+}
+.grafico-x {
+  display: flex;
+  margin-top: 6px;
+}
+.grafico-x span {
+  flex: 1 0 var(--colonna-min);
+  min-width: 0;
+  text-align: center;
+  font-size: 0.74rem;
+  color: var(--testo-attenuato);
+  line-height: 1.25;
+  white-space: nowrap;
+}
+.grafico-x em {
+  display: block;
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}
+
+/* Il riquadro dei dettagli, sopra la colonna scelta. */
+.grafico-riquadro {
+  position: absolute;
+  z-index: 10;
+  width: max-content;
+  min-width: 200px;
+  max-width: min(300px, 100%);
+  background: #141212;
+  color: #fff;
+  border-radius: 14px;
+  padding: 12px 14px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+  font-size: 0.86rem;
+  line-height: 1.35;
+  pointer-events: none;
+}
+.grafico-riquadro-titolo {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #bdb5b3;
+  margin-bottom: 8px;
+}
+.grafico-riquadro ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.grafico-riquadro li {
+  display: grid;
+  grid-template-columns: 12px 1fr;
+  gap: 8px;
+  align-items: start;
+}
+.grafico-riquadro strong {
+  font-size: 1.02rem;
+  font-variant-numeric: tabular-nums;
+}
+.grafico-riquadro-nota {
+  color: #bdb5b3;
+  font-size: 0.8rem;
+}
+.quadratino {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  margin-top: 4px;
+}
+.quadratino.serie {
+  background: var(--serie);
+}
+.quadratino.negativa {
+  background: var(--serie-negativa);
+}
+.quadratino.tenue {
+  background: #9ec5f4;
+}
+.quadratino.nessuno {
+  background: transparent;
+}
+.grafico-riquadro-piede {
+  margin: 10px 0 0;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  display: grid;
+  gap: 3px;
+}
+.grafico-riquadro-piede div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+.grafico-riquadro-piede dt {
+  color: #bdb5b3;
+}
+.grafico-riquadro-piede dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+@media (max-width: 720px) {
+  .numero.totale .valore {
+    font-size: 2.4rem;
+  }
+}
+
+/* --- Utenti --------------------------------------------------------------- */
+
+.utenti {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  margin-bottom: 18px;
+  align-items: start;
+}
+details.scheda .utenti {
+  margin-top: 14px;
+}
+.scheda.utente {
+  margin: 0;
+}
+.utente fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.utente fieldset:disabled {
+  opacity: 0.6;
+}
+.utente-testa {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.utente-testa h3 {
+  margin: 0 0 2px;
+}
+.utente-bollini {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+.utente-riga {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  padding: 12px 0;
+  border-top: 1px solid var(--bordo);
+}
+.campo-breve {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--testo-attenuato);
+}
+.utente-gruppo {
+  padding: 12px 0;
+  border-top: 1px solid var(--bordo);
+}
+.utente-etichetta {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--testo-attenuato);
+  margin-bottom: 8px;
+}
+.utente-etichetta .attenuato {
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+.spunte {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+/* Una sezione accesa e' una pillola nera, come le viste del CRM. */
+.chip {
+  position: relative;
+  cursor: pointer;
+}
+.chip input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
+}
+.chip span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--bordo);
+  background: #fff;
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+.chip span::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid var(--testo-attenuato);
+}
+.chip input:checked + span {
+  background: var(--nero);
+  border-color: var(--nero);
+  color: #fff;
+}
+.chip input:checked + span::before {
+  content: '✓';
+  width: auto;
+  height: auto;
+  border: 0;
+  font-size: 0.75rem;
+  line-height: 1;
+}
+.chip input:focus-visible + span {
+  outline: 2px solid var(--rosso);
+  outline-offset: 2px;
+}
+.autorizzazioni {
+  display: grid;
+  gap: 8px;
+}
+.spunta {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+.spunta input {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--nero);
+  flex-shrink: 0;
+}
+.utente-riga .spunta {
+  align-items: center;
+  min-height: 40px;
+  font-weight: 700;
+}
+.utente-riga .spunta input {
+  margin-top: 0;
+}
+.utente-piede {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 12px;
+  border-top: 1px solid var(--bordo);
+}
+.utente-piede .bottone {
+  margin-left: auto;
+}
+.nuovo-utente {
+  display: grid;
+  gap: 0 14px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  align-items: end;
+}
+.nuovo-utente .invio .bottone {
+  width: 100%;
+  justify-content: center;
+}
+@media (max-width: 420px) {
+  .utenti {
+    grid-template-columns: 1fr;
+  }
+}

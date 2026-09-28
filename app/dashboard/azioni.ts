@@ -123,3 +123,42 @@ export async function cerca(f: FormData) {
   const q = testo(f, 'q')
   redirect(q ? `/dashboard/cerca?q=${encodeURIComponent(q)}` : '/dashboard/cerca')
 }
+
+// --- Utenti -------------------------------------------------------------------
+
+const lista = (f: FormData, k: string) => f.getAll(k).filter((v): v is string => typeof v === 'string' && v !== '')
+
+// Si torna sempre a Utenti: con «Salvato» o con l'errore del database (che
+// dice perche', per esempio che il proprio ruolo lo cambia un altro).
+async function suUtenti(ok: string, azione: () => Promise<unknown>) {
+  try {
+    await azione()
+  } catch (e) {
+    redirect(`/dashboard/utenti?errore=${encodeURIComponent(e instanceof Error ? e.message : 'Non salvato')}`)
+  }
+  revalidatePath('/dashboard', 'layout')
+  redirect(`/dashboard/utenti?ok=${ok}`)
+}
+
+export async function aggiornaUtente(f: FormData) {
+  await suUtenti('utente_salvato', () =>
+    rpc('crm_utente_aggiorna', {
+      p_id: testo(f, 'utente'),
+      p_ruolo: testo(f, 'ruolo'),
+      p_attivo: f.get('attivo') === 'on',
+      p_sezioni: lista(f, 'sezioni'),
+      p_autorizzazioni: lista(f, 'autorizzazioni'),
+    }),
+  )
+}
+
+export async function nuovoUtente(f: FormData) {
+  await suUtenti('utente_creato', () =>
+    rpc('crm_utente_nuovo', {
+      p_email: testo(f, 'email'),
+      p_nome: testo(f, 'nome'),
+      p_cognome: testo(f, 'cognome'),
+      p_ruolo: testo(f, 'ruolo') ?? 'consulente',
+    }),
+  )
+}

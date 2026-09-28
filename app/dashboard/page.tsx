@@ -1,13 +1,13 @@
 import Link from 'next/link'
 import { crm } from '@/lib/crm'
 import { formatoGiornoLungo, formatoOra, oggiRoma, traduci, TIPO_TASK } from '@/lib/formato'
-import { Persona, Vuoto } from '@/components/Ui'
+import { Avviso, Persona, Vuoto } from '@/components/Ui'
 import { TabellaLead } from '@/components/TabellaLead'
 import { completaTask } from './azioni'
 
 // «Quando aprono c'avranno lead da gestire, prove da gestire, abbonamenti in
 // scadenza» (riunione del 28/09/2026): la home e' il lavoro di oggi.
-export default async function DaGestire() {
+export default async function DaGestire({ searchParams }: { searchParams: { errore?: string } }) {
   const [h, io, arretrati, oggi, nuovi, scadenza, staff] = await Promise.all([
     crm.home(),
     crm.io(),
@@ -28,6 +28,8 @@ export default async function DaGestire() {
         </div>
         <Link className="bottone" href="/dashboard/lead/nuovo">+ Nuovo lead</Link>
       </div>
+
+      <Avviso errore={searchParams.errore} />
 
       <div className="numeri">
         <Link href="/dashboard/lead?vista=da_gestire" className={`numero${h.lead_da_gestire ? ' caldo' : ''}`}>
