@@ -1,9 +1,10 @@
 # APP PASSION
 
-Il gestionale di Passion Fitness dentro Supabase. Per ora c'e' la prima parte:
-**il mirror di PerfectGym**, cioe' tutto il database di passion.perfectgym.com
-copiato nel progetto Supabase **Passion Fitness** (`tihpfycrkjtuppbmcqew`,
-eu-west-2 Londra) e tenuto aggiornato. L'app arrivera' dopo, sopra questi dati.
+Il gestionale di Passion Fitness dentro Supabase, in tre pezzi:
+**il mirror di PerfectGym** (tutto il database di passion.perfectgym.com
+copiato nel progetto Supabase **Passion Fitness**, `tihpfycrkjtuppbmcqew`,
+eu-west-2 Londra, e tenuto aggiornato), **il CRM** (il lavoro degli operatori,
+migrato da Airtable) e **l'app** per lo staff, su https://crm-passion.vercel.app.
 
 La macchina e' la stessa costruita per Athlon il 28/09/2026 (repo APP-ATHLON,
 sezione «Il mirror di PerfectGym» del README e migrazioni `20260928d..l`):
@@ -13,7 +14,7 @@ qui e' portata nella sua forma finale, per un progetto nuovo.
 
 Lo schema e' quello deciso nella riunione del 28/09/2026: pochi contenitori,
 ognuno col suo lavoro. Sta in `public`, con la RLS accesa e nessuna policy:
-dal client non si legge finche' non ci sara' l'app. I dati di PerfectGym
+dal client non si legge niente, l'app passa solo dalle funzioni `crm_*`. I dati di PerfectGym
 (contratti, date, pagamenti, ingressi) non si copiano: si leggono dal mirror
 per `member_id` e `contract_id`. Qui sta il lavoro degli operatori.
 
@@ -59,6 +60,42 @@ Due cose che non si vedono da Airtable:
   database pieno, mirror fermo. Ora la funzione apre e chiude una connessione
   per chiamata. Durante l'import il mirror e' stato messo in pausa e poi
   riacceso.
+
+### Il CRM dal vivo (`20260928h`)
+
+Dal 28/09/2026 alle 16:44 UTC (`crm.impostazioni.dal_vivo_dal`) il CRM si
+alimenta da solo: il cron `crm-alimenta`, ogni 5 minuti, lancia
+`crm.alimenta()` (esiti in `crm.alimenta_log`), che fa:
+
+- **nuovi lead da Airtable**: i record creati dopo quell'ora (sito, Meta,
+  referral scrivono ancora li' attraverso n8n) diventano lead. Serve che il
+  workflow di import giri a orario; poi i workflow n8n dovranno scrivere
+  direttamente nel CRM;
+- **nuovi contratti** dal mirror: ogni contratto firmato che non e' un Pass;
+- **disdette** dal mirror: un contratto a cui compare la `data_disdetta`. Non
+  il rinnovo automatico spento, come ad Athlon: a Passion e' spento su tutti i
+  contratti. Le disdette gia' note sono in `crm.disdette_note`;
+- **prove** dal mirror: ogni Pass (piano che contiene pass, prova o guest);
+- **task di fine prova**: due giorni prima della scadenza, a chi segue la prova.
+
+## L'app (Next.js, alla radice del repository)
+
+Le interfacce della riunione, nello stile del sito (barra nera, rosso #E3032D,
+fondo rosa, titoli in Anton): **Da gestire** (la home: i numeri, i miei task,
+le prove in scadenza, i lead da prendere), **Lead** (prendi in carico,
+assegna, chiudi vinta/persa), la **scheda persona** (i dati di PerfectGym, i
+contenitori con le loro azioni, la storia di commenti e task), **Prove**,
+**Nuovi contratti**, **Disdette**, **Task**, **Cerca**.
+
+Su Vercel c'e' solo la chiave anon (`NEXT_PUBLIC_SUPABASE_URL`,
+`NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_SITE_URL`). I permessi li
+controlla il database: ogni funzione `crm_*` (`20260928i`) e' `security
+definer`, eseguibile solo da `authenticated`, e per prima cosa verifica che
+l'email di chi chiama sia di uno staff attivo. Riassegnare o chiudere un lead
+puo' solo chi ce l'ha in carico, o un admin.
+
+Gli accessi: ogni operatore si crea in Supabase (Authentication -> Add user,
+con la stessa email della tabella `staff`); entra con email e password.
 
 ## Il mirror di PerfectGym
 
