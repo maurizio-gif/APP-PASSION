@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { crm, linkPgm } from '@/lib/crm'
+import { crm, linkPgm, type Scheda } from '@/lib/crm'
 import {
   CONTROLLO, ESITO_DISDETTA, formatoData, formatoDataOra, formatoEuro, perInputDataOra,
   STATO_CONTRATTO, TESSERAMENTO, TIPO_SOCIO, TIPO_TASK, traduci,
@@ -8,14 +8,18 @@ import {
 import { Avviso, BollinoFase, BollinoFonte, Contatti, Vuoto } from '@/components/Ui'
 import { BottoneInvio } from '@/components/BottoneInvio'
 import {
-  aggiornaProva, aggiungiCommento, assegnaLead, chiudiLead, completaTask, nuovoTask, prendiLead, riapriLead,
+  aggiornaProva, assegnaLead, chiudiLead, completaTask, nuovoTask, prendiLead, riapriLead,
 } from '../../azioni'
+
+const VINTA_DA_SOLA = 'Vinta si segna da sola, quando su PerfectGym compare la prova o il contratto'
 
 export default async function SchedaPersona({ params, searchParams }: { params: { id: string }; searchParams: { errore?: string; ok?: string } }) {
   const [s, io, staff] = await Promise.all([crm.persona(params.id), crm.io(), crm.staff()])
   if (!s) notFound()
   const p = s.persona
   const qui = `/dashboard/persone/${p.id}`
+  // Nella scheda solo i task: i commenti (quelli di Airtable) non si mostrano.
+  const task = s.storia.filter((e): e is Extract<Scheda['storia'][number], { tipo: 'task' }> => e.tipo === 'task')
   const leadAperto = s.lead.find((l) => l.fase === 'da_gestire' || l.fase === 'in_gestione')
   const pgm = linkPgm(p.member_id)
   const domani = new Date(Date.now() + 24 * 3600 * 1000)
@@ -77,10 +81,11 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                     <form action={chiudiLead} className="azioni-scheda chiusura">
                       <input type="hidden" name="lead" value={l.id} />
                       <input type="hidden" name="torna" value={qui} />
-                      <input type="text" name="nota" placeholder="Nota di chiusura (facoltativa)" />
-                      <button className="bottone" name="chiusura" value="vinta_prova">Vinta: prova attivata</button>
-                      <button className="bottone" name="chiusura" value="vinta_contratto">Vinta: contratto</button>
+                      <input type="text" name="nota" placeholder="Perché è persa (facoltativo)" />
+                      <button type="button" className="bottone" disabled title={VINTA_DA_SOLA}>Vinta: prova attivata</button>
+                      <button type="button" className="bottone" disabled title={VINTA_DA_SOLA}>Vinta: contratto</button>
                       <button className="bottone secondario" name="chiusura" value="persa">Persa</button>
+                      <p className="piccolo attenuato">{VINTA_DA_SOLA}.</p>
                     </form>
                   </>
                 )}
@@ -167,15 +172,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
           ))}
 
           <section className="scheda">
-            <h2>Scrivi</h2>
-            <form action={aggiungiCommento} className="modulo">
-              <input type="hidden" name="utente" value={p.id} />
-              <input type="hidden" name="lead" value={leadAperto?.id ?? ''} />
-              <input type="hidden" name="torna" value={qui} />
-              <textarea name="testo" rows={3} required placeholder="Com'è andata la chiamata, cosa ha detto, cosa serve" />
-              <BottoneInvio testo="Aggiungi commento" inCorso="Salvataggio…" />
-            </form>
-            <hr />
+            <h2>Nuovo task</h2>
             <form action={nuovoTask} className="modulo">
               <input type="hidden" name="utente" value={p.id} />
               <input type="hidden" name="lead" value={leadAperto?.id ?? ''} />
@@ -260,18 +257,12 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
           </section>
 
           <section className="scheda">
-            <h2>Storia</h2>
-            {s.storia.length === 0 ? (
-              <Vuoto>Ancora niente: il primo commento lo scrivi qui accanto.</Vuoto>
+            <h2>Task</h2>
+            {task.length === 0 ? (
+              <Vuoto>Nessun task: lo crei qui accanto.</Vuoto>
             ) : (
               <ol className="storia">
-                {s.storia.map((e) =>
-                  e.tipo === 'commento' ? (
-                    <li key={e.id} className="storia-commento">
-                      <div className="storia-testa">{e.autore ?? '—'} · {formatoDataOra(e.quando)}</div>
-                      <div className="storia-testo">{e.testo}</div>
-                    </li>
-                  ) : (
+                {task.map((e) => (
                     <li key={e.id} className={`storia-task${e.archiviato ? ' archiviato' : e.completato_il ? ' fatto' : ''}`}>
                       <div className="storia-testa">
                         <span className="bollino">{traduci(TIPO_TASK, e.task_tipo)}</span>{' '}
@@ -291,8 +282,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                         </form>
                       )}
                     </li>
-                  ),
-                )}
+                ))}
               </ol>
             )}
           </section>

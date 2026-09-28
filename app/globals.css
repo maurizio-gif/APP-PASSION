@@ -832,3 +832,10 @@ select.piccola {
 .tabella-lead a:hover {
   color: var(--rosso);
 }
+.azioni-scheda.chiusura p {
+  flex: 1 1 100%;
+  margin: 0;
+}
+.bottone:disabled {
+  cursor: not-allowed;
+}
