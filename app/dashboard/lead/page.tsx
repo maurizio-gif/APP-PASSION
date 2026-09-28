@@ -1,17 +1,22 @@
 import Link from 'next/link'
 import { crm } from '@/lib/crm'
-import { formatoData, formatoDataOra, formatoFa, FONTE } from '@/lib/formato'
-import { Avviso, BollinoFase, BollinoFonte, Contatti, Persona, Schede, Vuoto } from '@/components/Ui'
+import { formatoData, formatoOra, FONTE, nomeCompleto } from '@/lib/formato'
+import { Avviso, BollinoFase, BollinoFonte, Schede, Vuoto } from '@/components/Ui'
 import { assegnaLead, prendiLead } from '../azioni'
 
 const VISTE = [
   { chiave: 'da_gestire', testo: 'Da gestire' },
-  { chiave: 'mie', testo: 'I miei' },
   { chiave: 'in_gestione', testo: 'In gestione' },
+  { chiave: 'mie', testo: 'I miei' },
   { chiave: 'vinte', testo: 'Vinte' },
   { chiave: 'perse', testo: 'Perse' },
+  { chiave: 'tutte', testo: 'Tutti' },
 ]
 
+// La tabella e' quella a cui lo staff e' abituato su Airtable (Interface
+// Commerciali -> Opportunita'): una riga per lead, e a colpo d'occhio da dove
+// arriva, cosa cerca, le note dei task e l'ultimo commento. Il resto e' nella
+// scheda, che si apre dal nome.
 export default async function Lead({ searchParams }: { searchParams: { vista?: string; fonte?: string; q?: string; errore?: string } }) {
   const vista = VISTE.some((v) => v.chiave === searchParams.vista) ? searchParams.vista! : 'da_gestire'
   const fonte = searchParams.fonte && FONTE[searchParams.fonte] ? searchParams.fonte : null
@@ -19,13 +24,14 @@ export default async function Lead({ searchParams }: { searchParams: { vista?: s
   const [lead, io, staff] = await Promise.all([crm.lead(vista, fonte, q), crm.io(), crm.staff()])
   const qui = `/dashboard/lead?vista=${vista}${fonte ? `&fonte=${fonte}` : ''}${q ? `&q=${encodeURIComponent(q)}` : ''}`
   const base = `/dashboard/lead?${fonte ? `fonte=${fonte}&` : ''}${q ? `q=${encodeURIComponent(q)}` : ''}`.replace(/[?&]$/, '')
+  const aperti = vista === 'da_gestire' || vista === 'in_gestione' || vista === 'mie'
 
   return (
     <>
       <div className="testata">
         <div>
           <h1>Lead</h1>
-          <p>Chi arriva: si commenta finché non c&apos;è un contatto, poi lo si prende in carico e lo si chiude.</p>
+          <p>Si commenta finché non c&apos;è un contatto, poi lo si prende in carico e lo si chiude.</p>
         </div>
         <Link className="bottone" href="/dashboard/lead/nuovo">+ Nuovo lead</Link>
       </div>
@@ -44,70 +50,61 @@ export default async function Lead({ searchParams }: { searchParams: { vista?: s
       </form>
 
       <div className="scheda">
-        <p className="piccolo attenuato" style={{ marginTop: 0 }}>{lead.length === 200 ? 'I 200 più recenti' : `${lead.length} lead`}</p>
         {lead.length === 0 ? (
           <Vuoto>Nessun lead qui.</Vuoto>
         ) : (
           <div className="tabella-scorre">
-            <table>
+            <table className="tabella-lead">
               <thead>
                 <tr>
-                  <th>Persona</th>
-                  <th>Fonte</th>
-                  <th>Stato</th>
-                  <th>Ultimo commento</th>
-                  <th>Prossimo task</th>
-                  <th>Arrivato</th>
+                  <th>Data di creazione</th>
                   <th></th>
+                  <th>Nome + Cognome</th>
+                  <th>Tipologia</th>
+                  <th>Attività di interesse</th>
+                  <th>Nota task</th>
+                  <th>Commenti</th>
+                  <th>{aperti ? '' : 'Stato'}</th>
                 </tr>
               </thead>
               <tbody>
                 {lead.map((l) => {
+                  const scheda = `/dashboard/persone/${l.utente_id}`
                   const puo = io?.ruolo === 'admin' || !l.assegnato_a || l.assegnato_a === io?.id
                   return (
                     <tr key={l.id}>
-                      <td>
-                        <Persona id={l.utente_id} nome={l.nome} cognome={l.cognome} />
-                        <Contatti telefono={l.telefono} email={l.email} />
-                        {l.attivita_interesse && <div className="piccolo attenuato">{l.attivita_interesse}</div>}
-                      </td>
-                      <td>
-                        <BollinoFonte fonte={l.fonte} dettaglio={l.fonte_dettaglio} />
-                        {l.presentato_da && <div className="piccolo attenuato">da {l.presentato_da}</div>}
-                      </td>
-                      <td>
-                        <BollinoFase fase={l.fase} esito={l.esito} />
-                        {l.assegnato_nome && <div className="piccolo">{l.assegnato_nome}</div>}
-                      </td>
-                      <td className="piccolo" style={{ maxWidth: 280 }}>
-                        {l.ultimo_commento ? (
-                          <>
-                            <span className="riassunto">{l.ultimo_commento}</span>
-                            <div className="attenuato">{formatoFa(l.ultimo_commento_il)} · {l.commenti} in tutto</div>
-                          </>
-                        ) : (
-                          <span className="attenuato">—</span>
-                        )}
-                      </td>
-                      <td className="piccolo nowrap">{l.prossimo_task ? formatoDataOra(l.prossimo_task) : '—'}</td>
-                      <td className="piccolo nowrap">{formatoData(l.creato_il)}</td>
+                      <td className="nowrap"><Link href={scheda} className="muto">{formatoData(l.creato_il)}</Link></td>
+                      <td className="nowrap attenuato">{formatoOra(l.creato_il)}</td>
                       <td className="nowrap">
-                        {l.fase === 'da_gestire' && (
+                        <Link href={scheda}><strong>{nomeCompleto(l.nome, l.cognome)}</strong></Link>
+                      </td>
+                      <td className="nowrap"><BollinoFonte fonte={l.fonte} dettaglio={l.fonte_dettaglio} /></td>
+                      <td><span className="taglia" title={l.attivita_interesse ?? undefined}>{l.attivita_interesse || '–'}</span></td>
+                      <td><span className="taglia" title={l.note_task ?? undefined}>{l.note_task || ''}</span></td>
+                      <td>
+                        <span className="taglia larga" title={l.ultimo_commento ?? undefined}>{l.ultimo_commento || '–'}</span>
+                        {l.commenti > 1 && <span className="piccolo attenuato"> ({l.commenti})</span>}
+                      </td>
+                      <td className="nowrap">
+                        {l.fase === 'da_gestire' ? (
                           <form action={prendiLead}>
                             <input type="hidden" name="lead" value={l.id} />
                             <input type="hidden" name="torna" value={qui} />
                             <button className="bottone piccolo">Prendo in carico</button>
                           </form>
-                        )}
-                        {l.fase === 'in_gestione' && puo && (
+                        ) : l.fase === 'in_gestione' && puo ? (
                           <form action={assegnaLead} className="azioni-riga">
                             <input type="hidden" name="lead" value={l.id} />
                             <input type="hidden" name="torna" value={qui} />
-                            <select name="staff" defaultValue={l.assegnato_a ?? ''} aria-label="Assegna a">
+                            <select name="staff" defaultValue={l.assegnato_a ?? ''} aria-label="Assegna a" className="piccola">
                               {staff.map((s) => <option key={s.id} value={s.id}>{s.nome} {s.cognome ?? ''}</option>)}
                             </select>
                             <button className="bottone secondario piccolo">Assegna</button>
                           </form>
+                        ) : l.fase === 'in_gestione' ? (
+                          <span className="piccolo">{l.assegnato_nome}</span>
+                        ) : (
+                          <BollinoFase fase={l.fase} esito={l.esito} />
                         )}
                       </td>
                     </tr>
@@ -117,6 +114,7 @@ export default async function Lead({ searchParams }: { searchParams: { vista?: s
             </table>
           </div>
         )}
+        <p className="piccolo attenuato conteggio">{lead.length === 200 ? 'I 200 più recenti' : `${lead.length} lead`}</p>
       </div>
     </>
   )

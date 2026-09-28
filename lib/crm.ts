@@ -60,6 +60,7 @@ export type Lead = {
   ultimo_commento_il: string | null
   task_aperti: number
   prossimo_task: string | null
+  note_task: string | null
 }
 
 export type Fonte = 'sito' | 'tour' | 'referral' | 'meta' | 'altro'
