@@ -101,62 +101,84 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
     piede: [{ etichetta: 'Saldo', valore: segnato(m.nuovi - m.scaduti) }, ...confronti(i, (x) => x.nuovi - x.scaduti, false)],
   }))
 
-  // I Guest Pass: quanti ne finiscono e quanti diventano un abbonamento.
+  // I pass di prova: per persona, quante finiscono la prova e quante si abbonano.
   const tasso = (conv: number, tot: number) => (tot ? Math.round((conv / tot) * 100) : null)
-  const guest: Punto[] = d.mesi.map((m, i) => {
-    const non = m.guest_scaduti - m.guest_convertiti
-    const t = tasso(m.guest_convertiti, m.guest_scaduti)
+  const percento = (conv: number, tot: number) => `${tasso(conv, tot) ?? '—'}%`
+  const prove: Punto[] = d.mesi.map((m, i) => {
+    const non = m.prove - m.prove_abbonati
+    const giornalieri = m.prove - m.prove_guest
+    const giornalieriAbbonati = m.prove_abbonati - m.prove_guest_abbonati
     return {
       ...asseMese(m),
-      valore: m.guest_scaduti,
-      tratteggio: m.guest_provvisori > 0,
+      valore: m.prove,
+      tratteggio: m.prove_provvisori > 0,
       parti: [
-        { valore: m.guest_convertiti, colore: 'serie' },
+        { valore: m.prove_abbonati, colore: 'serie' },
         { valore: non, colore: 'tenue' },
       ],
       righe: [
         {
           colore: 'serie',
-          valore: formatoCifra(m.guest_convertiti),
-          etichetta: 'abbonati',
-          nota: `${t == null ? '—' : `${t}%`} dei pass finiti${m.guest_giorni != null ? ` · in media ${formatoCifra(m.guest_giorni, 0)} giorni dall’inizio del pass` : ''}`,
+          valore: formatoCifra(m.prove_abbonati),
+          etichetta: 'si sono abbonate',
+          nota: `${percento(m.prove_abbonati, m.prove)}${m.prove_giorni != null ? ` · in media ${formatoCifra(m.prove_giorni)} giorni dall’inizio della prova` : ''}`,
         },
         {
           colore: 'tenue',
           valore: formatoCifra(non),
-          etichetta: 'non abbonati',
-          nota: m.guest_provvisori > 0 ? `${formatoCifra(m.guest_provvisori)} finiti da meno di 30 giorni: possono ancora abbonarsi` : undefined,
+          etichetta: 'non abbonate',
+          nota: m.prove_provvisori > 0 ? `${formatoCifra(m.prove_provvisori)} hanno finito da meno di 30 giorni: possono ancora abbonarsi` : undefined,
         },
       ],
       piede: [
-        { etichetta: 'Guest Pass finiti', valore: formatoCifra(m.guest_scaduti) },
-        ...(i >= 12
-          ? [{ etichetta: 'Un anno prima', valore: `${formatoCifra(d.mesi[i - 12].guest_convertiti)} su ${formatoCifra(d.mesi[i - 12].guest_scaduti)} · ${tasso(d.mesi[i - 12].guest_convertiti, d.mesi[i - 12].guest_scaduti) ?? '—'}%` }]
-          : []),
+        { etichetta: 'Persone in prova', valore: formatoCifra(m.prove) },
+        { etichetta: 'Con un Guest Pass', valore: `${formatoCifra(m.prove_guest_abbonati)} su ${formatoCifra(m.prove_guest)} · ${percento(m.prove_guest_abbonati, m.prove_guest)}` },
+        { etichetta: 'Solo pass giornalieri', valore: `${formatoCifra(giornalieriAbbonati)} su ${formatoCifra(giornalieri)} · ${percento(giornalieriAbbonati, giornalieri)}` },
+        { etichetta: 'Pass attivati', valore: formatoCifra(m.prove_pass) },
+        ...(m.prove_piu_pass > 0 ? [{ etichetta: 'Persone con più di un pass', valore: formatoCifra(m.prove_piu_pass) }] : []),
+        ...(i >= 12 ? [{ etichetta: 'Un anno prima', valore: `${formatoCifra(d.mesi[i - 12].prove_abbonati)} su ${formatoCifra(d.mesi[i - 12].prove)} · ${percento(d.mesi[i - 12].prove_abbonati, d.mesi[i - 12].prove)}` }] : []),
       ],
     }
   })
   const conversione: Punto[] = d.mesi.map((m, i) => ({
     ...asseMese(m),
-    valore: tasso(m.guest_convertiti, m.guest_scaduti),
-    tratteggio: m.guest_provvisori > 0,
+    valore: tasso(m.prove_abbonati, m.prove),
+    tratteggio: m.prove_provvisori > 0,
     righe: [
       {
         colore: 'serie',
-        valore: `${tasso(m.guest_convertiti, m.guest_scaduti) ?? '—'}%`,
+        valore: percento(m.prove_abbonati, m.prove),
         etichetta: 'si abbonano',
-        nota: `${formatoCifra(m.guest_convertiti)} su ${formatoCifra(m.guest_scaduti)} Guest Pass finiti`,
+        nota: `${formatoCifra(m.prove_abbonati)} persone su ${formatoCifra(m.prove)} che hanno finito la prova`,
       },
     ],
     piede: [
-      ...(i >= 1 ? [{ etichetta: 'Rispetto al mese prima', valore: punti(tasso(m.guest_convertiti, m.guest_scaduti), tasso(d.mesi[i - 1].guest_convertiti, d.mesi[i - 1].guest_scaduti)) }] : []),
-      ...(i >= 12 ? [{ etichetta: 'Rispetto a un anno prima', valore: punti(tasso(m.guest_convertiti, m.guest_scaduti), tasso(d.mesi[i - 12].guest_convertiti, d.mesi[i - 12].guest_scaduti)) }] : []),
+      { etichetta: 'Con un Guest Pass', valore: percento(m.prove_guest_abbonati, m.prove_guest) },
+      { etichetta: 'Solo pass giornalieri', valore: percento(m.prove_abbonati - m.prove_guest_abbonati, m.prove - m.prove_guest) },
+      ...(i >= 1 ? [{ etichetta: 'Rispetto al mese prima', valore: punti(tasso(m.prove_abbonati, m.prove), tasso(d.mesi[i - 1].prove_abbonati, d.mesi[i - 1].prove)) }] : []),
+      ...(i >= 12 ? [{ etichetta: 'Rispetto a un anno prima', valore: punti(tasso(m.prove_abbonati, m.prove), tasso(d.mesi[i - 12].prove_abbonati, d.mesi[i - 12].prove)) }] : []),
     ],
   }))
-  const somma = (mesi: Abbonamenti['mesi'], k: 'guest_scaduti' | 'guest_convertiti') => mesi.reduce((a, m) => a + m[k], 0)
-  const guestUltimi = { finiti: somma(d.mesi.slice(12), 'guest_scaduti'), abbonati: somma(d.mesi.slice(12), 'guest_convertiti') }
-  const guestPrima = { finiti: somma(d.mesi.slice(0, 12), 'guest_scaduti'), abbonati: somma(d.mesi.slice(0, 12), 'guest_convertiti') }
-  const guestProvvisori = d.mesi.reduce((a, m) => a + m.guest_provvisori, 0)
+  // Gli ultimi 12 mesi contro i 12 prima, in tutto e per tipo di pass.
+  const somma = (mesi: Abbonamenti['mesi']) => {
+    const t = mesi.reduce(
+      (a, m) => ({
+        persone: a.persone + m.prove,
+        abbonati: a.abbonati + m.prove_abbonati,
+        guest: a.guest + m.prove_guest,
+        guestAbbonati: a.guestAbbonati + m.prove_guest_abbonati,
+      }),
+      { persone: 0, abbonati: 0, guest: 0, guestAbbonati: 0 },
+    )
+    return {
+      tutti: { persone: t.persone, abbonati: t.abbonati },
+      guest: { persone: t.guest, abbonati: t.guestAbbonati },
+      giornalieri: { persone: t.persone - t.guest, abbonati: t.abbonati - t.guestAbbonati },
+    }
+  }
+  const proveUltimi = somma(d.mesi.slice(12))
+  const provePrima = somma(d.mesi.slice(0, 12))
+  const proveProvvisori = d.mesi.reduce((a, m) => a + m.prove_provvisori, 0)
 
   const vincoli: Vincolo[] = [1, 4, 12]
   const oltreMassimo = Math.max(1, ...d.durata.trimestri.filter((t) => t.arrivati >= MINIMO).map((t) => t.oltre_medio ?? 0))
@@ -189,7 +211,7 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
           ]}
         />
         <Totale
-          titolo="Pass attivi"
+          titolo="Pass attivi · persone"
           ora={kpi.oggi.pass}
           confronti={[
             { giorno: kpi.anno_fa.giorno, valore: kpi.anno_fa.pass },
@@ -229,36 +251,33 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
       </section>
 
       <section className="scheda">
-        <h2>Guest Pass: quanti diventano abbonamento</h2>
+        <h2>Pass di prova: quanti diventano abbonamento</h2>
         <p className="piccolo attenuato sotto-titolo">
-          Per mese di fine del pass: quanti Guest Pass sono finiti e quanti, durante il pass o entro 30 giorni, sono diventati un
-          abbonamento a pagamento. Non contano i pass di chi era già abbonato; i Pass giornalieri (Pass Reformer, Sala Pesi…) sono
-          un’altra cosa e restano fuori.
+          Guest Pass e Pass giornalieri (Reformer, Sala Pesi, Corsi Fitness, Crossfit…), contati per <strong>persona</strong>: chi
+          attiva più pass conta una volta, e i suoi pass a meno di 30 giorni l’uno dall’altro sono una prova sola. Per mese di
+          fine della prova: quante persone l’hanno finita e quante si sono abbonate, durante la prova o entro 30 giorni. Non
+          contano i pass di chi era già abbonato.
         </p>
         <div className="numeri-guest">
-          <ConfrontoGuest titolo="Ultimi 12 mesi" {...guestUltimi} />
-          <ConfrontoGuest titolo="I 12 mesi prima" {...guestPrima} />
-          <div className="numero">
-            <div className="etichetta">Differenza</div>
-            <div className="valore">
-              {punti(tasso(guestUltimi.abbonati, guestUltimi.finiti), tasso(guestPrima.abbonati, guestPrima.finiti))}
-            </div>
-            <div className="nota">
-              di conversione{guestProvvisori > 0 ? ` · ${formatoCifra(guestProvvisori)} pass finiti da meno di 30 giorni possono ancora abbonarsi` : ''}
-            </div>
-          </div>
+          <ConfrontoProve titolo="Tutte le prove" ora={proveUltimi.tutti} prima={provePrima.tutti} />
+          <ConfrontoProve titolo="Con un Guest Pass" ora={proveUltimi.guest} prima={provePrima.guest} />
+          <ConfrontoProve titolo="Solo pass giornalieri" ora={proveUltimi.giornalieri} prima={provePrima.giornalieri} />
         </div>
-        <h3 className="titoletto">Guest Pass finiti e abbonati</h3>
-        <Colonne punti={guest} unita="Guest Pass finiti" />
+        <p className="piccolo attenuato">
+          Ultimi 12 mesi, contro i 12 mesi prima.
+          {proveProvvisori > 0 ? ` ${formatoCifra(proveProvvisori)} persone hanno finito da meno di 30 giorni e possono ancora abbonarsi.` : ''}
+        </p>
+        <h3 className="titoletto">Persone che hanno finito la prova</h3>
+        <Colonne punti={prove} unita="persone in prova" />
         <div className="legenda" aria-hidden>
           <span>
-            <span className="quadratino serie" /> abbonati entro 30 giorni
+            <span className="quadratino serie" /> abbonate entro 30 giorni
           </span>
           <span>
-            <span className="quadratino tenue" /> non abbonati
+            <span className="quadratino tenue" /> non abbonate
           </span>
         </div>
-        <h3 className="titoletto">Quanti si abbonano, in percentuale</h3>
+        <h3 className="titoletto">Quante si abbonano, in percentuale</h3>
         <Colonne punti={conversione} formato="percento" massimo={100} altezza={160} unita="di conversione" />
       </section>
 
@@ -450,13 +469,26 @@ function RigheDurata({ vincolo, ultimi, precedenti }: { vincolo: Vincolo; ultimi
   )
 }
 
-function ConfrontoGuest({ titolo, finiti, abbonati }: { titolo: string; finiti: number; abbonati: number }) {
+function ConfrontoProve({ titolo, ora, prima }: { titolo: string; ora: { persone: number; abbonati: number }; prima: { persone: number; abbonati: number } }) {
+  const t = ora.persone ? Math.round((ora.abbonati / ora.persone) * 100) : null
+  const p = prima.persone ? Math.round((prima.abbonati / prima.persone) * 100) : null
   return (
     <div className="numero">
       <div className="etichetta">{titolo}</div>
-      <div className="valore">{finiti ? `${Math.round((abbonati / finiti) * 100)}%` : '—'}</div>
+      <div className="valore">{t == null ? '—' : `${t}%`}</div>
       <div className="nota">
-        {formatoCifra(abbonati)} abbonati su {formatoCifra(finiti)} Guest Pass finiti
+        {formatoCifra(ora.abbonati)} abbonate su {formatoCifra(ora.persone)} persone
+      </div>
+      <div className="nota">
+        12 mesi prima {p == null ? '—' : `${p}%`}
+        {t != null && p != null && (
+          <>
+            {' '}
+            <span className={`bollino ${t > p ? 'verde' : t < p ? 'rosso' : 'grigio'}`}>
+              {t > p ? '▲' : t < p ? '▼' : '='} {punti(t, p)}
+            </span>
+          </>
+        )}
       </div>
     </div>
   )

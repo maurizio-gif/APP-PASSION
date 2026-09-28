@@ -105,8 +105,9 @@ contenitori con le loro azioni, la storia di commenti e task), **Prove**,
 ogni volta che si apre la pagina. In cima gli abbonamenti e i pass attivi oggi,
 contro lo stesso giorno di uno e due anni fa; poi, sugli ultimi 24 mesi, gli
 attivi a fine mese, i nuovi (esclusi i rinnovi), gli scaduti non rinnovati
-entro 30 giorni e il saldo fra i due; i **Guest Pass** finiti ogni mese e
-quanti sono diventati un abbonamento (durante il pass o entro 30 giorni); in
+entro 30 giorni e il saldo fra i due; i **pass di prova** (Guest Pass e Pass
+giornalieri) contati per persona, con quante si sono abbonate durante la prova
+o entro 30 giorni (`20260928r`); in
 fondo quanto durano gli abbonamenti senza scadenza, mensili, quadrimestrali e
 annuali: quanti mesi restano dopo il vincolo minimo, trimestre per trimestre.
 Sul telefono i grafici scorrono di lato; toccando una colonna si apre il
@@ -116,8 +117,10 @@ Le regole stanno nelle migrazioni, non nell'app: abbonamento e' un contratto
 non aggiuntivo con canone (`membershipFee`) sopra lo zero; rinnovo e' un
 abbonamento che parte mentre la persona ne ha un altro, o entro 30 giorni
 dalla fine (contano anche i piani OLD del vecchio gestionale, a canone zero);
-pass e' un piano che si chiama pass, prova o guest, come per le prove; Guest
-Pass solo i piani «Guest Pass», e non contano quelli di chi era gia' abbonato.
+pass di prova e' un piano che si chiama pass, prova o guest (come per le
+prove del CRM), senza gli aggregatori (Fitprime + Gympass, Wellhub): si
+contano le persone, e i pass della stessa persona a meno di 30 giorni l'uno
+dall'altro sono una prova sola; non contano quelli di chi era gia' abbonato.
 La durata si misura sulla **catena** (`crm.catene`): abbonamenti della stessa
 persona senza piu' di 30 giorni di vuoto sono una sola permanenza, anche se
 cambia piano (mensile -> quadrimestrale -> annuale); il tipo e' quello con cui

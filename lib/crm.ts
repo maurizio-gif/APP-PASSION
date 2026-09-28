@@ -266,11 +266,15 @@ export type Abbonamenti = {
     rinnovi: number
     scaduti: number
     scaduti_provvisori: number
-    guest_scaduti: number
-    guest_convertiti: number
-    guest_durante: number
-    guest_provvisori: number
-    guest_giorni: number | null
+    // Le prove: persone, non pass (chi ne attiva piu' d'uno conta una volta).
+    prove: number
+    prove_abbonati: number
+    prove_provvisori: number
+    prove_giorni: number | null
+    prove_guest: number
+    prove_guest_abbonati: number
+    prove_piu_pass: number
+    prove_pass: number
   }[]
   durata: {
     trimestri: (DurataPeriodo & { trimestre: string; vincolo: Vincolo; in_corso: boolean })[]
