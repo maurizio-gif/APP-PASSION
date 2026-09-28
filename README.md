@@ -9,6 +9,57 @@ La macchina e' la stessa costruita per Athlon il 28/09/2026 (repo APP-ATHLON,
 sezione «Il mirror di PerfectGym» del README e migrazioni `20260928d..l`):
 qui e' portata nella sua forma finale, per un progetto nuovo.
 
+## Il CRM, e da dove viene
+
+Lo schema e' quello deciso nella riunione del 28/09/2026: pochi contenitori,
+ognuno col suo lavoro. Sta in `public`, con la RLS accesa e nessuna policy:
+dal client non si legge finche' non ci sara' l'app. I dati di PerfectGym
+(contratti, date, pagamenti, ingressi) non si copiano: si leggono dal mirror
+per `member_id` e `contract_id`. Qui sta il lavoro degli operatori.
+
+| tabella | cosa |
+| --- | --- |
+| `utenti` | una persona sola, riconosciuta dall'email o dal telefono normalizzato (`+393331234567`, qualunque sia la scrittura), agganciata al socio del mirror |
+| `staff` | gli operatori, admin o consulenti; chi non c'e' piu' resta con `attivo = false`. Si inseriscono a mano (vedi `20260928f`): nomi ed email non stanno nel repository, che e' pubblico |
+| `lead` | chi arriva: fonte (sito, tour, referral, meta, altro) e dettaglio; fasi `da_gestire` -> `in_gestione` (assegnato) -> `vinta`/`persa` |
+| `prove` | i pass attivati, con la scadenza e l'esito (iscritto / non iscritto) |
+| `nuovi_contratti` | i controlli su ogni contratto nuovo: metodo di pagamento, codice fiscale, tesseramento |
+| `disdette` | chi disdice, com'e' stato contattato, com'e' finita |
+| `commenti`, `task` | il lavoro sulle persone; i task sono assegnabili a un altro operatore |
+
+Rinnovi e Customer Care per ora restano fuori, per scelta.
+
+### La migrazione da Airtable
+
+In due tempi. **La copia**: il workflow n8n «PASSION: Airtable -> Supabase
+(import CRM)» (`mVLX3FPqcVtxZgpx`, lancio a mano, solo letture) porta ogni
+record della base CRM PASSION FITNESS nello schema `airtable` (tabella
+`airtable.record`, i campi cosi' come li da' l'API) attraverso l'Edge
+Function `airtable-atterraggio`. **La ricostruzione**:
+`select airtable.ricostruisci_crm();` svuota il CRM e lo rifa' dalla copia
+con le regole scritte in `20260928g`. Si rilancia quanto si vuole finche' il
+CRM non e' dal vivo; poi si rifiuta da sola, appena nel CRM c'e' una riga nata
+nel CRM.
+
+Il 28/09/2026: 46.599 record copiati, e nel CRM 7.414 persone (6.884 col socio
+di PerfectGym), 5.159 lead (tour 2.035, meta 1.219, sito 1.159, referral 712,
+altro 34), 1.609 prove, 2.325 nuovi contratti, 2.001 disdette, 21.716 commenti,
+13.949 task. Quello che manca ha un motivo: task e commenti delle 26
+opportunita' di test o senza contatto; 109 nuovi contratti senza ContractID
+che nel mirror non si trovano (41 con un numero socio inesistente, 32 doppioni,
+28 senza un contratto firmato in quei giorni, 8 cancellati su PerfectGym).
+
+Due cose che non si vedono da Airtable:
+
+- **chi arriva dal sito non e' un Lead ma un Pass.** Il modulo attiva subito
+  la prova, e l'opportunita' nasce di tipo Pass (1.300 su 1.363). Nel CRM ne
+  nascono un lead gia' vinto con esito prova, e la prova agganciata;
+- **l'import si fa una connessione alla volta.** Il primo lancio teneva un
+  pool aperto per ogni istanza della funzione: 72 connessioni in due minuti,
+  database pieno, mirror fermo. Ora la funzione apre e chiude una connessione
+  per chiamata. Durante l'import il mirror e' stato messo in pausa e poi
+  riacceso.
+
 ## Il mirror di PerfectGym
 
 Vive nello schema `perfectgym`, che PostgREST non espone: dal client non si
