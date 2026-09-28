@@ -67,16 +67,26 @@ Dal 28/09/2026 alle 16:44 UTC (`crm.impostazioni.dal_vivo_dal`) il CRM si
 alimenta da solo: il cron `crm-alimenta`, ogni 5 minuti, lancia
 `crm.alimenta()` (esiti in `crm.alimenta_log`), che fa:
 
-- **nuovi lead da Airtable**: i record creati dopo quell'ora (sito, Meta,
-  referral scrivono ancora li' attraverso n8n) diventano lead. Serve che il
-  workflow di import giri a orario; poi i workflow n8n dovranno scrivere
-  direttamente nel CRM;
+- **nuovi lead da Airtable**: i record creati dopo quell'ora (Tour e Meta
+  scrivono ancora li') diventano lead. Serve che il workflow di import giri a
+  orario. Se la stessa persona e' gia' arrivata dai moduli nella mezz'ora, il
+  record si aggancia a quel lead invece di farne un secondo;
 - **nuovi contratti** dal mirror: ogni contratto firmato che non e' un Pass;
 - **disdette** dal mirror: un contratto a cui compare la `data_disdetta`. Non
   il rinnovo automatico spento, come ad Athlon: a Passion e' spento su tutti i
   contratti. Le disdette gia' note sono in `crm.disdette_note`;
 - **prove** dal mirror: ogni Pass (piano che contiene pass, prova o guest);
 - **task di fine prova**: due giorni prima della scadenza, a chi segue la prova.
+
+### Le richieste dei moduli, dritte nel CRM (`20260928n`)
+
+I workflow n8n della cartella PASSION/RICHIESTE (PROVA PASSION, REFERRAL
+PASSION) dopo la scrittura su Airtable chiamano l'Edge Function
+`crm-richiesta` (nodo «Nuovo lead nel CRM», stessa credenziale e stesso token
+dell'import), che crea persona e lead con `crm.nuova_richiesta()`: le regole
+sono quelle dell'import, il Pass del sito nasce vinto con la sua prova. Il nodo
+e' un ramo a parte, eseguito per primo: se il CRM non risponde il modulo va
+avanti lo stesso.
 
 ## L'app (Next.js, alla radice del repository)
 
