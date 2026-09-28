@@ -129,6 +129,7 @@ export default async function DaGestire() {
                     <Persona id={l.utente_id} nome={l.nome} cognome={l.cognome} />{' '}
                     <span className="piccolo attenuato">{formatoFa(l.creato_il)}</span>
                     <Contatti telefono={l.telefono} email={l.email} />
+                    {l.note_task && <div className="piccolo"><strong>Nota task:</strong> {l.note_task}</div>}
                     {l.ultimo_commento && <div className="piccolo">«{l.ultimo_commento}»</div>}
                   </div>
                   <form action={prendiLead}>

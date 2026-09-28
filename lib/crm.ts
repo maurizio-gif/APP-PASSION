@@ -214,7 +214,7 @@ export type Scheda = {
   disdette: { id: string; contract_id: number | null; data_disdetta: string | null; esito: Disdetta['esito']; motivo: string | null; contatto: string | null; note: string | null }[]
   storia: (
     | { tipo: 'commento'; id: string; quando: string; testo: string; autore: string | null }
-    | { tipo: 'task'; id: string; quando: string; task_tipo: TipoTask; data: string | null; nota: string | null; completato_il: string | null; esito: Task['esito']; archiviato?: boolean; assegnato_nome: string | null; autore: string | null }
+    | { tipo: 'task'; id: string; quando: string; task_tipo: TipoTask; data: string | null; nota: string | null; completato_il: string | null; esito: Task['esito']; archiviato?: boolean; nota_esito?: string | null; assegnato_nome: string | null; autore: string | null }
   )[]
 }
 

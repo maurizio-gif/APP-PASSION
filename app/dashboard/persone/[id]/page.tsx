@@ -280,6 +280,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                         {e.esito && <span className={`bollino ${e.esito === 'positivo' ? 'verde' : 'rosso'}`}>{e.esito}</span>}
                       </div>
                       {e.nota && <div className="storia-testo">{e.nota}</div>}
+                      {e.nota_esito && <div className="storia-testo"><strong>Com&apos;è andata:</strong> {e.nota_esito}</div>}
                       {!e.completato_il && (
                         <form action={completaTask} className="azioni-riga">
                           <input type="hidden" name="task" value={e.id} />
