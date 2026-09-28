@@ -9,6 +9,7 @@ const VOCI = [
   { href: '/dashboard/prove', testo: 'Prove' },
   { href: '/dashboard/contratti', testo: 'Nuovi contratti' },
   { href: '/dashboard/disdette', testo: 'Disdette' },
+  { href: '/dashboard/abbonamenti', testo: 'Abbonamenti' },
   { href: '/dashboard/task', testo: 'Task' },
   { href: '/dashboard/cerca', testo: 'Cerca' },
 ]

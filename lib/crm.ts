@@ -229,6 +229,40 @@ export type Trovato = {
   ultima_attivita: string | null
 }
 
+// La dashboard abbonamenti (supabase/migrations/20260928p_dashboard_abbonamenti.sql).
+export type Abbonamenti = {
+  oggi: string
+  aggiornato_il: string | null
+  kpi: Record<'oggi' | 'anno_fa' | 'due_anni_fa', { giorno: string; abbonamenti: number; pass: number; old: number }>
+  mesi: {
+    mese: string
+    in_corso: boolean
+    attivi: number
+    nuovi: number
+    rinnovi: number
+    scaduti: number
+    scaduti_provvisori: number
+  }[]
+  durata: {
+    trimestri: (DurataPeriodo & { trimestre: string; vincolo: Vincolo; in_corso: boolean })[]
+    riepilogo: {
+      vincolo: Vincolo
+      attivi: number
+      attivi_oltre: number
+      attivi_oltre_mesi: number | null
+      periodi: Record<'ultimi_12' | 'precedenti_12', DurataPeriodo>
+    }[]
+  }
+}
+export type Vincolo = 1 | 4 | 12
+export type DurataPeriodo = {
+  disdetti: number
+  durata_media: number | null
+  arrivati: number
+  oltre_medio: number | null
+  anticipati: number
+}
+
 export const crm = {
   io: () => rpc<Io>('crm_io'),
   staff: () => rpc<Operatore[]>('crm_staff'),
@@ -241,6 +275,7 @@ export const crm = {
   task: (chi: string, quando: string) => rpc<Task[]>('crm_task', { p_chi: chi, p_quando: quando }),
   persona: (id: string) => rpc<Scheda | null>('crm_persona', { p_id: id }),
   cerca: (testo: string) => rpc<Trovato[]>('crm_cerca', { p_testo: testo }),
+  abbonamenti: () => rpc<Abbonamenti>('crm_abbonamenti'),
 }
 
 // Il socio su PerfectGym, per aprirlo nel gestionale.

@@ -99,6 +99,25 @@ assegna, chiudi vinta/persa), la **scheda persona** (i dati di PerfectGym, i
 contenitori con le loro azioni, la storia di commenti e task), **Prove**,
 **Nuovi contratti**, **Disdette**, **Task**, **Cerca**.
 
+### La dashboard abbonamenti (`20260928p`)
+
+**Abbonamenti** nel menu: i numeri di `crm_abbonamenti()`, letti dal mirror
+ogni volta che si apre la pagina. In cima gli abbonamenti e i pass attivi oggi,
+contro lo stesso giorno di uno e due anni fa; poi, sugli ultimi 24 mesi, gli
+attivi a fine mese, i nuovi (esclusi i rinnovi), gli scaduti non rinnovati
+entro 30 giorni e il saldo fra i due; in fondo quanto durano gli abbonamenti
+senza scadenza, mensili, quadrimestrali e annuali: quanti mesi restano dopo il
+vincolo minimo prima di disdire, trimestre per trimestre.
+
+Le regole stanno nella migrazione, non nell'app: abbonamento e' un contratto
+non aggiuntivo con canone (`membershipFee`) sopra lo zero; rinnovo e' un
+abbonamento che parte mentre la persona ne ha un altro, o entro 30 giorni
+dalla fine (contano anche i piani OLD del vecchio gestionale, a canone zero);
+pass e' un piano che si chiama pass, prova o guest, come per le prove.
+Gli abbonamenti a pagamento su PerfectGym partono da luglio 2024: il
+28/09/2024 i soci erano quasi tutti sui piani OLD (994, contro 515), e la
+pagina lo dice accanto al confronto con due anni fa.
+
 Su Vercel c'e' solo la chiave anon (`NEXT_PUBLIC_SUPABASE_URL`,
 `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_SITE_URL`). I permessi li
 controlla il database: ogni funzione `crm_*` (`20260928i`) e' `security
