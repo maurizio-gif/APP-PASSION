@@ -787,3 +787,7 @@ hr {
 .nowrap {
   white-space: nowrap;
 }
+.storia > li.storia-task.archiviato {
+  border-left-color: var(--fondo-grigio);
+  opacity: 0.7;
+}

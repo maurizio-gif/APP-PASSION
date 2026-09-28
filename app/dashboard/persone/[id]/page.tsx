@@ -272,10 +272,10 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                       <div className="storia-testo">{e.testo}</div>
                     </li>
                   ) : (
-                    <li key={e.id} className={`storia-task${e.completato_il ? ' fatto' : ''}`}>
+                    <li key={e.id} className={`storia-task${e.archiviato ? ' archiviato' : e.completato_il ? ' fatto' : ''}`}>
                       <div className="storia-testa">
                         <span className="bollino">{traduci(TIPO_TASK, e.task_tipo)}</span>{' '}
-                        {e.completato_il ? `fatto ${formatoDataOra(e.completato_il)}` : `per ${formatoDataOra(e.data)}`}
+                        {e.archiviato ? `del ${formatoDataOra(e.data)} · archiviato` : e.completato_il ? `fatto ${formatoDataOra(e.completato_il)}` : `per ${formatoDataOra(e.data)}`}
                         {e.assegnato_nome ? ` · ${e.assegnato_nome}` : ''}
                         {e.esito && <span className={`bollino ${e.esito === 'positivo' ? 'verde' : 'rosso'}`}>{e.esito}</span>}
                       </div>
