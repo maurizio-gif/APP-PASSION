@@ -1,0 +1,15 @@
+node_modules
+.next
+.env.local
+tsconfig.tsbuildinfo
+.vercel
+
+# La bozza dell'app (Next.js), messa da parte il 28/09/2026: prima si finisce
+# la migrazione del database, poi si riprende da qui.
+bozza-app/
+
+# Il disco di lavoro e' exFAT: macOS ci scrive un file "._nome" accanto a
+# ogni file per i metadati che il filesystem non sa tenere. Non vanno nel
+# repository.
+._*
+.DS_Store
