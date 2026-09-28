@@ -1,19 +1,21 @@
 import Link from 'next/link'
 import { crm } from '@/lib/crm'
-import { formatoFa, formatoGiornoLungo, formatoOra, oggiRoma, traduci, TIPO_TASK } from '@/lib/formato'
-import { BollinoFonte, Contatti, Persona, Vuoto } from '@/components/Ui'
-import { completaTask, prendiLead } from './azioni'
+import { formatoGiornoLungo, formatoOra, oggiRoma, traduci, TIPO_TASK } from '@/lib/formato'
+import { Persona, Vuoto } from '@/components/Ui'
+import { TabellaLead } from '@/components/TabellaLead'
+import { completaTask } from './azioni'
 
 // «Quando aprono c'avranno lead da gestire, prove da gestire, abbonamenti in
 // scadenza» (riunione del 28/09/2026): la home e' il lavoro di oggi.
 export default async function DaGestire() {
-  const [h, io, arretrati, oggi, nuovi, scadenza] = await Promise.all([
+  const [h, io, arretrati, oggi, nuovi, scadenza, staff] = await Promise.all([
     crm.home(),
     crm.io(),
     crm.task('miei', 'arretrati'),
     crm.task('miei', 'oggi'),
     crm.lead('da_gestire', null, null),
     crm.prove('in_scadenza'),
+    crm.staff(),
   ])
   const task = [...arretrati, ...oggi]
 
@@ -59,6 +61,18 @@ export default async function DaGestire() {
           <div className="nota">{h.miei_task_oggi} oggi · {h.miei_task_arretrati} arretrati</div>
         </Link>
       </div>
+
+      <section className="scheda">
+        <div className="testata-scheda">
+          <h2>Lead da gestire</h2>
+          <Link href="/dashboard/lead?vista=da_gestire">Tutti →</Link>
+        </div>
+        {nuovi.length === 0 ? (
+          <Vuoto>Tutti i lead sono presi in carico.</Vuoto>
+        ) : (
+          <TabellaLead lead={nuovi.slice(0, 15)} io={io} staff={staff} torna="/dashboard" />
+        )}
+      </section>
 
       <div className="griglia">
         <section className="scheda">
@@ -112,37 +126,6 @@ export default async function DaGestire() {
         </section>
       </div>
 
-      <section className="scheda">
-        <div className="testata-scheda">
-          <h2>Lead da gestire</h2>
-          <Link href="/dashboard/lead?vista=da_gestire">Tutti →</Link>
-        </div>
-        {nuovi.length === 0 ? (
-          <Vuoto>Tutti i lead sono presi in carico.</Vuoto>
-        ) : (
-          <ul className="elenco">
-            {nuovi.slice(0, 10).map((l) => (
-              <li key={l.id}>
-                <div className="elenco-riga">
-                  <div>
-                    <BollinoFonte fonte={l.fonte} dettaglio={l.fonte_dettaglio} />{' '}
-                    <Persona id={l.utente_id} nome={l.nome} cognome={l.cognome} />{' '}
-                    <span className="piccolo attenuato">{formatoFa(l.creato_il)}</span>
-                    <Contatti telefono={l.telefono} email={l.email} />
-                    {l.note_task && <div className="piccolo"><strong>Nota task:</strong> {l.note_task}</div>}
-                    {l.ultimo_commento && <div className="piccolo">«{l.ultimo_commento}»</div>}
-                  </div>
-                  <form action={prendiLead}>
-                    <input type="hidden" name="lead" value={l.id} />
-                    <input type="hidden" name="torna" value="/dashboard" />
-                    <button className="bottone piccolo">Prendo in carico</button>
-                  </form>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
     </>
   )
 }
