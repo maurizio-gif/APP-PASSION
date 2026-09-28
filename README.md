@@ -80,8 +80,10 @@ alimenta da solo: il cron `crm-alimenta`, ogni 5 minuti, lancia
 
 ### Le richieste dei moduli, dritte nel CRM (`20260928n`)
 
-I workflow n8n della cartella PASSION/RICHIESTE (PROVA PASSION, REFERRAL
-PASSION) dopo la scrittura su Airtable chiamano l'Edge Function
+I workflow n8n dei moduli, `passion-prova-compilata` (il form Prova Passion
+del sito), `passion-referral` (il form /referral, un lead per ogni amico) e i
+vecchi form PROVA PASSION e REFERRAL PASSION (cartella PASSION/RICHIESTE),
+accanto alla scrittura su Airtable chiamano l'Edge Function
 `crm-richiesta` (nodo «Nuovo lead nel CRM», stessa credenziale e stesso token
 dell'import), che crea persona e lead con `crm.nuova_richiesta()`: le regole
 sono quelle dell'import, il Pass del sito nasce vinto con la sua prova. Il nodo
