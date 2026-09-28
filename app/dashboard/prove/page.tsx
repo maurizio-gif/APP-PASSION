@@ -1,4 +1,4 @@
-import { crm } from '@/lib/crm'
+import { crm, richiediSezione } from '@/lib/crm'
 import { formatoData, formatoFa } from '@/lib/formato'
 import { Avviso, BollinoFonte, Contatti, Persona, Schede, Vuoto } from '@/components/Ui'
 import { aggiornaProva } from '../azioni'
@@ -13,6 +13,7 @@ const VISTE = [
 // «Il container prove»: chi sta provando la palestra, come si sta comportando
 // (ingressi, lezioni) e com'e' finita. L'esito lo si scrive qui.
 export default async function Prove({ searchParams }: { searchParams: { vista?: string; errore?: string } }) {
+  await richiediSezione('prove')
   const vista = VISTE.some((v) => v.chiave === searchParams.vista) ? searchParams.vista! : 'in_corso'
   const prove = await crm.prove(vista)
   const qui = `/dashboard/prove?vista=${vista}`

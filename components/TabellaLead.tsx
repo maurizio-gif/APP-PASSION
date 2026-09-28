@@ -3,6 +3,7 @@ import type { Io, Lead, Operatore } from '@/lib/crm'
 import { formatoData, formatoOra, nomeCompleto } from '@/lib/formato'
 import { BollinoFase, BollinoFonte } from '@/components/Ui'
 import { assegnaLead, prendiLead } from '@/app/dashboard/azioni'
+import { puoGestireLead } from '@/lib/permessi'
 
 // La tabella dei lead com'e' l'Interface di Airtable (Interface Commerciali ->
 // Opportunita'): una riga per lead, con in fila da dove arriva, cosa cerca, le
@@ -26,7 +27,7 @@ export function TabellaLead({ lead, io, staff, torna }: { lead: Lead[]; io: Io; 
         <tbody>
           {lead.map((l) => {
             const scheda = `/dashboard/persone/${l.utente_id}`
-            const puo = io?.ruolo === 'admin' || !l.assegnato_a || l.assegnato_a === io?.id
+            const puo = puoGestireLead(io, l.assegnato_a)
             return (
               <tr key={l.id}>
                 <td className="nowrap"><Link href={scheda} className="muto">{formatoData(l.creato_il)}</Link></td>

@@ -1,3 +1,4 @@
+import { richiediSezione } from '@/lib/crm'
 import Link from 'next/link'
 import { FONTE } from '@/lib/formato'
 import { Avviso } from '@/components/Ui'
@@ -6,7 +7,8 @@ import { nuovoLead } from '../../azioni'
 
 // Il lead che arriva al desk o al telefono: il tour (walk-in), la telefonata in
 // ingresso. Quelli del sito, di Meta e dei referral arrivano da soli.
-export default function NuovoLead({ searchParams }: { searchParams: { errore?: string } }) {
+export default async function NuovoLead({ searchParams }: { searchParams: { errore?: string } }) {
+  await richiediSezione('lead')
   return (
     <>
       <div className="testata">

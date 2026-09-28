@@ -1,4 +1,4 @@
-import { crm } from '@/lib/crm'
+import { crm, richiediSezione } from '@/lib/crm'
 import { CONTROLLO, formatoData, formatoEuro, traduci } from '@/lib/formato'
 import { Avviso, Contatti, Persona, Schede, Vuoto } from '@/components/Ui'
 import { aggiornaContratto } from '../azioni'
@@ -12,6 +12,7 @@ const VISTE = [
 // «Nuovi contratti»: ogni contratto nuovo di PerfectGym arriva qui per i
 // controlli (metodo di pagamento, codice fiscale, tesseramento ASI).
 export default async function Contratti({ searchParams }: { searchParams: { vista?: string; errore?: string } }) {
+  await richiediSezione('contratti')
   const vista = VISTE.some((v) => v.chiave === searchParams.vista) ? searchParams.vista! : 'da_controllare'
   const contratti = await crm.nuoviContratti(vista)
   const qui = `/dashboard/contratti?vista=${vista}`

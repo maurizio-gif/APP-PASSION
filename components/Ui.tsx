@@ -8,7 +8,11 @@ export function Avviso({ errore, ok }: { errore?: string; ok?: string }) {
   if (ok) return <p className="avviso ok">{MESSAGGI_OK[ok] ?? 'Fatto.'}</p>
   return null
 }
-const MESSAGGI_OK: Record<string, string> = { lead: 'Lead creato.' }
+const MESSAGGI_OK: Record<string, string> = {
+  lead: 'Lead creato.',
+  utente_salvato: 'Utente salvato.',
+  utente_creato: 'Utente creato. Per entrare gli serve l’accesso in Supabase (Authentication → Add user, con la stessa email).',
+}
 
 export function Schede({ voci, attiva, base }: { voci: { chiave: string; testo: string; n?: number }[]; attiva: string; base: string }) {
   return (

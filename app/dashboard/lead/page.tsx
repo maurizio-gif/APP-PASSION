@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { crm } from '@/lib/crm'
+import { crm, richiediSezione } from '@/lib/crm'
 import { FONTE } from '@/lib/formato'
 import { Avviso, Schede, Vuoto } from '@/components/Ui'
 import { TabellaLead } from '@/components/TabellaLead'
@@ -14,6 +14,7 @@ const VISTE = [
 ]
 
 export default async function Lead({ searchParams }: { searchParams: { vista?: string; fonte?: string; q?: string; errore?: string } }) {
+  await richiediSezione('lead')
   const vista = VISTE.some((v) => v.chiave === searchParams.vista) ? searchParams.vista! : 'da_gestire'
   const fonte = searchParams.fonte && FONTE[searchParams.fonte] ? searchParams.fonte : null
   const q = searchParams.q?.slice(0, 80) || null

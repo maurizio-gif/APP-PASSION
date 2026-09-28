@@ -12,7 +12,7 @@ import { formatoCifra } from '@/lib/formato'
 // «tratteggiata» e' un numero che puo' ancora cambiare (il mese in corso, o
 // chi e' scaduto da meno di 30 giorni e puo' ancora rinnovare).
 
-export type Formato = 'intero' | 'segno' | 'mesi'
+export type Formato = 'intero' | 'segno' | 'mesi' | 'percento'
 
 export type RigaDettaglio = {
   // Il quadratino accanto alla riga: il colore della colonna, quello del
@@ -30,6 +30,8 @@ export type Punto = {
   titolo: string
   valore: number | null
   tratteggio?: boolean
+  // Una colonna fatta a pezzi, dal basso: la loro somma e' `valore`.
+  parti?: { valore: number; colore: 'serie' | 'tenue' }[]
   righe: RigaDettaglio[]
   piede?: { etichetta: string; valore: string }[]
 }
@@ -38,6 +40,7 @@ const FORMATI: Record<Formato, (v: number) => string> = {
   intero: (v) => formatoCifra(v),
   segno: (v) => (v > 0 ? `+${formatoCifra(v)}` : formatoCifra(v)),
   mesi: (v) => formatoCifra(v, 1),
+  percento: (v) => `${formatoCifra(v)}%`,
 }
 
 export function Colonne({
@@ -155,12 +158,24 @@ export function Colonne({
                     onClick={() => setScelta(i)}
                     onFocus={() => setScelta(i)}
                   >
-                    {v != null && (
+                    {v != null && !pt.parti && (
                       <span
                         className={`grafico-barra${negativo ? ' negativa' : ''}${pt.tratteggio ? ' tratteggio' : ''}`}
                         style={negativo ? { top: `${100 - zero}%`, height: `${zero - y(v)}%` } : { bottom: `${zero}%`, height: `${y(v) - zero}%` }}
                       />
                     )}
+                    {v != null &&
+                      pt.parti?.map((parte, k) => {
+                        const sotto = pt.parti!.slice(0, k).reduce((a, b) => a + b.valore, 0)
+                        const ultima = k === pt.parti!.length - 1 || pt.parti!.slice(k + 1).every((x) => x.valore === 0)
+                        return parte.valore > 0 ? (
+                          <span
+                            key={k}
+                            className={`grafico-barra pezzo ${parte.colore}${ultima ? ' cima' : ''}${pt.tratteggio ? ' tratteggio' : ''}`}
+                            style={{ bottom: `${y(sotto)}%`, height: `${y(sotto + parte.valore) - y(sotto)}%` }}
+                          />
+                        ) : null
+                      })}
                     {v != null && daScrivere.has(i) && (
                       <span className={`grafico-cifra${negativo ? ' sotto' : ''}`} style={negativo ? { top: `${100 - y(v)}%` } : { bottom: `${y(v)}%` }}>
                         {f(v)}

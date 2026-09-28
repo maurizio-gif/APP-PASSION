@@ -1,4 +1,4 @@
-import { crm } from '@/lib/crm'
+import { crm, richiediSezione } from '@/lib/crm'
 import { ESITO_DISDETTA, formatoData, formatoEuro, MOTIVI_DISDETTA, traduci } from '@/lib/formato'
 import { Avviso, Contatti, Persona, Schede, Vuoto } from '@/components/Ui'
 import { aggiornaDisdetta } from '../azioni'
@@ -12,6 +12,7 @@ const VISTE = [
 // Le disdette: quando su PerfectGym compare la data di disdetta di un
 // contratto, arriva qui. Si chiama il socio per provare a recuperarlo.
 export default async function Disdette({ searchParams }: { searchParams: { vista?: string; errore?: string } }) {
+  await richiediSezione('disdette')
   const vista = VISTE.some((v) => v.chiave === searchParams.vista) ? searchParams.vista! : 'da_gestire'
   const disdette = await crm.disdette(vista)
   const qui = `/dashboard/disdette?vista=${vista}`

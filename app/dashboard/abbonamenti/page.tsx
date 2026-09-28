@@ -1,4 +1,4 @@
-import { crm } from '@/lib/crm'
+import { crm, richiediSezione } from '@/lib/crm'
 import { VistaAbbonamenti } from '@/components/VistaAbbonamenti'
 
 // La dashboard abbonamenti: quanti sono, quanti ne entrano, quanti ne escono e
@@ -6,5 +6,6 @@ import { VistaAbbonamenti } from '@/components/VistaAbbonamenti'
 // abbonamento, un rinnovo, uno scaduto) stanno nel database, in
 // supabase/migrations/20260928p_dashboard_abbonamenti.sql.
 export default async function DashboardAbbonamenti() {
+  await richiediSezione('abbonamenti')
   return <VistaAbbonamenti d={await crm.abbonamenti()} />
 }

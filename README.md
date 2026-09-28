@@ -99,24 +99,48 @@ assegna, chiudi vinta/persa), la **scheda persona** (i dati di PerfectGym, i
 contenitori con le loro azioni, la storia di commenti e task), **Prove**,
 **Nuovi contratti**, **Disdette**, **Task**, **Cerca**.
 
-### La dashboard abbonamenti (`20260928p`)
+### La dashboard abbonamenti (`20260928p`, `20260928q`)
 
 **Abbonamenti** nel menu: i numeri di `crm_abbonamenti()`, letti dal mirror
 ogni volta che si apre la pagina. In cima gli abbonamenti e i pass attivi oggi,
 contro lo stesso giorno di uno e due anni fa; poi, sugli ultimi 24 mesi, gli
 attivi a fine mese, i nuovi (esclusi i rinnovi), gli scaduti non rinnovati
-entro 30 giorni e il saldo fra i due; in fondo quanto durano gli abbonamenti
-senza scadenza, mensili, quadrimestrali e annuali: quanti mesi restano dopo il
-vincolo minimo prima di disdire, trimestre per trimestre.
+entro 30 giorni e il saldo fra i due; i **Guest Pass** finiti ogni mese e
+quanti sono diventati un abbonamento (durante il pass o entro 30 giorni); in
+fondo quanto durano gli abbonamenti senza scadenza, mensili, quadrimestrali e
+annuali: quanti mesi restano dopo il vincolo minimo, trimestre per trimestre.
+Sul telefono i grafici scorrono di lato; toccando una colonna si apre il
+riquadro con i numeri del mese.
 
-Le regole stanno nella migrazione, non nell'app: abbonamento e' un contratto
+Le regole stanno nelle migrazioni, non nell'app: abbonamento e' un contratto
 non aggiuntivo con canone (`membershipFee`) sopra lo zero; rinnovo e' un
 abbonamento che parte mentre la persona ne ha un altro, o entro 30 giorni
 dalla fine (contano anche i piani OLD del vecchio gestionale, a canone zero);
-pass e' un piano che si chiama pass, prova o guest, come per le prove.
-Gli abbonamenti a pagamento su PerfectGym partono da luglio 2024: il
-28/09/2024 i soci erano quasi tutti sui piani OLD (994, contro 515), e la
+pass e' un piano che si chiama pass, prova o guest, come per le prove; Guest
+Pass solo i piani «Guest Pass», e non contano quelli di chi era gia' abbonato.
+La durata si misura sulla **catena** (`crm.catene`): abbonamenti della stessa
+persona senza piu' di 30 giorni di vuoto sono una sola permanenza, anche se
+cambia piano (mensile -> quadrimestrale -> annuale); il tipo e' quello con cui
+e' entrata. Gli abbonamenti a pagamento su PerfectGym partono da luglio 2024:
+il 28/09/2024 i soci erano quasi tutti sui piani OLD (994, contro 515), e la
 pagina lo dice accanto al confronto con due anni fa.
+
+### Utenti: sezioni e autorizzazioni (`20260928q`)
+
+**Utenti** nel menu, per gli admin e per chi ha l'autorizzazione «Gestione
+utenti»: per ogni operatore le **sezioni** che vede (Lead, Prove, Nuovi
+contratti, Disdette, Task, Cerca, Abbonamenti) e le **autorizzazioni** («Lead
+degli altri»: riassegnare e chiudere anche i lead in carico a un altro;
+«Gestione utenti»). Stanno in `public.staff.sezioni` e
+`public.staff.autorizzazioni`. Un admin vede tutto; la home e la scheda
+persona le vedono tutti. Il menu mostra solo le sezioni abilitate e ogni
+pagina rimanda alla home chi non la vede; la dashboard abbonamenti la
+controlla anche il database (`crm.richiedi_sezione`). Chi c'era ha preso le
+sezioni operative: la dashboard, che ha i numeri dell'azienda, la vedono gli
+admin e chi la riceve da Utenti. Nessuno cambia il proprio ruolo o si toglie
+l'accesso da solo, e il ruolo admin lo da' e lo toglie solo un admin. Un
+utente nuovo si crea da li'; per entrare gli serve anche l'accesso in Supabase
+(Authentication -> Add user, con la stessa email).
 
 Su Vercel c'e' solo la chiave anon (`NEXT_PUBLIC_SUPABASE_URL`,
 `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_SITE_URL`). I permessi li

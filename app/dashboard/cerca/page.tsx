@@ -1,9 +1,10 @@
 import Link from 'next/link'
-import { crm } from '@/lib/crm'
+import { crm, richiediSezione } from '@/lib/crm'
 import { formatoFa } from '@/lib/formato'
 import { Contatti, Persona, Vuoto } from '@/components/Ui'
 
 export default async function Cerca({ searchParams }: { searchParams: { q?: string } }) {
+  await richiediSezione('cerca')
   const q = searchParams.q?.trim().slice(0, 80) ?? ''
   const trovati = q.length >= 2 ? await crm.cerca(q) : []
 

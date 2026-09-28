@@ -7,6 +7,7 @@ import {
 } from '@/lib/formato'
 import { Avviso, BollinoFase, BollinoFonte, Contatti, Vuoto } from '@/components/Ui'
 import { BottoneInvio } from '@/components/BottoneInvio'
+import { puoGestireLead } from '@/lib/permessi'
 import {
   aggiornaProva, assegnaLead, chiudiLead, completaTask, nuovoTask, prendiLead, riapriLead,
 } from '../../azioni'
@@ -40,7 +41,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
         {/* ---- Colonna 1: il lavoro ---- */}
         <div>
           {s.lead.map((l) => {
-            const puo = io?.ruolo === 'admin' || !l.assegnato_a || l.assegnato_a === io?.id
+            const puo = puoGestireLead(io, l.assegnato_a)
             return (
               <section className="scheda" key={l.id}>
                 <div className="testata-scheda">

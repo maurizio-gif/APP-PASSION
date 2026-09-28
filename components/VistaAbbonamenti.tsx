@@ -20,6 +20,13 @@ const data = (giorno: string) => new Date(`${giorno}T12:00:00Z`)
 const segnato = (v: number) => (v > 0 ? `+${formatoCifra(v)}` : formatoCifra(v))
 const quota = (parte: number, tutto: number) => (tutto ? `${Math.round((parte / tutto) * 100)}% del totale` : undefined)
 // "+434 · +22%"; senza la percentuale quando non vuol dire niente (il saldo).
+// La differenza fra due percentuali, in punti: "+4 punti".
+function punti(ora: number | null, prima: number | null) {
+  if (ora == null || prima == null) return '—'
+  const diff = ora - prima
+  return `${segnato(diff)} ${Math.abs(diff) === 1 ? 'punto' : 'punti'}`
+}
+
 function variazione(ora: number, prima: number, conPercentuale = true) {
   const diff = ora - prima
   if (!prima || !conPercentuale) return segnato(diff)
@@ -94,6 +101,63 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
     piede: [{ etichetta: 'Saldo', valore: segnato(m.nuovi - m.scaduti) }, ...confronti(i, (x) => x.nuovi - x.scaduti, false)],
   }))
 
+  // I Guest Pass: quanti ne finiscono e quanti diventano un abbonamento.
+  const tasso = (conv: number, tot: number) => (tot ? Math.round((conv / tot) * 100) : null)
+  const guest: Punto[] = d.mesi.map((m, i) => {
+    const non = m.guest_scaduti - m.guest_convertiti
+    const t = tasso(m.guest_convertiti, m.guest_scaduti)
+    return {
+      ...asseMese(m),
+      valore: m.guest_scaduti,
+      tratteggio: m.guest_provvisori > 0,
+      parti: [
+        { valore: m.guest_convertiti, colore: 'serie' },
+        { valore: non, colore: 'tenue' },
+      ],
+      righe: [
+        {
+          colore: 'serie',
+          valore: formatoCifra(m.guest_convertiti),
+          etichetta: 'abbonati',
+          nota: `${t == null ? '—' : `${t}%`} dei pass finiti${m.guest_giorni != null ? ` · in media ${formatoCifra(m.guest_giorni, 0)} giorni dall’inizio del pass` : ''}`,
+        },
+        {
+          colore: 'tenue',
+          valore: formatoCifra(non),
+          etichetta: 'non abbonati',
+          nota: m.guest_provvisori > 0 ? `${formatoCifra(m.guest_provvisori)} finiti da meno di 30 giorni: possono ancora abbonarsi` : undefined,
+        },
+      ],
+      piede: [
+        { etichetta: 'Guest Pass finiti', valore: formatoCifra(m.guest_scaduti) },
+        ...(i >= 12
+          ? [{ etichetta: 'Un anno prima', valore: `${formatoCifra(d.mesi[i - 12].guest_convertiti)} su ${formatoCifra(d.mesi[i - 12].guest_scaduti)} · ${tasso(d.mesi[i - 12].guest_convertiti, d.mesi[i - 12].guest_scaduti) ?? '—'}%` }]
+          : []),
+      ],
+    }
+  })
+  const conversione: Punto[] = d.mesi.map((m, i) => ({
+    ...asseMese(m),
+    valore: tasso(m.guest_convertiti, m.guest_scaduti),
+    tratteggio: m.guest_provvisori > 0,
+    righe: [
+      {
+        colore: 'serie',
+        valore: `${tasso(m.guest_convertiti, m.guest_scaduti) ?? '—'}%`,
+        etichetta: 'si abbonano',
+        nota: `${formatoCifra(m.guest_convertiti)} su ${formatoCifra(m.guest_scaduti)} Guest Pass finiti`,
+      },
+    ],
+    piede: [
+      ...(i >= 1 ? [{ etichetta: 'Rispetto al mese prima', valore: punti(tasso(m.guest_convertiti, m.guest_scaduti), tasso(d.mesi[i - 1].guest_convertiti, d.mesi[i - 1].guest_scaduti)) }] : []),
+      ...(i >= 12 ? [{ etichetta: 'Rispetto a un anno prima', valore: punti(tasso(m.guest_convertiti, m.guest_scaduti), tasso(d.mesi[i - 12].guest_convertiti, d.mesi[i - 12].guest_scaduti)) }] : []),
+    ],
+  }))
+  const somma = (mesi: Abbonamenti['mesi'], k: 'guest_scaduti' | 'guest_convertiti') => mesi.reduce((a, m) => a + m[k], 0)
+  const guestUltimi = { finiti: somma(d.mesi.slice(12), 'guest_scaduti'), abbonati: somma(d.mesi.slice(12), 'guest_convertiti') }
+  const guestPrima = { finiti: somma(d.mesi.slice(0, 12), 'guest_scaduti'), abbonati: somma(d.mesi.slice(0, 12), 'guest_convertiti') }
+  const guestProvvisori = d.mesi.reduce((a, m) => a + m.guest_provvisori, 0)
+
   const vincoli: Vincolo[] = [1, 4, 12]
   const oltreMassimo = Math.max(1, ...d.durata.trimestri.filter((t) => t.arrivati >= MINIMO).map((t) => t.oltre_medio ?? 0))
 
@@ -165,11 +229,47 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
       </section>
 
       <section className="scheda">
+        <h2>Guest Pass: quanti diventano abbonamento</h2>
+        <p className="piccolo attenuato sotto-titolo">
+          Per mese di fine del pass: quanti Guest Pass sono finiti e quanti, durante il pass o entro 30 giorni, sono diventati un
+          abbonamento a pagamento. Non contano i pass di chi era già abbonato; i Pass giornalieri (Pass Reformer, Sala Pesi…) sono
+          un’altra cosa e restano fuori.
+        </p>
+        <div className="numeri-guest">
+          <ConfrontoGuest titolo="Ultimi 12 mesi" {...guestUltimi} />
+          <ConfrontoGuest titolo="I 12 mesi prima" {...guestPrima} />
+          <div className="numero">
+            <div className="etichetta">Differenza</div>
+            <div className="valore">
+              {punti(tasso(guestUltimi.abbonati, guestUltimi.finiti), tasso(guestPrima.abbonati, guestPrima.finiti))}
+            </div>
+            <div className="nota">
+              di conversione{guestProvvisori > 0 ? ` · ${formatoCifra(guestProvvisori)} pass finiti da meno di 30 giorni possono ancora abbonarsi` : ''}
+            </div>
+          </div>
+        </div>
+        <h3 className="titoletto">Guest Pass finiti e abbonati</h3>
+        <Colonne punti={guest} unita="Guest Pass finiti" />
+        <div className="legenda" aria-hidden>
+          <span>
+            <span className="quadratino serie" /> abbonati entro 30 giorni
+          </span>
+          <span>
+            <span className="quadratino tenue" /> non abbonati
+          </span>
+        </div>
+        <h3 className="titoletto">Quanti si abbonano, in percentuale</h3>
+        <Colonne punti={conversione} formato="percento" massimo={100} altezza={160} unita="di conversione" />
+      </section>
+
+      <section className="scheda">
         <h2>Quanto durano</h2>
         <p className="piccolo attenuato sotto-titolo">
-          Gli abbonamenti senza scadenza (Mensile, Flex, Open, Formula 8) che sono stati disdetti e non rinnovati: quanti mesi
-          sono durati in tutto e quanti mesi sono rimasti <strong>dopo il vincolo minimo</strong>. I piani a durata fissa (Reformer 5
-          e 12 mesi, Percorsi I Love My Trainer) non ci sono: finiscono da soli.
+          Quanto resta chi entra con un abbonamento senza scadenza (Mensile, Flex, Open, Formula 8), e quanti mesi rimane{' '}
+          <strong>dopo il vincolo minimo</strong> prima di andarsene. I cambi contano: un mensile che passa al quadrimestrale, un
+          quadrimestrale che passa all’annuale, un annuale che cambia piano restano la stessa permanenza, dal primo giorno del
+          primo abbonamento all’ultimo dell’ultimo (con al massimo 30 giorni di vuoto). Il tipo è quello con cui la persona è
+          entrata.
         </p>
 
         <div className="tabella-scorre">
@@ -182,6 +282,7 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
                 <th className="num">Durata media</th>
                 <th className="num">Mesi oltre il vincolo</th>
                 <th className="num">Usciti prima del vincolo</th>
+                <th className="num">Con cambio piano</th>
               </tr>
             </thead>
             <tbody>
@@ -192,8 +293,7 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
           </table>
         </div>
         <p className="piccolo attenuato">
-          «Mesi oltre il vincolo» è la media su chi il vincolo l’ha finito; chi è uscito prima (cambio piano, recesso) è contato a
-          parte. Ancora dentro, oggi:{' '}
+          «Mesi oltre il vincolo» è la media su chi il vincolo l’ha finito; chi se n’è andato prima (recesso) è contato a parte. Ancora dentro, oggi:{' '}
           {d.durata.riepilogo
             .map((r) => `${NOME_VINCOLO[r.vincolo].toLowerCase()} ${formatoCifra(r.attivi)}, di cui ${formatoCifra(r.attivi_oltre)} già oltre il vincolo da ${mesi1(r.attivi_oltre_mesi)} mesi in media`)
             .join('; ')}
@@ -222,6 +322,7 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
                     nota: `media su ${formatoCifra(t.arrivati)} arrivati al vincolo${t.arrivati < MINIMO ? ': troppo pochi' : ''}`,
                   },
                   { colore: 'tenue', valore: formatoCifra(t.anticipati), etichetta: 'usciti prima del vincolo', nota: quota(t.anticipati, t.disdetti) },
+                  { valore: formatoCifra(t.con_cambio), etichetta: 'con un cambio di piano', nota: quota(t.con_cambio, t.disdetti) },
                 ],
                 piede: [
                   { etichetta: 'Disdetti', valore: formatoCifra(t.disdetti) },
@@ -335,6 +436,10 @@ function RigheDurata({ vincolo, ultimi, precedenti }: { vincolo: Vincolo; ultimi
         {formatoCifra(p.anticipati)}
         {p.disdetti > 0 && <span className="attenuato"> · {Math.round((p.anticipati / p.disdetti) * 100)}%</span>}
       </td>
+      <td className="num">
+        {formatoCifra(p.con_cambio)}
+        {p.disdetti > 0 && <span className="attenuato"> · {Math.round((p.con_cambio / p.disdetti) * 100)}%</span>}
+      </td>
     </tr>
   )
   return (
@@ -342,5 +447,17 @@ function RigheDurata({ vincolo, ultimi, precedenti }: { vincolo: Vincolo; ultimi
       {riga(ultimi, 'ultimi 12 mesi', true)}
       {riga(precedenti, '12 mesi prima', false)}
     </>
+  )
+}
+
+function ConfrontoGuest({ titolo, finiti, abbonati }: { titolo: string; finiti: number; abbonati: number }) {
+  return (
+    <div className="numero">
+      <div className="etichetta">{titolo}</div>
+      <div className="valore">{finiti ? `${Math.round((abbonati / finiti) * 100)}%` : '—'}</div>
+      <div className="nota">
+        {formatoCifra(abbonati)} abbonati su {formatoCifra(finiti)} Guest Pass finiti
+      </div>
+    </div>
   )
 }
