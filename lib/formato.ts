@@ -13,6 +13,16 @@ const giornoLungo = new Intl.DateTimeFormat('it-IT', { timeZone: FUSO, weekday: 
 export const formatoEuro = (v: number | null | undefined) => (v == null ? '—' : euro.format(v))
 export const formatoNumero = (v: number | null | undefined) => (v == null ? '—' : intero.format(v))
 
+// Come formatoNumero, ma con il punto delle migliaia anche sotto i 10.000
+// ("2.382") e uguale sul server e nel browser: Intl li scrive in modo diverso,
+// e un grafico disegnato da tutti e due deve dire la stessa cifra.
+export function formatoCifra(v: number | null | undefined, decimali = 0) {
+  if (v == null) return '—'
+  const [interi, dec] = Math.abs(v).toFixed(decimali).split('.')
+  const segno = v < 0 && Number(Math.abs(v).toFixed(decimali)) !== 0 ? '−' : ''
+  return `${segno}${interi.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}${dec ? `,${dec}` : ''}`
+}
+
 // Un istante (timestamptz) -> "28/09/2026, 17:40".
 export const formatoDataOra = (v: string | null | undefined) => (v ? giornoOra.format(new Date(v)) : '—')
 export const formatoOra = (v: string | null | undefined) => (v ? soloOra.format(new Date(v)) : '—')

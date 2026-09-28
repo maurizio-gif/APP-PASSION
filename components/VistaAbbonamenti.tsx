@@ -1,5 +1,5 @@
 import type { Abbonamenti, DurataPeriodo, Vincolo } from '@/lib/crm'
-import { formatoData, formatoFa, formatoNumero } from '@/lib/formato'
+import { formatoCifra, formatoData, formatoFa } from '@/lib/formato'
 import { Colonne, type Punto } from './Colonne'
 
 // La dashboard abbonamenti, disegnata: riceve i numeri di crm_abbonamenti() e
@@ -15,47 +15,83 @@ const DETTAGLIO_VINCOLO: Record<Vincolo, string> = {
 
 const meseCorto = new Intl.DateTimeFormat('it-IT', { month: 'short', timeZone: 'UTC' })
 const meseLungo = new Intl.DateTimeFormat('it-IT', { month: 'long', year: 'numeric', timeZone: 'UTC' })
-const unDecimale = new Intl.NumberFormat('it-IT', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
-const mesi1 = (v: number | null | undefined) => (v == null ? '—' : unDecimale.format(v))
+const mesi1 = (v: number | null | undefined) => formatoCifra(v, 1)
 const data = (giorno: string) => new Date(`${giorno}T12:00:00Z`)
-const segnato = (v: number) => (v > 0 ? `+${formatoNumero(v)}` : formatoNumero(v))
+const segnato = (v: number) => (v > 0 ? `+${formatoCifra(v)}` : formatoCifra(v))
+const quota = (parte: number, tutto: number) => (tutto ? `${Math.round((parte / tutto) * 100)}% del totale` : undefined)
+// "+434 · +22%"; senza la percentuale quando non vuol dire niente (il saldo).
+function variazione(ora: number, prima: number, conPercentuale = true) {
+  const diff = ora - prima
+  if (!prima || !conPercentuale) return segnato(diff)
+  return `${segnato(diff)} · ${segnato(Math.round((diff / Math.abs(prima)) * 100))}%`
+}
 
 export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
   const { kpi } = d
 
-  const asseMese = (m: Abbonamenti['mesi'][number], i: number) => {
+  // Ogni mese col suo nome, e sotto l'anno: si legge anche scorrendo.
+  const asseMese = (m: Abbonamenti['mesi'][number]) => {
     const g = data(m.mese)
     return {
       chiave: m.mese,
       etichetta: meseCorto.format(g).replace('.', ''),
-      anno: i === 0 || g.getUTCMonth() === 0 ? String(g.getUTCFullYear()) : undefined,
-      titolo: `${meseLungo.format(g)}${m.in_corso ? ' (in corso)' : ''}`,
+      anno: String(g.getUTCFullYear()).slice(2),
+      titolo: `${meseLungo.format(g)}${m.in_corso ? ' · in corso' : ''}`,
     }
+  }
+  // Il confronto col mese prima e con lo stesso mese dell'anno prima.
+  const confronti = (i: number, di: (m: Abbonamenti['mesi'][number]) => number, conPercentuale = true) => {
+    const piede: { etichetta: string; valore: string }[] = []
+    if (i >= 1) piede.push({ etichetta: 'Rispetto al mese prima', valore: variazione(di(d.mesi[i]), di(d.mesi[i - 1]), conPercentuale) })
+    if (i >= 12) piede.push({ etichetta: 'Rispetto a un anno prima', valore: variazione(di(d.mesi[i]), di(d.mesi[i - 12]), conPercentuale) })
+    return piede
   }
 
   const attivi: Punto[] = d.mesi.map((m, i) => ({
-    ...asseMese(m, i),
+    ...asseMese(m),
     valore: m.attivi,
     tratteggio: m.in_corso,
-    righe: [m.in_corso ? `attivi oggi, ${formatoData(d.oggi)}` : 'attivi l’ultimo giorno del mese'],
+    righe: [
+      {
+        colore: 'serie',
+        valore: formatoCifra(m.attivi),
+        etichetta: 'abbonamenti attivi',
+        nota: m.in_corso ? `contati a oggi, ${formatoData(d.oggi)}` : 'l’ultimo giorno del mese',
+      },
+    ],
+    piede: confronti(i, (x) => x.attivi),
   }))
   const nuovi: Punto[] = d.mesi.map((m, i) => ({
-    ...asseMese(m, i),
+    ...asseMese(m),
     valore: m.nuovi,
     tratteggio: m.in_corso,
-    righe: [`più ${formatoNumero(m.rinnovi)} rinnovi, non contati`],
+    righe: [
+      { colore: 'serie', valore: formatoCifra(m.nuovi), etichetta: 'nuovi', nota: quota(m.nuovi, m.nuovi + m.rinnovi) },
+      { colore: 'tenue', valore: formatoCifra(m.rinnovi), etichetta: 'rinnovi, non contati', nota: quota(m.rinnovi, m.nuovi + m.rinnovi) },
+    ],
+    piede: [{ etichetta: 'Partiti nel mese', valore: formatoCifra(m.nuovi + m.rinnovi) }, ...confronti(i, (x) => x.nuovi)],
   }))
   const scaduti: Punto[] = d.mesi.map((m, i) => ({
-    ...asseMese(m, i),
+    ...asseMese(m),
     valore: m.scaduti,
     tratteggio: m.scaduti_provvisori > 0,
-    righe: m.scaduti_provvisori > 0 ? [`${formatoNumero(m.scaduti_provvisori)} finiti da meno di 30 giorni: possono ancora rinnovare`] : [],
+    righe: [
+      { colore: 'serie', valore: formatoCifra(m.scaduti), etichetta: 'scaduti non rinnovati', nota: 'nessun abbonamento nei 30 giorni dopo' },
+      ...(m.scaduti_provvisori > 0
+        ? [{ colore: 'tenue' as const, valore: formatoCifra(m.scaduti_provvisori), etichetta: 'ancora provvisori', nota: 'finiti da meno di 30 giorni: possono rinnovare' }]
+        : []),
+    ],
+    piede: confronti(i, (x) => x.scaduti),
   }))
   const saldo: Punto[] = d.mesi.map((m, i) => ({
-    ...asseMese(m, i),
+    ...asseMese(m),
     valore: m.nuovi - m.scaduti,
     tratteggio: m.in_corso || m.scaduti_provvisori > 0,
-    righe: [`${formatoNumero(m.nuovi)} nuovi − ${formatoNumero(m.scaduti)} scaduti`],
+    righe: [
+      { colore: 'serie', valore: formatoCifra(m.nuovi), etichetta: 'nuovi' },
+      { colore: 'negativa', valore: formatoCifra(m.scaduti), etichetta: 'scaduti non rinnovati' },
+    ],
+    piede: [{ etichetta: 'Saldo', valore: segnato(m.nuovi - m.scaduti) }, ...confronti(i, (x) => x.nuovi - x.scaduti, false)],
   }))
 
   const vincoli: Vincolo[] = [1, 4, 12]
@@ -83,7 +119,7 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
               giorno: kpi.due_anni_fa.giorno,
               valore: kpi.due_anni_fa.abbonamenti,
               nota: kpi.due_anni_fa.old
-                ? `Quel giorno c’erano anche ${formatoNumero(kpi.due_anni_fa.old)} soci sui piani OLD a canone zero (dal vecchio gestionale), che qui non contano.`
+                ? `Quel giorno c’erano anche ${formatoCifra(kpi.due_anni_fa.old)} soci sui piani OLD a canone zero (dal vecchio gestionale), che qui non contano.`
                 : undefined,
             },
           ]}
@@ -125,7 +161,7 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
       <section className="scheda">
         <h2>Saldo del mese</h2>
         <p className="piccolo attenuato sotto-titolo">Nuovi abbonamenti meno scaduti non rinnovati. Sotto lo zero, se ne perdono più di quanti ne entrano.</p>
-        <Colonne punti={saldo} formato={segnato} unita="di saldo" />
+        <Colonne punti={saldo} formato="segno" unita="di saldo" />
       </section>
 
       <section className="scheda">
@@ -159,7 +195,7 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
           «Mesi oltre il vincolo» è la media su chi il vincolo l’ha finito; chi è uscito prima (cambio piano, recesso) è contato a
           parte. Ancora dentro, oggi:{' '}
           {d.durata.riepilogo
-            .map((r) => `${NOME_VINCOLO[r.vincolo].toLowerCase()} ${formatoNumero(r.attivi)}, di cui ${formatoNumero(r.attivi_oltre)} già oltre il vincolo da ${mesi1(r.attivi_oltre_mesi)} mesi in media`)
+            .map((r) => `${NOME_VINCOLO[r.vincolo].toLowerCase()} ${formatoCifra(r.attivi)}, di cui ${formatoCifra(r.attivi_oltre)} già oltre il vincolo da ${mesi1(r.attivi_oltre_mesi)} mesi in media`)
             .join('; ')}
           .
         </p>
@@ -168,19 +204,28 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
         <div className="multipli">
           {vincoli.map((v) => {
             const righe = d.durata.trimestri.filter((t) => t.vincolo === v)
-            const punti: Punto[] = righe.map((t, i) => {
+            const punti: Punto[] = righe.map((t) => {
               const g = data(t.trimestre)
               const q = Math.floor(g.getUTCMonth() / 3) + 1
               return {
                 chiave: t.trimestre,
                 etichetta: `T${q}`,
-                anno: i === 0 || q === 1 ? String(g.getUTCFullYear()) : undefined,
-                titolo: `${q}° trimestre ${g.getUTCFullYear()}${t.in_corso ? ' (in corso)' : ''}`,
+                anno: String(g.getUTCFullYear()).slice(2),
+                titolo: `${q}° trimestre ${g.getUTCFullYear()}${t.in_corso ? ' · in corso' : ''}`,
                 valore: t.arrivati >= MINIMO ? t.oltre_medio : null,
                 tratteggio: t.in_corso,
                 righe: [
-                  `${formatoNumero(t.disdetti)} disdetti, durata media ${mesi1(t.durata_media)} mesi`,
-                  `${formatoNumero(t.anticipati)} usciti prima del vincolo`,
+                  {
+                    colore: 'serie',
+                    valore: t.oltre_medio == null ? '—' : `${t.oltre_medio > 0 ? '+' : ''}${mesi1(t.oltre_medio)} mesi`,
+                    etichetta: 'oltre il vincolo',
+                    nota: `media su ${formatoCifra(t.arrivati)} arrivati al vincolo${t.arrivati < MINIMO ? ': troppo pochi' : ''}`,
+                  },
+                  { colore: 'tenue', valore: formatoCifra(t.anticipati), etichetta: 'usciti prima del vincolo', nota: quota(t.anticipati, t.disdetti) },
+                ],
+                piede: [
+                  { etichetta: 'Disdetti', valore: formatoCifra(t.disdetti) },
+                  { etichetta: 'Durata media', valore: t.durata_media == null ? '—' : `${mesi1(t.durata_media)} mesi` },
                 ],
               }
             })
@@ -188,7 +233,7 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
               <div key={v} className="multiplo">
                 <h3>{NOME_VINCOLO[v]}</h3>
                 <p className="piccolo attenuato">{DETTAGLIO_VINCOLO[v]}</p>
-                <Colonne punti={punti} altezza={150} massimo={oltreMassimo} formato={mesi1} unita="mesi oltre il vincolo" vuoto={`meno di ${MINIMO} arrivati al vincolo`} />
+                <Colonne punti={punti} altezza={150} massimo={oltreMassimo} formato="mesi" unita="mesi oltre il vincolo" vuoto={`meno di ${MINIMO} arrivati al vincolo`} />
               </div>
             )
           })}
@@ -223,12 +268,12 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
                     {meseLungo.format(data(m.mese))}
                     {m.in_corso && <span className="attenuato"> · in corso</span>}
                   </td>
-                  <td className="num">{formatoNumero(m.attivi)}</td>
-                  <td className="num">{formatoNumero(m.nuovi)}</td>
-                  <td className="num">{formatoNumero(m.rinnovi)}</td>
+                  <td className="num">{formatoCifra(m.attivi)}</td>
+                  <td className="num">{formatoCifra(m.nuovi)}</td>
+                  <td className="num">{formatoCifra(m.rinnovi)}</td>
                   <td className="num">
-                    {formatoNumero(m.scaduti)}
-                    {m.scaduti_provvisori > 0 && <span className="attenuato"> ({formatoNumero(m.scaduti_provvisori)} provvisori)</span>}
+                    {formatoCifra(m.scaduti)}
+                    {m.scaduti_provvisori > 0 && <span className="attenuato"> ({formatoCifra(m.scaduti_provvisori)} provvisori)</span>}
                   </td>
                   <td className="num">{segnato(m.nuovi - m.scaduti)}</td>
                 </tr>
@@ -248,7 +293,7 @@ function Totale({ titolo, ora, confronti }: { titolo: string; ora: number; confr
   return (
     <div className="numero totale">
       <div className="etichetta">{titolo}</div>
-      <div className="valore">{formatoNumero(ora)}</div>
+      <div className="valore">{formatoCifra(ora)}</div>
       <div className="nota">oggi</div>
       <ul className="confronti">
         {confronti.map((c) => {
@@ -256,10 +301,10 @@ function Totale({ titolo, ora, confronti }: { titolo: string; ora: number; confr
           const perc = c.valore ? Math.round((diff / c.valore) * 100) : null
           return (
             <li key={c.giorno}>
-              <span className="attenuato">il {formatoData(c.giorno)}</span> <strong>{formatoNumero(c.valore)}</strong>{' '}
+              <span className="attenuato">il {formatoData(c.giorno)}</span> <strong>{formatoCifra(c.valore)}</strong>{' '}
               <span className={`bollino ${diff > 0 ? 'verde' : diff < 0 ? 'rosso' : 'grigio'}`}>
                 {diff > 0 ? '▲' : diff < 0 ? '▼' : '='} {segnato(diff)}
-                {perc != null && diff !== 0 ? ` · ${perc > 0 ? '+' : ''}${perc}%` : ''}
+                {perc != null && diff !== 0 ? ` · ${segnato(perc)}%` : ''}
               </span>
               {c.nota && <div className="piccolo attenuato">{c.nota}</div>}
             </li>
@@ -280,14 +325,14 @@ function RigheDurata({ vincolo, ultimi, precedenti }: { vincolo: Vincolo; ultimi
         </td>
       )}
       <td className="nowrap">{periodo}</td>
-      <td className="num">{formatoNumero(p.disdetti)}</td>
+      <td className="num">{formatoCifra(p.disdetti)}</td>
       <td className="num">{p.durata_media == null ? '—' : `${mesi1(p.durata_media)} mesi`}</td>
       <td className="num">
         <strong>{p.oltre_medio == null ? '—' : `${p.oltre_medio > 0 ? '+' : ''}${mesi1(p.oltre_medio)}`}</strong>
-        <span className="attenuato"> su {formatoNumero(p.arrivati)}</span>
+        <span className="attenuato"> su {formatoCifra(p.arrivati)}</span>
       </td>
       <td className="num">
-        {formatoNumero(p.anticipati)}
+        {formatoCifra(p.anticipati)}
         {p.disdetti > 0 && <span className="attenuato"> · {Math.round((p.anticipati / p.disdetti) * 100)}%</span>}
       </td>
     </tr>
