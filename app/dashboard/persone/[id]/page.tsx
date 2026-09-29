@@ -323,7 +323,8 @@ function Contratto({ c, controllo }: { c: Socio['contratti'][number]; controllo?
       <dl className="dati">
         <dt>Firmato il</dt><dd>{formatoData(c.data_firma)}</dd>
         <dt>Inizio</dt><dd>{formatoData(c.data_inizio)}</dd>
-        <dt>Fine</dt><dd>{c.data_fine ? formatoData(c.data_fine) : 'a tempo indeterminato'}</dd>
+        {/* La fine dell'abbonamento, in evidenza. */}
+        <dt>Fine</dt><dd><strong>{c.data_fine ? formatoData(c.data_fine) : 'a tempo indeterminato'}</strong></dd>
         <dt>Disdetta</dt><dd>{c.data_disdetta ? formatoData(c.data_disdetta) : '—'}</dd>
         <dt>Canone</dt><dd>{formatoEuro(c.canone)}</dd>
         {c.giorno_addebito != null && (<><dt>Addebito</dt><dd>il {c.giorno_addebito} del mese</dd></>)}
