@@ -8,6 +8,8 @@
 // workflow n8n del sito (passion-prova-compilata, passion-referral):
 // Crm2/AddLead con club 1, sourceId 12, campaignId 12, inquiredViaId 79 e
 // l'agreement 3, cosi' i lead del desk entrano su PerfectGym come gli altri.
+// L'agreement e' accettato solo se chi ha creato il lead ha spuntato il
+// consenso privacy (`lead.consenso_privacy`, migrazione 20260929p).
 //
 // Chi puo' e quali dati mandare lo dice il database (`crm_lead_perfectgym`,
 // migrazione 20260929o), chiamato con la sessione di chi chiama. L'esito
@@ -81,7 +83,7 @@ Deno.serve(async (req) => {
     lastName: String(p.cognome ?? '').trim(),
     email: String(p.email ?? '').trim().toLowerCase(),
     clubId: 1, sourceId: 12, campaignId: 12, inquiredViaId: 79,
-    agreements: [{ id: 3, hasAgreed: true }],
+    agreements: [{ id: 3, hasAgreed: p.consenso_privacy === true }],
   }
   if (telefono) dati.phone = telefono
 

@@ -60,6 +60,9 @@ export default async function NuovoLead({ searchParams }: { searchParams: { erro
           <textarea id="nota" name="nota" rows={3} placeholder="Com'è andato il tour, cosa cerca, quando richiamare" />
         </div>
         <label className="spunta">
+          <input type="checkbox" name="privacy" /> Ha dato il consenso al trattamento dei dati (privacy)
+        </label>
+        <label className="spunta">
           <input type="checkbox" name="prendo" defaultChecked /> Lo prendo in carico io
         </label>
         <BottoneInvio testo="Crea il lead" inCorso="Salvataggio…" />

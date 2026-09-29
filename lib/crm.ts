@@ -255,6 +255,7 @@ export type Scheda = {
     pgm_stato?: 'creato' | 'gia_su_pgm' | 'errore' | null
     pgm_lead_id?: number | null
     pgm_errore?: string | null
+    consenso_privacy?: boolean | null
   }[]
   prove: { id: string; tipo_pass: string | null; data_inizio: string | null; data_fine: string | null; esito: Prova['esito']; obiezione: string | null; gestito_nome: string | null; gestito_da?: string | null; note: string | null }[]
   nuovi_contratti: { contract_id: number; controllo: NuovoContratto['controllo']; tesseramento: string | null; numero_tessera: string | null; note: string | null; creato_il: string }[]
