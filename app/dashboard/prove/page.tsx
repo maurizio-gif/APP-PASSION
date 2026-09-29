@@ -1,6 +1,8 @@
 import { crm, richiediSezione } from '@/lib/crm'
 import { formatoData, formatoFa } from '@/lib/formato'
 import { Avviso, BollinoFonte, Contatti, Persona, Schede, Vuoto } from '@/components/Ui'
+import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
+import { SceltaOperatore } from '@/components/SceltaOperatore'
 import { aggiornaProva } from '../azioni'
 
 const VISTE = [
@@ -12,11 +14,15 @@ const VISTE = [
 
 // «Il container prove»: chi sta provando la palestra, come si sta comportando
 // (ingressi, lezioni) e com'e' finita. L'esito lo si scrive qui.
-export default async function Prove({ searchParams }: { searchParams: { vista?: string; errore?: string } }) {
+export default async function Prove({ searchParams }: { searchParams: { vista?: string; consulente?: string; errore?: string } }) {
   await richiediSezione('prove')
   const vista = VISTE.some((v) => v.chiave === searchParams.vista) ? searchParams.vista! : 'in_corso'
-  const prove = await crm.prove(vista)
-  const qui = `/dashboard/prove?vista=${vista}`
+  const staff = await crm.staff()
+  // Il consulente: chi segue la prova.
+  const consulente = consulenteScelto(staff, searchParams.consulente)
+  const prove = await crm.prove(vista, consulente)
+  const perConsulente = consulente ? `consulente=${consulente}` : ''
+  const qui = `/dashboard/prove?vista=${vista}${perConsulente ? `&${perConsulente}` : ''}`
 
   return (
     <>
@@ -27,7 +33,8 @@ export default async function Prove({ searchParams }: { searchParams: { vista?: 
         </div>
       </div>
       <Avviso errore={searchParams.errore} />
-      <Schede voci={VISTE} attiva={vista} base="/dashboard/prove" />
+      <Schede voci={VISTE} attiva={vista} base={`/dashboard/prove${perConsulente ? `?${perConsulente}` : ''}`} />
+      <FiltroConsulente azione="/dashboard/prove" staff={staff} consulente={consulente} tieni={{ vista }} />
 
       <div className="scheda">
         {prove.length === 0 ? (
@@ -78,10 +85,8 @@ export default async function Prove({ searchParams }: { searchParams: { vista?: 
                         </select>
                         <input type="text" name="obiezione" defaultValue={p.obiezione ?? ''} placeholder="Obiezione" />
                         <input type="text" name="note" defaultValue={p.note ?? ''} placeholder="Note" />
-                        <div className="azioni-riga">
-                          {!p.gestito_nome && <label className="spunta"><input type="checkbox" name="gestisco" /> la seguo io</label>}
-                          <button className="bottone piccolo">Salva</button>
-                        </div>
+                        <SceltaOperatore staff={staff} attuale={p.gestito_da} attualeNome={p.gestito_nome} />
+                        <button className="bottone piccolo">Salva</button>
                       </form>
                     </td>
                   </tr>

@@ -165,6 +165,7 @@ export type NuovoContratto = {
   gestito_nome: string | null
   gestito_il: string | null
   creato_il: string
+  gestito_da: string | null
 }
 
 export type Disdetta = {
@@ -188,6 +189,7 @@ export type Disdetta = {
   gestito_nome: string | null
   gestito_il: string | null
   creato_il: string
+  gestito_da: string | null
 }
 
 export type Task = {
@@ -250,9 +252,9 @@ export type Scheda = {
     presentato_da: string | null
     orario_ricontatto: string | null
   }[]
-  prove: { id: string; tipo_pass: string | null; data_inizio: string | null; data_fine: string | null; esito: Prova['esito']; obiezione: string | null; gestito_nome: string | null; note: string | null }[]
+  prove: { id: string; tipo_pass: string | null; data_inizio: string | null; data_fine: string | null; esito: Prova['esito']; obiezione: string | null; gestito_nome: string | null; gestito_da?: string | null; note: string | null }[]
   nuovi_contratti: { contract_id: number; controllo: NuovoContratto['controllo']; tesseramento: string | null; numero_tessera: string | null; note: string | null; creato_il: string }[]
-  disdette: { id: string; contract_id: number | null; data_disdetta: string | null; esito: Disdetta['esito']; motivo: string | null; contatto: string | null; note: string | null }[]
+  disdette: { id: string; contract_id: number | null; data_disdetta: string | null; esito: Disdetta['esito']; motivo: string | null; contatto: string | null; note: string | null; gestito_da?: string | null; gestito_nome?: string | null }[]
   storia: (
     | { tipo: 'commento'; id: string; quando: string; testo: string; autore: string | null }
     | { tipo: 'task'; id: string; quando: string; task_tipo: TipoTask; data: string | null; nota: string | null; completato_il: string | null; esito: Task['esito']; archiviato?: boolean; nota_esito?: string | null; assegnato_nome: string | null; autore: string | null }
@@ -373,15 +375,18 @@ export const crm = {
   home: () => rpc<Home>('crm_home'),
   lead: (vista: string, fonte: string | null, testo: string | null, consulente: string | null = null) =>
     rpc<Lead[]>('crm_lead', { p_vista: vista, p_fonte: fonte, p_testo: testo, p_consulente: consulente }),
-  prove: (vista: string) => rpc<Prova[]>('crm_prove', { p_vista: vista }),
+  prove: (vista: string, consulente: string | null = null) => rpc<Prova[]>('crm_prove', { p_vista: vista, p_consulente: consulente }),
   nuoviContratti: (vista: string) => rpc<NuovoContratto[]>('crm_nuovi_contratti', { p_vista: vista }),
-  disdette: (vista: string) => rpc<Disdetta[]>('crm_disdette', { p_vista: vista }),
+  disdette: (vista: string, consulente: string | null = null) =>
+    rpc<Disdetta[]>('crm_disdette', { p_vista: vista, p_consulente: consulente }),
   task: (chi: string, quando: string, consulente: string | null = null) =>
     rpc<Task[]>('crm_task', { p_chi: chi, p_quando: quando, p_consulente: consulente }),
   persona: (id: string) => rpc<Scheda | null>('crm_persona', { p_id: id }),
   cerca: (testo: string) => rpc<Trovato[]>('crm_cerca', { p_testo: testo }),
-  rinnovi: (vista: string) => rpc<Rinnovo[]>('crm_rinnovi', { p_vista: vista }),
-  debitori: (vista: string, chi: string) => rpc<Debitore[]>('crm_debitori', { p_vista: vista, p_chi: chi }),
+  rinnovi: (vista: string, consulente: string | null = null) =>
+    rpc<Rinnovo[]>('crm_rinnovi', { p_vista: vista, p_consulente: consulente }),
+  debitori: (vista: string, chi: string, consulente: string | null = null) =>
+    rpc<Debitore[]>('crm_debitori', { p_vista: vista, p_chi: chi, p_consulente: consulente }),
   abbonamenti: () => rpc<Abbonamenti>('crm_abbonamenti'),
   utenti: () => rpc<Utente[]>('crm_utenti'),
 }

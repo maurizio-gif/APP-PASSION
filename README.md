@@ -232,9 +232,18 @@ ci sono i contratti di PerfectGym, uno per riquadro: piano, stato, firma,
 inizio, fine, disdetta, canone, giorno di addebito, rinnovo automatico,
 aggiuntivo (`20260929i`).
 
-**Filtro per consulente** (`20260929g`): in Lead e in Task si sceglie un
-operatore e si vedono i lead assegnati a lui, o i suoi task. Il filtro sta in
-`crm_lead()` e `crm_task()` (`p_consulente`), prima del limite di righe.
+**Filtro per consulente** (`20260929g`, `20260929m`): in ogni sezione (Lead,
+Prove, Disdette, Rinnovi, Task, Debitori) si sceglie un operatore e si vede il
+suo lavoro: i lead e i rinnovi assegnati a lui, le prove e le disdette che
+segue, i suoi task, i debitori di cui segue il recupero. Il filtro sta nelle
+funzioni `crm_*` (`p_consulente`), prima del limite di righe; la tendina e'
+`components/FiltroConsulente.tsx`. Nei Task (e in quelli della home) il nome
+apre la scheda della persona in un'altra scheda del browser.
+
+**Prove e disdette assegnate** (`20260929n`): come lead, rinnovi, debitori e
+task, anche prove e disdette hanno la tendina «Assegnata a» (nella loro pagina
+e, per le prove, nella scheda persona). Salva chi le segue (`gestito_da`); senza
+una scelta resta com'era.
 
 **Nuovo task: programmare o registrare** (`20260929h`): nella scheda persona
 un task «da programmare» ha la data scelta e le note di preparazione (`nota`);

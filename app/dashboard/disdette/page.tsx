@@ -1,6 +1,8 @@
 import { crm, richiediSezione } from '@/lib/crm'
 import { ESITO_DISDETTA, formatoData, formatoEuro, MOTIVI_DISDETTA, traduci } from '@/lib/formato'
 import { Avviso, Contatti, Persona, Schede, Vuoto } from '@/components/Ui'
+import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
+import { SceltaOperatore } from '@/components/SceltaOperatore'
 import { aggiornaDisdetta } from '../azioni'
 
 const VISTE = [
@@ -11,11 +13,15 @@ const VISTE = [
 
 // Le disdette: quando su PerfectGym compare la data di disdetta di un
 // contratto, arriva qui. Si chiama il socio per provare a recuperarlo.
-export default async function Disdette({ searchParams }: { searchParams: { vista?: string; errore?: string } }) {
+export default async function Disdette({ searchParams }: { searchParams: { vista?: string; consulente?: string; errore?: string } }) {
   await richiediSezione('disdette')
   const vista = VISTE.some((v) => v.chiave === searchParams.vista) ? searchParams.vista! : 'da_gestire'
-  const disdette = await crm.disdette(vista)
-  const qui = `/dashboard/disdette?vista=${vista}`
+  const staff = await crm.staff()
+  // Il consulente: chi segue la disdetta.
+  const consulente = consulenteScelto(staff, searchParams.consulente)
+  const disdette = await crm.disdette(vista, consulente)
+  const perConsulente = consulente ? `consulente=${consulente}` : ''
+  const qui = `/dashboard/disdette?vista=${vista}${perConsulente ? `&${perConsulente}` : ''}`
 
   return (
     <>
@@ -26,7 +32,8 @@ export default async function Disdette({ searchParams }: { searchParams: { vista
         </div>
       </div>
       <Avviso errore={searchParams.errore} />
-      <Schede voci={VISTE} attiva={vista} base="/dashboard/disdette" />
+      <Schede voci={VISTE} attiva={vista} base={`/dashboard/disdette${perConsulente ? `?${perConsulente}` : ''}`} />
+      <FiltroConsulente azione="/dashboard/disdette" staff={staff} consulente={consulente} tieni={{ vista }} />
 
       <div className="scheda">
         {disdette.length === 0 ? (
@@ -80,6 +87,7 @@ export default async function Disdette({ searchParams }: { searchParams: { vista
                           {MOTIVI_DISDETTA.map((m) => <option key={m} value={m}>{m}</option>)}
                         </select>
                         <input type="text" name="note" defaultValue={d.note ?? ''} placeholder="Note" />
+                        <SceltaOperatore staff={staff} attuale={d.gestito_da} attualeNome={d.gestito_nome} />
                         <button className="bottone piccolo">Salva</button>
                       </form>
                     </td>

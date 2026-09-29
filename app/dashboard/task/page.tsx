@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { crm, richiediSezione } from '@/lib/crm'
 import { formatoDataOra, TIPO_TASK, traduci } from '@/lib/formato'
 import { Avviso, Contatti, Persona, Vuoto } from '@/components/Ui'
+import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
 import { completaTask } from '../azioni'
 
 const CHI = [
@@ -20,7 +21,7 @@ export default async function Task({ searchParams }: { searchParams: { chi?: str
   await richiediSezione('task')
   const staff = await crm.staff()
   // Un consulente scelto: i suoi task, di chiunque sia la vista «chi».
-  const consulente = staff.some((o) => o.id === searchParams.consulente) ? searchParams.consulente! : null
+  const consulente = consulenteScelto(staff, searchParams.consulente)
   const chi = consulente ? 'tutti' : CHI.some((v) => v.chiave === searchParams.chi) ? searchParams.chi! : 'miei'
   const quando = QUANDO.some((v) => v.chiave === searchParams.quando) ? searchParams.quando! : 'oggi'
   const task = await crm.task(chi, quando, consulente)
@@ -46,15 +47,7 @@ export default async function Task({ searchParams }: { searchParams: { chi?: str
           <Link key={v.chiave} href={`/dashboard/task?chi=${chi}&quando=${v.chiave}${perConsulente}`} className={v.chiave === quando ? 'attivo' : undefined}>{v.testo}</Link>
         ))}
       </div>
-      <form className="filtri" action="/dashboard/task">
-        <input type="hidden" name="chi" value="tutti" />
-        <input type="hidden" name="quando" value={quando} />
-        <select name="consulente" defaultValue={consulente ?? ''} aria-label="Consulente">
-          <option value="">Tutti i consulenti</option>
-          {staff.map((o) => <option key={o.id} value={o.id}>{o.nome} {o.cognome ?? ''}</option>)}
-        </select>
-        <button className="bottone secondario" type="submit">Filtra</button>
-      </form>
+      <FiltroConsulente azione="/dashboard/task" staff={staff} consulente={consulente} tieni={{ chi: 'tutti', quando }} />
 
       <div className="scheda">
         {task.length === 0 ? (
@@ -68,7 +61,7 @@ export default async function Task({ searchParams }: { searchParams: { chi?: str
                     <span className={`bollino${!t.completato_il && t.data && new Date(t.data) < new Date() ? ' rosso' : ''}`}>
                       {traduci(TIPO_TASK, t.tipo)} · {formatoDataOra(t.data)}
                     </span>{' '}
-                    <Persona id={t.utente_id} nome={t.nome} cognome={t.cognome} />
+                    <Persona id={t.utente_id} nome={t.nome} cognome={t.cognome} nuovaScheda />
                     {chi !== 'miei' && <span className="piccolo attenuato"> · {t.assegnato_nome ?? 'nessuno'}</span>}
                     <Contatti telefono={t.telefono} email={null} />
                     {t.nota && <div className="piccolo">{t.nota}</div>}

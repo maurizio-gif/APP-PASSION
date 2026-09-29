@@ -103,7 +103,7 @@ export async function aggiornaProva(f: FormData) {
   await esegui(f, () =>
     rpc('crm_prova_aggiorna', {
       p_prova: testo(f, 'prova'), p_esito: testo(f, 'esito') ?? '', p_obiezione: testo(f, 'obiezione'),
-      p_note: testo(f, 'note'), p_gestisco: f.get('gestisco') === 'on',
+      p_note: testo(f, 'note'), p_gestisco: f.get('gestisco') === 'on', p_assegnato: testo(f, 'assegnato'),
     }))
 }
 
@@ -121,7 +121,7 @@ export async function aggiornaDisdetta(f: FormData) {
   await esegui(f, () =>
     rpc('crm_disdetta_aggiorna', {
       p_id: testo(f, 'disdetta'), p_esito: testo(f, 'esito') ?? '', p_contatto: testo(f, 'contatto') ?? '',
-      p_motivo: testo(f, 'motivo'), p_note: testo(f, 'note'),
+      p_motivo: testo(f, 'motivo'), p_note: testo(f, 'note'), p_assegnato: testo(f, 'assegnato'),
     }))
 }
 
