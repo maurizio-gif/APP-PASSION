@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import type { Operatore } from '@/lib/crm'
-import { TIPO_TASK } from '@/lib/formato'
+import { TIPI_TASK_NUOVI } from '@/lib/formato'
 import { BottoneInvio } from '@/components/BottoneInvio'
 import { nuovoTask } from '@/app/dashboard/azioni'
 
@@ -37,8 +37,8 @@ export function NuovoTask({ utente, lead, torna, staff, io, domani }: {
       <div className="due-colonne">
         <div className="campo">
           <label htmlFor="nt-tipo">Task</label>
-          <select id="nt-tipo" name="tipo" defaultValue={registra ? 'telefonata' : 'richiamare'} key={modo}>
-            {Object.entries(TIPO_TASK).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+          <select id="nt-tipo" name="tipo" defaultValue="telefonata">
+            {TIPI_TASK_NUOVI.map(([k, v]) => <option key={k} value={k}>{v}</option>)}
           </select>
         </div>
         {registra ? (

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { crm, linkPgm, richiediSezione } from '@/lib/crm'
-import { formatoData, formatoDataOra, formatoEuro, formatoFa, perInputDataOra, STATO_CONTRATTO, TIPO_TASK, traduci } from '@/lib/formato'
+import { formatoData, formatoDataOra, formatoEuro, formatoFa, perInputDataOra, STATO_CONTRATTO, TIPI_TASK_NUOVI, traduci } from '@/lib/formato'
 import { Avviso, Contatti, Persona, Vuoto } from '@/components/Ui'
 import { debitoAssegna, debitoTask } from '../azioni'
 
@@ -145,7 +145,7 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
                               <input type="hidden" name="torna" value={qui} />
                               <div className="azioni-riga">
                                 <select name="tipo" defaultValue="telefonata" aria-label="Task">
-                                  {Object.entries(TIPO_TASK).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+                                  {TIPI_TASK_NUOVI.map(([k, v]) => <option key={k} value={k}>{v}</option>)}
                                 </select>
                                 <select name="assegnato" defaultValue={d.assegnato_a ?? io?.id ?? ''} aria-label="A chi">
                                   {staff.map((s) => <option key={s.id} value={s.id}>{s.nome} {s.cognome ?? ''}</option>)}
