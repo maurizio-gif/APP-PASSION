@@ -478,6 +478,9 @@ select:focus {
   background: var(--fondo-verde);
   color: var(--verde);
 }
+.testo-rosso {
+  color: var(--rosso-scuro);
+}
 
 /* --- Il grafico degli ingressi -------------------------------------------- */
 

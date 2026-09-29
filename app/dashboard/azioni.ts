@@ -64,10 +64,34 @@ export async function nuovoLead(f: FormData) {
   } catch (e) {
     redirect(`/dashboard/lead/nuovo?errore=${encodeURIComponent(e instanceof Error ? e.message : 'Non salvato')}`)
   }
+  // Poi su PerfectGym, come fanno i form del sito in n8n. Se non va il lead
+  // nel CRM resta: si dice perche' e dalla scheda si riprova.
+  let esito = 'ok=lead'
+  if (id) {
+    try {
+      const r = await edge<EsitoPerfectGym>('crm-perfectgym-lead', { lead: id })
+      if (r.stato === 'gia_su_pgm') esito = 'ok=lead_gia_pgm'
+      else if (r.stato === 'errore') esito = `errore=${encodeURIComponent(nonSuPgm(r.errore))}`
+    } catch (e) {
+      esito = `errore=${encodeURIComponent(nonSuPgm(e instanceof Error ? e.message : undefined))}`
+    }
+  }
   revalidatePath('/dashboard', 'layout')
   // La scheda della persona: la si apre subito per il primo commento o task.
   const u = id ? await rpc<string | null>('crm_utente_del_lead', { p_lead: id }) : null
-  redirect(u ? `/dashboard/persone/${u}?ok=lead` : '/dashboard/lead')
+  redirect(u ? `/dashboard/persone/${u}?${esito}` : '/dashboard/lead')
+}
+
+type EsitoPerfectGym = { stato: 'creato' | 'gia_su_pgm' | 'errore'; errore?: string }
+const nonSuPgm = (motivo?: string) =>
+  `Lead creato nel CRM, ma non su PerfectGym: ${motivo ?? 'errore sconosciuto'}. Correggi i dati se serve e riprova dalla scheda del lead.`
+
+// Il bottone «Riprova» della scheda: di nuovo AddLead su PerfectGym.
+export async function leadSuPerfectGym(f: FormData) {
+  await esegui(f, async () => {
+    const r = await edge<EsitoPerfectGym>('crm-perfectgym-lead', { lead: testo(f, 'lead') })
+    if (r.stato === 'errore') throw new Error(`PerfectGym non ha creato il lead: ${r.errore ?? 'errore sconosciuto'}`)
+  })
 }
 
 // --- Commenti e task --------------------------------------------------------

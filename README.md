@@ -142,6 +142,20 @@ sono quelle dell'import, il Pass del sito nasce vinto con la sua prova. Il nodo
 e' un ramo a parte, eseguito per primo: se il CRM non risponde il modulo va
 avanti lo stesso.
 
+### Il lead creato nel CRM nasce anche su PerfectGym (`20260929o`)
+
+«Nuovo lead» (il tour, la telefonata in ingresso), appena creato il lead nel
+CRM, chiama l'Edge Function `crm-perfectgym-lead`, che fa la stessa chiamata
+dei workflow n8n del sito (`passion-prova-compilata`, `passion-referral`):
+`Api/v2.1/Crm2/AddLead` con club 1, sourceId 12, campaignId 12,
+inquiredViaId 79 e l'agreement 3, il telefono portato a +39 come in n8n. Le
+credenziali sono quelle del sync (`PERFECTGYM_CLIENT_ID` e
+`PERFECTGYM_CLIENT_SECRET` fra i segreti delle Edge Function). L'esito sta nel
+lead (`pgm_stato`, `pgm_lead_id`, `pgm_errore`) e si vede nella sua scheda:
+se la persona e' gia' su PerfectGym non si crea un doppione; se PerfectGym
+rifiuta (per esempio PhoneNumberInvalid, i numeri non italiani) il lead nel
+CRM resta, il motivo compare e dalla scheda si riprova.
+
 ### I lead dei moduli Meta, dritti nel CRM (`20260929d`)
 
 Il workflow n8n «PASSION: Lead dai moduli Meta nel CRM» (`WV91lQokWaEEFdy5`,

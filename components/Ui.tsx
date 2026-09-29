@@ -9,7 +9,8 @@ export function Avviso({ errore, ok }: { errore?: string; ok?: string }) {
   return null
 }
 const MESSAGGI_OK: Record<string, string> = {
-  lead: 'Lead creato.',
+  lead: 'Lead creato, anche su PerfectGym.',
+  lead_gia_pgm: 'Lead creato. La persona è già su PerfectGym: lì non si crea un doppione.',
   utente_salvato: 'Utente salvato.',
   utente_cancellato: 'Utente rimosso. Non aveva storia nel CRM: è stato cancellato del tutto, accesso compreso.',
   utente_rimosso: 'Utente rimosso: non entra più e non compare fra gli operatori. Il suo lavoro aperto è passato di mano; nella storia resta il suo nome.',
