@@ -559,19 +559,29 @@ select:focus {
   color: var(--rosso-scuro);
 }
 
-/* Rinnovo e disdetta gia' chiusi, nella scheda: il modulo si riapre da qui. */
-.modifica {
-  margin-top: 8px;
+/* «Riapri» di quello che e' chiuso con un esito (components/Ui.tsx, Riapri):
+   il bottone apre l'avviso, e da li' si conferma. */
+.riapri > summary {
+  list-style: none;
 }
-.modifica > summary {
-  cursor: pointer;
+.riapri > summary::-webkit-details-marker {
+  display: none;
+}
+.riapri[open] > summary {
+  background: var(--nero);
+  border-color: var(--nero);
+  color: #fff;
+}
+.riapri-avviso {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--fondo-giallo);
+  color: var(--giallo);
   font-size: 0.88rem;
-  font-weight: 700;
-  color: var(--testo-attenuato);
 }
-.modifica[open] > summary {
-  margin-bottom: 10px;
-  color: var(--rosso-scuro);
+.riapri-avviso p {
+  margin: 0 0 8px;
 }
 
 /* Il nuovo task, in fondo al riquadro dei task, sotto lo storico. */

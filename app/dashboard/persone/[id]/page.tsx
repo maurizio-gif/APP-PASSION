@@ -4,7 +4,7 @@ import {
   CONTROLLO, ESITO_DISDETTA, ESITO_RINNOVO, FONTE, formatoData, formatoDataOra, formatoEuro, formatoGiorno, formatoOra,
   MOTIVI_DISDETTA, oggiRoma, STATO_CONTRATTO, TIPO_SOCIO, TIPO_TASK, traduci,
 } from '@/lib/formato'
-import { Avviso, BollinoFase, BollinoFonte, Contatti, Provenienza, Vuoto } from '@/components/Ui'
+import { Avviso, BollinoFase, BollinoFonte, Contatti, Provenienza, Riapri, Vuoto } from '@/components/Ui'
 import { BottoneInvio } from '@/components/BottoneInvio'
 import { NuovoTask } from '@/components/NuovoTask'
 import { SceltaOperatore } from '@/components/SceltaOperatore'
@@ -122,11 +122,13 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                   </>
                 )}
                 {(l.fase === 'vinta' || l.fase === 'persa') && puo && (
-                  <form action={riapriLead} className="azioni-scheda">
-                    <input type="hidden" name="lead" value={l.id} />
-                    <input type="hidden" name="torna" value={qui} />
-                    <button className="bottone secondario piccolo">Riapri</button>
-                  </form>
+                  <div className="azioni-scheda">
+                    <Riapri
+                      azione={riapriLead}
+                      campi={{ lead: l.id, torna: qui }}
+                      avviso={`riaprendo il lead si toglie l'esito «${l.fase === 'vinta' ? `Vinta${l.esito ? ` · ${l.esito}` : ''}` : 'Persa'}» e torna ${l.assegnato_a ? 'in gestione' : 'da gestire'}. Lo storico cambia.`}
+                    />
+                  </div>
                 )}
               </section>
             )
@@ -144,34 +146,49 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                 <dt>Pass</dt><dd>{pr.tipo_pass ?? '—'}</dd>
                 <dt>Dal</dt><dd>{formatoData(pr.data_inizio)} al {formatoData(pr.data_fine)}</dd>
                 <dt>La segue</dt><dd>{pr.gestito_nome ?? <span className="attenuato">nessuno</span>}</dd>
+                {pr.esito && pr.obiezione && (<><dt>Obiezione</dt><dd>{pr.obiezione}</dd></>)}
               </dl>
-              <form action={aggiornaProva} className="modulo">
-                <input type="hidden" name="prova" value={pr.id} />
-                <input type="hidden" name="torna" value={qui} />
-                <div className="due-colonne">
-                  <div className="campo">
-                    <label>Esito</label>
-                    <select name="esito" defaultValue={pr.esito ?? ''}>
-                      <option value="">Ancora aperto</option>
-                      <option value="iscritto">Iscritto</option>
-                      <option value="non_iscritto">Non iscritto</option>
-                    </select>
+              {/* Chiusa con l'esito non si modifica: si riapre, con l'avviso. */}
+              {pr.esito ? (
+                <>
+                  {pr.note && <p className="nota-socio">{pr.note}</p>}
+                  <div className="azioni-scheda">
+                    <Riapri
+                      azione={aggiornaProva}
+                      campi={{ prova: pr.id, torna: qui, esito: '', obiezione: pr.obiezione ?? '', note: pr.note ?? '' }}
+                      avviso={`riaprendo la prova si toglie l'esito «${pr.esito === 'iscritto' ? 'Iscritto' : 'Non iscritto'}» e torna aperta. Lo storico cambia.`}
+                    />
+                  </div>
+                </>
+              ) : (
+                <form action={aggiornaProva} className="modulo">
+                  <input type="hidden" name="prova" value={pr.id} />
+                  <input type="hidden" name="torna" value={qui} />
+                  <div className="due-colonne">
+                    <div className="campo">
+                      <label>Esito</label>
+                      <select name="esito" defaultValue={pr.esito ?? ''}>
+                        <option value="">Ancora aperto</option>
+                        <option value="iscritto">Iscritto</option>
+                        <option value="non_iscritto">Non iscritto</option>
+                      </select>
+                    </div>
+                    <div className="campo">
+                      <label>Obiezione</label>
+                      <input type="text" name="obiezione" defaultValue={pr.obiezione ?? ''} placeholder="Prezzo, orari, distanza…" />
+                    </div>
                   </div>
                   <div className="campo">
-                    <label>Obiezione</label>
-                    <input type="text" name="obiezione" defaultValue={pr.obiezione ?? ''} placeholder="Prezzo, orari, distanza…" />
+                    <label>Note</label>
+                    <input type="text" name="note" defaultValue={pr.note ?? ''} />
                   </div>
-                </div>
-                <div className="campo">
-                  <label>Note</label>
-                  <input type="text" name="note" defaultValue={pr.note ?? ''} />
-                </div>
-                <div className="campo">
-                  <label>La segue</label>
-                  <SceltaOperatore staff={staff} attuale={pr.gestito_da} attualeNome={pr.gestito_nome} etichetta="Da assegnare" />
-                </div>
-                <BottoneInvio testo="Salva la prova" inCorso="Salvataggio…" />
-              </form>
+                  <div className="campo">
+                    <label>La segue</label>
+                    <SceltaOperatore staff={staff} attuale={pr.gestito_da} attualeNome={pr.gestito_nome} etichetta="Da assegnare" />
+                  </div>
+                  <BottoneInvio testo="Salva la prova" inCorso="Salvataggio…" />
+                </form>
+              )}
             </section>
           ))}
 
@@ -200,7 +217,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
           )}
 
           {/* Rinnovi e disdette si gestiscono qui: da gestire, il modulo e'
-              aperto; gia' chiusi, si riapre da «Modifica». */}
+              aperto; chiusi con l'esito, si leggono e si riaprono, con l'avviso. */}
           {rinnovi.map((r) => (
             <section className="scheda" key={r.id}>
               <div className="testata-scheda">
@@ -217,10 +234,13 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
               ) : r.esito ? (
                 <>
                   {r.note && <p className="nota-socio">{r.note}</p>}
-                  <details className="modifica">
-                    <summary>Modifica</summary>
-                    <ModuloRinnovo r={r} staff={staff} torna={qui} />
-                  </details>
+                  <div className="azioni-scheda">
+                    <Riapri
+                      azione={aggiornaRinnovo}
+                      campi={{ rinnovo: r.id, torna: qui, esito: '', note: r.note ?? '' }}
+                      avviso={`riaprendo il rinnovo si toglie l'esito «${traduci(ESITO_RINNOVO, r.esito)}» e torna da gestire. Lo storico cambia.`}
+                    />
+                  </div>
                 </>
               ) : (
                 <ModuloRinnovo r={r} staff={staff} torna={qui} />
@@ -243,11 +263,14 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                 <>
                   {d.motivo && <p className="piccolo">Motivo: {d.motivo}</p>}
                   {d.note && <p className="nota-socio">{d.note}</p>}
-                  {puoVedere(io, 'disdette') && (
-                    <details className="modifica">
-                      <summary>Modifica</summary>
-                      <ModuloDisdetta d={d} staff={staff} torna={qui} />
-                    </details>
+                  {puoVedere(io, 'disdette') && d.esito && (
+                    <div className="azioni-scheda">
+                      <Riapri
+                        azione={aggiornaDisdetta}
+                        campi={{ disdetta: d.id, torna: qui, esito: '', contatto: d.contatto ?? '', motivo: d.motivo ?? '', note: d.note ?? '' }}
+                        avviso={`riaprendo la disdetta si toglie l'esito «${traduci(ESITO_DISDETTA, d.esito)}» e torna da gestire. Lo storico cambia.`}
+                      />
+                    </div>
                   )}
                 </>
               ) : (

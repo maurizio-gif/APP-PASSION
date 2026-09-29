@@ -303,9 +303,12 @@ fine prova, nascono da soli (`crm.alimenta()`, ogni 5 minuti):
 Solo per disdette e rinnovi nati dal 29/09/2026 alle 20:06 UTC
 (`crm.impostazioni.task_automatici_dal`), e solo se non hanno gia' un task.
 Nella scheda persona rinnovi e disdette si gestiscono sul posto (esito,
-contatto, motivo, chi li segue, note; quelli chiusi da «Modifica»), e il nuovo
-task si fa «Per» quello che della persona e' aperto (disdetta, rinnovo, pass,
-lead), o per la persona sola.
+contatto, motivo, chi li segue, note), e il nuovo task si fa «Per» quello che
+della persona e' aperto (disdetta, rinnovo, pass, lead), o per la persona sola.
+Lead, prova, rinnovo e disdetta chiusi con un esito non si modificano: si
+leggono, e «Riapri» apre prima l'avviso (riaprendo si toglie l'esito e lo
+storico cambia), poi si conferma con «Sì, riapri» (`Riapri` in
+`components/Ui.tsx`; il resto, note, motivo, chi li segue, resta com'era).
 
 **Filtro per consulente** (`20260929g`, `20260929m`): in ogni sezione (Lead,
 Prove, Disdette, Rinnovi, Task, Debitori) si sceglie un operatore e si vede il

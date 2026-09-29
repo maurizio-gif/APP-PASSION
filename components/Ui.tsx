@@ -108,3 +108,23 @@ export function Provenienza({ origine }: { origine?: string | null }) {
   if (!origine) return null
   return <span className={`origine origine-${origine}`}>{traduci(ORIGINE_TASK, origine)}</span>
 }
+
+// «Riapri» per quello che e' chiuso con un esito (lead, prova, rinnovo,
+// disdetta): il bottone apre l'avviso, «Sì, riapri» manda il modulo, con i
+// campi nascosti in `campi` (per le sezioni, l'esito vuoto e il resto com'era).
+export function Riapri({ azione, campi, avviso }: {
+  azione: (f: FormData) => Promise<void>
+  campi: Record<string, string>
+  avviso: string
+}) {
+  return (
+    <details className="riapri">
+      <summary className="bottone secondario piccolo">Riapri</summary>
+      <form action={azione} className="riapri-avviso">
+        {Object.entries(campi).map(([k, v]) => <input key={k} type="hidden" name={k} value={v} />)}
+        <p><strong>Attenzione:</strong> {avviso}</p>
+        <button className="bottone piccolo">Sì, riapri</button>
+      </form>
+    </details>
+  )
+}
