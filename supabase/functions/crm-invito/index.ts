@@ -1,6 +1,6 @@
 // L'invito nel CRM, o il link per una nuova password.
 //
-//   POST { "utente": "<id di public.staff>", "sito": "https://crm-passion.vercel.app" }
+//   POST { "utente": "<id di public.staff>", "sito": "https://crm.passionfitness.it" }
 //   header Authorization: Bearer <sessione di chi e' entrato nel CRM>
 //
 // La chiama la pagina Utenti. Chi puo' invitare chi lo decide il database

@@ -4,7 +4,7 @@ Il gestionale di Passion Fitness dentro Supabase, in tre pezzi:
 **il mirror di PerfectGym** (tutto il database di passion.perfectgym.com
 copiato nel progetto Supabase **Passion Fitness**, `tihpfycrkjtuppbmcqew`,
 eu-west-2 Londra, e tenuto aggiornato), **il CRM** (il lavoro degli operatori,
-migrato da Airtable) e **l'app** per lo staff, su https://crm-passion.vercel.app.
+migrato da Airtable) e **l'app** per lo staff, su https://crm.passionfitness.it (anche crm-passion.vercel.app).
 
 La macchina e' la stessa costruita per Athlon il 28/09/2026 (repo APP-ATHLON,
 sezione «Il mirror di PerfectGym» del README e migrazioni `20260928d..l`):
