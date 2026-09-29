@@ -36,7 +36,15 @@ Deno.serve(async (req) => {
 async function gestisci(req: Request, sql: ReturnType<typeof postgres>): Promise<Response> {
   const token = req.headers.get('x-import-token')
   const [r] = await sql`select decrypted_secret from vault.decrypted_secrets where name = 'airtable_import_token'`
-  if (!token || !r || token !== r.decrypted_secret) return new Response('Non autorizzato', { status: 401 })
+  if (!token || !r || token !== r.decrypted_secret) {
+    // Per capire quale token arriva senza mai mostrarlo: lunghezza e inizio
+    // della sua impronta sha256 (confrontabili con quelle dei segreti del Vault).
+    const [d] = token
+      ? await sql`select length(${token}) as l, left(encode(extensions.digest(${token}, 'sha256'), 'hex'), 8) as h`
+      : [{ l: 0, h: '-' }]
+    console.log(`token rifiutato: ${d.l} caratteri, impronta ${d.h}`)
+    return new Response(`Non autorizzato: token ricevuto di ${d.l} caratteri (impronta ${d.h})`, { status: 401 })
+  }
 
   const corpo = await req.json().catch(() => null) as { tabella?: string; record?: unknown[] } | null
   if (!corpo?.tabella || !TABELLE.has(corpo.tabella) || !Array.isArray(corpo.record)) {
