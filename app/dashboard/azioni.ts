@@ -117,6 +117,13 @@ export async function aggiornaDisdetta(f: FormData) {
     }))
 }
 
+export async function aggiornaRinnovo(f: FormData) {
+  await esegui(f, () =>
+    rpc('crm_rinnovo_aggiorna', {
+      p_id: testo(f, 'rinnovo'), p_esito: testo(f, 'esito') ?? '', p_assegnato: testo(f, 'assegnato'), p_note: testo(f, 'note'),
+    }))
+}
+
 // --- Debitori ----------------------------------------------------------------
 
 export async function debitoTask(f: FormData) {
