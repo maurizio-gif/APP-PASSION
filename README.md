@@ -185,7 +185,7 @@ assegna, chiudi vinta/persa), la **scheda persona** (i dati di PerfectGym, i
 contenitori con le loro azioni, la storia di commenti e task), **Prove**,
 **Nuovi contratti**, **Disdette**, **Task**, **Cerca**.
 
-**L'icona dell'app** (salvata sulla schermata home): «Passion CRM», dal logo
+**L'icona dell'app** (salvata sulla schermata home): «CRM Passion», dal logo
 scontornato. `public/apple-touch-icon.png` per iPhone (a tutto campo: gli
 angoli li arrotonda iOS), `public/icon-192.png` e `icon-512.png` con gli angoli
 trasparenti, `icon-maskable-*.png` per le icone tonde di Android (il logo

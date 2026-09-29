@@ -5,8 +5,8 @@ import type { MetadataRoute } from 'next'
 // Su iPhone l'icona e' public/apple-touch-icon.png (app/layout.tsx).
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Passion CRM',
-    short_name: 'Passion CRM',
+    name: 'CRM Passion',
+    short_name: 'CRM Passion',
     description: 'Il CRM di Passion Fitness',
     start_url: '/dashboard',
     display: 'browser',
