@@ -343,6 +343,17 @@ export type Abbonamenti = {
   oggi: string
   aggiornato_il: string | null
   kpi: Record<'oggi' | 'anno_fa' | 'due_anni_fa', { giorno: string; abbonamenti: number; pass: number; old: number }>
+  // La retention su base annuale (20260929s): degli iscritti del mese, quanti
+  // lo erano anche un anno prima, senza pause.
+  retention?: {
+    mese: string
+    in_corso: boolean
+    giorno: string
+    giorno_anno_prima: string
+    iscritti: number
+    anno_prima: number
+    da_un_anno: number
+  }[]
   mesi: {
     mese: string
     in_corso: boolean

@@ -37,7 +37,7 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
   const { kpi } = d
 
   // Ogni mese col suo nome, e sotto l'anno: si legge anche scorrendo.
-  const asseMese = (m: Abbonamenti['mesi'][number]) => {
+  const asseMese = (m: { mese: string; in_corso: boolean }) => {
     const g = data(m.mese)
     return {
       chiave: m.mese,
@@ -159,6 +159,30 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
       ...(i >= 12 ? [{ etichetta: 'Rispetto a un anno prima', valore: punti(tasso(m.prove_abbonati, m.prove), tasso(d.mesi[i - 12].prove_abbonati, d.mesi[i - 12].prove)) }] : []),
     ],
   }))
+  // La retention: degli iscritti del mese, quanti lo erano anche lo stesso
+  // giorno di un anno prima, senza pause. Nel riquadro anche l'altra lettura:
+  // di chi c'era un anno prima, quanti ci sono ancora.
+  const ret = d.retention ?? []
+  const retention: Punto[] = ret.map((r, i) => ({
+    ...asseMese(r),
+    valore: tasso(r.da_un_anno, r.iscritti),
+    tratteggio: r.in_corso,
+    righe: [
+      {
+        colore: 'serie',
+        valore: percento(r.da_un_anno, r.iscritti),
+        etichetta: 'iscritti da almeno un anno',
+        nota: `${formatoCifra(r.da_un_anno)} dei ${formatoCifra(r.iscritti)} iscritti ${r.in_corso ? 'oggi' : `il ${formatoData(r.giorno)}`} lo erano anche il ${formatoData(r.giorno_anno_prima)}, senza pause`,
+      },
+    ],
+    piede: [
+      { etichetta: `Iscritti il ${formatoData(r.giorno_anno_prima)}`, valore: formatoCifra(r.anno_prima) },
+      { etichetta: 'Di loro, ancora iscritti senza pause', valore: `${formatoCifra(r.da_un_anno)} · ${percento(r.da_un_anno, r.anno_prima)}` },
+      ...(i >= 1 ? [{ etichetta: 'Rispetto al mese prima', valore: punti(tasso(r.da_un_anno, r.iscritti), tasso(ret[i - 1].da_un_anno, ret[i - 1].iscritti)) }] : []),
+      ...(i >= 12 ? [{ etichetta: 'Rispetto a un anno prima', valore: punti(tasso(r.da_un_anno, r.iscritti), tasso(ret[i - 12].da_un_anno, ret[i - 12].iscritti)) }] : []),
+    ],
+  }))
+
   // Gli ultimi 12 mesi contro i 12 prima, in tutto e per tipo di pass.
   const somma = (mesi: Abbonamenti['mesi']) => {
     const t = mesi.reduce(
@@ -249,6 +273,24 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
         <p className="piccolo attenuato sotto-titolo">Nuovi abbonamenti meno scaduti non rinnovati. Sotto lo zero, se ne perdono più di quanti ne entrano.</p>
         <Colonne punti={saldo} formato="segno" unita="di saldo" />
       </section>
+
+      {retention.length > 0 && (
+        <section className="scheda">
+          <h2>Retention</h2>
+          <p className="piccolo attenuato sotto-titolo">
+            Su base annuale: degli iscritti di ogni mese, quanti erano iscritti anche lo stesso giorno dell&apos;anno prima,{' '}
+            <strong>senza pause</strong> (settembre 2026 contro settembre 2025, agosto 2026 contro agosto 2025…). Iscritto è chi ha un
+            abbonamento principale: non aggiuntivo, a pagamento o dei piani OLD del vecchio gestionale. Un cambio di abbonamento che
+            finisce il 30 e riparte il primo è continuità; anche un giorno di vuoto è una pausa. L&apos;ultimo giorno del mese; il mese in
+            corso (tratteggiato) è contato a oggi.
+          </p>
+          <Colonne punti={retention} formato="percento" massimo={100} altezza={160} unita="di retention" />
+          <p className="piccolo attenuato">
+            Quando i soci crescono, la retention scende anche se nessuno se ne va: un anno prima c&apos;erano meno persone da trattenere.
+            Nel riquadro di ogni mese c&apos;è anche l&apos;altra lettura: di chi c&apos;era un anno prima, quanti ci sono ancora.
+          </p>
+        </section>
+      )}
 
       <section className="scheda">
         <h2>Pass di prova: quanti diventano abbonamento</h2>
