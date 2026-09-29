@@ -235,17 +235,19 @@ e' entrata. Gli abbonamenti a pagamento su PerfectGym partono da luglio 2024:
 il 28/09/2024 i soci erano quasi tutti sui piani OLD (994, contro 515), e la
 pagina lo dice accanto al confronto con due anni fa.
 
-**Retention** (`20260929s`), prima dei pass di prova: per ogni mese, degli
-iscritti dell'ultimo giorno del mese (oggi, per quello in corso) quanti erano
-iscritti anche lo stesso giorno dell'anno prima, **senza pause** (settembre
-2026 contro settembre 2025, agosto contro agosto...). Qui la regola e' piu'
-stretta della catena: conta un abbonamento principale (non aggiuntivo, a
-pagamento o dei piani OLD) dopo l'altro, e il successivo deve partire al
-massimo il giorno dopo la fine del precedente: un cambio che finisce il 30
-settembre e riparte il primo ottobre e' continuita', anche un giorno di vuoto
-e' una pausa. Il riquadro del mese da' anche l'altra lettura, sugli iscritti
-di un anno prima. Il 29/09/2026: 1.062 dei 2.388 iscritti lo erano anche il
-29/09/2025 (44%); dei 1.972 iscritti di allora, e' ancora il 54%.
+**Retention** (`20260929s`, `20260929t`), prima dei pass di prova: per ogni
+mese, degli iscritti dell'ultimo giorno del mese (oggi, per quello in corso)
+quanti erano iscritti anche lo stesso giorno dell'anno prima, **senza
+interruzioni** (settembre 2026 contro settembre 2025, agosto contro
+agosto...). Contano gli abbonamenti principali (non aggiuntivi, a pagamento o
+dei piani OLD, che valgono come abbonamenti anche a canone zero) uno dopo
+l'altro: un cambio di piano o una pausa breve non interrompono, basta
+ripartire entro 30 giorni dalla fine del precedente, come per i rinnovi e le
+catene. Bisogna essere iscritti in tutti e due i giorni: chi era in pausa
+proprio quel giorno non conta. Il riquadro del mese da' anche l'altra
+lettura, sugli iscritti di un anno prima. Il 29/09/2026: 1.100 dei 2.388
+iscritti lo erano anche il 29/09/2025 (46%); dei 1.972 iscritti di allora,
+e' ancora il 56%.
 
 ### Debitori (`20260929a`)
 
