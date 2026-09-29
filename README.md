@@ -27,8 +27,10 @@ per `member_id` e `contract_id`. Qui sta il lavoro degli operatori.
 | `nuovi_contratti` | i controlli su ogni contratto nuovo: metodo di pagamento, codice fiscale, tesseramento |
 | `disdette` | chi disdice, com'e' stato contattato, com'e' finita |
 | `commenti`, `task` | il lavoro sulle persone; i task sono assegnabili a un altro operatore |
+| `rinnovi` | gli abbonamenti in scadenza da rinnovare, con chi li segue e l'esito (dal 29/09/2026, `20260929b`) |
+| `debiti` | i soci in negativo su PerfectGym e chi segue il recupero (`20260929a`) |
 
-Rinnovi e Customer Care per ora restano fuori, per scelta.
+Customer Care per ora resta fuori, per scelta.
 
 ### La migrazione da Airtable
 
@@ -77,6 +79,56 @@ alimenta da solo: il cron `crm-alimenta`, ogni 5 minuti, lancia
   contratti. Le disdette gia' note sono in `crm.disdette_note`;
 - **prove** dal mirror: ogni Pass (piano che contiene pass, prova o guest);
 - **task di fine prova**: due giorni prima della scadenza, a chi segue la prova.
+
+### Airtable -> CRM, di continuo (`20260929b`)
+
+Il CRM e' dal vivo, ma lo staff lavora ancora anche su Airtable (task, stati,
+assegnazioni, controlli dei nuovi contratti), e Tour e Meta scrivono i lead
+solo li'. Finche' Airtable resta acceso, il CRM lo segue:
+
+- **il trasporto**: il workflow n8n «PASSION: Airtable -> Supabase (sync CRM)»
+  (`mVLX3FPqcVtxZgpx`) ogni 5 minuti porta in `airtable.record` i record
+  modificati nell'ultima ora (`filterByFormula` su `LAST_MODIFIED_TIME()`),
+  ogni notte alle 3:40 li riporta tutti; il lancio a mano rilegge tutto.
+  `airtable.salva()` scrive solo i record cambiati e li segna da applicare
+  (`applicato_il` vuoto);
+- **l'applicazione**: `airtable.allinea()`, dentro `crm.alimenta()`, porta nel
+  CRM i record da applicare con le regole della ricostruzione: lead nuovi,
+  stato e assegnazione delle opportunita' (Lead, Referral, Tour), esito delle
+  prove (Pass), disdette (agganciate a quella del mirror dello stesso
+  contratto, se c'e'), rinnovi, task (nuovi, fatti, con esito), commenti,
+  controlli e tessera dei nuovi contratti. Un record che non va resta con
+  l'errore in `airtable.record.errore` e non ferma gli altri.
+
+Un task di Airtable e' **fatto** se ha l'ESITO (POSITIVO / NEGATIVO) o se
+«Completato» e' Si (`20260929c`): da maggio 2026 lo staff chiude i task con
+l'esito e non usa piu' «Completato». Il 29/09/2026 questo ha chiuso nel CRM
+1.394 task gia' fatti che risultavano aperti e ha ridato l'esito a 2.599
+archiviati; i task aperti veri erano 144.
+
+Una modifica di Airtable si applica solo se su Airtable **quel campo** e'
+cambiato: accanto alle righe del CRM resta l'ultimo valore di Airtable
+applicato (`airtable_stato_il`, `airtable_assegnato`, `airtable_note`,
+`airtable_impronta`). Cosi' un record che torna perche' e' cambiato un campo
+calcolato non tocca niente, e quello che si fa nel CRM resta finche' su
+Airtable non si cambia la stessa cosa. Un lead vinto dal mirror non si riapre;
+un task chiuso nel CRM non si riapre. Il giorno che Airtable si spegne basta
+disattivare il workflow.
+
+Per vedere a che punto e':
+
+```sql
+select tabella, count(*) filter (where applicato_il is null) da_applicare,
+       count(errore) errori, max(importato_il) ultimo_cambio
+  from airtable.record group by 1;
+select esito -> 'airtable' from crm.alimenta_log order by id desc limit 5;
+```
+
+**Rinnovi** nel menu: gli abbonamenti in scadenza (`public.rinnovi`, 338
+dallo storico di Airtable il 29/09/2026), da gestire in ordine di scadenza,
+con l'esito (rinnovato / non rinnovato), chi li segue e le note; accanto, se
+su PerfectGym c'e' gia' un abbonamento nuovo della persona. Per ora nascono
+su Airtable (l'automazione di fine mese) e arrivano col sync.
 
 ### Le richieste dei moduli, dritte nel CRM (`20260928n`)
 
@@ -153,7 +205,7 @@ minuti. La sezione l'hanno ricevuta tutti gli operatori; si toglie da Utenti.
 
 **Utenti** nel menu, per gli admin e per chi ha l'autorizzazione «Gestione
 utenti»: per ogni operatore le **sezioni** che vede (Lead, Prove, Nuovi
-contratti, Disdette, Task, Cerca, Debitori, Abbonamenti) e le **autorizzazioni** («Lead
+contratti, Disdette, Rinnovi, Task, Cerca, Debitori, Abbonamenti) e le **autorizzazioni** («Lead
 degli altri»: riassegnare e chiudere anche i lead in carico a un altro;
 «Gestione utenti»). Stanno in `public.staff.sezioni` e
 `public.staff.autorizzazioni`. Un admin vede tutto; la home e la scheda

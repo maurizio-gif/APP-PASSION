@@ -95,6 +95,7 @@ export const CONTROLLO: Record<string, string> = {
   da_controllare: 'Da controllare', in_corso: 'In corso', errore: 'Errore', controllato: 'Controllato',
 }
 export const TESSERAMENTO: Record<string, string> = { si: 'Tesserato', gia_presente: 'Già presente', no: 'Non tesserato' }
+export const ESITO_RINNOVO: Record<string, string> = { rinnovato: 'Rinnovato', non_rinnovato: 'Non rinnovato' }
 export const ESITO_DISDETTA: Record<string, string> = { vinto: 'Recuperato', perso: 'Perso', standby: 'In sospeso' }
 
 // I motivi di disdetta, gli stessi a cui si e' ricondotto lo storico.

@@ -10,6 +10,7 @@ export const SEZIONI = [
   { chiave: 'prove', href: '/dashboard/prove', testo: 'Prove' },
   { chiave: 'contratti', href: '/dashboard/contratti', testo: 'Nuovi contratti' },
   { chiave: 'disdette', href: '/dashboard/disdette', testo: 'Disdette' },
+  { chiave: 'rinnovi', href: '/dashboard/rinnovi', testo: 'Rinnovi' },
   { chiave: 'task', href: '/dashboard/task', testo: 'Task' },
   { chiave: 'cerca', href: '/dashboard/cerca', testo: 'Cerca' },
   { chiave: 'debitori', href: '/dashboard/debitori', testo: 'Debitori' },

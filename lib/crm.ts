@@ -242,6 +242,31 @@ export type Scheda = {
   )[]
 }
 
+// I rinnovi: gli abbonamenti in scadenza da rinnovare, dall'Airtable dello
+// staff (supabase/migrations/20260929b_airtable_sync_continuo.sql).
+export type Rinnovo = {
+  id: string
+  utente_id: string | null
+  nome: string | null
+  cognome: string | null
+  telefono: string | null
+  email: string | null
+  member_id: number | null
+  contract_id: number | null
+  piano: string | null
+  scadenza: string | null
+  valore: number | null
+  stato_contratto: string | null
+  rinnovato_su_pgm: boolean
+  esito: 'rinnovato' | 'non_rinnovato' | null
+  assegnato_a: string | null
+  assegnato_nome: string | null
+  gestito_il: string | null
+  note: string | null
+  task_aperti: number
+  creato_il: string
+}
+
 // I debitori: il saldo e' quello del mirror di PerfectGym, letto adesso
 // (supabase/migrations/20260929a_debitori.sql).
 export type Debitore = {
@@ -337,6 +362,7 @@ export const crm = {
   task: (chi: string, quando: string) => rpc<Task[]>('crm_task', { p_chi: chi, p_quando: quando }),
   persona: (id: string) => rpc<Scheda | null>('crm_persona', { p_id: id }),
   cerca: (testo: string) => rpc<Trovato[]>('crm_cerca', { p_testo: testo }),
+  rinnovi: (vista: string) => rpc<Rinnovo[]>('crm_rinnovi', { p_vista: vista }),
   debitori: (vista: string, chi: string) => rpc<Debitore[]>('crm_debitori', { p_vista: vista, p_chi: chi }),
   abbonamenti: () => rpc<Abbonamenti>('crm_abbonamenti'),
   utenti: () => rpc<Utente[]>('crm_utenti'),
