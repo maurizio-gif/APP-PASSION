@@ -265,7 +265,13 @@ export type Scheda = {
     pgm_errore?: string | null
     consenso_privacy?: boolean | null
   }[]
-  prove: { id: string; tipo_pass: string | null; data_inizio: string | null; data_fine: string | null; esito: Prova['esito']; obiezione: string | null; gestito_nome: string | null; gestito_da?: string | null; note: string | null }[]
+  // automatico: l'esito l'ha messo il mirror (20260929u); abbonamento: quello
+  // che l'ha chiusa come iscritto.
+  prove: {
+    id: string; tipo_pass: string | null; data_inizio: string | null; data_fine: string | null; esito: Prova['esito']
+    obiezione: string | null; gestito_nome: string | null; gestito_da?: string | null; note: string | null
+    automatico?: boolean; abbonamento?: { piano: string; dal: string } | null
+  }[]
   nuovi_contratti: { contract_id: number; controllo: NuovoContratto['controllo']; tesseramento: string | null; numero_tessera: string | null; note: string | null; creato_il: string }[]
   disdette: { id: string; contract_id: number | null; data_disdetta: string | null; esito: Disdetta['esito']; motivo: string | null; contatto: string | null; note: string | null; gestito_da?: string | null; gestito_nome?: string | null; piano?: string | null }[]
   rinnovi?: { id: string; contract_id: number | null; piano: string | null; scadenza: string | null; esito: Rinnovo['esito']; assegnato_a: string | null; assegnato_nome: string | null; note: string | null }[]

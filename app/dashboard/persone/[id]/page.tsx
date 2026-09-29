@@ -148,17 +148,33 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                 <dt>La segue</dt><dd>{pr.gestito_nome ?? <span className="attenuato">nessuno</span>}</dd>
                 {pr.esito && pr.obiezione && (<><dt>Obiezione</dt><dd>{pr.obiezione}</dd></>)}
               </dl>
-              {/* Chiusa con l'esito non si modifica: si riapre, con l'avviso. */}
+              {/* L'esito lo mette il mirror (20260929u): iscritto quando su
+                  PerfectGym compare l'abbonamento, non iscritto 30 giorni dopo
+                  la fine del pass. Chiusa non si modifica: si riapre, con
+                  l'avviso; quella iscritta da sola no, tornerebbe iscritta. */}
               {pr.esito ? (
                 <>
+                  {pr.automatico && (
+                    <p className="piccolo attenuato">
+                      {pr.esito === 'iscritto'
+                        ? `Segnata da sola: su PerfectGym c'è l'abbonamento${pr.abbonamento ? ` «${pr.abbonamento.piano}», firmato il ${formatoData(pr.abbonamento.dal)}` : ''}.`
+                        : 'Chiusa da sola: nessun abbonamento entro 30 giorni dalla fine del pass.'}
+                    </p>
+                  )}
                   {pr.note && <p className="nota-socio">{pr.note}</p>}
-                  <div className="azioni-scheda">
-                    <Riapri
-                      azione={aggiornaProva}
-                      campi={{ prova: pr.id, torna: qui, esito: '', obiezione: pr.obiezione ?? '', note: pr.note ?? '' }}
-                      avviso={`riaprendo la prova si toglie l'esito «${pr.esito === 'iscritto' ? 'Iscritto' : 'Non iscritto'}» e torna aperta. Lo storico cambia.`}
-                    />
-                  </div>
+                  {!(pr.automatico && pr.esito === 'iscritto') && (
+                    <div className="azioni-scheda">
+                      <Riapri
+                        azione={aggiornaProva}
+                        campi={{ prova: pr.id, torna: qui, esito: '', obiezione: pr.obiezione ?? '', note: pr.note ?? '' }}
+                        avviso={
+                          pr.esito === 'iscritto'
+                            ? "riaprendo la prova si toglie l'esito «Iscritto» e torna aperta; Iscritto non si rimette a mano, torna da solo se su PerfectGym c'è l'abbonamento. Lo storico cambia."
+                            : "riaprendo la prova si toglie l'esito «Non iscritto» e torna aperta. Lo storico cambia."
+                        }
+                      />
+                    </div>
+                  )}
                 </>
               ) : (
                 <form action={aggiornaProva} className="modulo">
@@ -167,9 +183,8 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                   <div className="due-colonne">
                     <div className="campo">
                       <label>Esito</label>
-                      <select name="esito" defaultValue={pr.esito ?? ''}>
-                        <option value="">Ancora aperto</option>
-                        <option value="iscritto">Iscritto</option>
+                      <select name="esito" defaultValue="">
+                        <option value="">Ancora aperta</option>
                         <option value="non_iscritto">Non iscritto</option>
                       </select>
                     </div>
@@ -178,6 +193,10 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                       <input type="text" name="obiezione" defaultValue={pr.obiezione ?? ''} placeholder="Prezzo, orari, distanza…" />
                     </div>
                   </div>
+                  <p className="piccolo attenuato">
+                    Iscritto si segna da solo, quando su PerfectGym compare l&apos;abbonamento. Non iscritto da solo 30 giorni dopo la fine
+                    del pass; prima, a mano.
+                  </p>
                   <div className="campo">
                     <label>Note</label>
                     <input type="text" name="note" defaultValue={pr.note ?? ''} />

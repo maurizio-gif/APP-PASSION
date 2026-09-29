@@ -78,6 +78,8 @@ alimenta da solo: il cron `crm-alimenta`, ogni 5 minuti, lancia
   il rinnovo automatico spento, come ad Athlon: a Passion e' spento su tutti i
   contratti. Le disdette gia' note sono in `crm.disdette_note`;
 - **prove** dal mirror: ogni Pass (piano che contiene pass, prova o guest);
+- **esito delle prove** dal mirror (`20260929u`): iscritto e non iscritto si
+  segnano da soli, vedi sotto;
 - **task di fine prova**: due giorni prima della scadenza, a chi segue la prova.
 
 ### Airtable -> CRM, di continuo (`20260929b`)
@@ -331,6 +333,24 @@ segue, i suoi task, i debitori di cui segue il recupero. Il filtro sta nelle
 funzioni `crm_*` (`p_consulente`), prima del limite di righe; la tendina e'
 `components/FiltroConsulente.tsx`. Nei Task (e in quelli della home) il nome
 apre la scheda della persona in un'altra scheda del browser.
+
+**L'esito delle prove si segna da solo** (`20260929u`): come i lead vinti,
+lo dice PerfectGym (`crm.prove_esiti_dal_mirror()`, dentro `crm.alimenta()`
+ogni 5 minuti). **Iscritto** quando su PerfectGym compare un abbonamento
+principale (non un pass, non aggiuntivo, a pagamento o dei piani OLD) firmato
+fra l'inizio della prova e 30 giorni dopo la fine del pass, la stessa finestra
+della dashboard abbonamenti; vale anche per una prova gia' chiusa come non
+iscritto, e resta l'abbonamento che l'ha chiusa (`esito_contract_id`). **Non
+iscritto** quando sono passati 30 giorni dalla fine del pass senza
+abbonamento: fino ad allora la prova resta fra le «Finite senza esito», per
+richiamare la persona, e a mano si puo' chiudere prima come non iscritto.
+«Iscritto» a mano non si sceglie piu'. Un pass senza data di fine (le prove
+dei moduli, senza il Pass su PerfectGym) dura 7 giorni. Nella scheda persona
+una prova chiusa da sola lo dice (`esito_automatico_il`), con l'abbonamento;
+quella iscritta da sola non si riapre, quella non iscritta si', e poi il
+mirror non la richiude. Alla prima passata, il 29/09/2026: 31 prove aperte
+iscritte, 226 non iscritte (tutte vecchie, da Airtable), 3 da non iscritto a
+iscritto.
 
 **Prove e disdette assegnate** (`20260929n`): come lead, rinnovi, debitori e
 task, anche prove e disdette hanno la tendina «Assegnata a» (nella loro pagina
