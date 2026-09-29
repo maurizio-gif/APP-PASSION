@@ -251,6 +251,10 @@ consulente compaiono solo gli operatori attivi, con un accesso (invitati o
 gia' entrati) e con la spunta «Riceve lead e task» in Utenti. Fra gli admin
 la ha solo Marco Morandini.
 
+**Disdette da gestire** (`20260929l`): in «Da gestire» e nel numero della home
+ci sono solo le disdette con la data nel futuro o al massimo 30 giorni fa.
+«Gestite» e «Tutte» restano complete.
+
 **Utenti** nel menu, per gli admin e per chi ha l'autorizzazione «Gestione
 utenti»: per ogni operatore le **sezioni** che vede (Lead, Prove, Nuovi
 contratti, Disdette, Rinnovi, Task, Cerca, Debitori, Abbonamenti) e le **autorizzazioni** («Lead
