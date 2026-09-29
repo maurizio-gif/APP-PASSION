@@ -8,14 +8,14 @@ import { nuovoTask } from '@/app/dashboard/azioni'
 
 // «Nuovo task» nella scheda persona: si programma (una cosa da fare, con la
 // data e le note di preparazione) o si registra (una cosa appena fatta: data e
-// ora sono quelle di adesso, e si scrive com'e' andata).
-export function NuovoTask({ utente, lead, torna, staff, io, domani }: {
+// ora sono quelle di adesso, e si scrive com'e' andata). La data di un task
+// programmato non e' precompilata: la si sceglie ogni volta.
+export function NuovoTask({ utente, lead, torna, staff, io }: {
   utente: string
   lead: string | null
   torna: string
   staff: Operatore[]
   io: string | null
-  domani: string
 }) {
   const [modo, setModo] = useState<'programma' | 'registra'>('programma')
   const registra = modo === 'registra'
@@ -52,7 +52,7 @@ export function NuovoTask({ utente, lead, torna, staff, io, domani }: {
         ) : (
           <div className="campo">
             <label htmlFor="nt-data">Quando</label>
-            <input id="nt-data" type="datetime-local" name="data" defaultValue={domani} required />
+            <input id="nt-data" type="datetime-local" name="data" required />
           </div>
         )}
         <div className="campo">

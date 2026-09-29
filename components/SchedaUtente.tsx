@@ -70,6 +70,10 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
               <input type="checkbox" name="attivo" defaultChecked={u.attivo} disabled={ioStesso} />
               Attivo
             </label>
+            <label className="spunta" title="Compare fra chi può ricevere lead e task (serve anche l’accesso)">
+              <input type="checkbox" name="assegnabile" defaultChecked={u.assegnabile} />
+              Riceve lead e task
+            </label>
           </div>
 
           {/* Da admin le spunte sono spente, e le spunte spente non partono col
@@ -168,7 +172,7 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
                 Il lavoro aperto passa a
                 <select name="passa_a" defaultValue="">
                   <option value="">Nessuno: torna da assegnare</option>
-                  {operatori.filter((o) => o.id !== u.id).map((o) => (
+                  {operatori.filter((o) => o.id !== u.id && o.assegnabile && o.accesso).map((o) => (
                     <option key={o.id} value={o.id}>{o.nome} {o.cognome ?? ''}</option>
                   ))}
                 </select>

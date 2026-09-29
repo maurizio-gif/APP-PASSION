@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { crm, linkPgm, type Scheda } from '@/lib/crm'
 import {
-  CONTROLLO, ESITO_DISDETTA, formatoData, formatoDataOra, formatoEuro, perInputDataOra,
+  CONTROLLO, ESITO_DISDETTA, formatoData, formatoDataOra, formatoEuro,
   STATO_CONTRATTO, TESSERAMENTO, TIPO_SOCIO, TIPO_TASK, traduci,
 } from '@/lib/formato'
 import { Avviso, BollinoFase, BollinoFonte, Contatti, Vuoto } from '@/components/Ui'
@@ -24,8 +24,6 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
   const task = s.storia.filter((e): e is Extract<Scheda['storia'][number], { tipo: 'task' }> => e.tipo === 'task')
   const leadAperto = s.lead.find((l) => l.fase === 'da_gestire' || l.fase === 'in_gestione')
   const pgm = linkPgm(p.member_id)
-  const domani = new Date(Date.now() + 24 * 3600 * 1000)
-  domani.setHours(10, 0, 0, 0)
 
   return (
     <>
@@ -185,7 +183,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
 
           <section className="scheda">
             <h2>Nuovo task</h2>
-            <NuovoTask utente={p.id} lead={leadAperto?.id ?? null} torna={qui} staff={staff} io={io?.id ?? null} domani={perInputDataOra(domani)} />
+            <NuovoTask utente={p.id} lead={leadAperto?.id ?? null} torna={qui} staff={staff} io={io?.id ?? null} />
           </section>
         </div>
 

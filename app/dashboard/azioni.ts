@@ -178,6 +178,7 @@ export async function aggiornaUtente(f: FormData) {
       p_attivo: f.get('attivo') === 'on',
       p_sezioni: lista(f, 'sezioni'),
       p_autorizzazioni: lista(f, 'autorizzazioni'),
+      p_assegnabile: f.get('assegnabile') === 'on',
     }),
   )
 }
