@@ -41,6 +41,9 @@ export type Utente = {
   autorizzazioni: string[]
   accesso: boolean
   ultimo_accesso: string | null
+  lead_aperti: number
+  task_aperti: number
+  altro_aperto: number
 }
 export type Operatore = { id: string; nome: string; cognome: string | null; ruolo: string }
 

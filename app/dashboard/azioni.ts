@@ -151,14 +151,14 @@ const lista = (f: FormData, k: string) => f.getAll(k).filter((v): v is string =>
 
 // Si torna sempre a Utenti: con «Salvato» o con l'errore del database (che
 // dice perche', per esempio che il proprio ruolo lo cambia un altro).
-async function suUtenti(ok: string, azione: () => Promise<unknown>) {
+async function suUtenti(ok: string | (() => string), azione: () => Promise<unknown>) {
   try {
     await azione()
   } catch (e) {
     redirect(`/dashboard/utenti?errore=${encodeURIComponent(e instanceof Error ? e.message : 'Non salvato')}`)
   }
   revalidatePath('/dashboard', 'layout')
-  redirect(`/dashboard/utenti?ok=${ok}`)
+  redirect(`/dashboard/utenti?ok=${typeof ok === 'string' ? ok : ok()}`)
 }
 
 export async function aggiornaUtente(f: FormData) {
@@ -181,5 +181,17 @@ export async function nuovoUtente(f: FormData) {
       p_cognome: testo(f, 'cognome'),
       p_ruolo: testo(f, 'ruolo') ?? 'consulente',
     }),
+  )
+}
+
+// Il lavoro aperto passa a chi si sceglie (vuoto: torna da assegnare). Senza
+// storia nel CRM l'utente si cancella, altrimenti resta nella storia, rimosso.
+export async function rimuoviUtente(f: FormData) {
+  let esito = 'rimosso'
+  await suUtenti(
+    () => `utente_${esito}`,
+    async () => {
+      esito = await rpc<string>('crm_utente_rimuovi', { p_id: testo(f, 'utente'), p_passa_a: testo(f, 'passa_a') })
+    },
   )
 }

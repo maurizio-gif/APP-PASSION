@@ -236,6 +236,15 @@ l'accesso da solo, e il ruolo admin lo da' e lo toglie solo un admin. Un
 utente nuovo si crea da li'; per entrare gli serve anche l'accesso in Supabase
 (Authentication -> Add user, con la stessa email).
 
+**Rimuovere un utente** (`20260929e`): in fondo alla sua scheda, «Rimuovi
+utente». Il lavoro aperto (lead da gestire o in gestione, task aperti,
+debitori da recuperare, rinnovi senza esito) passa all'operatore scelto, o
+torna da assegnare. L'accesso in Supabase si cancella. Chi non ha storia nel
+CRM si cancella del tutto; chi ce l'ha resta nella storia col suo nome,
+spento e segnato rimosso (`staff.rimosso_il`), e sparisce da Utenti e dagli
+elenchi. Stesse regole di Utenti: un admin lo rimuove solo un admin, nessuno
+rimuove se stesso. Ricreare un utente con la stessa email lo riporta com'era.
+
 Su Vercel c'e' solo la chiave anon (`NEXT_PUBLIC_SUPABASE_URL`,
 `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_SITE_URL`). I permessi li
 controlla il database: ogni funzione `crm_*` (`20260928i`) e' `security

@@ -1336,6 +1336,30 @@ details.scheda .utenti {
 .utente-piede .bottone {
   margin-left: auto;
 }
+.utente-rimuovi {
+  border-top: 1px solid var(--bordo);
+  margin-top: 12px;
+  padding-top: 10px;
+}
+.utente-rimuovi > summary {
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--testo-attenuato);
+}
+.utente-rimuovi > summary:hover,
+.utente-rimuovi[open] > summary {
+  color: var(--rosso);
+}
+.utente-rimuovi form {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+.utente-rimuovi .utente-piede {
+  border-top: 0;
+  padding-top: 0;
+}
 .nuovo-utente {
   display: grid;
   gap: 0 14px;
