@@ -52,7 +52,7 @@ export default async function Utenti({ searchParams }: { searchParams: { errore?
         <h2>Nuovo utente</h2>
         <p className="piccolo attenuato sotto-titolo">
           Nasce con le sezioni operative (Lead, Prove, Nuovi contratti, Disdette, Task, Cerca); il resto lo si abilita qui sopra.
-          Per entrare gli serve anche l’accesso: in Supabase, Authentication → Add user, con la stessa email.
+          Appena creato gli arriva un’email di invito con il link per scegliere la password.
         </p>
         <form action={nuovoUtente} className="modulo nuovo-utente">
           <div className="campo">

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { rpc } from '@/lib/crm'
+import { edge, rpc } from '@/lib/crm'
 import { daInputDataOra } from '@/lib/formato'
 
 // Le azioni del CRM. Ognuna chiama la sua funzione crm_* del database, che
@@ -155,6 +155,7 @@ async function suUtenti(ok: string | (() => string), azione: () => Promise<unkno
   try {
     await azione()
   } catch (e) {
+    revalidatePath('/dashboard', 'layout')
     redirect(`/dashboard/utenti?errore=${encodeURIComponent(e instanceof Error ? e.message : 'Non salvato')}`)
   }
   revalidatePath('/dashboard', 'layout')
@@ -173,14 +174,37 @@ export async function aggiornaUtente(f: FormData) {
   )
 }
 
+// L'invito (o, a chi l'accesso ce l'ha gia', il link per una nuova password):
+// l'Edge Function crm-invito, con i permessi controllati dal database.
+const invita = (utente: string | null) =>
+  edge<{ inviato: 'invito' | 'password' }>('crm-invito', {
+    utente,
+    sito: process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000',
+  })
+
+// Si crea e si invita subito: se l'invito non parte l'utente resta creato, e
+// lo si reinvita dalla sua scheda.
 export async function nuovoUtente(f: FormData) {
-  await suUtenti('utente_creato', () =>
-    rpc('crm_utente_nuovo', {
+  await suUtenti('utente_creato', async () => {
+    const id = await rpc<string>('crm_utente_nuovo', {
       p_email: testo(f, 'email'),
       p_nome: testo(f, 'nome'),
       p_cognome: testo(f, 'cognome'),
       p_ruolo: testo(f, 'ruolo') ?? 'consulente',
-    }),
+    })
+    await invita(id).catch((e) => {
+      throw new Error(`Utente creato, ma l’invito non è partito: ${e instanceof Error ? e.message : e}`)
+    })
+  })
+}
+
+export async function invitaUtente(f: FormData) {
+  let inviato = 'invito'
+  await suUtenti(
+    () => (inviato === 'password' ? 'utente_link_password' : 'utente_invitato'),
+    async () => {
+      inviato = (await invita(testo(f, 'utente'))).inviato
+    },
   )
 }
 

@@ -13,7 +13,9 @@ const MESSAGGI_OK: Record<string, string> = {
   utente_salvato: 'Utente salvato.',
   utente_cancellato: 'Utente rimosso. Non aveva storia nel CRM: è stato cancellato del tutto, accesso compreso.',
   utente_rimosso: 'Utente rimosso: non entra più e non compare fra gli operatori. Il suo lavoro aperto è passato di mano; nella storia resta il suo nome.',
-  utente_creato: 'Utente creato. Per entrare gli serve l’accesso in Supabase (Authentication → Add user, con la stessa email).',
+  utente_creato: 'Utente creato e invitato: gli arriva un’email con il link per scegliere la password.',
+  utente_invitato: 'Invito mandato: gli arriva un’email con il link per scegliere la password.',
+  utente_link_password: 'Link mandato: gli arriva un’email per scegliere una nuova password.',
 }
 
 export function Schede({ voci, attiva, base }: { voci: { chiave: string; testo: string; n?: number }[]; attiva: string; base: string }) {
