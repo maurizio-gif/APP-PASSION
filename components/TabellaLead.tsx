@@ -7,7 +7,7 @@ import { puoGestireLead } from '@/lib/permessi'
 
 // La tabella dei lead com'e' l'Interface di Airtable (Interface Commerciali ->
 // Opportunita'): una riga per lead, con in fila da dove arriva, cosa cerca, le
-// note dei task e l'ultimo commento. Il resto e' nella scheda, dal nome.
+// note dei task. Il resto e' nella scheda, dal nome.
 export function TabellaLead({ lead, io, staff, torna }: { lead: Lead[]; io: Io; staff: Operatore[]; torna: string }) {
   return (
     <div className="tabella-scorre">
@@ -20,7 +20,6 @@ export function TabellaLead({ lead, io, staff, torna }: { lead: Lead[]; io: Io; 
             <th>Tipologia</th>
             <th>Attività di interesse</th>
             <th>Nota task</th>
-            <th>Commenti</th>
             <th></th>
           </tr>
         </thead>
@@ -38,10 +37,6 @@ export function TabellaLead({ lead, io, staff, torna }: { lead: Lead[]; io: Io; 
                 <td className="nowrap"><BollinoFonte fonte={l.fonte} dettaglio={l.fonte_dettaglio} /></td>
                 <td><span className="taglia" title={l.attivita_interesse ?? undefined}>{l.attivita_interesse || '–'}</span></td>
                 <td><span className="taglia" title={l.note_task ?? undefined}>{l.note_task || ''}</span></td>
-                <td>
-                  <span className="taglia larga" title={l.ultimo_commento ?? undefined}>{l.ultimo_commento || '–'}</span>
-                  {l.commenti > 1 && <span className="piccolo attenuato"> ({l.commenti})</span>}
-                </td>
                 <td className="nowrap">
                   {l.fase === 'da_gestire' ? (
                     <form action={prendiLead}>
