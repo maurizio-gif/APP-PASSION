@@ -185,6 +185,15 @@ assegna, chiudi vinta/persa), la **scheda persona** (i dati di PerfectGym, i
 contenitori con le loro azioni, la storia di commenti e task), **Prove**,
 **Nuovi contratti**, **Disdette**, **Task**, **Cerca**.
 
+**L'icona dell'app** (salvata sulla schermata home): «Passion CRM», dal logo
+scontornato. `public/apple-touch-icon.png` per iPhone (a tutto campo: gli
+angoli li arrotonda iOS), `public/icon-192.png` e `icon-512.png` con gli angoli
+trasparenti, `icon-maskable-*.png` per le icone tonde di Android (il logo
+dentro la zona sicura), `favicon.ico` e `favicon-32x32.png`; nome e icone in
+`app/manifest.ts`. L'icona apre il sito nel browser, come sempre: niente
+modalita' app a se' (`appleWebApp.capable: false`), che su iPhone avrebbe un
+accesso suo.
+
 **Sul telefono** (fino a 720px, la barra fino a 860px) le righe restano
 basse: la barra nera e' una riga sola ferma in cima, con logo, ricerca e il
 bottone ☰ che apre l'elenco delle sezioni (`components/Menu.tsx`; si richiude
