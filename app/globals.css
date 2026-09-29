@@ -198,7 +198,9 @@ h3 {
     width: 84px;
     margin: 0;
   }
-  .barra-cerca {
+  /* .barra davanti: vince sul margine sotto della ricerca sul computer
+     (.barra-cerca, piu' avanti nel file), che la spostava in alto. */
+  .barra .barra-cerca {
     grid-area: cerca;
     margin: 0;
   }
