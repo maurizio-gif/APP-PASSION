@@ -1,17 +1,17 @@
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { crm, linkPgm, type Scheda } from '@/lib/crm'
+import { crm, linkPgm, type Operatore, type Scheda } from '@/lib/crm'
 import {
-  CONTROLLO, ESITO_DISDETTA, formatoData, formatoDataOra, formatoEuro, formatoGiorno, formatoOra, oggiRoma,
-  STATO_CONTRATTO, TESSERAMENTO, TIPO_SOCIO, TIPO_TASK, traduci,
+  CONTROLLO, ESITO_DISDETTA, ESITO_RINNOVO, FONTE, formatoData, formatoDataOra, formatoEuro, formatoGiorno, formatoOra,
+  MOTIVI_DISDETTA, oggiRoma, STATO_CONTRATTO, TIPO_SOCIO, TIPO_TASK, traduci,
 } from '@/lib/formato'
-import { Avviso, BollinoFase, BollinoFonte, Contatti, Vuoto } from '@/components/Ui'
+import { Avviso, BollinoFase, BollinoFonte, Contatti, Provenienza, Vuoto } from '@/components/Ui'
 import { BottoneInvio } from '@/components/BottoneInvio'
 import { NuovoTask } from '@/components/NuovoTask'
 import { SceltaOperatore } from '@/components/SceltaOperatore'
 import { puoGestireLead, puoVedere } from '@/lib/permessi'
 import {
-  aggiornaProva, assegnaLead, chiudiLead, completaTask, leadSuPerfectGym, prendiLead, riapriLead,
+  aggiornaDisdetta, aggiornaProva, aggiornaRinnovo, assegnaLead, chiudiLead, completaTask, leadSuPerfectGym, prendiLead,
+  riapriLead,
 } from '../../azioni'
 
 const VINTA_DA_SOLA = 'Vinta si segna da sola, quando su PerfectGym compare la prova o il contratto'
@@ -29,6 +29,15 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
   const [ultimo, ...precedenti] = s.socio?.contratti ?? []
   const controllo = (id: number) =>
     puoVedere(io, 'contratti') ? s.nuovi_contratti.find((n) => n.contract_id === id)?.controllo : undefined
+  const rinnovi = s.rinnovi ?? []
+  // Per cosa si fa il nuovo task: quello che della persona e' ancora aperto.
+  // Il primo e' scelto; «nessuno» lo lascia solo alla persona.
+  const per = [
+    ...s.disdette.filter((d) => !d.esito).map((d) => ({ valore: `disdetta:${d.id}`, testo: `Disdetta del ${formatoData(d.data_disdetta)}` })),
+    ...rinnovi.filter((r) => !r.esito).map((r) => ({ valore: `rinnovo:${r.id}`, testo: `Rinnovo, scade il ${formatoData(r.scadenza)}` })),
+    ...s.prove.filter((pr) => !pr.esito).map((pr) => ({ valore: `prova:${pr.id}`, testo: `Pass fino al ${formatoData(pr.data_fine)}` })),
+    ...(leadAperto ? [{ valore: `lead:${leadAperto.id}`, testo: `Lead ${traduci(FONTE, leadAperto.fonte)}` }] : []),
+  ]
 
   return (
     <>
@@ -190,6 +199,35 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
             </section>
           )}
 
+          {/* Rinnovi e disdette si gestiscono qui: da gestire, il modulo e'
+              aperto; gia' chiusi, si riapre da «Modifica». */}
+          {rinnovi.map((r) => (
+            <section className="scheda" key={r.id}>
+              <div className="testata-scheda">
+                <h2>Rinnovo</h2>
+                <span className={`bollino ${r.esito === 'rinnovato' ? 'verde' : r.esito ? 'grigio' : 'giallo'}`}>
+                  {r.esito ? traduci(ESITO_RINNOVO, r.esito) : 'Da gestire'}
+                </span>
+              </div>
+              <p className="piccolo">
+                scade il <strong>{formatoData(r.scadenza)}</strong>{r.piano ? ` · ${r.piano}` : ''} · lo segue {r.assegnato_nome ?? 'nessuno'}
+              </p>
+              {!puoVedere(io, 'rinnovi') ? (
+                r.note && <p className="nota-socio">{r.note}</p>
+              ) : r.esito ? (
+                <>
+                  {r.note && <p className="nota-socio">{r.note}</p>}
+                  <details className="modifica">
+                    <summary>Modifica</summary>
+                    <ModuloRinnovo r={r} staff={staff} torna={qui} />
+                  </details>
+                </>
+              ) : (
+                <ModuloRinnovo r={r} staff={staff} torna={qui} />
+              )}
+            </section>
+          ))}
+
           {s.disdette.map((d) => (
             <section className="scheda" key={d.id}>
               <div className="testata-scheda">
@@ -199,10 +237,22 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                 </span>
               </div>
               <p className="piccolo">
-                {formatoData(d.data_disdetta)}{d.motivo ? ` · ${d.motivo}` : ''} · la segue {d.gestito_nome ?? 'nessuno'} ·{' '}
-                <Link href="/dashboard/disdette?vista=tutte">vai alle disdette</Link>
+                del <strong>{formatoData(d.data_disdetta)}</strong>{d.piano ? ` · ${d.piano}` : ''} · la segue {d.gestito_nome ?? 'nessuno'}
               </p>
-              {d.note && <p className="nota-socio">{d.note}</p>}
+              {!puoVedere(io, 'disdette') || d.esito ? (
+                <>
+                  {d.motivo && <p className="piccolo">Motivo: {d.motivo}</p>}
+                  {d.note && <p className="nota-socio">{d.note}</p>}
+                  {puoVedere(io, 'disdette') && (
+                    <details className="modifica">
+                      <summary>Modifica</summary>
+                      <ModuloDisdetta d={d} staff={staff} torna={qui} />
+                    </details>
+                  )}
+                </>
+              ) : (
+                <ModuloDisdetta d={d} staff={staff} torna={qui} />
+              )}
             </section>
           ))}
 
@@ -218,6 +268,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                     <li key={e.id} className={`storia-task${e.archiviato ? ' archiviato' : e.completato_il ? ' fatto' : ''}`}>
                       <div className="storia-testa">
                         <span className="bollino">{traduci(TIPO_TASK, e.task_tipo)}</span>{' '}
+                        <Provenienza origine={e.origine} />{' '}
                         {e.archiviato ? `del ${formatoDataOra(e.data)} · archiviato` : e.completato_il ? `fatto ${formatoDataOra(e.completato_il)}` : `per ${formatoDataOra(e.data)}`}
                         {e.assegnato_nome ? ` · ${e.assegnato_nome}` : ''}
                         {e.esito && <span className={`bollino ${e.esito === 'positivo' ? 'verde' : 'rosso'}`}>{e.esito}</span>}
@@ -239,7 +290,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
             )}
             <div className="task-nuovo">
               <h3>Nuovo task</h3>
-              <NuovoTask utente={p.id} lead={leadAperto?.id ?? null} torna={qui} staff={staff} io={io?.id ?? null} />
+              <NuovoTask utente={p.id} per={per} torna={qui} staff={staff} io={io?.id ?? null} />
             </div>
           </section>
         </div>
@@ -353,6 +404,77 @@ function StatoCertificato({ c }: { c: Socio['certificato'] | undefined }) {
         <span><span className="bollino rosso">Certificato medico scaduto</span> il {formatoData(scadenza)}</span>
       )}
     </div>
+  )
+}
+
+// Rinnovo e disdetta, dalla scheda: gli stessi campi delle loro sezioni.
+function ModuloRinnovo({ r, staff, torna }: { r: NonNullable<Scheda['rinnovi']>[number]; staff: Operatore[]; torna: string }) {
+  return (
+    <form action={aggiornaRinnovo} className="modulo">
+      <input type="hidden" name="rinnovo" value={r.id} />
+      <input type="hidden" name="torna" value={torna} />
+      <div className="due-colonne">
+        <div className="campo">
+          <label>Esito</label>
+          <select name="esito" defaultValue={r.esito ?? ''}>
+            <option value="">Ancora aperto</option>
+            {Object.entries(ESITO_RINNOVO).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+          </select>
+        </div>
+        <div className="campo">
+          <label>Lo segue</label>
+          <SceltaOperatore staff={staff} attuale={r.assegnato_a} attualeNome={r.assegnato_nome} etichetta="Da assegnare" />
+        </div>
+      </div>
+      <div className="campo">
+        <label>Note</label>
+        <input type="text" name="note" defaultValue={r.note ?? ''} />
+      </div>
+      <BottoneInvio testo="Salva il rinnovo" inCorso="Salvataggio…" />
+    </form>
+  )
+}
+
+function ModuloDisdetta({ d, staff, torna }: { d: Scheda['disdette'][number]; staff: Operatore[]; torna: string }) {
+  return (
+    <form action={aggiornaDisdetta} className="modulo">
+      <input type="hidden" name="disdetta" value={d.id} />
+      <input type="hidden" name="torna" value={torna} />
+      <div className="due-colonne">
+        <div className="campo">
+          <label>Contatto</label>
+          <select name="contatto" defaultValue={d.contatto ?? ''}>
+            <option value="">Non ancora</option>
+            <option value="telefonata">Telefonata</option>
+            <option value="appuntamento">Appuntamento</option>
+          </select>
+        </div>
+        <div className="campo">
+          <label>Esito</label>
+          <select name="esito" defaultValue={d.esito ?? ''}>
+            <option value="">Da gestire</option>
+            {Object.entries(ESITO_DISDETTA).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+          </select>
+        </div>
+        <div className="campo">
+          <label>Motivo</label>
+          <select name="motivo" defaultValue={d.motivo ?? ''}>
+            <option value="">Non ancora</option>
+            {d.motivo && !MOTIVI_DISDETTA.includes(d.motivo) && <option value={d.motivo}>{d.motivo}</option>}
+            {MOTIVI_DISDETTA.map((m) => <option key={m} value={m}>{m}</option>)}
+          </select>
+        </div>
+        <div className="campo">
+          <label>La segue</label>
+          <SceltaOperatore staff={staff} attuale={d.gestito_da} attualeNome={d.gestito_nome} etichetta="Da assegnare" />
+        </div>
+      </div>
+      <div className="campo">
+        <label>Note</label>
+        <input type="text" name="note" defaultValue={d.note ?? ''} />
+      </div>
+      <BottoneInvio testo="Salva la disdetta" inCorso="Salvataggio…" />
+    </form>
   )
 }
 

@@ -186,9 +186,10 @@ contenitori con le loro azioni, la storia di commenti e task), **Prove**,
 **Nuovi contratti**, **Disdette**, **Task**, **Cerca**.
 
 **Sul telefono** (fino a 720px, la barra fino a 860px) le righe restano
-basse: la barra nera ha logo ed «Esci» sulla stessa riga e il menu in una riga
-sola che scorre di lato (la voce aperta si porta al centro); le viste (Da
-gestire, In gestione...) scorrono di lato anche loro. In Prove, Disdette,
+basse: la barra nera e' una riga sola ferma in cima, con logo, ricerca e il
+bottone ☰ che apre l'elenco delle sezioni (`components/Menu.tsx`; si richiude
+scegliendo, o con Esc); le viste (Da gestire, In gestione...) scorrono di
+lato. In Prove, Disdette,
 Rinnovi e Debitori ogni riga della tabella diventa una scheda: il nome coi
 suoi bollini, i contatti su una riga (l'email lunga si taglia), i dettagli uno
 dopo l'altro; il modulo della riga sta chiuso dietro «Gestisci»
@@ -275,6 +276,27 @@ annullata, prenotata, in lista d'attesa). I **Task** stanno in un riquadro
 solo, anche sul telefono: prima lo storico, sotto il nuovo task. I custom
 attribute non hanno `version`: una data cambiata su PerfectGym arriva con la
 rilettura completa, ogni 6 ore.
+
+**Il lavoro sta nei Task** (`20260929r`): ogni task dice da dove viene, con
+una dicitura piccola accanto al tipo (in Task, in home e nella scheda): Lead,
+Scadenza pass, Rinnovo, Disdetta, Debito (`crm.origine_task()`, dai legami
+`lead_id`, `prova_id`, `rinnovo_id`, `disdetta_id`, `debito_id`). I task di
+Airtable delle opportunita' «Disdetta» e «Rinnovi» si agganciano alla disdetta
+e al rinnovo del CRM (stesso `airtable_id`), anche col sync. Come il task di
+fine prova, nascono da soli (`crm.alimenta()`, ogni 5 minuti):
+
+- **disdetta**: appena arriva, una telefonata per oggi a chi la segue (se non
+  la segue nessuno, resta senza assegnatario): «Disdetta del ... (piano):
+  chiamare per capire il motivo e provare a recuperarlo» (`crm.task_disdette()`);
+- **rinnovo**: 15 giorni prima della scadenza, alle 10, a chi lo segue; non se
+  su PerfectGym c'e' gia' l'abbonamento nuovo (`crm.task_rinnovi()`).
+
+Solo per disdette e rinnovi nati dal 29/09/2026 alle 20:06 UTC
+(`crm.impostazioni.task_automatici_dal`), e solo se non hanno gia' un task.
+Nella scheda persona rinnovi e disdette si gestiscono sul posto (esito,
+contatto, motivo, chi li segue, note; quelli chiusi da «Modifica»), e il nuovo
+task si fa «Per» quello che della persona e' aperto (disdetta, rinnovo, pass,
+lead), o per la persona sola.
 
 **Filtro per consulente** (`20260929g`, `20260929m`): in ogni sezione (Lead,
 Prove, Disdette, Rinnovi, Task, Debitori) si sceglie un operatore e si vede il

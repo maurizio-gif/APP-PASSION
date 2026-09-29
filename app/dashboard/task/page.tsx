@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { crm, richiediSezione } from '@/lib/crm'
 import { formatoDataOra, TIPO_TASK, traduci } from '@/lib/formato'
-import { Avviso, Contatti, Persona, Vuoto } from '@/components/Ui'
+import { Avviso, Contatti, Persona, Provenienza, Vuoto } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
 import { completaTask } from '../azioni'
 
@@ -33,7 +33,7 @@ export default async function Task({ searchParams }: { searchParams: { chi?: str
       <div className="testata">
         <div>
           <h1>Task</h1>
-          <p>Le cose da fare: si creano dalla scheda della persona e si chiudono con l&apos;esito.</p>
+          <p>Tutto il lavoro, da ogni sezione: lead, scadenze dei pass, rinnovi, disdette, debiti. Si creano dalla scheda della persona (o nascono da soli) e si chiudono con l&apos;esito.</p>
         </div>
       </div>
       <Avviso errore={searchParams.errore} />
@@ -61,6 +61,7 @@ export default async function Task({ searchParams }: { searchParams: { chi?: str
                     <span className={`bollino${!t.completato_il && t.data && new Date(t.data) < new Date() ? ' rosso' : ''}`}>
                       {traduci(TIPO_TASK, t.tipo)} · {formatoDataOra(t.data)}
                     </span>{' '}
+                    <Provenienza origine={t.origine} />{' '}
                     <Persona id={t.utente_id} nome={t.nome} cognome={t.cognome} nuovaScheda />
                     {chi !== 'miei' && <span className="piccolo attenuato"> · {t.assegnato_nome ?? 'nessuno'}</span>}
                     <Contatti telefono={t.telefono} email={null} />

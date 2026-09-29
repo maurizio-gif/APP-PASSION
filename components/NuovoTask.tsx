@@ -10,9 +10,11 @@ import { nuovoTask } from '@/app/dashboard/azioni'
 // data e le note di preparazione) o si registra (una cosa appena fatta: data e
 // ora sono quelle di adesso, e si scrive com'e' andata). La data di un task
 // programmato non e' precompilata: la si sceglie ogni volta.
-export function NuovoTask({ utente, lead, torna, staff, io }: {
+// `per`: quello che della persona e' aperto (disdetta, rinnovo, pass, lead),
+// «tipo:id»; il task si aggancia a quello scelto, e in Task si vede da dove viene.
+export function NuovoTask({ utente, per, torna, staff, io }: {
   utente: string
-  lead: string | null
+  per: { valore: string; testo: string }[]
   torna: string
   staff: Operatore[]
   io: string | null
@@ -23,7 +25,6 @@ export function NuovoTask({ utente, lead, torna, staff, io }: {
   return (
     <form action={nuovoTask} className="modulo">
       <input type="hidden" name="utente" value={utente} />
-      <input type="hidden" name="lead" value={lead ?? ''} />
       <input type="hidden" name="torna" value={torna} />
       <input type="hidden" name="modo" value={modo} />
       <div className="schede-vista scelta-task" role="radiogroup" aria-label="Programma o registra">
@@ -34,6 +35,15 @@ export function NuovoTask({ utente, lead, torna, staff, io }: {
           Registra (già fatto)
         </button>
       </div>
+      {per.length > 0 && (
+        <div className="campo">
+          <label htmlFor="nt-per">Per</label>
+          <select id="nt-per" name="per" defaultValue={per[0].valore}>
+            {per.map((x) => <option key={x.valore} value={x.valore}>{x.testo}</option>)}
+            <option value="">Nessuno: solo la persona</option>
+          </select>
+        </div>
+      )}
       <div className="due-colonne">
         <div className="campo">
           <label htmlFor="nt-tipo">Task</label>

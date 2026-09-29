@@ -101,6 +101,10 @@ export const TIPO_TASK: Record<string, string> = {
 // Telefonata e In sede, che si programmano o si registrano.
 const SOLO_STORICO = ['richiamare', 'appuntamento']
 export const TIPI_TASK_NUOVI = Object.entries(TIPO_TASK).filter(([k]) => !SOLO_STORICO.includes(k))
+// Da dove viene un task: la dicitura accanto al task, in Task, in home e nella scheda.
+export const ORIGINE_TASK: Record<string, string> = {
+  lead: 'Lead', prova: 'Scadenza pass', rinnovo: 'Rinnovo', disdetta: 'Disdetta', debito: 'Debito',
+}
 export const CONTROLLO: Record<string, string> = {
   da_controllare: 'Da controllare', in_corso: 'In corso', errore: 'Errore', controllato: 'Controllato',
 }

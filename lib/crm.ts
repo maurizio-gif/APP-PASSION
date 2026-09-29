@@ -209,7 +209,12 @@ export type Task = {
   completato_il: string | null
   esito: 'positivo' | 'negativo' | null
   creato_il: string
+  origine?: OrigineTask | null
 }
+
+// Da dove viene un task (crm.origine_task()): nessuna, se e' nato dalla scheda
+// senza un lead, una prova, un rinnovo, una disdetta o un debito.
+export type OrigineTask = 'lead' | 'prova' | 'rinnovo' | 'disdetta' | 'debito'
 
 export type TipoTask = 'telefonata' | 'in_sede' | 'whatsapp' | 'email' | 'richiamare' | 'appuntamento'
 
@@ -262,10 +267,11 @@ export type Scheda = {
   }[]
   prove: { id: string; tipo_pass: string | null; data_inizio: string | null; data_fine: string | null; esito: Prova['esito']; obiezione: string | null; gestito_nome: string | null; gestito_da?: string | null; note: string | null }[]
   nuovi_contratti: { contract_id: number; controllo: NuovoContratto['controllo']; tesseramento: string | null; numero_tessera: string | null; note: string | null; creato_il: string }[]
-  disdette: { id: string; contract_id: number | null; data_disdetta: string | null; esito: Disdetta['esito']; motivo: string | null; contatto: string | null; note: string | null; gestito_da?: string | null; gestito_nome?: string | null }[]
+  disdette: { id: string; contract_id: number | null; data_disdetta: string | null; esito: Disdetta['esito']; motivo: string | null; contatto: string | null; note: string | null; gestito_da?: string | null; gestito_nome?: string | null; piano?: string | null }[]
+  rinnovi?: { id: string; contract_id: number | null; piano: string | null; scadenza: string | null; esito: Rinnovo['esito']; assegnato_a: string | null; assegnato_nome: string | null; note: string | null }[]
   storia: (
     | { tipo: 'commento'; id: string; quando: string; testo: string; autore: string | null }
-    | { tipo: 'task'; id: string; quando: string; task_tipo: TipoTask; data: string | null; nota: string | null; completato_il: string | null; esito: Task['esito']; archiviato?: boolean; nota_esito?: string | null; assegnato_nome: string | null; autore: string | null }
+    | { tipo: 'task'; id: string; quando: string; task_tipo: TipoTask; data: string | null; nota: string | null; completato_il: string | null; esito: Task['esito']; archiviato?: boolean; nota_esito?: string | null; assegnato_nome: string | null; autore: string | null; origine?: OrigineTask | null }
   )[]
 }
 

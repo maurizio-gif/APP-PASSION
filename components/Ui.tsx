@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { FASE, FONTE, traduci, nomeCompleto, telefonoLink } from '@/lib/formato'
+import { FASE, FONTE, ORIGINE_TASK, traduci, nomeCompleto, telefonoLink } from '@/lib/formato'
 
 // I pezzi che tornano in ogni pagina del CRM.
 
@@ -100,4 +100,11 @@ export function Gestione({ id, testo = 'Gestisci', children }: { id: string; tes
       <div className="gestione-corpo">{children}</div>
     </div>
   )
+}
+
+// Da dove viene un task (lead, scadenza del pass, rinnovo, disdetta, debito):
+// una dicitura piccola accanto al task. Niente, per i task nati dalla scheda.
+export function Provenienza({ origine }: { origine?: string | null }) {
+  if (!origine) return null
+  return <span className={`origine origine-${origine}`}>{traduci(ORIGINE_TASK, origine)}</span>
 }
