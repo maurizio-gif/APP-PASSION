@@ -59,6 +59,7 @@ export async function nuovoLead(f: FormData) {
       p_nome: testo(f, 'nome'), p_cognome: testo(f, 'cognome'), p_telefono: testo(f, 'telefono'),
       p_email: testo(f, 'email'), p_fonte: testo(f, 'fonte'), p_fonte_dettaglio: testo(f, 'fonte_dettaglio'),
       p_attivita: testo(f, 'attivita'), p_nota: testo(f, 'nota'), p_prendo: f.get('prendo') === 'on',
+      p_privacy: f.get('privacy') === 'on',
     })
     id = lead
   } catch (e) {

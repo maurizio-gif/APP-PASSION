@@ -148,7 +148,9 @@ avanti lo stesso.
 CRM, chiama l'Edge Function `crm-perfectgym-lead`, che fa la stessa chiamata
 dei workflow n8n del sito (`passion-prova-compilata`, `passion-referral`):
 `Api/v2.1/Crm2/AddLead` con club 1, sourceId 12, campaignId 12,
-inquiredViaId 79 e l'agreement 3, il telefono portato a +39 come in n8n. Le
+inquiredViaId 79 e l'agreement 3, il telefono portato a +39 come in n8n. L'agreement 3 e' accettato solo se nel
+modulo e' spuntato «Ha dato il consenso al trattamento dei dati» (`20260929p`,
+`lead.consenso_privacy`, visibile nella scheda del lead). Le
 credenziali sono quelle del sync (`PERFECTGYM_CLIENT_ID` e
 `PERFECTGYM_CLIENT_SECRET` fra i segreti delle Edge Function). L'esito sta nel
 lead (`pgm_stato`, `pgm_lead_id`, `pgm_errore`) e si vede nella sua scheda:
