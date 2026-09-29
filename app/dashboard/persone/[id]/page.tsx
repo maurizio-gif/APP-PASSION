@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { crm, linkPgm, type Scheda } from '@/lib/crm'
 import {
   CONTROLLO, ESITO_DISDETTA, formatoData, formatoDataOra, formatoEuro, formatoGiorno, formatoOra, oggiRoma,
-  spostaGiorno, STATO_CONTRATTO, TESSERAMENTO, TIPO_SOCIO, TIPO_TASK, traduci,
+  STATO_CONTRATTO, TESSERAMENTO, TIPO_SOCIO, TIPO_TASK, traduci,
 } from '@/lib/formato'
 import { Avviso, BollinoFase, BollinoFonte, Contatti, Vuoto } from '@/components/Ui'
 import { BottoneInvio } from '@/components/BottoneInvio'
@@ -36,6 +36,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
         <div>
           <h1>{[p.nome, p.cognome].filter(Boolean).join(' ') || 'Senza nome'}</h1>
           <Contatti telefono={p.telefono} email={p.email} />
+          <StatoCertificato c={s.socio?.certificato} />
         </div>
         {pgm && <a className="bottone secondario" href={pgm} target="_blank" rel="noreferrer">Apri su PerfectGym ↗</a>}
       </div>
@@ -205,13 +206,45 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
             </section>
           ))}
 
+          {/* I task in un riquadro solo, che sul telefono resta insieme: prima
+              lo storico, sotto il nuovo task. */}
           <section className="scheda">
-            <h2>Nuovo task</h2>
-            <NuovoTask utente={p.id} lead={leadAperto?.id ?? null} torna={qui} staff={staff} io={io?.id ?? null} />
+            <h2>Task</h2>
+            {task.length === 0 ? (
+              <Vuoto>Nessun task: lo crei qui sotto.</Vuoto>
+            ) : (
+              <ol className="storia">
+                {task.map((e) => (
+                    <li key={e.id} className={`storia-task${e.archiviato ? ' archiviato' : e.completato_il ? ' fatto' : ''}`}>
+                      <div className="storia-testa">
+                        <span className="bollino">{traduci(TIPO_TASK, e.task_tipo)}</span>{' '}
+                        {e.archiviato ? `del ${formatoDataOra(e.data)} · archiviato` : e.completato_il ? `fatto ${formatoDataOra(e.completato_il)}` : `per ${formatoDataOra(e.data)}`}
+                        {e.assegnato_nome ? ` · ${e.assegnato_nome}` : ''}
+                        {e.esito && <span className={`bollino ${e.esito === 'positivo' ? 'verde' : 'rosso'}`}>{e.esito}</span>}
+                      </div>
+                      {e.nota && <div className="storia-testo">{e.nota}</div>}
+                      {e.nota_esito && <div className="storia-testo"><strong>Com&apos;è andata:</strong> {e.nota_esito}</div>}
+                      {!e.completato_il && (
+                        <form action={completaTask} className="azioni-riga">
+                          <input type="hidden" name="task" value={e.id} />
+                          <input type="hidden" name="torna" value={qui} />
+                          <input type="text" name="nota" placeholder="Com'è andata" />
+                          <button className="bottone piccolo" name="esito" value="positivo">Fatto ✓</button>
+                          <button className="bottone secondario piccolo" name="esito" value="negativo">Negativo</button>
+                        </form>
+                      )}
+                    </li>
+                ))}
+              </ol>
+            )}
+            <div className="task-nuovo">
+              <h3>Nuovo task</h3>
+              <NuovoTask utente={p.id} lead={leadAperto?.id ?? null} torna={qui} staff={staff} io={io?.id ?? null} />
+            </div>
           </section>
         </div>
 
-        {/* ---- Colonna 2: chi e', e la sua storia ---- */}
+        {/* ---- Colonna 2: chi e' su PerfectGym ---- */}
         <div>
           <section className="scheda">
             <h2>Su PerfectGym</h2>
@@ -225,7 +258,6 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                   {p.codice_fiscale && (<><dt>Codice fiscale</dt><dd>{p.codice_fiscale}</dd></>)}
                   {p.data_nascita && (<><dt>Nato il</dt><dd>{formatoData(p.data_nascita)}</dd></>)}
                   <dt>Saldo</dt><dd className={s.socio.saldo != null && s.socio.saldo < 0 ? 'negativo' : undefined}>{formatoEuro(s.socio.saldo)}</dd>
-                  <Certificato c={s.socio.certificato} />
                 </dl>
               </>
             )}
@@ -270,36 +302,6 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
             </section>
           )}
 
-          <section className="scheda">
-            <h2>Task</h2>
-            {task.length === 0 ? (
-              <Vuoto>Nessun task: lo crei qui accanto.</Vuoto>
-            ) : (
-              <ol className="storia">
-                {task.map((e) => (
-                    <li key={e.id} className={`storia-task${e.archiviato ? ' archiviato' : e.completato_il ? ' fatto' : ''}`}>
-                      <div className="storia-testa">
-                        <span className="bollino">{traduci(TIPO_TASK, e.task_tipo)}</span>{' '}
-                        {e.archiviato ? `del ${formatoDataOra(e.data)} · archiviato` : e.completato_il ? `fatto ${formatoDataOra(e.completato_il)}` : `per ${formatoDataOra(e.data)}`}
-                        {e.assegnato_nome ? ` · ${e.assegnato_nome}` : ''}
-                        {e.esito && <span className={`bollino ${e.esito === 'positivo' ? 'verde' : 'rosso'}`}>{e.esito}</span>}
-                      </div>
-                      {e.nota && <div className="storia-testo">{e.nota}</div>}
-                      {e.nota_esito && <div className="storia-testo"><strong>Com&apos;è andata:</strong> {e.nota_esito}</div>}
-                      {!e.completato_il && (
-                        <form action={completaTask} className="azioni-riga">
-                          <input type="hidden" name="task" value={e.id} />
-                          <input type="hidden" name="torna" value={qui} />
-                          <input type="text" name="nota" placeholder="Com'è andata" />
-                          <button className="bottone piccolo" name="esito" value="positivo">Fatto ✓</button>
-                          <button className="bottone secondario piccolo" name="esito" value="negativo">Negativo</button>
-                        </form>
-                      )}
-                    </li>
-                ))}
-              </ol>
-            )}
-          </section>
         </div>
       </div>
     </>
@@ -333,44 +335,28 @@ function Contratto({ c, controllo }: { c: Socio['contratti'][number]; controllo?
   )
 }
 
-// Il certificato medico, dai custom attribute di PerfectGym. Il temporaneo si
-// mostra solo quando il certificato vero non e' valido.
-function Certificato({ c }: { c: Socio['certificato'] }) {
+// Il certificato medico nell'intestazione, dalla scadenza scritta su
+// PerfectGym (custom attribute del socio): attivo fino a, scaduto il, non
+// presente. Se il certificato vero non e' attivo ma c'e' un temporaneo ancora
+// valido, lo si dice accanto.
+function StatoCertificato({ c }: { c: Socio['certificato'] | undefined }) {
   const oggi = oggiRoma()
-  const periodo = (dal: string | null, al: string | null) =>
-    [dal && `dal ${formatoData(dal)}`, al && `al ${formatoData(al)}`].filter(Boolean).join(' ')
-  const medico = c?.inizio || c?.scadenza
-  const medicoValido = Boolean(c?.scadenza && c.scadenza >= oggi)
-  const temporaneo = c?.temporaneo_inizio || c?.temporaneo_fine
+  const scadenza = c?.scadenza ?? null
+  const attivo = scadenza != null && scadenza >= oggi
+  const temporaneo = !attivo && c?.temporaneo_fine && c.temporaneo_fine >= oggi ? c.temporaneo_fine : null
   return (
-    <>
-      <dt>Certificato medico</dt>
-      <dd>
-        {!medico ? (
-          <span className="attenuato">non registrato su PerfectGym</span>
-        ) : (
-          <>
-            {periodo(c!.inizio, c!.scadenza)}{' '}
-            {c!.scadenza && (
-              !medicoValido ? <span className="bollino rosso">scaduto</span>
-                : c!.scadenza <= spostaGiorno(oggi, 30) ? <span className="bollino giallo">in scadenza</span>
-                : <span className="bollino verde">valido</span>
-            )}
-          </>
-        )}
-      </dd>
-      {temporaneo && !medicoValido && (
-        <>
-          <dt>Certificato temporaneo</dt>
-          <dd>
-            {periodo(c!.temporaneo_inizio, c!.temporaneo_fine)}{' '}
-            {c!.temporaneo_fine && (
-              c!.temporaneo_fine >= oggi ? <span className="bollino giallo">valido</span> : <span className="bollino rosso">scaduto</span>
-            )}
-          </dd>
-        </>
+    <div className="certificato">
+      {!scadenza ? (
+        <span><span className="bollino grigio">Certificato medico non presente</span></span>
+      ) : attivo ? (
+        <span><span className="bollino verde">Certificato medico attivo</span> scade il {formatoData(scadenza)}</span>
+      ) : (
+        <span><span className="bollino rosso">Certificato medico scaduto</span> il {formatoData(scadenza)}</span>
       )}
-    </>
+      {temporaneo && (
+        <span><span className="bollino giallo">Certificato temporaneo attivo</span> scade il {formatoData(temporaneo)}</span>
+      )}
+    </div>
   )
 }
 
