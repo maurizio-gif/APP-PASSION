@@ -232,10 +232,13 @@ export type Scheda = {
     attivo: boolean | null
     creato_il: string | null
     saldo: number | null
+    // Le date del certificato, dai custom attribute del socio ("AAAA-MM-GG").
+    certificato?: { inizio: string | null; scadenza: string | null; temporaneo_inizio: string | null; temporaneo_fine: string | null } | null
+    // Senza i certificati, che su PerfectGym sono contratti aggiuntivi.
     contratti: { id: number; piano: string | null; canone: number | null; stato: string | null; data_firma: string | null; data_inizio: string | null; data_fine: string | null; data_disdetta: string | null; aggiuntivo?: boolean; rinnovo_automatico?: boolean; giorno_addebito?: number | null }[]
     ingressi: { entrata: string; uscita: string | null }[]
     ingressi_30gg: number
-    prenotazioni: { inizio: string; lezione: string | null; annullata: boolean | null; presente: boolean | null }[]
+    prenotazioni: { inizio: string; lezione: string | null; annullata: boolean | null; presente: boolean | null; in_attesa?: boolean | null }[]
   }
   lead: {
     id: string

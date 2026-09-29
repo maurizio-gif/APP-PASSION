@@ -244,9 +244,24 @@ spunte di Utenti, e la pagina rimanda alla home. I nuovi contratti intanto
 continuano ad arrivare dal mirror, e chi aveva la sezione la tiene: per
 riaccenderla basta toglierla da `SOSPESE`.
 Nella scheda persona, al posto dei riquadri «Nuovo contratto · Controllato»,
-ci sono i contratti di PerfectGym, uno per riquadro: piano, stato, firma,
+ci sono i contratti di PerfectGym: piano, stato, firma,
 inizio, fine, disdetta, canone, giorno di addebito, rinnovo automatico,
 aggiuntivo (`20260929i`).
+
+**Scheda persona riordinata** (`20260929q`): nel riquadro **Abbonamenti** si
+vede quello in corso (fra quelli in corso, il non aggiuntivo); gli altri, dal
+piu' recente, stanno nella tendina «Storico abbonamenti». I certificati non ci
+sono: su PerfectGym sono contratti aggiuntivi a canone zero («Certificato Medico», «Certificato
+Temporaneo»), ma non sono abbonamenti. Il certificato sta fra i dati «Su
+PerfectGym», letto dai custom attribute del socio nel mirror
+(`perfectgym.member_custom_attributes`: 20 inizio e 21 scadenza del
+certificato medico, 23 e 24 del temporaneo), con valido / in scadenza (30
+giorni) / scaduto; il temporaneo compare solo se il certificato vero non e'
+valido. Poi due riquadri, a punti: **Ultimi accessi** (gli ultimi 10, con
+entrata e uscita) e **Prenotazioni** (le ultime 10, con presente, assente,
+annullata, prenotata, in lista d'attesa). I custom attribute non hanno
+`version`: una data cambiata su PerfectGym arriva con la rilettura completa,
+ogni 6 ore.
 
 **Filtro per consulente** (`20260929g`, `20260929m`): in ogni sezione (Lead,
 Prove, Disdette, Rinnovi, Task, Debitori) si sceglie un operatore e si vede il
