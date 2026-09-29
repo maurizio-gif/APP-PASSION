@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { FASE, FONTE, traduci, nomeCompleto, telefonoLink, whatsappLink } from '@/lib/formato'
+import { FASE, FONTE, traduci, nomeCompleto, telefonoLink } from '@/lib/formato'
 
 // I pezzi che tornano in ogni pagina del CRM.
 
@@ -38,13 +38,11 @@ export function Persona({ id, nome, cognome }: { id: string | null; nome: string
 
 export function Contatti({ telefono, email }: { telefono: string | null; email: string | null }) {
   const tel = telefonoLink(telefono)
-  const wa = whatsappLink(telefono)
   return (
     <div className="contatti">
       {telefono && (
         <span>
           <a href={tel ?? undefined}>{telefono}</a>
-          {wa && <a className="wa" href={wa} target="_blank" rel="noreferrer">WhatsApp</a>}
         </span>
       )}
       {email && <a href={`mailto:${email}`}>{email}</a>}

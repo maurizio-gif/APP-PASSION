@@ -133,8 +133,3 @@ export function daInputDataOra(v: string | null | undefined): string | null {
 export function telefonoLink(t: string | null | undefined) {
   return t ? `tel:${t.replace(/[^\d+]/g, '')}` : null
 }
-export function whatsappLink(t: string | null | undefined) {
-  const n = t?.replace(/\D/g, '')
-  if (!n) return null
-  return `https://wa.me/${n.startsWith('39') || n.length > 10 ? n : '39' + n}`
-}

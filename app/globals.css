@@ -662,11 +662,6 @@ hr {
 .contatti a {
   color: var(--testo-attenuato);
 }
-.contatti .wa {
-  margin-left: 8px;
-  color: var(--verde);
-  font-weight: 700;
-}
 
 .schede-vista .conta {
   margin-left: 6px;
