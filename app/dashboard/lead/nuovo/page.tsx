@@ -6,7 +6,8 @@ import { BottoneInvio } from '@/components/BottoneInvio'
 import { nuovoLead } from '../../azioni'
 
 // Il lead che arriva al desk o al telefono: il tour (walk-in), la telefonata in
-// ingresso. Quelli del sito, di Meta e dei referral arrivano da soli.
+// ingresso. Quelli del sito, di Meta e dei referral arrivano da soli. Creato
+// qui, va anche su PerfectGym (azione nuovoLead, Edge Function crm-perfectgym-lead).
 export default async function NuovoLead({ searchParams }: { searchParams: { errore?: string } }) {
   await richiediSezione('lead')
   return (
@@ -14,7 +15,8 @@ export default async function NuovoLead({ searchParams }: { searchParams: { erro
       <div className="testata">
         <div>
           <h1>Nuovo lead</h1>
-          <p>Se la persona c&apos;è già (stesso telefono o email) il lead si aggancia alla sua scheda.</p>
+          <p>Se la persona c&apos;è già (stesso telefono o email) il lead si aggancia alla sua scheda.
+            Il lead nasce anche su PerfectGym, se la persona non c&apos;è già.</p>
         </div>
         <Link href="/dashboard/lead">← Lead</Link>
       </div>

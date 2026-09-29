@@ -11,7 +11,7 @@ import { NuovoTask } from '@/components/NuovoTask'
 import { SceltaOperatore } from '@/components/SceltaOperatore'
 import { puoGestireLead, puoVedere } from '@/lib/permessi'
 import {
-  aggiornaProva, assegnaLead, chiudiLead, completaTask, prendiLead, riapriLead,
+  aggiornaProva, assegnaLead, chiudiLead, completaTask, leadSuPerfectGym, prendiLead, riapriLead,
 } from '../../azioni'
 
 const VINTA_DA_SOLA = 'Vinta si segna da sola, quando su PerfectGym compare la prova o il contratto'
@@ -58,8 +58,24 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                   {l.presentato_da && (<><dt>Presentato da</dt><dd>{l.presentato_da}</dd></>)}
                   <dt>In carico a</dt><dd>{l.assegnato_nome ?? <span className="attenuato">nessuno</span>}</dd>
                   {l.chiuso_il && (<><dt>Chiuso</dt><dd>{formatoDataOra(l.chiuso_il)}</dd></>)}
+                  {l.origine === 'app' && (
+                    <><dt>PerfectGym</dt><dd>
+                      {l.pgm_stato === 'creato' ? <>Lead creato{l.pgm_lead_id ? ` (n. ${l.pgm_lead_id})` : ''}</>
+                        : l.pgm_stato === 'gia_su_pgm' ? 'Già presente: nessun lead nuovo'
+                        : l.pgm_stato === 'errore' ? <span className="testo-rosso">Non creato: {l.pgm_errore}</span>
+                        : <span className="attenuato">non mandato</span>}
+                    </dd></>
+                  )}
                 </dl>
                 {l.note && <p className="nota-socio">{l.note}</p>}
+
+                {l.origine === 'app' && (l.pgm_stato === 'errore' || !l.pgm_stato) && (
+                  <form action={leadSuPerfectGym} className="azioni-scheda">
+                    <input type="hidden" name="lead" value={l.id} />
+                    <input type="hidden" name="torna" value={qui} />
+                    <BottoneInvio testo={l.pgm_stato === 'errore' ? 'Riprova su PerfectGym' : 'Manda a PerfectGym'} inCorso="Invio…" classe="secondario piccolo" />
+                  </form>
+                )}
 
                 {l.fase === 'da_gestire' && (
                   <form action={prendiLead} className="azioni-scheda">
