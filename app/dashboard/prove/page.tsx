@@ -13,7 +13,9 @@ const VISTE = [
 ]
 
 // «Il container prove»: chi sta provando la palestra, come si sta comportando
-// (ingressi, lezioni) e com'e' finita. L'esito lo si scrive qui.
+// (ingressi, lezioni) e com'e' finita. L'esito lo mette il mirror (20260929u):
+// iscritto quando su PerfectGym compare l'abbonamento, non iscritto 30 giorni
+// dopo la fine del pass. A mano si chiude prima come non iscritto.
 export default async function Prove({ searchParams }: { searchParams: { vista?: string; consulente?: string; errore?: string } }) {
   await richiediSezione('prove')
   const vista = VISTE.some((v) => v.chiave === searchParams.vista) ? searchParams.vista! : 'in_corso'
@@ -29,7 +31,10 @@ export default async function Prove({ searchParams }: { searchParams: { vista?: 
       <div className="testata">
         <div>
           <h1>Prove</h1>
-          <p>Il Pass arriva da PerfectGym da solo. Qui si segue la persona fino all&apos;iscrizione.</p>
+          <p>
+            Il Pass arriva da PerfectGym da solo, e anche l&apos;esito: Iscritto quando compare l&apos;abbonamento, Non iscritto 30 giorni
+            dopo la fine del pass. Qui si segue la persona fino all&apos;iscrizione.
+          </p>
         </div>
       </div>
       <Avviso errore={searchParams.errore} />
@@ -79,9 +84,10 @@ export default async function Prove({ searchParams }: { searchParams: { vista?: 
                         <form action={aggiornaProva} className="modulo compatto">
                           <input type="hidden" name="prova" value={p.id} />
                           <input type="hidden" name="torna" value={qui} />
-                          <select name="esito" defaultValue={p.esito ?? (p.iscritto_su_pgm ? 'iscritto' : '')} aria-label="Esito">
-                            <option value="">Ancora aperto</option>
-                            <option value="iscritto">Iscritto</option>
+                          {/* Iscritto non si sceglie: resta solo se c'e' gia'. */}
+                          <select name="esito" defaultValue={p.esito ?? ''} aria-label="Esito">
+                            <option value="">Ancora aperta</option>
+                            {p.esito === 'iscritto' && <option value="iscritto">Iscritto</option>}
                             <option value="non_iscritto">Non iscritto</option>
                           </select>
                           <input type="text" name="obiezione" defaultValue={p.obiezione ?? ''} placeholder="Obiezione" />
