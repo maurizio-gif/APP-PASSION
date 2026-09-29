@@ -142,6 +142,24 @@ sono quelle dell'import, il Pass del sito nasce vinto con la sua prova. Il nodo
 e' un ramo a parte, eseguito per primo: se il CRM non risponde il modulo va
 avanti lo stesso.
 
+### I lead dei moduli Meta, dritti nel CRM (`20260929d`)
+
+Il workflow n8n «PASSION: Lead dai moduli Meta nel CRM» (`WV91lQokWaEEFdy5`,
+cartella PASSION/RICHIESTE) ogni 5 minuti chiede a Meta (Graph API
+`/<form_id>/leads`, credenziale «Facebook Lead Ads account») i lead delle
+ultime 2 ore dei moduli istantanei della pagina Passion Fitness Roma
+Tuscolana, e li manda a `crm-richiesta` con `rif` = `meta-<id del lead>`,
+campagna, gruppo di inserzioni e modulo. Niente trigger Facebook Lead Ads:
+Meta concede un solo webhook per app, e quello dell'app di n8n e' gia' usato.
+
+- **modulo nuovo** = una riga nel nodo «Moduli da leggere» (id e nome);
+- **i campi** si riconoscono dal nome (nome, cognome, e-mail, telefono,
+  attivita'); l'orario di ricontatto e «quando vorresti iniziare» vanno
+  insieme in `orario_ricontatto`;
+- **niente doppioni**: rileggere le stesse 2 ore ritrova il lead dal `rif`;
+  finche' Zapier scrive anche su Airtable, il record che torna col sync si
+  aggancia allo stesso lead (stessa persona e fonte nella mezz'ora).
+
 ## L'app (Next.js, alla radice del repository)
 
 Le interfacce della riunione, nello stile del sito (barra nera, rosso #E3032D,
