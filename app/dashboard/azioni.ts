@@ -117,6 +117,20 @@ export async function aggiornaDisdetta(f: FormData) {
     }))
 }
 
+// --- Debitori ----------------------------------------------------------------
+
+export async function debitoTask(f: FormData) {
+  await esegui(f, () =>
+    rpc('crm_debito_task', {
+      p_member: Number(testo(f, 'socio')), p_tipo: testo(f, 'tipo') ?? 'telefonata',
+      p_data: daInputDataOra(testo(f, 'data')), p_nota: testo(f, 'nota'), p_assegnato: testo(f, 'assegnato'),
+    }))
+}
+
+export async function debitoAssegna(f: FormData) {
+  await esegui(f, () => rpc('crm_debito_assegna', { p_member: Number(testo(f, 'socio')), p_staff: testo(f, 'staff') }))
+}
+
 // --- Ricerca ------------------------------------------------------------------
 
 export async function cerca(f: FormData) {

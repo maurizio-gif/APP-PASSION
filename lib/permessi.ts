@@ -12,6 +12,7 @@ export const SEZIONI = [
   { chiave: 'disdette', href: '/dashboard/disdette', testo: 'Disdette' },
   { chiave: 'task', href: '/dashboard/task', testo: 'Task' },
   { chiave: 'cerca', href: '/dashboard/cerca', testo: 'Cerca' },
+  { chiave: 'debitori', href: '/dashboard/debitori', testo: 'Debitori' },
   { chiave: 'abbonamenti', href: '/dashboard/abbonamenti', testo: 'Abbonamenti' },
 ] as const
 
