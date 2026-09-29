@@ -8,6 +8,7 @@ import {
 import { Avviso, BollinoFase, BollinoFonte, Contatti, Vuoto } from '@/components/Ui'
 import { BottoneInvio } from '@/components/BottoneInvio'
 import { NuovoTask } from '@/components/NuovoTask'
+import { SceltaOperatore } from '@/components/SceltaOperatore'
 import { puoGestireLead, puoVedere } from '@/lib/permessi'
 import {
   aggiornaProva, assegnaLead, chiudiLead, completaTask, prendiLead, riapriLead,
@@ -134,7 +135,10 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                   <label>Note</label>
                   <input type="text" name="note" defaultValue={pr.note ?? ''} />
                 </div>
-                <label className="spunta"><input type="checkbox" name="gestisco" /> La seguo io</label>
+                <div className="campo">
+                  <label>La segue</label>
+                  <SceltaOperatore staff={staff} attuale={pr.gestito_da} attualeNome={pr.gestito_nome} etichetta="Da assegnare" />
+                </div>
                 <BottoneInvio testo="Salva la prova" inCorso="Salvataggio…" />
               </form>
             </section>
@@ -175,7 +179,8 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                 </span>
               </div>
               <p className="piccolo">
-                {formatoData(d.data_disdetta)}{d.motivo ? ` · ${d.motivo}` : ''} · <Link href="/dashboard/disdette?vista=tutte">vai alle disdette</Link>
+                {formatoData(d.data_disdetta)}{d.motivo ? ` · ${d.motivo}` : ''} · la segue {d.gestito_nome ?? 'nessuno'} ·{' '}
+                <Link href="/dashboard/disdette?vista=tutte">vai alle disdette</Link>
               </p>
               {d.note && <p className="nota-socio">{d.note}</p>}
             </section>

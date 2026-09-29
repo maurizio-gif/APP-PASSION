@@ -93,7 +93,7 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
                       <span className={`bollino${t.data && new Date(t.data) < new Date() ? ' rosso' : ''}`}>
                         {traduci(TIPO_TASK, t.tipo)} {formatoOra(t.data)}
                       </span>{' '}
-                      <Persona id={t.utente_id} nome={t.nome} cognome={t.cognome} />
+                      <Persona id={t.utente_id} nome={t.nome} cognome={t.cognome} nuovaScheda />
                       {t.nota && <div className="piccolo">{t.nota}</div>}
                     </div>
                     <form action={completaTask} className="azioni-riga">

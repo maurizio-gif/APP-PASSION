@@ -1,6 +1,7 @@
 import { crm, linkPgm, richiediSezione } from '@/lib/crm'
 import { ESITO_RINNOVO, formatoData, formatoEuro, STATO_CONTRATTO, traduci } from '@/lib/formato'
 import { Avviso, Contatti, Persona, Schede, Vuoto } from '@/components/Ui'
+import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
 import { aggiornaRinnovo } from '../azioni'
 
 const VISTE = [
@@ -13,11 +14,15 @@ const VISTE = [
 // I rinnovi: gli abbonamenti in scadenza, uno per contratto. Per ora nascono
 // su Airtable (l'automazione di fine mese) e arrivano qui col sync; l'esito
 // si scrive qui o su Airtable, e vale l'ultimo cambiato.
-export default async function Rinnovi({ searchParams }: { searchParams: { vista?: string; errore?: string } }) {
+export default async function Rinnovi({ searchParams }: { searchParams: { vista?: string; consulente?: string; errore?: string } }) {
   const io = await richiediSezione('rinnovi')
   const vista = VISTE.some((v) => v.chiave === searchParams.vista) ? searchParams.vista! : 'da_gestire'
-  const [rinnovi, staff] = await Promise.all([crm.rinnovi(vista), crm.staff()])
-  const qui = `/dashboard/rinnovi?vista=${vista}`
+  const staff = await crm.staff()
+  // Il consulente: a chi e' assegnato il rinnovo.
+  const consulente = consulenteScelto(staff, searchParams.consulente)
+  const rinnovi = await crm.rinnovi(vista, consulente)
+  const perConsulente = consulente ? `consulente=${consulente}` : ''
+  const qui = `/dashboard/rinnovi?vista=${vista}${perConsulente ? `&${perConsulente}` : ''}`
 
   return (
     <>
@@ -28,7 +33,8 @@ export default async function Rinnovi({ searchParams }: { searchParams: { vista?
         </div>
       </div>
       <Avviso errore={searchParams.errore} />
-      <Schede voci={VISTE} attiva={vista} base="/dashboard/rinnovi" />
+      <Schede voci={VISTE} attiva={vista} base={`/dashboard/rinnovi${perConsulente ? `?${perConsulente}` : ''}`} />
+      <FiltroConsulente azione="/dashboard/rinnovi" staff={staff} consulente={consulente} tieni={{ vista }} />
 
       <div className="scheda">
         {rinnovi.length === 0 ? (
