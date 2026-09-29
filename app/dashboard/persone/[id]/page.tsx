@@ -7,7 +7,7 @@ import {
 } from '@/lib/formato'
 import { Avviso, BollinoFase, BollinoFonte, Contatti, Vuoto } from '@/components/Ui'
 import { BottoneInvio } from '@/components/BottoneInvio'
-import { puoGestireLead } from '@/lib/permessi'
+import { puoGestireLead, puoVedere } from '@/lib/permessi'
 import {
   aggiornaProva, assegnaLead, chiudiLead, completaTask, nuovoTask, prendiLead, riapriLead,
 } from '../../azioni'
@@ -141,7 +141,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
             </section>
           ))}
 
-          {s.nuovi_contratti.map((n) => (
+          {puoVedere(io, 'contratti') && s.nuovi_contratti.map((n) => (
             <section className="scheda" key={n.contract_id}>
               <div className="testata-scheda">
                 <h2>Nuovo contratto</h2>

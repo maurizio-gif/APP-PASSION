@@ -221,6 +221,13 @@ minuti. La sezione l'hanno ricevuta tutti gli operatori; si toglie da Utenti.
 
 ### Utenti: sezioni e autorizzazioni (`20260928q`)
 
+**Nuovi contratti e' sospesa** (dal 29/09/2026): `SOSPESE` in
+`lib/permessi.ts` la spegne per tutti, admin compresi. Sparisce dal menu, dalla
+home (il riquadro «Contratti da controllare»), dalla scheda persona e dalle
+spunte di Utenti, e la pagina rimanda alla home. I nuovi contratti intanto
+continuano ad arrivare dal mirror, e chi aveva la sezione la tiene: per
+riaccenderla basta toglierla da `SOSPESE`.
+
 **Utenti** nel menu, per gli admin e per chi ha l'autorizzazione «Gestione
 utenti»: per ogni operatore le **sezioni** che vede (Lead, Prove, Nuovi
 contratti, Disdette, Rinnovi, Task, Cerca, Debitori, Abbonamenti) e le **autorizzazioni** («Lead

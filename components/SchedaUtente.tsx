@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import type { Io, Utente } from '@/lib/crm'
 import { formatoDataOra } from '@/lib/formato'
-import { AUTORIZZAZIONI, eAdmin, SEZIONI } from '@/lib/permessi'
+import { AUTORIZZAZIONI, eAdmin, SEZIONI_ATTIVE, SOSPESE } from '@/lib/permessi'
 import { BottoneInvio } from '@/components/BottoneInvio'
 import { aggiornaUtente, invitaUtente, rimuoviUtente } from '@/app/dashboard/azioni'
 
@@ -75,6 +75,8 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
           {/* Da admin le spunte sono spente, e le spunte spente non partono col
               modulo: quelle salvate viaggiano nascoste. */}
           {admin && u.sezioni.map((s) => <input key={s} type="hidden" name="sezioni" value={s} />)}
+          {/* Le sezioni sospese non si vedono, ma chi le aveva le tiene. */}
+          {!admin && u.sezioni.filter((s) => SOSPESE.some((x) => x === s)).map((s) => <input key={s} type="hidden" name="sezioni" value={s} />)}
           {admin && u.autorizzazioni.map((a) => <input key={a} type="hidden" name="autorizzazioni" value={a} />)}
 
           <div className="utente-gruppo">
@@ -83,7 +85,7 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
               {admin && <span className="attenuato"> · un admin le vede tutte: per sceglierle, ruolo Consulente</span>}
             </div>
             <div className="spunte">
-              {SEZIONI.map((s) => (
+              {SEZIONI_ATTIVE.map((s) => (
                 <label key={s.chiave} className="chip">
                   {admin ? (
                     <input type="checkbox" checked readOnly disabled />

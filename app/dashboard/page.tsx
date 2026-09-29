@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { crm } from '@/lib/crm'
 import { formatoGiornoLungo, formatoOra, oggiRoma, traduci, TIPO_TASK } from '@/lib/formato'
 import { Avviso, Persona, Vuoto } from '@/components/Ui'
+import { puoVedere } from '@/lib/permessi'
 import { TabellaLead } from '@/components/TabellaLead'
 import { completaTask } from './azioni'
 
@@ -47,11 +48,13 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
           <div className="valore">{h.prove_in_scadenza}</div>
           <div className="nota">entro 2 giorni · {h.prove_in_corso} in corso</div>
         </Link>
-        <Link href="/dashboard/contratti" className="numero">
-          <div className="etichetta">Contratti da controllare</div>
-          <div className="valore">{h.contratti_da_controllare}</div>
-          <div className="nota">pagamento, codice fiscale, tessera</div>
-        </Link>
+        {puoVedere(io, 'contratti') && (
+          <Link href="/dashboard/contratti" className="numero">
+            <div className="etichetta">Contratti da controllare</div>
+            <div className="valore">{h.contratti_da_controllare}</div>
+            <div className="nota">pagamento, codice fiscale, tessera</div>
+          </Link>
+        )}
         <Link href="/dashboard/disdette" className="numero">
           <div className="etichetta">Disdette</div>
           <div className="valore">{h.disdette_da_gestire}</div>

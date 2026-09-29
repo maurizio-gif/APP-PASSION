@@ -51,7 +51,7 @@ export default async function Utenti({ searchParams }: { searchParams: { errore?
       <section className="scheda">
         <h2>Nuovo utente</h2>
         <p className="piccolo attenuato sotto-titolo">
-          Nasce con le sezioni operative (Lead, Prove, Nuovi contratti, Disdette, Task, Cerca); il resto lo si abilita qui sopra.
+          Nasce con le sezioni operative (Lead, Prove, Disdette, Rinnovi, Task, Cerca, Debitori); il resto lo si abilita qui sopra.
           Appena creato gli arriva un’email di invito con il link per scegliere la password.
         </p>
         <form action={nuovoUtente} className="modulo nuovo-utente">

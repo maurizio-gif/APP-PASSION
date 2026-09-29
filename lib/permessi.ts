@@ -19,6 +19,13 @@ export const SEZIONI = [
 
 export type Sezione = (typeof SEZIONI)[number]['chiave']
 
+// Sezioni spente per tutti, admin compresi: non compaiono nel menu, nella home,
+// nella scheda persona ne' fra le spunte di Utenti, e la pagina rimanda alla
+// home. I dati intanto continuano ad arrivare, e chi le aveva le ritrova
+// quando si riaccendono (basta toglierle da qui).
+export const SOSPESE: readonly Sezione[] = ['contratti']
+export const SEZIONI_ATTIVE = SEZIONI.filter((s) => !SOSPESE.includes(s.chiave))
+
 export const AUTORIZZAZIONI = [
   { chiave: 'lead_altrui', testo: 'Lead degli altri', descrizione: 'riassegnare e chiudere anche i lead in carico a un altro' },
   { chiave: 'gestione_utenti', testo: 'Gestione utenti', descrizione: 'aprire Utenti e cambiare sezioni e autorizzazioni' },
@@ -27,7 +34,8 @@ export const AUTORIZZAZIONI = [
 export type Autorizzazione = (typeof AUTORIZZAZIONI)[number]['chiave']
 
 export const eAdmin = (io: Io) => io?.ruolo === 'admin'
-export const puoVedere = (io: Io, sezione: Sezione) => eAdmin(io) || Boolean(io?.sezioni.includes(sezione))
+export const puoVedere = (io: Io, sezione: Sezione) =>
+  !SOSPESE.includes(sezione) && (eAdmin(io) || Boolean(io?.sezioni.includes(sezione)))
 export const ha = (io: Io, autorizzazione: Autorizzazione) => eAdmin(io) || Boolean(io?.autorizzazioni.includes(autorizzazione))
 
 // Riassegnare o chiudere un lead: se e' libero, se e' mio, o con l'autorizzazione.
