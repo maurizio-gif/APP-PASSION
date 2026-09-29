@@ -100,6 +100,12 @@ solo li'. Finche' Airtable resta acceso, il CRM lo segue:
   controlli e tessera dei nuovi contratti. Un record che non va resta con
   l'errore in `airtable.record.errore` e non ferma gli altri.
 
+Un task di Airtable e' **fatto** se ha l'ESITO (POSITIVO / NEGATIVO) o se
+«Completato» e' Si (`20260929c`): da maggio 2026 lo staff chiude i task con
+l'esito e non usa piu' «Completato». Il 29/09/2026 questo ha chiuso nel CRM
+1.394 task gia' fatti che risultavano aperti e ha ridato l'esito a 2.599
+archiviati; i task aperti veri erano 144.
+
 Una modifica di Airtable si applica solo se su Airtable **quel campo** e'
 cambiato: accanto alle righe del CRM resta l'ultimo valore di Airtable
 applicato (`airtable_stato_il`, `airtable_assegnato`, `airtable_note`,
