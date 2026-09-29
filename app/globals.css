@@ -163,6 +163,17 @@ h3 {
   color: var(--testo-attenuato);
 }
 
+/* Il bottone ☰ e il contenitore del menu: sul computer il bottone non c'e'
+   e il contenitore non conta (le voci stanno nella barra come sempre). */
+.barra-hamburger {
+  display: none;
+}
+.barra-menu {
+  display: contents;
+}
+
+/* Sul telefono la barra e' una riga sola, ferma in cima: logo, ricerca e il
+   bottone ☰, che apre sotto l'elenco delle sezioni (components/Menu.tsx). */
 @media (max-width: 860px) {
   .guscio {
     flex-direction: column;
@@ -170,25 +181,90 @@ h3 {
   .barra {
     width: 100%;
     height: auto;
-    position: static;
-    padding: 14px 16px;
-    gap: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding: 8px 16px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas: 'logo cerca bottone' 'menu menu menu';
+    align-items: center;
+    gap: 0 10px;
+  }
+  .barra-logo {
+    grid-area: logo;
   }
   .barra-logo img {
-    width: 110px;
+    width: 84px;
+    margin: 0;
   }
-  .barra nav {
-    flex-direction: row;
-    flex-wrap: wrap;
+  .barra-cerca {
+    grid-area: cerca;
+    margin: 0;
+  }
+  .barra-cerca input[type='search'] {
+    min-height: 36px;
+    padding: 6px 10px;
+  }
+  .barra-hamburger {
+    grid-area: bottone;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 40px;
+    height: 36px;
+    padding: 0 9px;
+    background: none;
+    border: 1px solid #3a3535;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .barra-hamburger span {
+    display: block;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    transition: transform 0.15s, opacity 0.15s;
+  }
+  .barra-hamburger[aria-expanded='true'] span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .barra-hamburger[aria-expanded='true'] span:nth-child(2) {
+    opacity: 0;
+  }
+  .barra-hamburger[aria-expanded='true'] span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+  .barra-menu {
+    grid-area: menu;
+    display: none;
+  }
+  .barra-menu.aperto {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 0 4px;
+    max-height: calc(100vh - 56px);
+    overflow-y: auto;
   }
   .barra nav a {
-    padding: 6px 10px;
+    padding: 10px 12px;
   }
   .barra-piede {
     margin-top: 0;
+    padding: 10px 6px 0;
+    border-top: 1px solid #2a2626;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .barra-piede button {
+    margin-top: 0;
   }
   .contenuto {
-    padding: 20px 16px 48px;
+    padding: 16px 16px 40px;
   }
 }
 
@@ -456,6 +532,44 @@ select:focus {
   font-size: 0.85rem;
   color: var(--testo-attenuato);
   margin-top: 6px;
+}
+
+/* Da dove viene un task: una dicitura piccola accanto al tipo. */
+.origine {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--testo-attenuato);
+  white-space: nowrap;
+}
+.origine-lead {
+  color: #0b5c8a;
+}
+.origine-prova {
+  color: var(--giallo);
+}
+.origine-rinnovo {
+  color: var(--verde);
+}
+.origine-disdetta,
+.origine-debito {
+  color: var(--rosso-scuro);
+}
+
+/* Rinnovo e disdetta gia' chiusi, nella scheda: il modulo si riapre da qui. */
+.modifica {
+  margin-top: 8px;
+}
+.modifica > summary {
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--testo-attenuato);
+}
+.modifica[open] > summary {
+  margin-bottom: 10px;
+  color: var(--rosso-scuro);
 }
 
 /* Il nuovo task, in fondo al riquadro dei task, sotto lo storico. */
@@ -1475,4 +1589,341 @@ details.scheda .utenti {
 }
 .debitori-nuovo[open] > summary {
   margin-bottom: 8px;
+}
+
+/* --- Sul telefono: righe basse -------------------------------------------- */
+
+/* Il modulo di una riga (components/Ui.tsx, Gestione): sul computer sempre
+   aperto, il bottone non c'e'. */
+.gestione-apri,
+.gestione-bottone,
+.solo-telefono {
+  display: none;
+}
+.schede-vista + .schede-vista {
+  margin-top: 6px;
+}
+
+@media (max-width: 720px) {
+  .solo-computer {
+    display: none;
+  }
+  .solo-telefono {
+    display: block;
+  }
+
+  /* Titoli, schede e filtri piu' stretti. */
+  .testata {
+    margin-bottom: 14px;
+    gap: 10px;
+  }
+  .testata p {
+    font-size: 0.88rem;
+    margin-top: 4px;
+  }
+  .scheda {
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .griglia {
+    gap: 0 12px;
+  }
+  h2 {
+    margin-bottom: 8px;
+  }
+  .tabella-scorre {
+    margin: 0 -14px;
+    padding: 0 14px;
+  }
+  .filtri {
+    margin-bottom: 12px;
+    gap: 8px;
+  }
+  .filtri input[type='search'] {
+    flex-basis: 100%;
+  }
+  .filtri:has(input[type='search'] + .bottone) input[type='search'] {
+    flex-basis: 0;
+  }
+  .filtri select {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  .elenco > li {
+    padding: 8px 0;
+  }
+  .dati {
+    gap: 4px 12px;
+    font-size: 0.9rem;
+  }
+  .campo {
+    margin-bottom: 10px;
+  }
+  .azioni-riga input[type='text'],
+  .azioni-riga select,
+  .modulo.compatto input[type='text'],
+  .modulo.compatto input[type='datetime-local'],
+  .modulo.compatto select {
+    min-height: 36px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+
+  /* Le viste (Da gestire, In gestione...) in una riga sola che scorre. */
+  .schede-vista {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin-left: -16px;
+    margin-right: -16px;
+    padding: 0 16px;
+  }
+  .schede-vista::-webkit-scrollbar {
+    display: none;
+  }
+  .schede-vista a,
+  .schede-vista button {
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding: 6px 12px;
+  }
+  .schede-vista:not(.scelta-task) {
+    margin-bottom: 8px;
+  }
+  .scheda .schede-vista {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0;
+  }
+
+  /* Telefono ed email su una riga: l'email lunga si taglia. */
+  .contatti {
+    flex-wrap: nowrap;
+    min-width: 0;
+  }
+  .contatti > * {
+    flex-shrink: 0;
+  }
+  .contatti > a:last-child {
+    flex-shrink: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  /* I task della home: i due bottoni a destra, uno sopra l'altro. */
+  .elenco-riga:has(> .pila) {
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+  .elenco-riga:has(> .pila) > div:first-child {
+    flex: 1 1 0;
+  }
+  .azioni-riga.pila {
+    flex-direction: column;
+    align-items: stretch;
+    flex-shrink: 0;
+    gap: 4px;
+  }
+  .azioni-riga.pila .bottone {
+    justify-content: center;
+  }
+  /* Nei task il telefono va accanto al nome. */
+  .elenco-riga .contatti {
+    display: inline-flex;
+    margin: 0 0 0 6px;
+    vertical-align: baseline;
+  }
+
+  /* La home: i numeri due per riga. */
+  .numeri {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .numero {
+    padding: 10px 12px;
+  }
+  .numero .etichetta {
+    font-size: 0.7rem;
+  }
+  .numero .valore {
+    font-size: 1.6rem;
+    margin-top: 2px;
+  }
+  .numero .nota {
+    font-size: 0.75rem;
+  }
+
+  /* Le tabelle col modulo in fondo (Prove, Disdette, Rinnovi, Debitori):
+     ogni riga diventa una scheda bassa. In cima il nome coi suoi bollini e,
+     a destra, «Gestisci» che apre il modulo; sotto i contatti e i dettagli,
+     uno dopo l'altro. */
+  .schede-mobile thead {
+    display: none;
+  }
+  .schede-mobile,
+  .schede-mobile tbody {
+    display: block;
+  }
+  .schede-mobile tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 3px 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--bordo);
+  }
+  .schede-mobile tr:last-child {
+    border-bottom: 0;
+  }
+  .schede-mobile td {
+    display: block;
+    grid-column: 1 / -1;
+    padding: 0;
+    border: 0;
+    white-space: normal;
+    min-width: 0;
+  }
+  .schede-mobile tbody tr:nth-child(even) td {
+    background: none;
+  }
+  .schede-mobile td:first-child {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px 8px;
+  }
+  .schede-mobile td:first-child > div {
+    order: 1;
+    flex-basis: 100%;
+    margin: 0;
+  }
+  .schede-mobile td.info > div {
+    display: inline;
+  }
+  .schede-mobile td.info > div + div:not(.bollino)::before {
+    content: ' · ';
+    color: var(--testo-attenuato);
+  }
+  .schede-mobile td.info .bollino {
+    margin-left: 4px;
+  }
+  .schede-mobile td.gestisci,
+  .schede-mobile .gestione {
+    display: contents;
+  }
+  .gestione-apri {
+    display: block;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .gestione-bottone {
+    display: inline-flex;
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+    cursor: pointer;
+  }
+  .gestione-apri:checked + .gestione-bottone {
+    background: var(--nero);
+    border-color: var(--nero);
+    color: #fff;
+  }
+  .gestione-apri:focus-visible + .gestione-bottone {
+    outline: 2px solid var(--rosso);
+    outline-offset: 1px;
+  }
+  .gestione-corpo {
+    display: none;
+    grid-column: 1 / -1;
+    margin-top: 6px;
+  }
+  .gestione-apri:checked ~ .gestione-corpo {
+    display: block;
+  }
+  .schede-mobile .modulo.compatto {
+    min-width: 0;
+  }
+  .gestione-corpo .bottone {
+    justify-content: center;
+  }
+  /* Debitori: chi segue il recupero e «+ Task» sulla stessa riga; aperto, il
+     nuovo task va sotto, largo. */
+  .schede-mobile td.recupero {
+    grid-column: 1;
+  }
+  .schede-mobile td.nuovo-task {
+    grid-column: 2;
+    align-self: start;
+  }
+  .schede-mobile td.nuovo-task:has(details[open]) {
+    grid-column: 1 / -1;
+  }
+  .schede-mobile .debitori-task {
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+  }
+  .schede-mobile .debitori-task .taglia.larga {
+    flex: 1;
+    min-width: 0;
+    max-width: none;
+  }
+  .schede-mobile .debitori-task:has(> .attenuato:only-child) {
+    display: none;
+  }
+
+  /* I lead sul telefono: nome e fonte, sotto quando e cosa cerca (tagliato),
+     l'azione a destra; la tendina per riassegnare va sotto, larga. */
+  .lead-telefono {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .lead-telefono > li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: 'testa azione' 'dettaglio azione';
+    align-items: center;
+    gap: 2px 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--bordo);
+  }
+  .lead-telefono > li:last-child {
+    border-bottom: 0;
+  }
+  .lead-telefono > li.con-modulo {
+    grid-template-areas: 'testa testa' 'dettaglio dettaglio' 'azione azione';
+  }
+  .lead-telefono a {
+    color: var(--testo);
+  }
+  .lead-telefono-testa {
+    grid-area: testa;
+    min-width: 0;
+  }
+  .lead-telefono-dettaglio {
+    grid-area: dettaglio;
+    font-size: 0.82rem;
+    color: var(--testo-attenuato);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
+  .lead-telefono-azione {
+    grid-area: azione;
+  }
+  .con-modulo .lead-telefono-azione {
+    margin-top: 4px;
+  }
+  .con-modulo .lead-telefono-azione select {
+    flex: 1;
+  }
 }

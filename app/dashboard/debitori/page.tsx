@@ -72,7 +72,7 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
           <Vuoto>{rientrati ? 'Nessun debito rientrato negli ultimi 90 giorni.' : 'Nessun debitore qui.'}</Vuoto>
         ) : (
           <div className="tabella-scorre">
-            <table>
+            <table className="schede-mobile">
               <thead>
                 <tr>
                   <th>Socio</th>
@@ -92,7 +92,7 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
                         <Contatti telefono={d.telefono} email={d.email} />
                         {pgm && <a className="piccolo" href={pgm} target="_blank" rel="noreferrer">PerfectGym ↗</a>}
                       </td>
-                      <td className="nowrap">
+                      <td className="nowrap info">
                         <div className={d.saldo != null && d.saldo < 0 ? 'negativo' : undefined}>{formatoEuro(d.saldo)}</div>
                         {d.negativo_da && <div className="piccolo attenuato">in negativo dal {formatoData(d.negativo_da)}</div>}
                         <div className="piccolo attenuato">
@@ -100,7 +100,7 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
                         </div>
                         {d.rientrato_il && <span className="bollino verde">Rientrato il {formatoData(d.rientrato_il)}</span>}
                       </td>
-                      <td className="piccolo">
+                      <td className="piccolo info">
                         <span className={`bollino ${d.abbonamento_attivo ? 'verde' : 'grigio'}`}>{d.abbonamento_attivo ? 'Attivo' : 'Scaduto'}</span>
                         <div><strong>{d.piano ?? 'nessun abbonamento'}</strong></div>
                         {d.stato_contratto && (
@@ -110,7 +110,7 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
                           </div>
                         )}
                       </td>
-                      <td>
+                      <td className="recupero">
                         {rientrati ? (
                           <span className="piccolo">{d.assegnato_nome ?? '—'}</span>
                         ) : (
@@ -141,7 +141,7 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
                         </div>
                       </td>
                       {!rientrati && (
-                        <td>
+                        <td className="nuovo-task">
                           <details className="debitori-nuovo">
                             <summary className="bottone secondario piccolo">+ Task</summary>
                             <form action={debitoTask} className="modulo compatto">

@@ -104,17 +104,24 @@ export async function aggiungiCommento(f: FormData) {
 // Programmato: la data scelta e le note di preparazione. Registrato: fatto
 // adesso (la data la mette il database), con l'esito e le note dell'esito.
 export async function nuovoTask(f: FormData) {
+  // Per cosa e' il task: «lead:<id>», «prova:<id>», «rinnovo:<id>», «disdetta:<id>»,
+  // o niente (solo la persona). Il database lo aggancia solo se e' della persona.
+  const [cosa, id] = (testo(f, 'per') ?? '').split(':')
+  const per = {
+    p_lead: cosa === 'lead' ? id : null, p_prova: cosa === 'prova' ? id : null,
+    p_rinnovo: cosa === 'rinnovo' ? id : null, p_disdetta: cosa === 'disdetta' ? id : null,
+  }
   await esegui(f, () =>
     testo(f, 'modo') === 'registra'
       ? rpc('crm_task_registra', {
           p_utente: testo(f, 'utente'), p_tipo: testo(f, 'tipo') ?? 'telefonata',
           p_esito: testo(f, 'esito'), p_nota_esito: testo(f, 'nota'),
-          p_assegnato: testo(f, 'assegnato'), p_lead: testo(f, 'lead'),
+          p_assegnato: testo(f, 'assegnato'), ...per,
         })
       : rpc('crm_task_nuovo', {
           p_utente: testo(f, 'utente'), p_tipo: testo(f, 'tipo') ?? 'telefonata',
           p_data: daInputDataOra(testo(f, 'data')), p_nota: testo(f, 'nota'),
-          p_assegnato: testo(f, 'assegnato'), p_lead: testo(f, 'lead'),
+          p_assegnato: testo(f, 'assegnato'), ...per,
         }))
 }
 

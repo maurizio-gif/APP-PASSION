@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { crm } from '@/lib/crm'
 import { formatoGiornoLungo, formatoOra, oggiRoma, traduci, TIPO_TASK } from '@/lib/formato'
-import { Avviso, Persona, Vuoto } from '@/components/Ui'
+import { Avviso, Persona, Provenienza, Vuoto } from '@/components/Ui'
 import { puoVedere } from '@/lib/permessi'
 import { TabellaLead } from '@/components/TabellaLead'
 import { completaTask } from './azioni'
@@ -93,10 +93,11 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
                       <span className={`bollino${t.data && new Date(t.data) < new Date() ? ' rosso' : ''}`}>
                         {traduci(TIPO_TASK, t.tipo)} {formatoOra(t.data)}
                       </span>{' '}
+                      <Provenienza origine={t.origine} />{' '}
                       <Persona id={t.utente_id} nome={t.nome} cognome={t.cognome} nuovaScheda />
                       {t.nota && <div className="piccolo">{t.nota}</div>}
                     </div>
-                    <form action={completaTask} className="azioni-riga">
+                    <form action={completaTask} className="azioni-riga pila">
                       <input type="hidden" name="task" value={t.id} />
                       <input type="hidden" name="torna" value="/dashboard" />
                       <button className="bottone piccolo" name="esito" value="positivo">Fatto ✓</button>
