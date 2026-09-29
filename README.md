@@ -251,20 +251,19 @@ aggiuntivo (`20260929i`).
 **Scheda persona riordinata** (`20260929q`): nel riquadro **Abbonamenti** si
 vede quello in corso (fra quelli in corso, il non aggiuntivo); gli altri, dal
 piu' recente, stanno nella tendina «Storico abbonamenti». I certificati non ci
-sono: su PerfectGym sono contratti aggiuntivi a canone zero («Certificato Medico», «Certificato
-Temporaneo»), ma non sono abbonamenti. Il certificato sta sotto nome e
-contatti, letto dai custom attribute del socio nel mirror
+sono: su PerfectGym sono contratti aggiuntivi a canone zero («Certificato
+Medico», «Certificato Temporaneo»), ma non sono abbonamenti. Il certificato
+sta sotto nome e contatti, letto dai custom attribute del socio nel mirror
 (`perfectgym.member_custom_attributes`: 20 inizio e 21 scadenza del
 certificato medico, 23 e 24 del temporaneo): «Certificato medico attivo» con
 la scadenza, «scaduto» con il giorno in cui e' scaduto, «non presente» se la
-scadenza su PerfectGym non c'e'; se il certificato vero non e' attivo ma c'e'
-un temporaneo valido, accanto «Certificato temporaneo attivo». Poi due
-riquadri, a punti: **Ultimi accessi** (gli ultimi 10, con entrata e uscita) e
-**Prenotazioni** (le ultime 10, con presente, assente, annullata, prenotata,
-in lista d'attesa). I **Task** stanno in un riquadro solo, anche sul
-telefono: prima lo storico, sotto il nuovo task. I custom attribute non hanno
-`version`: una data cambiata su PerfectGym arriva con la rilettura completa,
-ogni 6 ore.
+scadenza su PerfectGym non c'e'. Conta solo il certificato definitivo, non il
+temporaneo. Poi due riquadri, a punti: **Ultimi accessi** (gli ultimi 10, con
+entrata e uscita) e **Prenotazioni** (le ultime 10, con presente, assente,
+annullata, prenotata, in lista d'attesa). I **Task** stanno in un riquadro
+solo, anche sul telefono: prima lo storico, sotto il nuovo task. I custom
+attribute non hanno `version`: una data cambiata su PerfectGym arriva con la
+rilettura completa, ogni 6 ore.
 
 **Filtro per consulente** (`20260929g`, `20260929m`): in ogni sezione (Lead,
 Prove, Disdette, Rinnovi, Task, Debitori) si sceglie un operatore e si vede il

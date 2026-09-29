@@ -337,13 +337,11 @@ function Contratto({ c, controllo }: { c: Socio['contratti'][number]; controllo?
 
 // Il certificato medico nell'intestazione, dalla scadenza scritta su
 // PerfectGym (custom attribute del socio): attivo fino a, scaduto il, non
-// presente. Se il certificato vero non e' attivo ma c'e' un temporaneo ancora
-// valido, lo si dice accanto.
+// presente. Solo il certificato definitivo: il temporaneo qui non conta.
 function StatoCertificato({ c }: { c: Socio['certificato'] | undefined }) {
   const oggi = oggiRoma()
   const scadenza = c?.scadenza ?? null
   const attivo = scadenza != null && scadenza >= oggi
-  const temporaneo = !attivo && c?.temporaneo_fine && c.temporaneo_fine >= oggi ? c.temporaneo_fine : null
   return (
     <div className="certificato">
       {!scadenza ? (
@@ -352,9 +350,6 @@ function StatoCertificato({ c }: { c: Socio['certificato'] | undefined }) {
         <span><span className="bollino verde">Certificato medico attivo</span> scade il {formatoData(scadenza)}</span>
       ) : (
         <span><span className="bollino rosso">Certificato medico scaduto</span> il {formatoData(scadenza)}</span>
-      )}
-      {temporaneo && (
-        <span><span className="bollino giallo">Certificato temporaneo attivo</span> scade il {formatoData(temporaneo)}</span>
       )}
     </div>
   )
