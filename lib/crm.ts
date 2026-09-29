@@ -20,6 +20,19 @@ export async function rpc<T>(funzione: string, parametri: Record<string, unknown
   return data as T
 }
 
+// Un'Edge Function del progetto, con la sessione di chi e' entrato. L'errore
+// che la funzione scrive in `errore` diventa il messaggio.
+export async function edge<T>(funzione: string, corpo: Record<string, unknown>): Promise<T> {
+  const supabase = createSupabaseServerClient()
+  const { data, error } = await supabase.functions.invoke(funzione, { body: corpo })
+  if (error) {
+    const contesto = (error as { context?: Response }).context
+    const dettaglio = contesto ? await contesto.json().catch(() => null) : null
+    throw new Error(dettaglio?.errore ?? error.message)
+  }
+  return data as T
+}
+
 export type Io = {
   id: string
   email: string

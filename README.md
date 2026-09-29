@@ -233,8 +233,12 @@ controlla anche il database (`crm.richiedi_sezione`). Chi c'era ha preso le
 sezioni operative: la dashboard, che ha i numeri dell'azienda, la vedono gli
 admin e chi la riceve da Utenti. Nessuno cambia il proprio ruolo o si toglie
 l'accesso da solo, e il ruolo admin lo da' e lo toglie solo un admin. Un
-utente nuovo si crea da li'; per entrare gli serve anche l'accesso in Supabase
-(Authentication -> Add user, con la stessa email).
+utente nuovo si crea da li', e gli parte subito l'email di invito
+(`20260929f`, Edge Function `crm-invito`): il link porta a `/auth/callback`,
+dove sceglie la password. Dalla scheda di ognuno si rimanda l'invito, o a chi
+l'accesso ce l'ha gia' il link per una nuova password. Un admin vede tutte le
+sezioni e ha tutte le autorizzazioni: finche' il ruolo e' Admin le spunte sono
+ferme; per scegliergliele si passa a Consulente.
 
 **Rimuovere un utente** (`20260929e`): in fondo alla sua scheda, «Rimuovi
 utente». Il lavoro aperto (lead da gestire o in gestione, task aperti,
@@ -252,8 +256,12 @@ definer`, eseguibile solo da `authenticated`, e per prima cosa verifica che
 l'email di chi chiama sia di uno staff attivo. Riassegnare o chiudere un lead
 puo' solo chi ce l'ha in carico, o un admin.
 
-Gli accessi: ogni operatore si crea in Supabase (Authentication -> Add user,
-con la stessa email della tabella `staff`); entra con email e password.
+Gli accessi: l'invito da Utenti crea l'utente in Supabase con la stessa email
+della tabella `staff`; entra con email e password. «Password dimenticata»
+manda il link solo a chi l'accesso ce l'ha gia' (agli altri non dice niente,
+per non rivelare quali email esistono): chi non ce l'ha va invitato da Utenti.
+Le email partono dall'SMTP impostato in Supabase (Authentication -> Emails), e
+`<sito>/auth/callback` dev'essere fra i Redirect URLs.
 
 ## Il mirror di PerfectGym
 

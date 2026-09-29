@@ -1336,6 +1336,19 @@ details.scheda .utenti {
 .utente-piede .bottone {
   margin-left: auto;
 }
+.utente-invito {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--bordo);
+  margin-top: 12px;
+  padding-top: 12px;
+}
+.utente-invito .bottone {
+  margin-left: auto;
+}
 .utente-rimuovi {
   border-top: 1px solid var(--bordo);
   margin-top: 12px;
