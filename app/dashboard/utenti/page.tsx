@@ -10,7 +10,8 @@ import { nuovoUtente } from '../azioni'
 // cosa puo' fare (le autorizzazioni). Le regole le controlla il database
 // (supabase/migrations/20260928q_utenti_catene_guest_pass.sql): un admin vede
 // tutto; nessuno cambia il proprio ruolo o si toglie l'accesso da solo; il
-// ruolo admin lo da' e lo toglie solo un admin.
+// ruolo admin lo da' e lo toglie solo un admin. Un utente si rimuove dalla sua
+// scheda (20260929e_utenti_rimuovi.sql).
 export default async function Utenti({ searchParams }: { searchParams: { errore?: string; ok?: string } }) {
   const io = await crm.io()
   if (!ha(io, 'gestione_utenti')) redirect(`/dashboard?errore=${encodeURIComponent('La gestione utenti non è abilitata per te.')}`)
@@ -30,7 +31,7 @@ export default async function Utenti({ searchParams }: { searchParams: { errore?
 
       <div className="utenti">
         {attivi.map((u) => (
-          <SchedaUtente key={u.id} u={u} io={io} />
+          <SchedaUtente key={u.id} u={u} io={io} operatori={attivi} />
         ))}
       </div>
 
@@ -41,7 +42,7 @@ export default async function Utenti({ searchParams }: { searchParams: { errore?
           </summary>
           <div className="utenti">
             {spenti.map((u) => (
-              <SchedaUtente key={u.id} u={u} io={io} />
+              <SchedaUtente key={u.id} u={u} io={io} operatori={attivi} />
             ))}
           </div>
         </details>
