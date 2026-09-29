@@ -76,13 +76,21 @@ export async function aggiungiCommento(f: FormData) {
   await esegui(f, () => rpc('crm_commento', { p_utente: testo(f, 'utente'), p_testo: testo(f, 'testo'), p_lead: testo(f, 'lead') }))
 }
 
+// Programmato: la data scelta e le note di preparazione. Registrato: fatto
+// adesso (la data la mette il database), con l'esito e le note dell'esito.
 export async function nuovoTask(f: FormData) {
   await esegui(f, () =>
-    rpc('crm_task_nuovo', {
-      p_utente: testo(f, 'utente'), p_tipo: testo(f, 'tipo') ?? 'telefonata',
-      p_data: daInputDataOra(testo(f, 'data')), p_nota: testo(f, 'nota'),
-      p_assegnato: testo(f, 'assegnato'), p_lead: testo(f, 'lead'),
-    }))
+    testo(f, 'modo') === 'registra'
+      ? rpc('crm_task_registra', {
+          p_utente: testo(f, 'utente'), p_tipo: testo(f, 'tipo') ?? 'telefonata',
+          p_esito: testo(f, 'esito'), p_nota_esito: testo(f, 'nota'),
+          p_assegnato: testo(f, 'assegnato'), p_lead: testo(f, 'lead'),
+        })
+      : rpc('crm_task_nuovo', {
+          p_utente: testo(f, 'utente'), p_tipo: testo(f, 'tipo') ?? 'telefonata',
+          p_data: daInputDataOra(testo(f, 'data')), p_nota: testo(f, 'nota'),
+          p_assegnato: testo(f, 'assegnato'), p_lead: testo(f, 'lead'),
+        }))
 }
 
 export async function completaTask(f: FormData) {

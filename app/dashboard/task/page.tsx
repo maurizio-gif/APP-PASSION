@@ -16,12 +16,16 @@ const QUANDO = [
   { chiave: 'fatti', testo: 'Fatti' },
 ]
 
-export default async function Task({ searchParams }: { searchParams: { chi?: string; quando?: string; errore?: string } }) {
+export default async function Task({ searchParams }: { searchParams: { chi?: string; quando?: string; consulente?: string; errore?: string } }) {
   await richiediSezione('task')
-  const chi = CHI.some((v) => v.chiave === searchParams.chi) ? searchParams.chi! : 'miei'
+  const staff = await crm.staff()
+  // Un consulente scelto: i suoi task, di chiunque sia la vista «chi».
+  const consulente = staff.some((o) => o.id === searchParams.consulente) ? searchParams.consulente! : null
+  const chi = consulente ? 'tutti' : CHI.some((v) => v.chiave === searchParams.chi) ? searchParams.chi! : 'miei'
   const quando = QUANDO.some((v) => v.chiave === searchParams.quando) ? searchParams.quando! : 'oggi'
-  const task = await crm.task(chi, quando)
-  const qui = `/dashboard/task?chi=${chi}&quando=${quando}`
+  const task = await crm.task(chi, quando, consulente)
+  const perConsulente = consulente ? `&consulente=${consulente}` : ''
+  const qui = `/dashboard/task?chi=${chi}&quando=${quando}${perConsulente}`
 
   return (
     <>
@@ -34,14 +38,23 @@ export default async function Task({ searchParams }: { searchParams: { chi?: str
       <Avviso errore={searchParams.errore} />
       <div className="schede-vista">
         {CHI.map((v) => (
-          <Link key={v.chiave} href={`/dashboard/task?chi=${v.chiave}&quando=${quando}`} className={v.chiave === chi ? 'attivo' : undefined}>{v.testo}</Link>
+          <Link key={v.chiave} href={`/dashboard/task?chi=${v.chiave}&quando=${quando}`} className={!consulente && v.chiave === chi ? 'attivo' : undefined}>{v.testo}</Link>
         ))}
       </div>
       <div className="schede-vista">
         {QUANDO.map((v) => (
-          <Link key={v.chiave} href={`/dashboard/task?chi=${chi}&quando=${v.chiave}`} className={v.chiave === quando ? 'attivo' : undefined}>{v.testo}</Link>
+          <Link key={v.chiave} href={`/dashboard/task?chi=${chi}&quando=${v.chiave}${perConsulente}`} className={v.chiave === quando ? 'attivo' : undefined}>{v.testo}</Link>
         ))}
       </div>
+      <form className="filtri" action="/dashboard/task">
+        <input type="hidden" name="chi" value="tutti" />
+        <input type="hidden" name="quando" value={quando} />
+        <select name="consulente" defaultValue={consulente ?? ''} aria-label="Consulente">
+          <option value="">Tutti i consulenti</option>
+          {staff.map((o) => <option key={o.id} value={o.id}>{o.nome} {o.cognome ?? ''}</option>)}
+        </select>
+        <button className="bottone secondario" type="submit">Filtra</button>
+      </form>
 
       <div className="scheda">
         {task.length === 0 ? (

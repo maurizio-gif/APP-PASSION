@@ -391,7 +391,10 @@ select:focus {
   gap: 6px;
   flex-wrap: wrap;
 }
-.schede-vista a {
+.schede-vista a,
+.schede-vista button {
+  font: inherit;
+  cursor: pointer;
   padding: 7px 14px;
   border-radius: 999px;
   border: 1px solid var(--bordo);
@@ -400,14 +403,25 @@ select:focus {
   font-weight: 600;
   font-size: 0.9rem;
 }
-.schede-vista a.attivo {
+.schede-vista a.attivo,
+.schede-vista button.attivo {
   background: var(--nero);
   border-color: var(--nero);
   color: #fff;
 }
-.schede-vista a:hover {
+.schede-vista a:hover,
+.schede-vista button:hover {
   text-decoration: none;
   border-color: var(--rosso);
+}
+
+.scelta-task {
+  margin-bottom: 12px;
+}
+
+/* Un contratto nella scheda persona. */
+.contratto .dati {
+  margin-top: 4px;
 }
 
 /* --- Login ---------------------------------------------------------------- */

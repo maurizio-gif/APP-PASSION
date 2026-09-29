@@ -13,14 +13,20 @@ const VISTE = [
   { chiave: 'tutte', testo: 'Tutti' },
 ]
 
-export default async function Lead({ searchParams }: { searchParams: { vista?: string; fonte?: string; q?: string; errore?: string } }) {
+type Filtri = { vista?: string; fonte?: string; q?: string; consulente?: string; errore?: string }
+
+export default async function Lead({ searchParams }: { searchParams: Filtri }) {
   await richiediSezione('lead')
   const vista = VISTE.some((v) => v.chiave === searchParams.vista) ? searchParams.vista! : 'da_gestire'
   const fonte = searchParams.fonte && FONTE[searchParams.fonte] ? searchParams.fonte : null
   const q = searchParams.q?.slice(0, 80) || null
-  const [lead, io, staff] = await Promise.all([crm.lead(vista, fonte, q), crm.io(), crm.staff()])
-  const qui = `/dashboard/lead?vista=${vista}${fonte ? `&fonte=${fonte}` : ''}${q ? `&q=${encodeURIComponent(q)}` : ''}`
-  const base = `/dashboard/lead?${fonte ? `fonte=${fonte}&` : ''}${q ? `q=${encodeURIComponent(q)}` : ''}`.replace(/[?&]$/, '')
+  const staff = await crm.staff()
+  // Il consulente a cui e' assegnato il lead: uno degli operatori attivi.
+  const consulente = staff.some((o) => o.id === searchParams.consulente) ? searchParams.consulente! : null
+  const [lead, io] = await Promise.all([crm.lead(vista, fonte, q, consulente), crm.io()])
+  const filtri = [fonte && `fonte=${fonte}`, q && `q=${encodeURIComponent(q)}`, consulente && `consulente=${consulente}`].filter(Boolean).join('&')
+  const qui = `/dashboard/lead?vista=${vista}${filtri ? `&${filtri}` : ''}`
+  const base = `/dashboard/lead${filtri ? `?${filtri}` : ''}`
 
   return (
     <>
@@ -41,6 +47,10 @@ export default async function Lead({ searchParams }: { searchParams: { vista?: s
         <select name="fonte" defaultValue={fonte ?? ''} aria-label="Fonte">
           <option value="">Tutte le fonti</option>
           {Object.entries(FONTE).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+        </select>
+        <select name="consulente" defaultValue={consulente ?? ''} aria-label="Consulente">
+          <option value="">Tutti i consulenti</option>
+          {staff.map((o) => <option key={o.id} value={o.id}>{o.nome} {o.cognome ?? ''}</option>)}
         </select>
         <button className="bottone secondario" type="submit">Filtra</button>
       </form>

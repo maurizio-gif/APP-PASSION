@@ -227,6 +227,19 @@ home (il riquadro «Contratti da controllare»), dalla scheda persona e dalle
 spunte di Utenti, e la pagina rimanda alla home. I nuovi contratti intanto
 continuano ad arrivare dal mirror, e chi aveva la sezione la tiene: per
 riaccenderla basta toglierla da `SOSPESE`.
+Nella scheda persona, al posto dei riquadri «Nuovo contratto · Controllato»,
+ci sono i contratti di PerfectGym, uno per riquadro: piano, stato, firma,
+inizio, fine, disdetta, canone, giorno di addebito, rinnovo automatico,
+aggiuntivo (`20260929i`).
+
+**Filtro per consulente** (`20260929g`): in Lead e in Task si sceglie un
+operatore e si vedono i lead assegnati a lui, o i suoi task. Il filtro sta in
+`crm_lead()` e `crm_task()` (`p_consulente`), prima del limite di righe.
+
+**Nuovo task: programmare o registrare** (`20260929h`): nella scheda persona
+un task «da programmare» ha la data scelta e le note di preparazione (`nota`);
+uno «registrato» e' gia' fatto, con data e ora di adesso (non si scelgono),
+l'esito e le note dell'esito (`crm_task_registra()`, `nota_esito`).
 
 **Utenti** nel menu, per gli admin e per chi ha l'autorizzazione «Gestione
 utenti»: per ogni operatore le **sezioni** che vede (Lead, Prove, Nuovi

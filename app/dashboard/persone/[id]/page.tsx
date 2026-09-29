@@ -7,9 +7,10 @@ import {
 } from '@/lib/formato'
 import { Avviso, BollinoFase, BollinoFonte, Contatti, Vuoto } from '@/components/Ui'
 import { BottoneInvio } from '@/components/BottoneInvio'
+import { NuovoTask } from '@/components/NuovoTask'
 import { puoGestireLead, puoVedere } from '@/lib/permessi'
 import {
-  aggiornaProva, assegnaLead, chiudiLead, completaTask, nuovoTask, prendiLead, riapriLead,
+  aggiornaProva, assegnaLead, chiudiLead, completaTask, prendiLead, riapriLead,
 } from '../../azioni'
 
 const VINTA_DA_SOLA = 'Vinta si segna da sola, quando su PerfectGym compare la prova o il contratto'
@@ -141,19 +142,29 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
             </section>
           ))}
 
-          {puoVedere(io, 'contratti') && s.nuovi_contratti.map((n) => (
-            <section className="scheda" key={n.contract_id}>
+          {/* I contratti di PerfectGym, uno per riquadro (prima «Nuovo contratto ·
+              Controllato», con la sezione Nuovi contratti ora sospesa). */}
+          {(s.socio?.contratti ?? []).map((c) => (
+            <section className="scheda contratto" key={c.id}>
               <div className="testata-scheda">
-                <h2>Nuovo contratto</h2>
-                <span className={`bollino ${n.controllo === 'controllato' ? 'verde' : n.controllo === 'errore' ? 'rosso' : 'giallo'}`}>
-                  {traduci(CONTROLLO, n.controllo)}
+                <h2>{c.piano ?? 'Contratto'}</h2>
+                <span className={`bollino ${c.stato === 'Current' ? 'verde' : c.stato === 'NotStarted' ? 'giallo' : 'grigio'}`}>
+                  {traduci(STATO_CONTRATTO, c.stato)}
                 </span>
               </div>
-              <p className="piccolo">
-                {traduci(TESSERAMENTO, n.tesseramento)}{n.numero_tessera ? ` · tessera ${n.numero_tessera}` : ''} ·{' '}
-                <Link href="/dashboard/contratti?vista=tutti">vai ai controlli</Link>
-              </p>
-              {n.note && <p className="nota-socio">{n.note}</p>}
+              <dl className="dati">
+                <dt>Firmato il</dt><dd>{formatoData(c.data_firma)}</dd>
+                <dt>Inizio</dt><dd>{formatoData(c.data_inizio)}</dd>
+                <dt>Fine</dt><dd>{c.data_fine ? formatoData(c.data_fine) : 'a tempo indeterminato'}</dd>
+                <dt>Disdetta</dt><dd>{c.data_disdetta ? formatoData(c.data_disdetta) : '—'}</dd>
+                <dt>Canone</dt><dd>{formatoEuro(c.canone)}</dd>
+                {c.giorno_addebito != null && (<><dt>Addebito</dt><dd>il {c.giorno_addebito} del mese</dd></>)}
+                <dt>Rinnovo automatico</dt><dd>{c.rinnovo_automatico ? 'sì' : 'no'}</dd>
+                {c.aggiuntivo && (<><dt>Tipo</dt><dd>contratto aggiuntivo</dd></>)}
+                {puoVedere(io, 'contratti') && s.nuovi_contratti.some((n) => n.contract_id === c.id) && (
+                  <><dt>Controllo</dt><dd>{traduci(CONTROLLO, s.nuovi_contratti.find((n) => n.contract_id === c.id)!.controllo)}</dd></>
+                )}
+              </dl>
             </section>
           ))}
 
@@ -174,34 +185,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
 
           <section className="scheda">
             <h2>Nuovo task</h2>
-            <form action={nuovoTask} className="modulo">
-              <input type="hidden" name="utente" value={p.id} />
-              <input type="hidden" name="lead" value={leadAperto?.id ?? ''} />
-              <input type="hidden" name="torna" value={qui} />
-              <div className="due-colonne">
-                <div className="campo">
-                  <label>Task</label>
-                  <select name="tipo" defaultValue="richiamare">
-                    {Object.entries(TIPO_TASK).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-                  </select>
-                </div>
-                <div className="campo">
-                  <label>Quando</label>
-                  <input type="datetime-local" name="data" defaultValue={perInputDataOra(domani)} required />
-                </div>
-                <div className="campo">
-                  <label>A chi</label>
-                  <select name="assegnato" defaultValue={io?.id ?? ''}>
-                    {staff.map((o) => <option key={o.id} value={o.id}>{o.nome} {o.cognome ?? ''}</option>)}
-                  </select>
-                </div>
-                <div className="campo">
-                  <label>Nota</label>
-                  <input type="text" name="nota" placeholder="Cosa fare" />
-                </div>
-              </div>
-              <BottoneInvio testo="Crea task" inCorso="Salvataggio…" />
-            </form>
+            <NuovoTask utente={p.id} lead={leadAperto?.id ?? null} torna={qui} staff={staff} io={io?.id ?? null} domani={perInputDataOra(domani)} />
           </section>
         </div>
 
@@ -221,19 +205,6 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                   <dt>Saldo</dt><dd className={s.socio.saldo != null && s.socio.saldo < 0 ? 'negativo' : undefined}>{formatoEuro(s.socio.saldo)}</dd>
                   <dt>Ingressi</dt><dd>{s.socio.ingressi_30gg} negli ultimi 30 giorni</dd>
                 </dl>
-                {s.socio.contratti.length > 0 && (
-                  <>
-                    <h3 style={{ marginTop: 14 }}>Contratti</h3>
-                    <ul className="elenco">
-                      {s.socio.contratti.slice(0, 6).map((c) => (
-                        <li key={c.id}>
-                          <span className={`bollino ${c.stato === 'Current' ? 'verde' : ''}`}>{traduci(STATO_CONTRATTO, c.stato)}</span>{' '}
-                          {c.piano} <span className="piccolo attenuato">· {formatoData(c.data_inizio)} → {formatoData(c.data_fine)}{c.data_disdetta ? ` · disdetto ${formatoData(c.data_disdetta)}` : ''}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </>
-                )}
                 {s.socio.ingressi.length > 0 && (
                   <>
                     <h3 style={{ marginTop: 14 }}>Ultimi ingressi</h3>

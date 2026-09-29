@@ -229,7 +229,7 @@ export type Scheda = {
     attivo: boolean | null
     creato_il: string | null
     saldo: number | null
-    contratti: { id: number; piano: string | null; canone: number | null; stato: string | null; data_firma: string | null; data_inizio: string | null; data_fine: string | null; data_disdetta: string | null }[]
+    contratti: { id: number; piano: string | null; canone: number | null; stato: string | null; data_firma: string | null; data_inizio: string | null; data_fine: string | null; data_disdetta: string | null; aggiuntivo?: boolean; rinnovo_automatico?: boolean; giorno_addebito?: number | null }[]
     ingressi: { entrata: string; uscita: string | null }[]
     ingressi_30gg: number
     prenotazioni: { inizio: string; lezione: string | null; annullata: boolean | null; presente: boolean | null }[]
@@ -370,12 +370,13 @@ export const crm = {
   io: cache(() => rpc<Io>('crm_io')),
   staff: () => rpc<Operatore[]>('crm_staff'),
   home: () => rpc<Home>('crm_home'),
-  lead: (vista: string, fonte: string | null, testo: string | null) =>
-    rpc<Lead[]>('crm_lead', { p_vista: vista, p_fonte: fonte, p_testo: testo }),
+  lead: (vista: string, fonte: string | null, testo: string | null, consulente: string | null = null) =>
+    rpc<Lead[]>('crm_lead', { p_vista: vista, p_fonte: fonte, p_testo: testo, p_consulente: consulente }),
   prove: (vista: string) => rpc<Prova[]>('crm_prove', { p_vista: vista }),
   nuoviContratti: (vista: string) => rpc<NuovoContratto[]>('crm_nuovi_contratti', { p_vista: vista }),
   disdette: (vista: string) => rpc<Disdetta[]>('crm_disdette', { p_vista: vista }),
-  task: (chi: string, quando: string) => rpc<Task[]>('crm_task', { p_chi: chi, p_quando: quando }),
+  task: (chi: string, quando: string, consulente: string | null = null) =>
+    rpc<Task[]>('crm_task', { p_chi: chi, p_quando: quando, p_consulente: consulente }),
   persona: (id: string) => rpc<Scheda | null>('crm_persona', { p_id: id }),
   cerca: (testo: string) => rpc<Trovato[]>('crm_cerca', { p_testo: testo }),
   rinnovi: (vista: string) => rpc<Rinnovo[]>('crm_rinnovi', { p_vista: vista }),
