@@ -87,3 +87,17 @@ export function BollinoFase({ fase, esito }: { fase: string; esito?: string | nu
 export function Vuoto({ children }: { children: React.ReactNode }) {
   return <p className="vuoto">{children}</p>
 }
+
+// Il modulo di una riga (esito, note, a chi): sul computer sempre aperto; sul
+// telefono chiuso dietro un bottone, cosi' le righe restano basse. Solo CSS
+// (la casella nascosta apre e chiude), niente JavaScript: funziona anche prima
+// che la pagina sia caricata del tutto.
+export function Gestione({ id, testo = 'Gestisci', children }: { id: string; testo?: string; children: React.ReactNode }) {
+  return (
+    <div className="gestione">
+      <input type="checkbox" id={`gestione-${id}`} className="gestione-apri" />
+      <label htmlFor={`gestione-${id}`} className="bottone secondario piccolo gestione-bottone">{testo}</label>
+      <div className="gestione-corpo">{children}</div>
+    </div>
+  )
+}

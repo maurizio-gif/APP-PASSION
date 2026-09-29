@@ -96,7 +96,7 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
                       <Persona id={t.utente_id} nome={t.nome} cognome={t.cognome} nuovaScheda />
                       {t.nota && <div className="piccolo">{t.nota}</div>}
                     </div>
-                    <form action={completaTask} className="azioni-riga">
+                    <form action={completaTask} className="azioni-riga pila">
                       <input type="hidden" name="task" value={t.id} />
                       <input type="hidden" name="torna" value="/dashboard" />
                       <button className="bottone piccolo" name="esito" value="positivo">Fatto ✓</button>

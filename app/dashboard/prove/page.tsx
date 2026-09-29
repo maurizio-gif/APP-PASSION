@@ -1,6 +1,6 @@
 import { crm, richiediSezione } from '@/lib/crm'
 import { formatoData, formatoFa } from '@/lib/formato'
-import { Avviso, BollinoFonte, Contatti, Persona, Schede, Vuoto } from '@/components/Ui'
+import { Avviso, BollinoFonte, Contatti, Gestione, Persona, Schede, Vuoto } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
 import { SceltaOperatore } from '@/components/SceltaOperatore'
 import { aggiornaProva } from '../azioni'
@@ -41,7 +41,7 @@ export default async function Prove({ searchParams }: { searchParams: { vista?: 
           <Vuoto>Nessuna prova qui.</Vuoto>
         ) : (
           <div className="tabella-scorre">
-            <table>
+            <table className="schede-mobile">
               <thead>
                 <tr>
                   <th>Persona</th>
@@ -58,7 +58,7 @@ export default async function Prove({ searchParams }: { searchParams: { vista?: 
                       <Contatti telefono={p.telefono} email={p.email} />
                       <BollinoFonte fonte={p.fonte} dettaglio={p.fonte_dettaglio} />
                     </td>
-                    <td className="piccolo">
+                    <td className="piccolo info">
                       <div>{p.tipo_pass ?? '—'}</div>
                       <div className="attenuato nowrap">{formatoData(p.data_inizio)} → {formatoData(p.data_fine)}</div>
                       {p.giorni_rimasti != null && p.giorni_rimasti >= 0 && !p.esito && (
@@ -67,27 +67,29 @@ export default async function Prove({ searchParams }: { searchParams: { vista?: 
                         </span>
                       )}
                     </td>
-                    <td className="piccolo">
+                    <td className="piccolo info">
                       <div><strong>{p.ingressi}</strong> ingressi{p.ultimo_ingresso ? ` · ultimo ${formatoFa(p.ultimo_ingresso)}` : ''}</div>
                       <div><strong>{p.prenotazioni}</strong> lezioni prenotate · {p.presenze} fatte</div>
                       {p.ingressi === 0 && <span className="bollino rosso">mai entrato</span>}
                       {p.iscritto_su_pgm && !p.esito && <div className="bollino verde">ha già un contratto su PerfectGym</div>}
                       <div className="attenuato">{p.gestito_nome ? `segue ${p.gestito_nome}` : 'nessuno la segue'}</div>
                     </td>
-                    <td>
-                      <form action={aggiornaProva} className="modulo compatto">
-                        <input type="hidden" name="prova" value={p.id} />
-                        <input type="hidden" name="torna" value={qui} />
-                        <select name="esito" defaultValue={p.esito ?? (p.iscritto_su_pgm ? 'iscritto' : '')} aria-label="Esito">
-                          <option value="">Ancora aperto</option>
-                          <option value="iscritto">Iscritto</option>
-                          <option value="non_iscritto">Non iscritto</option>
-                        </select>
-                        <input type="text" name="obiezione" defaultValue={p.obiezione ?? ''} placeholder="Obiezione" />
-                        <input type="text" name="note" defaultValue={p.note ?? ''} placeholder="Note" />
-                        <SceltaOperatore staff={staff} attuale={p.gestito_da} attualeNome={p.gestito_nome} />
-                        <button className="bottone piccolo">Salva</button>
-                      </form>
+                    <td className="gestisci">
+                      <Gestione id={p.id}>
+                        <form action={aggiornaProva} className="modulo compatto">
+                          <input type="hidden" name="prova" value={p.id} />
+                          <input type="hidden" name="torna" value={qui} />
+                          <select name="esito" defaultValue={p.esito ?? (p.iscritto_su_pgm ? 'iscritto' : '')} aria-label="Esito">
+                            <option value="">Ancora aperto</option>
+                            <option value="iscritto">Iscritto</option>
+                            <option value="non_iscritto">Non iscritto</option>
+                          </select>
+                          <input type="text" name="obiezione" defaultValue={p.obiezione ?? ''} placeholder="Obiezione" />
+                          <input type="text" name="note" defaultValue={p.note ?? ''} placeholder="Note" />
+                          <SceltaOperatore staff={staff} attuale={p.gestito_da} attualeNome={p.gestito_nome} />
+                          <button className="bottone piccolo">Salva</button>
+                        </form>
+                      </Gestione>
                     </td>
                   </tr>
                 ))}

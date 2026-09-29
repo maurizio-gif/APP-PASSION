@@ -185,6 +185,17 @@ assegna, chiudi vinta/persa), la **scheda persona** (i dati di PerfectGym, i
 contenitori con le loro azioni, la storia di commenti e task), **Prove**,
 **Nuovi contratti**, **Disdette**, **Task**, **Cerca**.
 
+**Sul telefono** (fino a 720px, la barra fino a 860px) le righe restano
+basse: la barra nera ha logo ed «Esci» sulla stessa riga e il menu in una riga
+sola che scorre di lato (la voce aperta si porta al centro); le viste (Da
+gestire, In gestione...) scorrono di lato anche loro. In Prove, Disdette,
+Rinnovi e Debitori ogni riga della tabella diventa una scheda: il nome coi
+suoi bollini, i contatti su una riga (l'email lunga si taglia), i dettagli uno
+dopo l'altro; il modulo della riga sta chiuso dietro «Gestisci»
+(`Gestione` in `components/Ui.tsx`, solo CSS; sul computer e' sempre aperto).
+I lead (`TabellaLead`) sono un elenco di due righe, con l'azione a destra; in
+home i numeri stanno due per riga e i bottoni dei task a destra.
+
 ### La dashboard abbonamenti (`20260928p`, `20260928q`)
 
 **Abbonamenti** nel menu: i numeri di `crm_abbonamenti()`, letti dal mirror

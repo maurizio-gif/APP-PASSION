@@ -1,6 +1,6 @@
 import { crm, richiediSezione } from '@/lib/crm'
 import { ESITO_DISDETTA, formatoData, formatoEuro, MOTIVI_DISDETTA, traduci } from '@/lib/formato'
-import { Avviso, Contatti, Persona, Schede, Vuoto } from '@/components/Ui'
+import { Avviso, Contatti, Gestione, Persona, Schede, Vuoto } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
 import { SceltaOperatore } from '@/components/SceltaOperatore'
 import { aggiornaDisdetta } from '../azioni'
@@ -40,7 +40,7 @@ export default async function Disdette({ searchParams }: { searchParams: { vista
           <Vuoto>Nessuna disdetta qui.</Vuoto>
         ) : (
           <div className="tabella-scorre">
-            <table>
+            <table className="schede-mobile">
               <thead>
                 <tr>
                   <th>Socio</th>
@@ -61,35 +61,37 @@ export default async function Disdette({ searchParams }: { searchParams: { vista
                       )}
                       {d.gestito_nome && <div className="piccolo attenuato">{d.gestito_nome} · {formatoData(d.gestito_il)}</div>}
                     </td>
-                    <td className="piccolo">
+                    <td className="piccolo info">
                       <div><strong>{d.piano ?? '—'}</strong> · {formatoEuro(d.canone)}</div>
                       <div className="attenuato">firmato {formatoData(d.data_firma)} · fine {formatoData(d.data_fine)}</div>
                       <div>disdetto il <strong>{formatoData(d.data_disdetta)}</strong></div>
                     </td>
-                    <td>
-                      <form action={aggiornaDisdetta} className="modulo compatto">
-                        <input type="hidden" name="disdetta" value={d.id} />
-                        <input type="hidden" name="torna" value={qui} />
-                        <div className="azioni-riga">
-                          <select name="contatto" defaultValue={d.contatto ?? ''} aria-label="Contatto">
-                            <option value="">Contatto…</option>
-                            <option value="telefonata">Telefonata</option>
-                            <option value="appuntamento">Appuntamento</option>
+                    <td className="gestisci">
+                      <Gestione id={d.id}>
+                        <form action={aggiornaDisdetta} className="modulo compatto">
+                          <input type="hidden" name="disdetta" value={d.id} />
+                          <input type="hidden" name="torna" value={qui} />
+                          <div className="azioni-riga">
+                            <select name="contatto" defaultValue={d.contatto ?? ''} aria-label="Contatto">
+                              <option value="">Contatto…</option>
+                              <option value="telefonata">Telefonata</option>
+                              <option value="appuntamento">Appuntamento</option>
+                            </select>
+                            <select name="esito" defaultValue={d.esito ?? ''} aria-label="Esito">
+                              <option value="">Esito…</option>
+                              {Object.entries(ESITO_DISDETTA).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+                            </select>
+                          </div>
+                          <select name="motivo" defaultValue={d.motivo ?? ''} aria-label="Motivo">
+                            <option value="">Motivo…</option>
+                            {d.motivo && !MOTIVI_DISDETTA.includes(d.motivo) && <option value={d.motivo}>{d.motivo}</option>}
+                            {MOTIVI_DISDETTA.map((m) => <option key={m} value={m}>{m}</option>)}
                           </select>
-                          <select name="esito" defaultValue={d.esito ?? ''} aria-label="Esito">
-                            <option value="">Esito…</option>
-                            {Object.entries(ESITO_DISDETTA).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-                          </select>
-                        </div>
-                        <select name="motivo" defaultValue={d.motivo ?? ''} aria-label="Motivo">
-                          <option value="">Motivo…</option>
-                          {d.motivo && !MOTIVI_DISDETTA.includes(d.motivo) && <option value={d.motivo}>{d.motivo}</option>}
-                          {MOTIVI_DISDETTA.map((m) => <option key={m} value={m}>{m}</option>)}
-                        </select>
-                        <input type="text" name="note" defaultValue={d.note ?? ''} placeholder="Note" />
-                        <SceltaOperatore staff={staff} attuale={d.gestito_da} attualeNome={d.gestito_nome} />
-                        <button className="bottone piccolo">Salva</button>
-                      </form>
+                          <input type="text" name="note" defaultValue={d.note ?? ''} placeholder="Note" />
+                          <SceltaOperatore staff={staff} attuale={d.gestito_da} attualeNome={d.gestito_nome} />
+                          <button className="bottone piccolo">Salva</button>
+                        </form>
+                      </Gestione>
                     </td>
                   </tr>
                 ))}

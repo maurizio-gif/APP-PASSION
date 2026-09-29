@@ -1,6 +1,6 @@
 import { crm, linkPgm, richiediSezione } from '@/lib/crm'
 import { ESITO_RINNOVO, formatoData, formatoEuro, STATO_CONTRATTO, traduci } from '@/lib/formato'
-import { Avviso, Contatti, Persona, Schede, Vuoto } from '@/components/Ui'
+import { Avviso, Contatti, Gestione, Persona, Schede, Vuoto } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
 import { aggiornaRinnovo } from '../azioni'
 
@@ -41,7 +41,7 @@ export default async function Rinnovi({ searchParams }: { searchParams: { vista?
           <Vuoto>Nessun rinnovo qui.</Vuoto>
         ) : (
           <div className="tabella-scorre">
-            <table>
+            <table className="schede-mobile">
               <thead>
                 <tr>
                   <th>Socio</th>
@@ -63,29 +63,31 @@ export default async function Rinnovi({ searchParams }: { searchParams: { vista?
                         {r.gestito_il && <div className="piccolo attenuato">{r.assegnato_nome ?? '—'} · {formatoData(r.gestito_il)}</div>}
                         {pgm && <a className="piccolo" href={pgm} target="_blank" rel="noreferrer">PerfectGym ↗</a>}
                       </td>
-                      <td className="piccolo">
+                      <td className="piccolo info">
                         <div><strong>{r.piano ?? '—'}</strong> · {formatoEuro(r.valore)}</div>
                         <div>scade il <strong>{formatoData(r.scadenza)}</strong></div>
                         {r.stato_contratto && <div className="attenuato">{traduci(STATO_CONTRATTO, r.stato_contratto)}</div>}
                         {r.rinnovato_su_pgm && <span className="bollino verde">Nuovo abbonamento su PerfectGym</span>}
                         {r.task_aperti > 0 && <div className="attenuato">{r.task_aperti} {r.task_aperti === 1 ? 'task aperto' : 'task aperti'}</div>}
                       </td>
-                      <td>
-                        <form action={aggiornaRinnovo} className="modulo compatto">
-                          <input type="hidden" name="rinnovo" value={r.id} />
-                          <input type="hidden" name="torna" value={qui} />
-                          <div className="azioni-riga">
-                            <select name="esito" defaultValue={r.esito ?? ''} aria-label="Esito">
-                              <option value="">Esito…</option>
-                              {Object.entries(ESITO_RINNOVO).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-                            </select>
-                            <select name="assegnato" defaultValue={r.assegnato_a ?? io?.id ?? ''} aria-label="Chi lo segue">
-                              {staff.map((s) => <option key={s.id} value={s.id}>{s.nome} {s.cognome ?? ''}</option>)}
-                            </select>
-                          </div>
-                          <input type="text" name="note" defaultValue={r.note ?? ''} placeholder="Note" />
-                          <button className="bottone piccolo">Salva</button>
-                        </form>
+                      <td className="gestisci">
+                        <Gestione id={r.id}>
+                          <form action={aggiornaRinnovo} className="modulo compatto">
+                            <input type="hidden" name="rinnovo" value={r.id} />
+                            <input type="hidden" name="torna" value={qui} />
+                            <div className="azioni-riga">
+                              <select name="esito" defaultValue={r.esito ?? ''} aria-label="Esito">
+                                <option value="">Esito…</option>
+                                {Object.entries(ESITO_RINNOVO).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+                              </select>
+                              <select name="assegnato" defaultValue={r.assegnato_a ?? io?.id ?? ''} aria-label="Chi lo segue">
+                                {staff.map((s) => <option key={s.id} value={s.id}>{s.nome} {s.cognome ?? ''}</option>)}
+                              </select>
+                            </div>
+                            <input type="text" name="note" defaultValue={r.note ?? ''} placeholder="Note" />
+                            <button className="bottone piccolo">Salva</button>
+                          </form>
+                        </Gestione>
                       </td>
                     </tr>
                   )
