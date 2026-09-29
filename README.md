@@ -239,7 +239,17 @@ operatore e si vedono i lead assegnati a lui, o i suoi task. Il filtro sta in
 **Nuovo task: programmare o registrare** (`20260929h`): nella scheda persona
 un task «da programmare» ha la data scelta e le note di preparazione (`nota`);
 uno «registrato» e' gia' fatto, con data e ora di adesso (non si scelgono),
-l'esito e le note dell'esito (`crm_task_registra()`, `nota_esito`).
+l'esito e le note dell'esito (`crm_task_registra()`, `nota_esito`). La data di
+un task programmato non e' precompilata: si sceglie ogni volta.
+«Richiamare» e «Appuntamento» non si scelgono piu' per i task nuovi (doppioni
+di Telefonata e In sede): restano sui task che li hanno gia'. Dal sync, un task
+nuovo di Airtable senza tipologia arriva Telefonata, uno con Appuntamento
+arriva In sede (`20260929j`).
+
+**A chi si assegna** (`20260929k`): nelle tendine «A chi» e nei filtri per
+consulente compaiono solo gli operatori attivi, con un accesso (invitati o
+gia' entrati) e con la spunta «Riceve lead e task» in Utenti. Fra gli admin
+la ha solo Marco Morandini.
 
 **Utenti** nel menu, per gli admin e per chi ha l'autorizzazione «Gestione
 utenti»: per ogni operatore le **sezioni** che vede (Lead, Prove, Nuovi

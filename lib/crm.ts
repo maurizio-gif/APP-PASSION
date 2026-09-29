@@ -57,6 +57,7 @@ export type Utente = {
   lead_aperti: number
   task_aperti: number
   altro_aperto: number
+  assegnabile: boolean
 }
 export type Operatore = { id: string; nome: string; cognome: string | null; ruolo: string }
 

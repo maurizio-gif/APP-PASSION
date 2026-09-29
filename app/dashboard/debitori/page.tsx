@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { crm, linkPgm, richiediSezione } from '@/lib/crm'
-import { formatoData, formatoDataOra, formatoEuro, formatoFa, perInputDataOra, STATO_CONTRATTO, TIPI_TASK_NUOVI, traduci } from '@/lib/formato'
+import { formatoData, formatoDataOra, formatoEuro, formatoFa, STATO_CONTRATTO, TIPI_TASK_NUOVI, traduci } from '@/lib/formato'
 import { Avviso, Contatti, Persona, Vuoto } from '@/components/Ui'
 import { debitoAssegna, debitoTask } from '../azioni'
 
@@ -28,8 +28,6 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
   const rientrati = vista === 'rientrati'
   const totale = debitori.reduce((s, d) => s + (d.saldo != null && d.saldo < 0 ? d.saldo : 0), 0)
   const controllato = debitori[0]?.saldo_controllato_il
-  const domani = new Date(Date.now() + 24 * 3600 * 1000)
-  domani.setHours(10, 0, 0, 0)
 
   return (
     <>
@@ -151,7 +149,7 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
                                   {staff.map((s) => <option key={s.id} value={s.id}>{s.nome} {s.cognome ?? ''}</option>)}
                                 </select>
                               </div>
-                              <input type="datetime-local" name="data" defaultValue={perInputDataOra(domani)} required aria-label="Quando" />
+                              <input type="datetime-local" name="data" required aria-label="Quando" />
                               <input type="text" name="nota" placeholder="Cosa fare (es. sollecito, piano di rientro)" />
                               <button className="bottone piccolo">Aggiungi task</button>
                             </form>

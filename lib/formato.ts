@@ -91,10 +91,11 @@ export const TIPO_TASK: Record<string, string> = {
   telefonata: 'Telefonata', in_sede: 'In sede', whatsapp: 'WhatsApp', email: 'Email',
   richiamare: 'Richiamare', appuntamento: 'Appuntamento',
 }
-// I tipi che si scelgono per un task nuovo. «Richiamare» resta solo per i task
-// che l'hanno gia' (lo storico, e quelli senza tipo che arrivano da Airtable):
-// una telefonata si programma o si registra, e basta quella.
-export const TIPI_TASK_NUOVI = Object.entries(TIPO_TASK).filter(([k]) => k !== 'richiamare')
+// I tipi che si scelgono per un task nuovo. «Richiamare» e «Appuntamento»
+// restano solo per i task che l'hanno gia' (lo storico): erano doppioni di
+// Telefonata e In sede, che si programmano o si registrano.
+const SOLO_STORICO = ['richiamare', 'appuntamento']
+export const TIPI_TASK_NUOVI = Object.entries(TIPO_TASK).filter(([k]) => !SOLO_STORICO.includes(k))
 export const CONTROLLO: Record<string, string> = {
   da_controllare: 'Da controllare', in_corso: 'In corso', errore: 'Errore', controllato: 'Controllato',
 }
