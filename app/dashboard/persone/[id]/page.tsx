@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { crm, linkPgm, type Scheda } from '@/lib/crm'
 import {
-  CONTROLLO, ESITO_DISDETTA, formatoData, formatoDataOra, formatoEuro,
+  CONTROLLO, ESITO_DISDETTA, formatoData, formatoDataOra, formatoEuro, formatoGiorno, formatoOra, oggiRoma,
   STATO_CONTRATTO, TESSERAMENTO, TIPO_SOCIO, TIPO_TASK, traduci,
 } from '@/lib/formato'
 import { Avviso, BollinoFase, BollinoFonte, Contatti, Vuoto } from '@/components/Ui'
@@ -25,6 +25,10 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
   const task = s.storia.filter((e): e is Extract<Scheda['storia'][number], { tipo: 'task' }> => e.tipo === 'task')
   const leadAperto = s.lead.find((l) => l.fase === 'da_gestire' || l.fase === 'in_gestione')
   const pgm = linkPgm(p.member_id)
+  // Gli abbonamenti arrivano gia' in ordine: il primo e' quello in corso.
+  const [ultimo, ...precedenti] = s.socio?.contratti ?? []
+  const controllo = (id: number) =>
+    puoVedere(io, 'contratti') ? s.nuovi_contratti.find((n) => n.contract_id === id)?.controllo : undefined
 
   return (
     <>
@@ -32,6 +36,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
         <div>
           <h1>{[p.nome, p.cognome].filter(Boolean).join(' ') || 'Senza nome'}</h1>
           <Contatti telefono={p.telefono} email={p.email} />
+          <StatoCertificato c={s.socio?.certificato} />
         </div>
         {pgm && <a className="bottone secondario" href={pgm} target="_blank" rel="noreferrer">Apri su PerfectGym ↗</a>}
       </div>
@@ -161,31 +166,29 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
             </section>
           ))}
 
-          {/* I contratti di PerfectGym, uno per riquadro (prima «Nuovo contratto ·
-              Controllato», con la sezione Nuovi contratti ora sospesa). */}
-          {(s.socio?.contratti ?? []).map((c) => (
-            <section className="scheda contratto" key={c.id}>
-              <div className="testata-scheda">
-                <h2>{c.piano ?? 'Contratto'}</h2>
-                <span className={`bollino ${c.stato === 'Current' ? 'verde' : c.stato === 'NotStarted' ? 'giallo' : 'grigio'}`}>
-                  {traduci(STATO_CONTRATTO, c.stato)}
-                </span>
-              </div>
-              <dl className="dati">
-                <dt>Firmato il</dt><dd>{formatoData(c.data_firma)}</dd>
-                <dt>Inizio</dt><dd>{formatoData(c.data_inizio)}</dd>
-                <dt>Fine</dt><dd>{c.data_fine ? formatoData(c.data_fine) : 'a tempo indeterminato'}</dd>
-                <dt>Disdetta</dt><dd>{c.data_disdetta ? formatoData(c.data_disdetta) : '—'}</dd>
-                <dt>Canone</dt><dd>{formatoEuro(c.canone)}</dd>
-                {c.giorno_addebito != null && (<><dt>Addebito</dt><dd>il {c.giorno_addebito} del mese</dd></>)}
-                <dt>Rinnovo automatico</dt><dd>{c.rinnovo_automatico ? 'sì' : 'no'}</dd>
-                {c.aggiuntivo && (<><dt>Tipo</dt><dd>contratto aggiuntivo</dd></>)}
-                {puoVedere(io, 'contratti') && s.nuovi_contratti.some((n) => n.contract_id === c.id) && (
-                  <><dt>Controllo</dt><dd>{traduci(CONTROLLO, s.nuovi_contratti.find((n) => n.contract_id === c.id)!.controllo)}</dd></>
-                )}
-              </dl>
+          {/* Gli abbonamenti di PerfectGym, senza i certificati medici (che su
+              PerfectGym sono contratti aggiuntivi): in vista quello in corso,
+              gli altri nella tendina sotto. */}
+          {s.socio && (
+            <section className="scheda contratto">
+              <h2>Abbonamenti</h2>
+              {!ultimo ? (
+                <Vuoto>Nessun abbonamento su PerfectGym.</Vuoto>
+              ) : (
+                <>
+                  <Contratto c={ultimo} controllo={controllo(ultimo.id)} />
+                  {precedenti.length > 0 && (
+                    <details className="contratti-precedenti">
+                      <summary>
+                        <strong>Storico abbonamenti</strong> <span className="attenuato">· {precedenti.length}</span>
+                      </summary>
+                      {precedenti.map((c) => <Contratto key={c.id} c={c} controllo={controllo(c.id)} />)}
+                    </details>
+                  )}
+                </>
+              )}
             </section>
-          ))}
+          )}
 
           {s.disdette.map((d) => (
             <section className="scheda" key={d.id}>
@@ -203,55 +206,12 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
             </section>
           ))}
 
-          <section className="scheda">
-            <h2>Nuovo task</h2>
-            <NuovoTask utente={p.id} lead={leadAperto?.id ?? null} torna={qui} staff={staff} io={io?.id ?? null} />
-          </section>
-        </div>
-
-        {/* ---- Colonna 2: chi e', e la sua storia ---- */}
-        <div>
-          <section className="scheda">
-            <h2>Su PerfectGym</h2>
-            {!s.socio ? (
-              <Vuoto>Non ancora agganciato a un socio di PerfectGym.</Vuoto>
-            ) : (
-              <>
-                <dl className="dati">
-                  <dt>Numero</dt><dd>{s.socio.numero}</dd>
-                  <dt>Tipo</dt><dd>{traduci(TIPO_SOCIO, s.socio.tipo)}</dd>
-                  {p.codice_fiscale && (<><dt>Codice fiscale</dt><dd>{p.codice_fiscale}</dd></>)}
-                  {p.data_nascita && (<><dt>Nato il</dt><dd>{formatoData(p.data_nascita)}</dd></>)}
-                  <dt>Saldo</dt><dd className={s.socio.saldo != null && s.socio.saldo < 0 ? 'negativo' : undefined}>{formatoEuro(s.socio.saldo)}</dd>
-                  <dt>Ingressi</dt><dd>{s.socio.ingressi_30gg} negli ultimi 30 giorni</dd>
-                </dl>
-                {s.socio.ingressi.length > 0 && (
-                  <>
-                    <h3 style={{ marginTop: 14 }}>Ultimi ingressi</h3>
-                    <p className="piccolo">{s.socio.ingressi.slice(0, 8).map((v) => formatoDataOra(v.entrata)).join(' · ')}</p>
-                  </>
-                )}
-                {s.socio.prenotazioni.length > 0 && (
-                  <>
-                    <h3 style={{ marginTop: 14 }}>Lezioni</h3>
-                    <ul className="elenco piccolo">
-                      {s.socio.prenotazioni.slice(0, 8).map((b, i) => (
-                        <li key={i}>
-                          {formatoDataOra(b.inizio)} · {b.lezione ?? 'Lezione'}{' '}
-                          {b.annullata ? <span className="bollino grigio">annullata</span> : b.presente ? <span className="bollino verde">presente</span> : null}
-                        </li>
-                      ))}
-                    </ul>
-                  </>
-                )}
-              </>
-            )}
-          </section>
-
+          {/* I task in un riquadro solo, che sul telefono resta insieme: prima
+              lo storico, sotto il nuovo task. */}
           <section className="scheda">
             <h2>Task</h2>
             {task.length === 0 ? (
-              <Vuoto>Nessun task: lo crei qui accanto.</Vuoto>
+              <Vuoto>Nessun task: lo crei qui sotto.</Vuoto>
             ) : (
               <ol className="storia">
                 {task.map((e) => (
@@ -277,9 +237,128 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                 ))}
               </ol>
             )}
+            <div className="task-nuovo">
+              <h3>Nuovo task</h3>
+              <NuovoTask utente={p.id} lead={leadAperto?.id ?? null} torna={qui} staff={staff} io={io?.id ?? null} />
+            </div>
           </section>
+        </div>
+
+        {/* ---- Colonna 2: chi e' su PerfectGym ---- */}
+        <div>
+          <section className="scheda">
+            <h2>Su PerfectGym</h2>
+            {!s.socio ? (
+              <Vuoto>Non ancora agganciato a un socio di PerfectGym.</Vuoto>
+            ) : (
+              <>
+                <dl className="dati">
+                  <dt>Numero</dt><dd>{s.socio.numero}</dd>
+                  <dt>Tipo</dt><dd>{traduci(TIPO_SOCIO, s.socio.tipo)}</dd>
+                  {p.codice_fiscale && (<><dt>Codice fiscale</dt><dd>{p.codice_fiscale}</dd></>)}
+                  {p.data_nascita && (<><dt>Nato il</dt><dd>{formatoData(p.data_nascita)}</dd></>)}
+                  <dt>Saldo</dt><dd className={s.socio.saldo != null && s.socio.saldo < 0 ? 'negativo' : undefined}>{formatoEuro(s.socio.saldo)}</dd>
+                </dl>
+              </>
+            )}
+          </section>
+
+          {s.socio && (
+            <section className="scheda">
+              <div className="testata-scheda">
+                <h2>Ultimi accessi</h2>
+                <span className="piccolo attenuato">{s.socio.ingressi_30gg} negli ultimi 30 giorni</span>
+              </div>
+              {s.socio.ingressi.length === 0 ? (
+                <Vuoto>Nessun accesso registrato.</Vuoto>
+              ) : (
+                <ul className="punti">
+                  {s.socio.ingressi.slice(0, 10).map((v, i) => (
+                    <li key={i}>
+                      <strong>{formatoGiorno(v.entrata)}</strong> · entrata {formatoOra(v.entrata)}
+                      {v.uscita && v.uscita !== v.entrata ? `, uscita ${formatoOra(v.uscita)}` : ''}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          )}
+
+          {s.socio && (
+            <section className="scheda">
+              <h2>Prenotazioni</h2>
+              {s.socio.prenotazioni.length === 0 ? (
+                <Vuoto>Nessuna prenotazione.</Vuoto>
+              ) : (
+                <ul className="punti">
+                  {s.socio.prenotazioni.slice(0, 10).map((b, i) => (
+                    <li key={i}>
+                      <strong>{formatoGiorno(b.inizio)}, {formatoOra(b.inizio)}</strong> · {b.lezione ?? 'Lezione'}{' '}
+                      <StatoPrenotazione b={b} />
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          )}
+
         </div>
       </div>
     </>
   )
+}
+
+type Socio = NonNullable<Scheda['socio']>
+
+// Un abbonamento: il nome del piano, lo stato e le sue date.
+function Contratto({ c, controllo }: { c: Socio['contratti'][number]; controllo?: string }) {
+  return (
+    <div className="abbonamento">
+      <div className="testata-scheda">
+        <h3>{c.piano ?? 'Contratto'}</h3>
+        <span className={`bollino ${c.stato === 'Current' ? 'verde' : c.stato === 'NotStarted' ? 'giallo' : 'grigio'}`}>
+          {traduci(STATO_CONTRATTO, c.stato)}
+        </span>
+      </div>
+      <dl className="dati">
+        <dt>Firmato il</dt><dd>{formatoData(c.data_firma)}</dd>
+        <dt>Inizio</dt><dd>{formatoData(c.data_inizio)}</dd>
+        <dt>Fine</dt><dd>{c.data_fine ? formatoData(c.data_fine) : 'a tempo indeterminato'}</dd>
+        <dt>Disdetta</dt><dd>{c.data_disdetta ? formatoData(c.data_disdetta) : '—'}</dd>
+        <dt>Canone</dt><dd>{formatoEuro(c.canone)}</dd>
+        {c.giorno_addebito != null && (<><dt>Addebito</dt><dd>il {c.giorno_addebito} del mese</dd></>)}
+        <dt>Rinnovo automatico</dt><dd>{c.rinnovo_automatico ? 'sì' : 'no'}</dd>
+        {c.aggiuntivo && (<><dt>Tipo</dt><dd>contratto aggiuntivo</dd></>)}
+        {controllo && (<><dt>Controllo</dt><dd>{traduci(CONTROLLO, controllo)}</dd></>)}
+      </dl>
+    </div>
+  )
+}
+
+// Il certificato medico nell'intestazione, dalla scadenza scritta su
+// PerfectGym (custom attribute del socio): attivo fino a, scaduto il, non
+// presente. Solo il certificato definitivo: il temporaneo qui non conta.
+function StatoCertificato({ c }: { c: Socio['certificato'] | undefined }) {
+  const oggi = oggiRoma()
+  const scadenza = c?.scadenza ?? null
+  const attivo = scadenza != null && scadenza >= oggi
+  return (
+    <div className="certificato">
+      {!scadenza ? (
+        <span><span className="bollino grigio">Certificato medico non presente</span></span>
+      ) : attivo ? (
+        <span><span className="bollino verde">Certificato medico attivo</span> scade il {formatoData(scadenza)}</span>
+      ) : (
+        <span><span className="bollino rosso">Certificato medico scaduto</span> il {formatoData(scadenza)}</span>
+      )}
+    </div>
+  )
+}
+
+function StatoPrenotazione({ b }: { b: Socio['prenotazioni'][number] }) {
+  if (b.annullata) return <span className="bollino grigio">annullata</span>
+  if (b.in_attesa) return <span className="bollino giallo">in lista d&apos;attesa</span>
+  if (b.presente) return <span className="bollino verde">presente</span>
+  if (new Date(b.inizio).getTime() > Date.now()) return <span className="bollino giallo">prenotata</span>
+  return <span className="bollino rosso">assente</span>
 }

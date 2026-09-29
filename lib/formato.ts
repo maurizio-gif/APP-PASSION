@@ -9,6 +9,9 @@ const giornoOra = new Intl.DateTimeFormat('it-IT', {
 })
 const soloOra = new Intl.DateTimeFormat('it-IT', { timeZone: FUSO, hour: '2-digit', minute: '2-digit' })
 const giornoLungo = new Intl.DateTimeFormat('it-IT', { timeZone: FUSO, weekday: 'long', day: 'numeric', month: 'long' })
+const giornoSettimana = new Intl.DateTimeFormat('it-IT', {
+  timeZone: FUSO, weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric',
+})
 
 export const formatoEuro = (v: number | null | undefined) => (v == null ? '—' : euro.format(v))
 export const formatoNumero = (v: number | null | undefined) => (v == null ? '—' : intero.format(v))
@@ -26,6 +29,8 @@ export function formatoCifra(v: number | null | undefined, decimali = 0) {
 // Un istante (timestamptz) -> "28/09/2026, 17:40".
 export const formatoDataOra = (v: string | null | undefined) => (v ? giornoOra.format(new Date(v)) : '—')
 export const formatoOra = (v: string | null | undefined) => (v ? soloOra.format(new Date(v)) : '—')
+// Un istante -> "mar 29/09/2026", il giorno a Roma.
+export const formatoGiorno = (v: string | null | undefined) => (v ? giornoSettimana.format(new Date(v)) : '—')
 
 // Una data secca ("2026-09-28", o l'inizio di una data-ora) -> "28/09/2026".
 // Si legge la parte scritta: passare da Date la sposterebbe col fuso.

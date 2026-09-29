@@ -419,9 +419,63 @@ select:focus {
   margin-bottom: 12px;
 }
 
-/* Un contratto nella scheda persona. */
+/* Gli abbonamenti nella scheda persona: quello in corso, e sotto la tendina
+   con i precedenti, separati da una riga. */
 .contratto .dati {
   margin-top: 4px;
+}
+.abbonamento .testata-scheda {
+  margin-bottom: 6px;
+}
+.abbonamento .testata-scheda h3 {
+  margin: 0;
+}
+.contratti-precedenti {
+  border-top: 1px solid var(--bordo);
+  margin-top: 14px;
+  padding-top: 10px;
+}
+.contratti-precedenti > summary {
+  cursor: pointer;
+}
+.contratti-precedenti > summary:hover,
+.contratti-precedenti[open] > summary {
+  color: var(--rosso-scuro);
+}
+.contratti-precedenti .abbonamento {
+  border-top: 1px solid var(--bordo);
+  margin-top: 12px;
+  padding-top: 12px;
+}
+
+/* Il certificato medico sotto nome e contatti: il bollino e la data. */
+.certificato {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-size: 0.85rem;
+  color: var(--testo-attenuato);
+  margin-top: 6px;
+}
+
+/* Il nuovo task, in fondo al riquadro dei task, sotto lo storico. */
+.task-nuovo {
+  border-top: 1px solid var(--bordo);
+  margin-top: 14px;
+  padding-top: 14px;
+}
+
+/* Accessi e prenotazioni: un elenco puntato, una riga per volta. */
+.punti {
+  margin: 0;
+  padding-left: 1.2em;
+  font-size: 0.93rem;
+}
+.punti > li {
+  padding: 4px 0;
+}
+.punti > li::marker {
+  color: var(--rosso);
 }
 
 /* --- Login ---------------------------------------------------------------- */
