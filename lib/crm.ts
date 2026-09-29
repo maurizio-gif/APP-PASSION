@@ -242,6 +242,33 @@ export type Scheda = {
   )[]
 }
 
+// I debitori: il saldo e' quello del mirror di PerfectGym, letto adesso
+// (supabase/migrations/20260929a_debitori.sql).
+export type Debitore = {
+  member_id: number
+  debito_id: string | null
+  utente_id: string | null
+  nome: string | null
+  cognome: string | null
+  telefono: string | null
+  email: string | null
+  saldo: number | null
+  negativo_da: string | null
+  abbonamento_attivo: boolean
+  piano: string | null
+  stato_contratto: string | null
+  data_fine: string | null
+  ultimo_pagamento: string | null
+  ultimo_importo: number | null
+  assegnato_a: string | null
+  assegnato_nome: string | null
+  task_aperti: number
+  prossimo_task: string | null
+  note_task: string | null
+  rientrato_il: string | null
+  saldo_controllato_il: string | null
+}
+
 export type Trovato = {
   id: string
   nome: string | null
@@ -310,6 +337,7 @@ export const crm = {
   task: (chi: string, quando: string) => rpc<Task[]>('crm_task', { p_chi: chi, p_quando: quando }),
   persona: (id: string) => rpc<Scheda | null>('crm_persona', { p_id: id }),
   cerca: (testo: string) => rpc<Trovato[]>('crm_cerca', { p_testo: testo }),
+  debitori: (vista: string, chi: string) => rpc<Debitore[]>('crm_debitori', { p_vista: vista, p_chi: chi }),
   abbonamenti: () => rpc<Abbonamenti>('crm_abbonamenti'),
   utenti: () => rpc<Utente[]>('crm_utenti'),
 }

@@ -1351,3 +1351,25 @@ details.scheda .utenti {
     grid-template-columns: 1fr;
   }
 }
+
+/* Debitori: il totale in cima, i task del recupero, il modulo che si apre. */
+.debitori-totale {
+  margin: 0 0 10px;
+}
+.debitori-task {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+}
+.debitori-nuovo > summary {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+}
+.debitori-nuovo > summary::-webkit-details-marker {
+  display: none;
+}
+.debitori-nuovo[open] > summary {
+  margin-bottom: 8px;
+}

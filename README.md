@@ -128,11 +128,32 @@ e' entrata. Gli abbonamenti a pagamento su PerfectGym partono da luglio 2024:
 il 28/09/2024 i soci erano quasi tutti sui piani OLD (994, contro 515), e la
 pagina lo dice accanto al confronto con due anni fa.
 
+### Debitori (`20260929a`)
+
+**Debitori** nel menu: i soci di Passion col saldo negativo su PerfectGym.
+Il saldo non si copia: `crm_debitori()` lo legge dal mirror
+(`perfectgym.member_balances`, `currentBalance`) a ogni apertura, e il mirror
+lo ricontrolla ogni 2 minuti e subito dopo ogni pagamento (webhook
+`ContractPaymentDone` e `UserModified`). Chi paga esce dall'elenco da solo e
+passa in **Rientrati**. I filtri: **Abbonamento attivo** (un abbonamento a
+pagamento, non aggiuntivo, Current, Freezed o NotStarted), **Abbonamento
+scaduto** (tutti gli altri), Tutti; e di chi e' il recupero (di tutti, i miei,
+da assegnare).
+
+Il lavoro sta in `public.debiti`, una riga ogni volta che un socio va in
+negativo, aperta finche' il saldo non rientra, con chi segue il recupero. Il
+recupero si fa coi task (`task.debito_id`): si mettono dalla riga del
+debitore, a se' o a un altro operatore, e compaiono fra i Task e nella storia
+della persona. Chi riceve il primo task, se il debito non lo segue ancora
+nessuno, diventa chi lo segue; si prende in carico o si riassegna anche senza
+task. `crm.alimenta()` apre i debiti nuovi e chiude quelli rientrati ogni 5
+minuti. La sezione l'hanno ricevuta tutti gli operatori; si toglie da Utenti.
+
 ### Utenti: sezioni e autorizzazioni (`20260928q`)
 
 **Utenti** nel menu, per gli admin e per chi ha l'autorizzazione «Gestione
 utenti»: per ogni operatore le **sezioni** che vede (Lead, Prove, Nuovi
-contratti, Disdette, Task, Cerca, Abbonamenti) e le **autorizzazioni** («Lead
+contratti, Disdette, Task, Cerca, Debitori, Abbonamenti) e le **autorizzazioni** («Lead
 degli altri»: riassegnare e chiudere anche i lead in carico a un altro;
 «Gestione utenti»). Stanno in `public.staff.sezioni` e
 `public.staff.autorizzazioni`. Un admin vede tutto; la home e la scheda
