@@ -73,6 +73,9 @@ export type Home = {
   prove_senza_esito: number
   contratti_da_controllare: number
   disdette_da_gestire: number
+  mie_disdette: number
+  rinnovi_da_gestire: number
+  miei_rinnovi: number
   miei_task_arretrati: number
   miei_task_oggi: number
   task_senza_assegnatario: number
@@ -219,7 +222,7 @@ export type Task = {
 // senza un lead, una prova, un rinnovo, una disdetta o un debito.
 export type OrigineTask = 'lead' | 'prova' | 'rinnovo' | 'disdetta' | 'debito'
 
-export type TipoTask = 'telefonata' | 'in_sede' | 'whatsapp' | 'email' | 'richiamare' | 'appuntamento'
+export type TipoTask = 'telefonata' | 'in_sede' | 'whatsapp' | 'email' | 'customer_care' | 'richiamare' | 'appuntamento'
 
 export type Scheda = {
   persona: {

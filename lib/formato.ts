@@ -101,7 +101,7 @@ export const FASE: Record<string, string> = {
 }
 export const TIPO_TASK: Record<string, string> = {
   telefonata: 'Telefonata', in_sede: 'In sede', whatsapp: 'WhatsApp', email: 'Email',
-  richiamare: 'Richiamare', appuntamento: 'Appuntamento',
+  customer_care: 'Customer care', richiamare: 'Richiamare', appuntamento: 'Appuntamento',
 }
 // I tipi che si scelgono per un task nuovo. «Richiamare» e «Appuntamento»
 // restano solo per i task che l'hanno gia' (lo storico): erano doppioni di

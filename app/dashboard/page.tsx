@@ -56,11 +56,20 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
             <div className="nota">pagamento, codice fiscale, tessera</div>
           </Link>
         )}
-        <Link href="/dashboard/disdette" className="numero">
-          <div className="etichetta">Disdette</div>
-          <div className="valore">{h.disdette_da_gestire}</div>
-          <div className="nota">da chiamare o in sospeso</div>
-        </Link>
+        {puoVedere(io, 'disdette') && (
+          <Link href="/dashboard/disdette?vista=da_gestire" className={`numero${h.disdette_da_gestire ? ' caldo' : ''}`}>
+            <div className="etichetta">Disdette da gestire</div>
+            <div className="valore">{h.disdette_da_gestire}</div>
+            <div className="nota">non ancora prese in carico · {h.mie_disdette} mie</div>
+          </Link>
+        )}
+        {puoVedere(io, 'rinnovi') && (
+          <Link href="/dashboard/rinnovi?vista=da_gestire" className={`numero${h.rinnovi_da_gestire ? ' caldo' : ''}`}>
+            <div className="etichetta">Rinnovi da gestire</div>
+            <div className="valore">{h.rinnovi_da_gestire}</div>
+            <div className="nota">non ancora presi in carico · {h.miei_rinnovi} miei</div>
+          </Link>
+        )}
         <Link href="/dashboard/task?chi=miei&quando=arretrati" className={`numero${h.miei_task_arretrati ? ' caldo' : ''}`}>
           <div className="etichetta">I miei task</div>
           <div className="valore">{h.miei_task_oggi + h.miei_task_arretrati}</div>

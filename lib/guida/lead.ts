@@ -40,7 +40,7 @@ Da **«+ Nuovo lead»** (in home, in Lead e in Cerca):
 - **Nome**, **Cognome**, **Telefono**, **Email**: serve almeno un telefono o un'email;
 - **Fonte** (di solito **Tour / walk-in**), **Dettaglio fonte**, **Attività di interesse**;
 - **«Ha dato il consenso al trattamento dei dati (privacy)»**: spuntalo solo se la persona l'ha dato davvero;
-- **«Lo prendo in carico io»**: già spuntato. Toglilo se il lead deve restare da assegnare.
+- **Assegnato a**: propone te. Scegli un collega se lo deve seguire lui, o **«Nessuno: resta da assegnare»**. Assegnato, il lead nasce **In gestione**; senza nessuno, **Da gestire**.
 
 **«Crea il lead»** lo crea nel CRM **e su PerfectGym**, e apre la scheda della persona. Se la persona è già su PerfectGym, lì non si crea un doppione. Se PerfectGym lo rifiuta (per esempio un numero straniero scritto male), il lead nel CRM resta, il motivo compare nella scheda e da lì si riprova con **«Riprova su PerfectGym»**.
 

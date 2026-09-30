@@ -1,20 +1,23 @@
 import { crm, richiediSezione } from '@/lib/crm'
-import { ESITO_DISDETTA, formatoData, formatoEuro, MOTIVI_DISDETTA, traduci } from '@/lib/formato'
-import { Avviso, Contatti, Gestione, LinkGuida, Persona, Schede, Vuoto } from '@/components/Ui'
+import { ESITO_DISDETTA, formatoData, formatoEuro, traduci } from '@/lib/formato'
+import { Avviso, Contatti, LinkGuida, Persona, Schede, Vuoto } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
-import { SceltaOperatore } from '@/components/SceltaOperatore'
-import { aggiornaDisdetta } from '../azioni'
+import { InCarico } from '@/components/InCarico'
+import { assegnaDisdetta, rilasciaDisdetta } from '../azioni'
 
 const VISTE = [
   { chiave: 'da_gestire', testo: 'Da gestire' },
+  { chiave: 'in_gestione', testo: 'In gestione' },
+  { chiave: 'mie', testo: 'Le mie' },
   { chiave: 'gestite', testo: 'Gestite' },
   { chiave: 'tutte', testo: 'Tutte' },
 ]
 
 // Le disdette: quando su PerfectGym compare la data di disdetta di un
-// contratto, arriva qui. Si chiama il socio per provare a recuperarlo.
+// contratto, arriva qui. Si prende in carico come un lead e si chiama il socio
+// per provare a recuperarlo; l'esito si scrive nella sua scheda.
 export default async function Disdette({ searchParams }: { searchParams: { vista?: string; consulente?: string; errore?: string } }) {
-  await richiediSezione('disdette')
+  const io = await richiediSezione('disdette')
   const vista = VISTE.some((v) => v.chiave === searchParams.vista) ? searchParams.vista! : 'da_gestire'
   const staff = await crm.staff()
   // Il consulente: chi segue la disdetta.
@@ -28,7 +31,7 @@ export default async function Disdette({ searchParams }: { searchParams: { vista
       <div className="testata">
         <div>
           <h1>Disdette</h1>
-          <p>Chi ha disdetto su PerfectGym: una telefonata o un appuntamento per capire il motivo e recuperarlo.{' '}<LinkGuida argomento="disdette" /></p>
+          <p>Chi ha disdetto su PerfectGym: si prende in carico, poi una telefonata o un appuntamento per capire il motivo e recuperarlo. L&apos;esito si scrive nella scheda.{' '}<LinkGuida argomento="disdette" /></p>
         </div>
       </div>
       <Avviso errore={searchParams.errore} />
@@ -45,7 +48,7 @@ export default async function Disdette({ searchParams }: { searchParams: { vista
                 <tr>
                   <th>Socio</th>
                   <th>Contratto</th>
-                  <th>Gestione</th>
+                  <th>In carico</th>
                 </tr>
               </thead>
               <tbody>
@@ -59,39 +62,17 @@ export default async function Disdette({ searchParams }: { searchParams: { vista
                           {traduci(ESITO_DISDETTA, d.esito)}
                         </span>
                       )}
-                      {d.gestito_nome && <div className="piccolo attenuato">{d.gestito_nome} · {formatoData(d.gestito_il)}</div>}
+                      {d.gestito_il && <div className="piccolo attenuato">{d.gestito_nome ?? '—'} · {formatoData(d.gestito_il)}</div>}
                     </td>
                     <td className="piccolo info">
                       <div><strong>{d.piano ?? '—'}</strong> · {formatoEuro(d.canone)}</div>
                       <div className="attenuato">firmato {formatoData(d.data_firma)} · fine {formatoData(d.data_fine)}</div>
                       <div>disdetto il <strong>{formatoData(d.data_disdetta)}</strong></div>
                     </td>
-                    <td className="gestisci">
-                      <Gestione id={d.id}>
-                        <form action={aggiornaDisdetta} className="modulo compatto">
-                          <input type="hidden" name="disdetta" value={d.id} />
-                          <input type="hidden" name="torna" value={qui} />
-                          <div className="azioni-riga">
-                            <select name="contatto" defaultValue={d.contatto ?? ''} aria-label="Contatto">
-                              <option value="">Contatto…</option>
-                              <option value="telefonata">Telefonata</option>
-                              <option value="appuntamento">Appuntamento</option>
-                            </select>
-                            <select name="esito" defaultValue={d.esito ?? ''} aria-label="Esito">
-                              <option value="">Esito…</option>
-                              {Object.entries(ESITO_DISDETTA).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-                            </select>
-                          </div>
-                          <select name="motivo" defaultValue={d.motivo ?? ''} aria-label="Motivo">
-                            <option value="">Motivo…</option>
-                            {d.motivo && !MOTIVI_DISDETTA.includes(d.motivo) && <option value={d.motivo}>{d.motivo}</option>}
-                            {MOTIVI_DISDETTA.map((m) => <option key={m} value={m}>{m}</option>)}
-                          </select>
-                          <input type="text" name="note" defaultValue={d.note ?? ''} placeholder="Note" />
-                          <SceltaOperatore staff={staff} attuale={d.gestito_da} attualeNome={d.gestito_nome} />
-                          <button className="bottone piccolo">Salva</button>
-                        </form>
-                      </Gestione>
+                    <td className="nowrap">
+                      <InCarico id={d.id} assegnatoA={d.gestito_da} assegnatoNome={d.gestito_nome}
+                        aperto={!d.esito || d.esito === 'standby'} io={io} staff={staff} torna={qui}
+                        assegna={assegnaDisdetta} rilascia={rilasciaDisdetta} />
                     </td>
                   </tr>
                 ))}

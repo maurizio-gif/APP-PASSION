@@ -31,7 +31,7 @@ Se il task non era di nessuno, diventa tuo. Un task chiuso non si riapre: se va 
 ## Nuovo task
 Dalla scheda della persona, riquadro **Task**, due modi:
 
-- **Da programmare**: una cosa da fare più avanti. **Per** (la disdetta, il rinnovo, il pass o il lead della persona, oppure «Nessuno: solo la persona»), **Task** (Telefonata, In sede, WhatsApp, Email), **Quando** (sempre da scegliere), **A chi**, **Note di preparazione**. Poi **«Programma task»**.
+- **Da programmare**: una cosa da fare più avanti. **Per** (la disdetta, il rinnovo, il pass o il lead della persona, oppure «Nessuno: solo la persona»), **Task** (Telefonata, In sede, WhatsApp, Email, Customer care), **Quando** (sempre da scegliere), **A chi**, **Note di preparazione**. Poi **«Programma task»**.
 - **Registra (già fatto)**: una cosa appena fatta, per lasciarne traccia. **Per**, **Task**, **Esito** (Positivo o Negativo), **Chi l'ha fatto**, **Note dell'esito**; data e ora sono quelle del salvataggio. Poi **«Registra task»**.
 
 Per i debitori il task si mette dalla loro riga, con **«+ Task»**.

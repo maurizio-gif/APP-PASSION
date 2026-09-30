@@ -3,7 +3,7 @@ import type { Io, Lead, Operatore } from '@/lib/crm'
 import { formatoData, formatoOra, nomeCompleto } from '@/lib/formato'
 import { BollinoFase, BollinoFonte } from '@/components/Ui'
 import { assegnaLead, prendiLead, rilasciaLead } from '@/app/dashboard/azioni'
-import { puoGestireLead } from '@/lib/permessi'
+import { puoGestire } from '@/lib/permessi'
 
 // La tabella dei lead com'e' l'Interface di Airtable (Interface Commerciali ->
 // Opportunita'): una riga per lead, con in fila da dove arriva, cosa cerca, le
@@ -67,7 +67,7 @@ export function TabellaLead({ lead, io, staff, torna }: { lead: Lead[]; io: Io; 
 }
 
 // Si riassegna (tendina e bottone) o si rimette da assegnare un lead in gestione che si puo' gestire.
-const assegna = (l: Lead, io: Io) => l.fase === 'in_gestione' && puoGestireLead(io, l.assegnato_a)
+const assegna = (l: Lead, io: Io) => l.fase === 'in_gestione' && puoGestire(io, l.assegnato_a)
 
 // Cosa si fa sul lead: prenderlo, riassegnarlo, o solo vederne lo stato.
 function Azione({ l, io, staff, torna }: { l: Lead; io: Io; staff: Operatore[]; torna: string }) {

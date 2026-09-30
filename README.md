@@ -200,6 +200,17 @@ assegna, chiudi vinta/persa), la **scheda persona** (i dati di PerfectGym, i
 contenitori con le loro azioni, la storia dei task), **Prove**,
 **Nuovi contratti**, **Disdette**, **Task**, **Cerca**.
 
+**Disdette e rinnovi si prendono in carico come i lead** (`20260930g`): nella
+riga c'e' «Prendo in carico» (`crm_disdetta_assegna()`, `crm_rinnovo_assegna()`
+senza operatore), per chi ce l'ha «Assegna» e «Rimetti da assegnare»
+(`crm_*_rilascia()`); le regole sono quelle dei lead (`crm.puo_gestire_disdetta()`,
+`crm.puo_gestire_rinnovo()`: di nessuno, mio, o «Lead degli altri»). Chi lo
+prende prende anche i suoi task aperti di nessuno. Viste Da gestire (di
+nessuno), In gestione, Le mie / I miei; l'esito si scrive nella scheda
+persona. Il **nuovo lead** si assegna nel modulo (`p_assegnato` di
+`crm_lead_nuovo()`, `20260930h`): propone chi lo scrive, o un collega, o
+nessuno (nasce da gestire). Fra i tipi di task c'e' **Customer care**.
+
 **L'icona dell'app** (salvata sulla schermata home): «CRM Passion», dal logo
 scontornato. `public/apple-touch-icon.png` per iPhone (a tutto campo: gli
 angoli li arrotonda iOS), `public/icon-192.png` e `icon-512.png` con gli angoli

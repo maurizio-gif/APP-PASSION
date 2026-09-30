@@ -21,7 +21,7 @@ Appena entri, i numeri di oggi. Ogni riquadro porta al suo elenco:
 
 - **Lead da gestire**: non ancora presi in carico; **I miei lead**: in gestione a te;
 - **Prove in scadenza**: finiscono entro 2 giorni;
-- **Disdette**: da chiamare o in sospeso;
+- **Disdette da gestire** e **Rinnovi da gestire**: non ancora presi in carico, con quanti sono tuoi;
 - **I miei task**: di oggi e arretrati;
 - **Ticket in attesa**: R2D aspetta una risposta dal desk. Il supporto vede anche **Ticket da verificare**.
 

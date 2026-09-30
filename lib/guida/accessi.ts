@@ -22,7 +22,7 @@ La sezione **Abbonamenti** ha i numeri dell'azienda: la vedono gli admin e chi l
 ## Le autorizzazioni
 Oltre alle sezioni, due permessi in più, che si danno uno per uno:
 
-- **Lead degli altri**: riassegnare e chiudere anche i lead in carico a un altro operatore. Senza, un lead in carico a un collega lo gestisce solo lui (o un admin);
+- **Lead degli altri**: riassegnare e chiudere anche i lead, le disdette e i rinnovi in carico a un altro operatore. Senza, quelli in carico a un collega li gestisce solo lui (o un admin);
 - **Gestione utenti**: aprire Utenti e cambiare sezioni e autorizzazioni degli altri.
 
 Un admin le ha tutte e due d'ufficio.

@@ -1,4 +1,4 @@
-import { richiediSezione } from '@/lib/crm'
+import { crm, richiediSezione } from '@/lib/crm'
 import Link from 'next/link'
 import { FONTE } from '@/lib/formato'
 import { Avviso } from '@/components/Ui'
@@ -8,8 +8,12 @@ import { nuovoLead } from '../../azioni'
 // Il lead che arriva al desk o al telefono: il tour (walk-in), la telefonata in
 // ingresso. Quelli del sito, di Meta e dei referral arrivano da soli. Creato
 // qui, va anche su PerfectGym (azione nuovoLead, Edge Function crm-perfectgym-lead).
+// A chi va: di solito a chi lo scrive, o a un collega (nasce in gestione), o a
+// nessuno (nasce da gestire).
 export default async function NuovoLead({ searchParams }: { searchParams: { errore?: string } }) {
-  await richiediSezione('lead')
+  const [io, staff] = await Promise.all([richiediSezione('lead'), crm.staff()])
+  // Chi scrive e non e' fra gli operatori (un admin, R2D) resta scelto, col suo nome.
+  const fuori = io && !staff.some((o) => o.id === io.id)
   return (
     <>
       <div className="testata">
@@ -62,9 +66,14 @@ export default async function NuovoLead({ searchParams }: { searchParams: { erro
         <label className="spunta">
           <input type="checkbox" name="privacy" /> Ha dato il consenso al trattamento dei dati (privacy)
         </label>
-        <label className="spunta">
-          <input type="checkbox" name="prendo" defaultChecked /> Lo prendo in carico io
-        </label>
+        <div className="campo">
+          <label htmlFor="assegnato">Assegnato a</label>
+          <select id="assegnato" name="assegnato" defaultValue={io?.id ?? ''}>
+            <option value="">Nessuno: resta da assegnare</option>
+            {fuori && <option value={io.id}>{io.nome} {io.cognome ?? ''}</option>}
+            {staff.map((o) => <option key={o.id} value={o.id}>{o.nome} {o.cognome ?? ''}{o.id === io?.id ? ' (io)' : ''}</option>)}
+          </select>
+        </div>
         <BottoneInvio testo="Crea il lead" inCorso="Salvataggio…" />
       </form>
     </>

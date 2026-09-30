@@ -1,19 +1,22 @@
 import { crm, linkPgm, richiediSezione } from '@/lib/crm'
 import { ESITO_RINNOVO, formatoData, formatoEuro, STATO_CONTRATTO, traduci } from '@/lib/formato'
-import { Avviso, Contatti, Gestione, LinkGuida, Persona, Schede, Vuoto } from '@/components/Ui'
+import { Avviso, Contatti, LinkGuida, Persona, Schede, Vuoto } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
-import { aggiornaRinnovo } from '../azioni'
+import { InCarico } from '@/components/InCarico'
+import { assegnaRinnovo, rilasciaRinnovo } from '../azioni'
 
 const VISTE = [
   { chiave: 'da_gestire', testo: 'Da gestire' },
+  { chiave: 'in_gestione', testo: 'In gestione' },
+  { chiave: 'mie', testo: 'I miei' },
   { chiave: 'rinnovati', testo: 'Rinnovati' },
   { chiave: 'non_rinnovati', testo: 'Non rinnovati' },
   { chiave: 'tutti', testo: 'Tutti' },
 ]
 
-// I rinnovi: gli abbonamenti in scadenza, uno per contratto. Per ora nascono
-// su Airtable (l'automazione di fine mese) e arrivano qui col sync; l'esito
-// si scrive qui o su Airtable, e vale l'ultimo cambiato.
+// I rinnovi: gli abbonamenti a scadenza fissa che finiscono, uno per contratto,
+// dal mirror (20260930c). Si prendono in carico come i lead; l'esito si scrive
+// nella scheda della persona, il rinnovo su PerfectGym si vede da solo.
 export default async function Rinnovi({ searchParams }: { searchParams: { vista?: string; consulente?: string; errore?: string } }) {
   const io = await richiediSezione('rinnovi')
   const vista = VISTE.some((v) => v.chiave === searchParams.vista) ? searchParams.vista! : 'da_gestire'
@@ -29,7 +32,7 @@ export default async function Rinnovi({ searchParams }: { searchParams: { vista?
       <div className="testata">
         <div>
           <h1>Rinnovi</h1>
-          <p>Gli abbonamenti in scadenza: chi li segue, e com&apos;è finita. Il rinnovo su PerfectGym si vede da solo.{' '}<LinkGuida argomento="rinnovi" /></p>
+          <p>Gli abbonamenti in scadenza: si prendono in carico, e l&apos;esito si scrive nella scheda. Il rinnovo su PerfectGym si vede da solo.{' '}<LinkGuida argomento="rinnovi" /></p>
         </div>
       </div>
       <Avviso errore={searchParams.errore} />
@@ -46,7 +49,7 @@ export default async function Rinnovi({ searchParams }: { searchParams: { vista?
                 <tr>
                   <th>Socio</th>
                   <th>Abbonamento</th>
-                  <th>Gestione</th>
+                  <th>In carico</th>
                 </tr>
               </thead>
               <tbody>
@@ -70,24 +73,10 @@ export default async function Rinnovi({ searchParams }: { searchParams: { vista?
                         {r.rinnovato_su_pgm && <span className="bollino verde">Nuovo abbonamento su PerfectGym</span>}
                         {r.task_aperti > 0 && <div className="attenuato">{r.task_aperti} {r.task_aperti === 1 ? 'task aperto' : 'task aperti'}</div>}
                       </td>
-                      <td className="gestisci">
-                        <Gestione id={r.id}>
-                          <form action={aggiornaRinnovo} className="modulo compatto">
-                            <input type="hidden" name="rinnovo" value={r.id} />
-                            <input type="hidden" name="torna" value={qui} />
-                            <div className="azioni-riga">
-                              <select name="esito" defaultValue={r.esito ?? ''} aria-label="Esito">
-                                <option value="">Esito…</option>
-                                {Object.entries(ESITO_RINNOVO).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-                              </select>
-                              <select name="assegnato" defaultValue={r.assegnato_a ?? io?.id ?? ''} aria-label="Chi lo segue">
-                                {staff.map((s) => <option key={s.id} value={s.id}>{s.nome} {s.cognome ?? ''}</option>)}
-                              </select>
-                            </div>
-                            <input type="text" name="note" defaultValue={r.note ?? ''} placeholder="Note" />
-                            <button className="bottone piccolo">Salva</button>
-                          </form>
-                        </Gestione>
+                      <td className="nowrap">
+                        <InCarico id={r.id} assegnatoA={r.assegnato_a} assegnatoNome={r.assegnato_nome}
+                          aperto={!r.esito} io={io} staff={staff} torna={qui}
+                          assegna={assegnaRinnovo} rilascia={rilasciaRinnovo} />
                       </td>
                     </tr>
                   )
