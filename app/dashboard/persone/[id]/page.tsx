@@ -47,7 +47,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
       <div className="testata">
         <div>
           <h1>{[p.nome, p.cognome].filter(Boolean).join(' ') || 'Senza nome'}</h1>
-          <Contatti telefono={p.telefono} email={p.email} />
+          <Contatti telefono={p.telefono} email={p.email} grande />
           <StatoCertificato c={s.socio?.certificato} />
         </div>
         {pgm && <a className="bottone secondario" href={pgm} target="_blank" rel="noreferrer">Apri su PerfectGym ↗</a>}

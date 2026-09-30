@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { FASE, FONTE, ORIGINE_TASK, traduci, nomeCompleto, telefonoLink } from '@/lib/formato'
+import { FASE, FONTE, ORIGINE_TASK, traduci, nomeCompleto, telefonoLeggibile, telefonoLink } from '@/lib/formato'
 import { ARGOMENTI } from '@/lib/guida'
 import { ApriGuida } from '@/components/ApriGuida'
 import { TestoGuida } from '@/components/TestoGuida'
@@ -68,13 +68,17 @@ export function Persona({ id, nome, cognome, nuovaScheda = false }: {
   )
 }
 
-export function Contatti({ telefono, email }: { telefono: string | null; email: string | null }) {
+// `grande`: in cima alla scheda persona il telefono si legge da lontano, e
+// dal telefono basta toccarlo per chiamare.
+export function Contatti({ telefono, email, grande = false }: { telefono: string | null; email: string | null; grande?: boolean }) {
   const tel = telefonoLink(telefono)
   return (
-    <div className="contatti">
+    <div className={grande ? 'contatti contatti-scheda' : 'contatti'}>
       {telefono && (
         <span>
-          <a href={tel ?? undefined}>{telefono}</a>
+          <a href={tel ?? undefined} className={grande ? 'telefono-grande' : undefined}>
+            {grande ? telefonoLeggibile(telefono) : telefono}
+          </a>
         </span>
       )}
       {email && <a href={`mailto:${email}`}>{email}</a>}
