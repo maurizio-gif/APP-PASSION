@@ -12,7 +12,7 @@ Nel CRM trovi insieme due cose:
 - **i dati di PerfectGym**: abbonamenti, pagamenti, saldo, certificato, ingressi, prenotazioni. Arrivano da soli, aggiornati ogni pochi minuti. Qui si leggono: **si cambiano su PerfectGym**;
 - **il lavoro dello staff**: i lead, le prove, i rinnovi, le disdette, i debitori, i task, i ticket. Questo si fa qui.
 
-Molte cose il CRM le fa da solo: i lead dei moduli (sito, referral, Meta) arrivano da soli; le prove, i rinnovi, le disdette e i debitori nascono da quello che succede su PerfectGym; lead e prove si chiudono come vinti o iscritti quando compare l'abbonamento; i task della fine prova, delle disdette e dei rinnovi si creano da soli.
+Molte cose il CRM le fa da solo: da fuori arrivano solo i lead dei moduli (sito, referral, Meta); tutto il resto nasce da quello che succede su PerfectGym. Le **prove** dai pass; i **rinnovi** dagli abbonamenti a scadenza fissa (Reformer, percorsi con trainer) che stanno per finire; le **disdette** dagli abbonamenti mensili che il socio disdice; i **debitori** dal saldo negativo. E poi lead e prove si chiudono come vinti o iscritti quando compare l'abbonamento; i task della fine prova, delle disdette e dei rinnovi si creano da soli.
 
 > Airtable non si usa più: dal 30 settembre 2026 tutto il lavoro si fa qui. Da fuori arrivano solo i lead dei moduli; il resto nasce da PerfectGym.
 

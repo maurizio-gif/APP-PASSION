@@ -7,10 +7,13 @@
 -- Su PerfectGym un contratto ha la data di fine solo quando ha anche la data di
 -- disdetta, e a Passion ci sono due tipi di piano:
 --
---   - a termine, pagati in un'unica soluzione (annuali, «N mesi», Reformer,
---     percorsi con trainer): finiscono alla loro scadenza. Sono i RINNOVI: il
---     contratto entra in public.rinnovi 30 giorni prima della fine, e
---     crm.task_rinnovi() mette la telefonata 15 giorni prima, come sempre;
+--   - a termine, pagati in un'unica soluzione, senza rinnovo automatico:
+--     nascono gia' con la data di fine (Reformer 12 mesi, Percorsi «I ❤️ My
+--     Trainer», PT Elite, e le versioni di questi piani non piu' in vendita,
+--     che restano da gestire). Sono i RINNOVI: il contratto entra in
+--     public.rinnovi da 30 giorni prima della fine a 30 giorni dopo, se la
+--     persona non ha gia' l'abbonamento nuovo; crm.task_rinnovi() mette la
+--     telefonata 15 giorni prima (subito, se quel giorno e' passato);
 --   - ricorrenti, con addebito mensile (SDD o carta): finiscono solo se il
 --     socio disdice. Sono le DISDETTE, come prima.
 --
@@ -29,7 +32,9 @@ as $$
 $$;
 
 -- I rinnovi: abbonamenti principali a pagamento di un piano a termine, che
--- finiscono fra oggi e 30 giorni. Chi li segue si sceglie in Rinnovi.
+-- finiscono fra 30 giorni fa e 30 giorni da oggi, se su PerfectGym non c'e'
+-- gia' l'abbonamento nuovo (la stessa regola di crm.task_rinnovi()). Chi li
+-- segue si sceglie in Rinnovi.
 create or replace function crm.rinnovi_dal_mirror()
 returns integer
 language plpgsql
@@ -49,8 +54,13 @@ begin
      and coalesce(p.canone, 0) > 0
      and not crm.e_pass(p.nome)
      and not crm.piano_ricorrente(p.dati)
-     and c.data_fine between oggi and oggi + 30
-     and not exists (select 1 from public.rinnovi r where r.contract_id = c.id);
+     and c.data_fine between oggi - 30 and oggi + 30
+     and not exists (select 1 from public.rinnovi r where r.contract_id = c.id)
+     and not exists (select 1 from perfectgym.contracts c2
+                       join perfectgym.payment_plans p2 on p2.id = c2.payment_plan_id
+                      where c2.member_id = c.member_id and not c2.is_deleted and c2.id <> c.id
+                        and not coalesce(c2.aggiuntivo, false) and p2.canone > 0
+                        and c2.data_inizio >= c.data_fine - 30);
   get diagnostics n = row_count;
   return n;
 end;
