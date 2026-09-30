@@ -9,6 +9,7 @@ import { debitori } from './debitori'
 import { task } from './task'
 import { schedaPersona } from './scheda-persona'
 import { ticket } from './ticket'
+import { curriculum } from './curriculum'
 import { abbonamenti } from './abbonamenti'
 import { accessi } from './accessi'
 
@@ -36,6 +37,7 @@ export const ARGOMENTI: Argomento[] = [
   task,
   schedaPersona,
   ticket,
+  curriculum,
   abbonamenti,
   accessi,
 ]

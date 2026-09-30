@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { edge, rpc } from '@/lib/crm'
+import { avvisaTicketAR2D } from '@/lib/email'
 import { daInputDataOra } from '@/lib/formato'
 
 // Le azioni del CRM. Ognuna chiama la sua funzione crm_* del database, che
@@ -230,6 +231,8 @@ export async function nuovoTicket(f: FormData) {
     const messaggio = encodeURIComponent(e instanceof Error ? e.message : 'Non salvato')
     redirect(`/dashboard/ticket/nuovo?${persona ? `persona=${persona}&` : ''}errore=${messaggio}`)
   }
+  // Se e' nato gia' inviato (lo apre il supporto), R2D lo sa subito.
+  await avvisaTicketAR2D(id)
   revalidatePath('/dashboard', 'layout')
   redirect(`/dashboard/ticket/${id}?ok=ticket_aperto`)
 }
@@ -239,7 +242,11 @@ export async function messaggioTicket(f: FormData) {
 }
 
 export async function inviaTicket(f: FormData) {
-  await esegui(f, () => rpc('crm_ticket_invia', { p_id: numero(f, 'ticket'), p_nota: testo(f, 'nota') }))
+  await esegui(f, async () => {
+    await rpc('crm_ticket_invia', { p_id: numero(f, 'ticket'), p_nota: testo(f, 'nota') })
+    // Il supporto lo manda a R2D: avviso per email.
+    await avvisaTicketAR2D(numero(f, 'ticket'))
+  })
 }
 
 export async function risolviTicketDesk(f: FormData) {

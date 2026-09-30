@@ -16,6 +16,7 @@ export const SEZIONI = [
   { chiave: 'debitori', href: '/dashboard/debitori', testo: 'Debitori' },
   { chiave: 'abbonamenti', href: '/dashboard/abbonamenti', testo: 'Abbonamenti' },
   { chiave: 'ticket', href: '/dashboard/ticket', testo: 'Ticket' },
+  { chiave: 'curriculum', href: '/dashboard/curriculum', testo: 'Curriculum' },
 ] as const
 
 export type Sezione = (typeof SEZIONI)[number]['chiave']

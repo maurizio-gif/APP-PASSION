@@ -119,6 +119,24 @@ export const TESSERAMENTO: Record<string, string> = { si: 'Tesserato', gia_prese
 export const ESITO_RINNOVO: Record<string, string> = { rinnovato: 'Rinnovato', non_rinnovato: 'Non rinnovato' }
 export const ESITO_DISDETTA: Record<string, string> = { vinto: 'Recuperato', perso: 'Perso', standby: 'In sospeso' }
 
+// Le posizioni aperte del modulo «Inviaci il tuo CV» (20260930k_curriculum.sql).
+// Se ne aggiunge una: qui, nel modulo del sito (src/data/curriculum.ts) e nel
+// controllo della tabella `candidature`.
+export const POSIZIONE: Record<string, string> = {
+  istruttore_fitness: 'Istruttore fitness', istruttore_sala_pesi: 'Istruttore sala pesi', receptionist: 'Receptionist',
+}
+// Gli anni compiuti oggi da una data di nascita "AAAA-MM-GG".
+export function eta(nascita: string | null | undefined) {
+  if (!nascita) return null
+  const [a, m, g] = nascita.slice(0, 10).split('-').map(Number)
+  const oggi = new Date()
+  let anni = oggi.getFullYear() - a
+  if (oggi.getMonth() + 1 < m || (oggi.getMonth() + 1 === m && oggi.getDate() < g)) anni -= 1
+  return Number.isFinite(anni) ? anni : null
+}
+export const formatoPeso = (byte: number | null | undefined) =>
+  byte == null ? '' : byte < 1024 * 1024 ? `${Math.max(1, Math.round(byte / 1024))} KB` : `${(byte / 1024 / 1024).toFixed(1)} MB`
+
 // I ticket (supabase/migrations/20260930b_ticket.sql).
 export const TIPO_TICKET: Record<string, string> = {
   guasto: 'Qualcosa non funziona', domanda: 'Domanda', attivita: 'Attività', proposta: 'Proposta di modifica',

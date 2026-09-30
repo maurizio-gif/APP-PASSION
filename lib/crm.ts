@@ -405,6 +405,23 @@ export type DurataPeriodo = {
   con_cambio: number
 }
 
+// I curriculum arrivati dal sito (supabase/migrations/20260930k_curriculum.sql).
+export type Candidatura = {
+  id: number
+  posizione: string
+  nome: string
+  cognome: string
+  email: string
+  telefono: string
+  data_nascita: string
+  file_percorso: string
+  file_nome: string
+  file_tipo: string
+  file_dimensione: number
+  creato_il: string
+}
+export type CandidatureConti = { tutte: number; istruttore_fitness: number; istruttore_sala_pesi: number; receptionist: number }
+
 // I ticket (supabase/migrations/20260930b_ticket.sql).
 export type TipoTicket = 'guasto' | 'domanda' | 'attivita' | 'proposta' | 'modifica'
 export type StatoTicket =
@@ -587,6 +604,8 @@ export const crm = {
   riunioni: () => rpc<RiunioneInElenco[]>('crm_riunioni'),
   riunione: (id: string) => rpc<Riunione | null>('crm_riunione', { p_id: id }),
   riunioneTrascrizione: (id: string) => rpc<string | null>('crm_riunione_trascrizione', { p_id: id }),
+  candidature: (posizione: string | null = null) => rpc<Candidatura[]>('crm_candidature', { p_posizione: posizione }),
+  candidatureConti: () => rpc<CandidatureConti>('crm_candidature_conti'),
 }
 
 // In cima a ogni pagina di una sezione: chi non la vede torna alla home.
