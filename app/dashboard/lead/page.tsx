@@ -8,6 +8,8 @@ const VISTE = [
   { chiave: 'da_gestire', testo: 'Da gestire' },
   { chiave: 'in_gestione', testo: 'In gestione' },
   { chiave: 'mie', testo: 'I miei' },
+  // In gestione, ma senza un task aperto da oggi in avanti: nessuno ha fissato il prossimo passo.
+  { chiave: 'senza_task', testo: 'Senza task' },
   { chiave: 'vinte', testo: 'Vinte' },
   { chiave: 'perse', testo: 'Perse' },
   { chiave: 'tutte', testo: 'Tutti' },

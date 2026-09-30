@@ -47,7 +47,8 @@ Da **«+ Nuovo lead»** (in home, in Lead e in Cerca):
 > Prima di creare un lead, **cercalo**: il nuovo lead si crea sempre, anche se la persona ha già un lead aperto. La ricerca è in cima al menu.
 
 ## Le viste e i filtri
-- **Da gestire**, **In gestione**, **I miei** (quelli in gestione a te), **Vinte**, **Perse**, **Tutti**;
+- **Da gestire**, **In gestione**, **I miei** (quelli in gestione a te), **Senza task**, **Vinte**, **Perse**, **Tutti**;
+- **Senza task**: i lead in gestione su persone che non hanno nessun task aperto da oggi in avanti. Nessuno ha fissato il prossimo passo: o si programma un task, o il lead si chiude. Ci sono anche quelli con solo task arretrati non fatti;
 - in cima: la ricerca per nome, telefono o email, **Tutte le fonti** e **Tutti i consulenti** (il lavoro di un collega), poi **«Filtra»**;
 - l'elenco mostra al massimo 200 lead, i più recenti.
 
