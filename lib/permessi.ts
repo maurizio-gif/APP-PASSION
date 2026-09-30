@@ -28,7 +28,7 @@ export const SOSPESE: readonly Sezione[] = ['contratti']
 export const SEZIONI_ATTIVE = SEZIONI.filter((s) => !SOSPESE.includes(s.chiave))
 
 export const AUTORIZZAZIONI = [
-  { chiave: 'lead_altrui', testo: 'Lead degli altri', descrizione: 'riassegnare e chiudere anche i lead in carico a un altro' },
+  { chiave: 'lead_altrui', testo: 'Lead degli altri', descrizione: 'riassegnare e chiudere anche i lead, le disdette e i rinnovi in carico a un altro' },
   { chiave: 'gestione_utenti', testo: 'Gestione utenti', descrizione: 'aprire Utenti e cambiare sezioni e autorizzazioni' },
 ] as const
 
@@ -62,5 +62,6 @@ export const ha = (io: Io, autorizzazione: Autorizzazione) => eAdmin(io) || Bool
 export const smista = (io: Io) => io?.ruolo === 'supporto' || io?.ruolo === 'superadmin'
 export const assiste = (io: Io) => eSuperadmin(io)
 
-// Riassegnare o chiudere un lead: se e' libero, se e' mio, o con l'autorizzazione.
-export const puoGestireLead = (io: Io, assegnatoA: string | null) => ha(io, 'lead_altrui') || !assegnatoA || assegnatoA === io?.id
+// Riassegnare, rimettere da assegnare o chiudere un lead, una disdetta o un
+// rinnovo: se e' libero, se e' mio, o con l'autorizzazione (crm.puo_gestire()).
+export const puoGestire = (io: Io, assegnatoA: string | null) => ha(io, 'lead_altrui') || !assegnatoA || assegnatoA === io?.id

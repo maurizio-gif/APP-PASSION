@@ -47,7 +47,7 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
         <Link href="/dashboard/prove?vista=in_scadenza" className={`numero${h.prove_in_scadenza ? ' caldo' : ''}`}>
           <div className="etichetta">Prove in scadenza</div>
           <div className="valore">{h.prove_in_scadenza}</div>
-          <div className="nota">entro 2 giorni · {h.prove_in_corso} in corso</div>
+          <div className="nota">entro 3 giorni · {h.prove_in_corso} in corso</div>
         </Link>
         {puoVedere(io, 'contratti') && (
           <Link href="/dashboard/contratti" className="numero">
@@ -56,11 +56,20 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
             <div className="nota">pagamento, codice fiscale, tessera</div>
           </Link>
         )}
-        <Link href="/dashboard/disdette" className="numero">
-          <div className="etichetta">Disdette</div>
-          <div className="valore">{h.disdette_da_gestire}</div>
-          <div className="nota">da chiamare o in sospeso</div>
-        </Link>
+        {puoVedere(io, 'disdette') && (
+          <Link href="/dashboard/disdette?vista=da_gestire" className={`numero${h.disdette_da_gestire ? ' caldo' : ''}`}>
+            <div className="etichetta">Disdette da gestire</div>
+            <div className="valore">{h.disdette_da_gestire}</div>
+            <div className="nota">non ancora prese in carico · {h.mie_disdette} mie</div>
+          </Link>
+        )}
+        {puoVedere(io, 'rinnovi') && (
+          <Link href="/dashboard/rinnovi?vista=da_gestire" className={`numero${h.rinnovi_da_gestire ? ' caldo' : ''}`}>
+            <div className="etichetta">Rinnovi da gestire</div>
+            <div className="valore">{h.rinnovi_da_gestire}</div>
+            <div className="nota">non ancora presi in carico · {h.miei_rinnovi} miei</div>
+          </Link>
+        )}
         <Link href="/dashboard/task?chi=miei&quando=arretrati" className={`numero${h.miei_task_arretrati ? ' caldo' : ''}`}>
           <div className="etichetta">I miei task</div>
           <div className="valore">{h.miei_task_oggi + h.miei_task_arretrati}</div>
@@ -136,13 +145,13 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
         <section className="scheda">
           <h2>Prove in scadenza</h2>
           {scadenza.length === 0 ? (
-            <Vuoto>Nessuna prova finisce nei prossimi due giorni.</Vuoto>
+            <Vuoto>Nessuna prova finisce nei prossimi tre giorni.</Vuoto>
           ) : (
             <ul className="elenco">
               {scadenza.map((p) => (
                 <li key={p.id}>
                   <Persona id={p.utente_id} nome={p.nome} cognome={p.cognome} />{' '}
-                  <span className="bollino giallo">{p.giorni_rimasti != null && p.giorni_rimasti <= 1 ? 'domani' : `tra ${p.giorni_rimasti} gg`}</span>
+                  <span className="bollino giallo">{p.giorni_rimasti === 0 ? 'oggi' : p.giorni_rimasti === 1 ? 'domani' : `tra ${p.giorni_rimasti} gg`}</span>
                   <div className="piccolo attenuato">
                     {p.tipo_pass} · {p.ingressi} ingressi · {p.prenotazioni} lezioni prenotate
                     {p.gestito_nome ? ` · segue ${p.gestito_nome}` : ' · nessuno la segue'}

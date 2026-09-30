@@ -77,7 +77,13 @@ alimenta da solo: il cron `crm-alimenta`, ogni 5 minuti, lancia
 - **disdette** dal mirror: un contratto a cui compare la `data_disdetta`. Non
   il rinnovo automatico spento, come ad Athlon: a Passion e' spento su tutti i
   contratti. Le disdette gia' note sono in `crm.disdette_note`;
-- **prove** dal mirror: ogni Pass (piano che contiene pass, prova o guest);
+- **prove** dal mirror: ogni Pass (piano che contiene pass, prova o guest).
+  La richiesta del sito e il suo pass sono una prova sola (`20260930f`): il
+  pass che parte fra 3 giorni prima e 30 dopo il giorno chiesto diventa quella
+  richiesta, con le sue date; se la prova del pass c'e' gia', la richiesta ci
+  si fonde (`crm.prove_unisci()`, la prova tolta resta in `crm.prove_unite`).
+  Due richieste aperte a meno di 7 giorni sono una prova sola. La richiesta
+  senza pass dura 7 giorni;
 - **esito delle prove** dal mirror (`20260929u`): iscritto e non iscritto si
   segnano da soli, vedi sotto;
 - **task di fine prova**: due giorni prima della scadenza, a chi segue la prova.
@@ -193,6 +199,17 @@ le prove in scadenza, i lead da prendere), **Lead** (prendi in carico,
 assegna, chiudi vinta/persa), la **scheda persona** (i dati di PerfectGym, i
 contenitori con le loro azioni, la storia dei task), **Prove**,
 **Nuovi contratti**, **Disdette**, **Task**, **Cerca**.
+
+**Disdette e rinnovi si prendono in carico come i lead** (`20260930g`): nella
+riga c'e' «Prendo in carico» (`crm_disdetta_assegna()`, `crm_rinnovo_assegna()`
+senza operatore), per chi ce l'ha «Assegna» e «Rimetti da assegnare»
+(`crm_*_rilascia()`); le regole sono quelle dei lead (`crm.puo_gestire_disdetta()`,
+`crm.puo_gestire_rinnovo()`: di nessuno, mio, o «Lead degli altri»). Chi lo
+prende prende anche i suoi task aperti di nessuno. Viste Da gestire (di
+nessuno), In gestione, Le mie / I miei; l'esito si scrive nella scheda
+persona. Il **nuovo lead** si assegna nel modulo (`p_assegnato` di
+`crm_lead_nuovo()`, `20260930h`): propone chi lo scrive, o un collega, o
+nessuno (nasce da gestire). Fra i tipi di task c'e' **Customer care**.
 
 **L'icona dell'app** (salvata sulla schermata home): «CRM Passion», dal logo
 scontornato. `public/apple-touch-icon.png` per iPhone (a tutto campo: gli
@@ -351,8 +368,8 @@ iscritto, e resta l'abbonamento che l'ha chiusa (`esito_contract_id`). **Non
 iscritto** quando sono passati 30 giorni dalla fine del pass senza
 abbonamento: fino ad allora la prova resta fra le «Finite senza esito», per
 richiamare la persona, e a mano si puo' chiudere prima come non iscritto.
-«Iscritto» a mano non si sceglie piu'. Un pass senza data di fine (le prove
-dei moduli, senza il Pass su PerfectGym) dura 7 giorni. Nella scheda persona
+«Iscritto» a mano non si sceglie piu'. La richiesta dei moduli senza il Pass
+su PerfectGym dura 7 giorni (`20260930f` le scrive la fine). Nella scheda persona
 una prova chiusa da sola lo dice (`esito_automatico_il`), con l'abbonamento;
 quella iscritta da sola non si riapre, quella non iscritta si', e poi il
 mirror non la richiude. Alla prima passata, il 29/09/2026: 31 prove aperte

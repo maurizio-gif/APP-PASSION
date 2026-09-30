@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import { crm, linkPgm, type Operatore, type Scheda } from '@/lib/crm'
+import { crm, linkPgm, type Scheda } from '@/lib/crm'
 import {
   CONTROLLO, ESITO_DISDETTA, ESITO_RINNOVO, FONTE, formatoData, formatoDataOra, formatoEuro, formatoGiorno, formatoOra,
   MOTIVI_DISDETTA, oggiRoma, STATO_CONTRATTO, TIPO_SOCIO, TIPO_TASK, traduci,
@@ -8,11 +8,12 @@ import { Avviso, BollinoFase, BollinoFonte, Contatti, Provenienza, Riapri, Vuoto
 import { BottoneInvio } from '@/components/BottoneInvio'
 import { NuovoTask } from '@/components/NuovoTask'
 import { SceltaOperatore } from '@/components/SceltaOperatore'
-import { puoGestireLead, puoVedere } from '@/lib/permessi'
+import { InCarico } from '@/components/InCarico'
+import { puoGestire, puoVedere } from '@/lib/permessi'
 import { TabellaTicket } from '@/components/Ticket'
 import {
-  aggiornaDisdetta, aggiornaProva, aggiornaRinnovo, assegnaLead, chiudiLead, completaTask, leadSuPerfectGym, prendiLead,
-  riapriLead, rilasciaLead,
+  aggiornaDisdetta, aggiornaProva, aggiornaRinnovo, assegnaDisdetta, assegnaLead, assegnaRinnovo, chiudiLead, completaTask,
+  leadSuPerfectGym, prendiLead, riapriLead, rilasciaDisdetta, rilasciaLead, rilasciaRinnovo,
 } from '../../azioni'
 
 const VINTA_DA_SOLA = 'Vinta si segna da sola, quando su PerfectGym compare la prova o il contratto'
@@ -58,7 +59,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
         {/* ---- Colonna 1: il lavoro ---- */}
         <div>
           {s.lead.map((l) => {
-            const puo = puoGestireLead(io, l.assegnato_a)
+            const puo = puoGestire(io, l.assegnato_a)
             return (
               <section className="scheda" key={l.id}>
                 <div className="testata-scheda">
@@ -245,68 +246,84 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
             </section>
           )}
 
-          {/* Rinnovi e disdette si gestiscono qui: da gestire, il modulo e'
-              aperto; chiusi con l'esito, si leggono e si riaprono, con l'avviso. */}
-          {rinnovi.map((r) => (
-            <section className="scheda" key={r.id}>
-              <div className="testata-scheda">
-                <h2>Rinnovo</h2>
-                <span className={`bollino ${r.esito === 'rinnovato' ? 'verde' : r.esito ? 'grigio' : 'giallo'}`}>
-                  {r.esito ? traduci(ESITO_RINNOVO, r.esito) : 'Da gestire'}
-                </span>
-              </div>
-              <p className="piccolo">
-                scade il <strong>{formatoData(r.scadenza)}</strong>{r.piano ? ` · ${r.piano}` : ''} · lo segue {r.assegnato_nome ?? 'nessuno'}
-              </p>
-              {!puoVedere(io, 'rinnovi') ? (
-                r.note && <p className="nota-socio">{r.note}</p>
-              ) : r.esito ? (
-                <>
-                  {r.note && <p className="nota-socio">{r.note}</p>}
-                  <div className="azioni-scheda">
-                    <Riapri
-                      azione={aggiornaRinnovo}
-                      campi={{ rinnovo: r.id, torna: qui, esito: '', note: r.note ?? '' }}
-                      avviso={`riaprendo il rinnovo si toglie l'esito «${traduci(ESITO_RINNOVO, r.esito)}» e torna da gestire. Lo storico cambia.`}
-                    />
-                  </div>
-                </>
-              ) : (
-                <ModuloRinnovo r={r} staff={staff} torna={qui} />
-              )}
-            </section>
-          ))}
+          {/* Rinnovi e disdette si gestiscono qui, come i lead: si prendono in
+              carico, e chi li ha (o un admin) scrive l'esito; chiusi con l'esito,
+              si leggono e si riaprono, con l'avviso. */}
+          {rinnovi.map((r) => {
+            const puo = puoVedere(io, 'rinnovi') && puoGestire(io, r.assegnato_a)
+            return (
+              <section className="scheda" key={r.id}>
+                <div className="testata-scheda">
+                  <h2>Rinnovo</h2>
+                  <span className={`bollino ${r.esito === 'rinnovato' ? 'verde' : r.esito ? 'grigio' : 'giallo'}`}>
+                    {r.esito ? traduci(ESITO_RINNOVO, r.esito) : r.assegnato_a ? 'In gestione' : 'Da gestire'}
+                  </span>
+                </div>
+                <p className="piccolo">
+                  scade il <strong>{formatoData(r.scadenza)}</strong>{r.piano ? ` · ${r.piano}` : ''} · lo segue {r.assegnato_nome ?? 'nessuno'}
+                </p>
+                {puoVedere(io, 'rinnovi') && !r.esito && (
+                  <InCarico id={r.id} assegnatoA={r.assegnato_a} assegnatoNome={r.assegnato_nome} aperto io={io} staff={staff}
+                    torna={qui} assegna={assegnaRinnovo} rilascia={rilasciaRinnovo} completo />
+                )}
+                {!puo || r.esito ? (
+                  <>
+                    {r.note && <p className="nota-socio">{r.note}</p>}
+                    {puo && r.esito && (
+                      <div className="azioni-scheda">
+                        <Riapri
+                          azione={aggiornaRinnovo}
+                          campi={{ rinnovo: r.id, torna: qui, esito: '', note: r.note ?? '' }}
+                          avviso={`riaprendo il rinnovo si toglie l'esito «${traduci(ESITO_RINNOVO, r.esito)}» e torna ${r.assegnato_a ? 'in gestione' : 'da gestire'}. Lo storico cambia.`}
+                        />
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <ModuloRinnovo r={r} torna={qui} />
+                )}
+              </section>
+            )
+          })}
 
-          {s.disdette.map((d) => (
-            <section className="scheda" key={d.id}>
-              <div className="testata-scheda">
-                <h2>Disdetta</h2>
-                <span className={`bollino ${d.esito === 'vinto' ? 'verde' : d.esito === 'perso' ? 'grigio' : 'giallo'}`}>
-                  {d.esito ? traduci(ESITO_DISDETTA, d.esito) : 'Da gestire'}
-                </span>
-              </div>
-              <p className="piccolo">
-                del <strong>{formatoData(d.data_disdetta)}</strong>{d.piano ? ` · ${d.piano}` : ''} · la segue {d.gestito_nome ?? 'nessuno'}
-              </p>
-              {!puoVedere(io, 'disdette') || d.esito ? (
-                <>
-                  {d.motivo && <p className="piccolo">Motivo: {d.motivo}</p>}
-                  {d.note && <p className="nota-socio">{d.note}</p>}
-                  {puoVedere(io, 'disdette') && d.esito && (
-                    <div className="azioni-scheda">
-                      <Riapri
-                        azione={aggiornaDisdetta}
-                        campi={{ disdetta: d.id, torna: qui, esito: '', contatto: d.contatto ?? '', motivo: d.motivo ?? '', note: d.note ?? '' }}
-                        avviso={`riaprendo la disdetta si toglie l'esito «${traduci(ESITO_DISDETTA, d.esito)}» e torna da gestire. Lo storico cambia.`}
-                      />
-                    </div>
-                  )}
-                </>
-              ) : (
-                <ModuloDisdetta d={d} staff={staff} torna={qui} />
-              )}
-            </section>
-          ))}
+          {s.disdette.map((d) => {
+            const puo = puoVedere(io, 'disdette') && puoGestire(io, d.gestito_da ?? null)
+            const aperta = !d.esito || d.esito === 'standby'
+            return (
+              <section className="scheda" key={d.id}>
+                <div className="testata-scheda">
+                  <h2>Disdetta</h2>
+                  <span className={`bollino ${d.esito === 'vinto' ? 'verde' : d.esito === 'perso' ? 'grigio' : 'giallo'}`}>
+                    {d.esito ? traduci(ESITO_DISDETTA, d.esito) : d.gestito_da ? 'In gestione' : 'Da gestire'}
+                  </span>
+                </div>
+                <p className="piccolo">
+                  del <strong>{formatoData(d.data_disdetta)}</strong>{d.piano ? ` · ${d.piano}` : ''} · la segue {d.gestito_nome ?? 'nessuno'}
+                </p>
+                {puoVedere(io, 'disdette') && aperta && (
+                  <InCarico id={d.id} assegnatoA={d.gestito_da ?? null} assegnatoNome={d.gestito_nome ?? null} aperto io={io} staff={staff}
+                    torna={qui} assegna={assegnaDisdetta} rilascia={rilasciaDisdetta} completo />
+                )}
+                {!puo || (d.esito && d.esito !== 'standby') ? (
+                  <>
+                    {d.motivo && <p className="piccolo">Motivo: {d.motivo}</p>}
+                    {d.note && <p className="nota-socio">{d.note}</p>}
+                    {puo && d.esito && (
+                      <div className="azioni-scheda">
+                        <Riapri
+                          azione={aggiornaDisdetta}
+                          campi={{ disdetta: d.id, torna: qui, esito: '', contatto: d.contatto ?? '', motivo: d.motivo ?? '', note: d.note ?? '' }}
+                          avviso={`riaprendo la disdetta si toglie l'esito «${traduci(ESITO_DISDETTA, d.esito)}» e torna ${d.gestito_da ? 'in gestione' : 'da gestire'}. Lo storico cambia.`}
+                        />
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <ModuloDisdetta d={d} torna={qui} />
+                )}
+              </section>
+            )
+          })}
 
           {/* I task in un riquadro solo, che sul telefono resta insieme: prima
               lo storico, sotto il nuovo task. */}
@@ -471,8 +488,9 @@ function StatoCertificato({ c }: { c: Socio['certificato'] | undefined }) {
   )
 }
 
-// Rinnovo e disdetta, dalla scheda: gli stessi campi delle loro sezioni.
-function ModuloRinnovo({ r, staff, torna }: { r: NonNullable<Scheda['rinnovi']>[number]; staff: Operatore[]; torna: string }) {
+// Rinnovo e disdetta, dalla scheda: l'esito e le note. Chi li segue si cambia
+// con «Assegna» (InCarico); salvare quello di nessuno lo prende in carico.
+function ModuloRinnovo({ r, torna }: { r: NonNullable<Scheda['rinnovi']>[number]; torna: string }) {
   return (
     <form action={aggiornaRinnovo} className="modulo">
       <input type="hidden" name="rinnovo" value={r.id} />
@@ -486,20 +504,16 @@ function ModuloRinnovo({ r, staff, torna }: { r: NonNullable<Scheda['rinnovi']>[
           </select>
         </div>
         <div className="campo">
-          <label>Lo segue</label>
-          <SceltaOperatore staff={staff} attuale={r.assegnato_a} attualeNome={r.assegnato_nome} etichetta="Da assegnare" />
+          <label>Note</label>
+          <input type="text" name="note" defaultValue={r.note ?? ''} />
         </div>
-      </div>
-      <div className="campo">
-        <label>Note</label>
-        <input type="text" name="note" defaultValue={r.note ?? ''} />
       </div>
       <BottoneInvio testo="Salva il rinnovo" inCorso="Salvataggio…" />
     </form>
   )
 }
 
-function ModuloDisdetta({ d, staff, torna }: { d: Scheda['disdette'][number]; staff: Operatore[]; torna: string }) {
+function ModuloDisdetta({ d, torna }: { d: Scheda['disdette'][number]; torna: string }) {
   return (
     <form action={aggiornaDisdetta} className="modulo">
       <input type="hidden" name="disdetta" value={d.id} />
@@ -520,18 +534,14 @@ function ModuloDisdetta({ d, staff, torna }: { d: Scheda['disdette'][number]; st
             {Object.entries(ESITO_DISDETTA).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
           </select>
         </div>
-        <div className="campo">
-          <label>Motivo</label>
-          <select name="motivo" defaultValue={d.motivo ?? ''}>
-            <option value="">Non ancora</option>
-            {d.motivo && !MOTIVI_DISDETTA.includes(d.motivo) && <option value={d.motivo}>{d.motivo}</option>}
-            {MOTIVI_DISDETTA.map((m) => <option key={m} value={m}>{m}</option>)}
-          </select>
-        </div>
-        <div className="campo">
-          <label>La segue</label>
-          <SceltaOperatore staff={staff} attuale={d.gestito_da} attualeNome={d.gestito_nome} etichetta="Da assegnare" />
-        </div>
+      </div>
+      <div className="campo">
+        <label>Motivo</label>
+        <select name="motivo" defaultValue={d.motivo ?? ''}>
+          <option value="">Non ancora</option>
+          {d.motivo && !MOTIVI_DISDETTA.includes(d.motivo) && <option value={d.motivo}>{d.motivo}</option>}
+          {MOTIVI_DISDETTA.map((m) => <option key={m} value={m}>{m}</option>)}
+        </select>
       </div>
       <div className="campo">
         <label>Note</label>

@@ -8,6 +8,7 @@ const giornoOra = new Intl.DateTimeFormat('it-IT', {
   timeZone: FUSO, day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit',
 })
 const soloOra = new Intl.DateTimeFormat('it-IT', { timeZone: FUSO, hour: '2-digit', minute: '2-digit' })
+const soloGiorno = new Intl.DateTimeFormat('it-IT', { timeZone: FUSO, day: '2-digit', month: '2-digit', year: 'numeric' })
 const giornoLungo = new Intl.DateTimeFormat('it-IT', { timeZone: FUSO, weekday: 'long', day: 'numeric', month: 'long' })
 const giornoSettimana = new Intl.DateTimeFormat('it-IT', {
   timeZone: FUSO, weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric',
@@ -32,10 +33,16 @@ export const formatoOra = (v: string | null | undefined) => (v ? soloOra.format(
 // Un istante -> "mar 29/09/2026", il giorno a Roma.
 export const formatoGiorno = (v: string | null | undefined) => (v ? giornoSettimana.format(new Date(v)) : '—')
 
-// Una data secca ("2026-09-28", o l'inizio di una data-ora) -> "28/09/2026".
-// Si legge la parte scritta: passare da Date la sposterebbe col fuso.
+// Una data secca ("2026-09-28") -> "28/09/2026": si legge la parte scritta,
+// passare da Date la sposterebbe col fuso. Un istante con il suo fuso
+// ("2026-09-27T22:00:00+00:00", la mezzanotte di Roma) -> il giorno a Roma,
+// "28/09/2026": la parte scritta sarebbe il giorno prima.
 export function formatoData(v: string | null | undefined) {
   if (!v) return '—'
+  if (/[T ]\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}(:?\d{2})?)$/.test(v)) {
+    const d = new Date(v)
+    if (!Number.isNaN(d.getTime())) return soloGiorno.format(d)
+  }
   const [a, m, g] = v.slice(0, 10).split('-')
   return g && m && a ? `${g}/${m}/${a}` : v
 }
@@ -94,7 +101,7 @@ export const FASE: Record<string, string> = {
 }
 export const TIPO_TASK: Record<string, string> = {
   telefonata: 'Telefonata', in_sede: 'In sede', whatsapp: 'WhatsApp', email: 'Email',
-  richiamare: 'Richiamare', appuntamento: 'Appuntamento',
+  customer_care: 'Customer care', richiamare: 'Richiamare', appuntamento: 'Appuntamento',
 }
 // I tipi che si scelgono per un task nuovo. «Richiamare» e «Appuntamento»
 // restano solo per i task che l'hanno gia' (lo storico): erano doppioni di

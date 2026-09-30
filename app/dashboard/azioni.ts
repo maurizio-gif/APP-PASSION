@@ -63,8 +63,8 @@ export async function nuovoLead(f: FormData) {
     const lead = await rpc<string>('crm_lead_nuovo', {
       p_nome: testo(f, 'nome'), p_cognome: testo(f, 'cognome'), p_telefono: testo(f, 'telefono'),
       p_email: testo(f, 'email'), p_fonte: testo(f, 'fonte'), p_fonte_dettaglio: testo(f, 'fonte_dettaglio'),
-      p_attivita: testo(f, 'attivita'), p_nota: testo(f, 'nota'), p_prendo: f.get('prendo') === 'on',
-      p_privacy: f.get('privacy') === 'on',
+      p_attivita: testo(f, 'attivita'), p_nota: testo(f, 'nota'), p_prendo: false,
+      p_privacy: f.get('privacy') === 'on', p_assegnato: testo(f, 'assegnato'),
     })
     id = lead
   } catch (e) {
@@ -160,6 +160,24 @@ export async function aggiornaDisdetta(f: FormData) {
       p_id: testo(f, 'disdetta'), p_esito: testo(f, 'esito') ?? '', p_contatto: testo(f, 'contatto') ?? '',
       p_motivo: testo(f, 'motivo'), p_note: testo(f, 'note'), p_assegnato: testo(f, 'assegnato'),
     }))
+}
+
+// Disdette e rinnovi si prendono in carico come i lead (20260930g): senza
+// «staff» e' «Prendo in carico», con lo «staff» e' «Assegna».
+export async function assegnaDisdetta(f: FormData) {
+  await esegui(f, () => rpc('crm_disdetta_assegna', { p_id: testo(f, 'id'), p_staff: testo(f, 'staff') }))
+}
+
+export async function rilasciaDisdetta(f: FormData) {
+  await esegui(f, () => rpc('crm_disdetta_rilascia', { p_id: testo(f, 'id') }))
+}
+
+export async function assegnaRinnovo(f: FormData) {
+  await esegui(f, () => rpc('crm_rinnovo_assegna', { p_id: testo(f, 'id'), p_staff: testo(f, 'staff') }))
+}
+
+export async function rilasciaRinnovo(f: FormData) {
+  await esegui(f, () => rpc('crm_rinnovo_rilascia', { p_id: testo(f, 'id') }))
 }
 
 export async function aggiornaRinnovo(f: FormData) {

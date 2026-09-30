@@ -33,12 +33,12 @@ Ogni cosa aperta sulla persona ha il suo riquadro, e si gestisce sul posto:
 
 - **Lead**: fonte, da quando, chi lo segue, l'invio a PerfectGym; **«Prendo in carico»**, **«Assegna»**, **«Persa»** (vedi [Lead](/dashboard/guida/lead));
 - **Prova**: il pass e le date, chi la segue, l'obiezione; **«Salva la prova»** (vedi [Prove](/dashboard/guida/prove));
-- **Rinnovo**: esito, chi lo segue, note; **«Salva il rinnovo»** (vedi [Rinnovi](/dashboard/guida/rinnovi));
-- **Disdetta**: contatto, esito, motivo, chi la segue, note; **«Salva la disdetta»** (vedi [Disdette](/dashboard/guida/disdette));
+- **Rinnovo**: **«Prendo in carico»**, **«Assegna»** e **«Rimetti da assegnare»** come per i lead; poi esito e note, **«Salva il rinnovo»** (vedi [Rinnovi](/dashboard/guida/rinnovi));
+- **Disdetta**: **«Prendo in carico»**, **«Assegna»** e **«Rimetti da assegnare»** come per i lead; poi contatto, esito, motivo e note, **«Salva la disdetta»** (vedi [Disdette](/dashboard/guida/disdette));
 - **Task**: prima la storia, poi il nuovo task, da programmare o già fatto (vedi [Task](/dashboard/guida/task));
 - **Ticket**: **«+ Apri un ticket»**, che si porta dietro la situazione del socio (vedi [Ticket](/dashboard/guida/ticket)).
 
-Rinnovo e disdetta si modificano qui solo se hai anche la loro sezione; altrimenti si leggono.
+Rinnovo e disdetta si modificano qui solo se hai anche la loro sezione, e se sono tuoi o di nessuno (o sei admin, o hai **«Lead degli altri»**); altrimenti si leggono.
 
 ## Riapri
 Lead, prova, rinnovo e disdetta chiusi con un esito non si modificano: si leggono. Per cambiarli, **«Riapri»**: prima compare l'avviso (riaprendo si toglie l'esito e la storia cambia), poi **«Sì, riapri»**. Note, motivo e chi lo segue restano com'erano.

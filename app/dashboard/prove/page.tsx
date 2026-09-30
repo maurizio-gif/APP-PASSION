@@ -68,7 +68,7 @@ export default async function Prove({ searchParams }: { searchParams: { vista?: 
                       <div>{p.tipo_pass ?? '—'}</div>
                       <div className="attenuato nowrap">{formatoData(p.data_inizio)} → {formatoData(p.data_fine)}</div>
                       {p.giorni_rimasti != null && p.giorni_rimasti >= 0 && !p.esito && (
-                        <span className={`bollino ${p.giorni_rimasti <= 2 ? 'rosso' : 'giallo'}`}>
+                        <span className={`bollino ${p.giorni_rimasti <= 3 ? 'rosso' : 'giallo'}`}>
                           {p.giorni_rimasti === 0 ? 'finisce oggi' : `${p.giorni_rimasti} gg`}
                         </span>
                       )}
