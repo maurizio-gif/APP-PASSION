@@ -5,22 +5,21 @@
 -- quindici persone diverse, un terzo senza risposta scritta. Da qui in avanti
 -- passano dal CRM, con le regole decise dopo l'analisi del 30/09/2026:
 --
---   - tutti scrivono, Ludovica invia. Chiunque dello staff apre una
+--   - tutti scrivono, il supporto invia. Chiunque dello staff apre una
 --     segnalazione (dalla sezione Ticket o dalla scheda del socio); resta «da
---     verificare» finche' chi ha l'autorizzazione `ticket_smistamento`
---     (Ludovica e il suo sostituto) non la manda a R2D, la risolve al desk o la
---     unisce a un ticket gia' aperto. Chi ha lo smistamento, quando apre lui,
---     manda subito;
---   - R2D risponde nel CRM. Chi ha `ticket_assistenza` (lo staff di R2D, data
---     una per una: un admin non l'ha d'ufficio) prende
---     in carico, chiede informazioni al desk («in attesa»: il ticket torna in
---     lavorazione alla prima risposta di Passion) e chiude. Non si chiude senza
+--     verificare» finche' chi ha il ruolo supporto (chi segue il desk, e chi
+--     lo sostituisce: 20260930a) non la manda a R2D, la risolve al desk o la
+--     unisce a un ticket gia' aperto. Il supporto e i superadmin, quando aprono
+--     loro, mandano subito;
+--   - R2D risponde nel CRM. I superadmin (lo staff di R2D) prendono
+--     in carico, chiedono informazioni al desk («in attesa»: il ticket torna in
+--     lavorazione alla prima risposta di Passion) e chiudono. Non si chiude senza
 --     la natura del ticket, la causa e la soluzione: sono le categorie
 --     dell'analisi, e il resoconto mensile esce da solo;
---   - le modifiche le scrive R2D. Marco non apre ticket: le modifiche nascono
---     nella riunione settimanale con Michele, che le scrive come «modifica»
+--   - le modifiche le scrive R2D. Il titolare non apre ticket: le modifiche
+--     nascono nella riunione settimanale con R2D, che le scrive come «modifica»
 --     (cosa cambia, per quali abbonamenti, da quando, cosa si dice ai soci),
---     ne registra la conferma di Marco e, dopo il rilascio, cosa ha verificato.
+--     ne registra la conferma del titolare e, dopo il rilascio, cosa ha verificato.
 --     Le proposte del desk (tipo «proposta») non vanno a R2D: aspettano la
 --     riunione e si chiudono al desk con quello che si e' deciso.
 --
@@ -119,7 +118,7 @@ alter table public.ticket_allegati enable row level security;
 revoke all on public.ticket_allegati from anon, authenticated;
 
 -- ---------------------------------------------------------------------------
--- 2. Sezione e autorizzazioni
+-- 2. La sezione
 -- ---------------------------------------------------------------------------
 
 alter table public.staff drop constraint if exists staff_sezioni_note;
@@ -131,46 +130,42 @@ alter table public.staff alter column sezioni
 -- Tutti scrivono: la sezione la ricevono tutti quelli che ci sono.
 update public.staff set sezioni = sezioni || array['ticket'] where not ('ticket' = any (sezioni));
 
-alter table public.staff drop constraint if exists staff_autorizzazioni_note;
-alter table public.staff add constraint staff_autorizzazioni_note
-  check (autorizzazioni <@ array['lead_altrui', 'gestione_utenti', 'ticket_smistamento', 'ticket_assistenza']);
-
 -- ---------------------------------------------------------------------------
 -- 3. Le regole
 -- ---------------------------------------------------------------------------
 
--- `ticket_assistenza` e' la prima autorizzazione che un admin non ha d'ufficio:
--- si da' una per una, anche agli admin (in Utenti la spunta resta libera). Dice
--- da che parte scrive un operatore: un admin di Passion resta Passion, e non
--- chiude i ticket al posto di R2D.
-create or replace function crm.ha(p_autorizzazione text) returns boolean
+-- Chi smista i ticket del desk: il supporto e i superadmin. Chi li lavora e li
+-- chiude (l'assistenza): i superadmin, cioe' R2D. Un admin di Passion i ticket
+-- li apre e li legge, ma non li smista e non li chiude.
+create or replace function crm.smista() returns boolean
 language sql stable security definer set search_path = ''
-as $$
-  select coalesce((select (s.ruolo = 'admin' and p_autorizzazione <> 'ticket_assistenza')
-                          or p_autorizzazione = any (s.autorizzazioni)
-                     from crm.io() s where s.id is not null), false)
-$$;
+as $$ select coalesce((crm.io()).ruolo in ('supporto', 'superadmin'), false) $$;
 
--- Da che parte scrive un operatore: R2D chi ha `ticket_assistenza`.
+create or replace function crm.assiste() returns boolean
+language sql stable security definer set search_path = ''
+as $$ select crm.e_superadmin() $$;
+
+-- Da che parte scrive un operatore: R2D i superadmin, Passion tutti gli altri.
 create or replace function crm.ticket_lato(p_staff uuid) returns text
 language sql stable security definer set search_path = ''
 as $$
-  select case when exists (select 1 from public.staff s where s.id = p_staff and 'ticket_assistenza' = any (s.autorizzazioni))
+  select case when exists (select 1 from public.staff s where s.id = p_staff and s.ruolo = 'superadmin')
               then 'r2d' else 'passion' end
 $$;
 
-create or replace function crm.ticket_richiedi(p_autorizzazione text) returns uuid
+-- p_cosa: null (basta la sezione Ticket), 'smistamento' o 'assistenza'.
+create or replace function crm.ticket_richiedi(p_cosa text) returns uuid
 language plpgsql stable security definer set search_path = ''
 as $$
 declare me uuid;
 begin
   perform crm.richiedi_sezione('ticket');
   me := crm.chi();
-  if p_autorizzazione is not null and not crm.ha(p_autorizzazione) then
-    raise exception '%', case p_autorizzazione
-                           when 'ticket_smistamento' then 'Solo chi smista i ticket (Ludovica o chi la sostituisce) può farlo'
-                           else 'Solo l''assistenza R2D può farlo' end
-      using errcode = '42501';
+  if p_cosa = 'smistamento' and not crm.smista() then
+    raise exception 'Solo il supporto può farlo' using errcode = '42501';
+  end if;
+  if p_cosa = 'assistenza' and not crm.assiste() then
+    raise exception 'Solo l''assistenza R2D può farlo' using errcode = '42501';
   end if;
   return me;
 end;
@@ -407,8 +402,8 @@ $$;
 -- 5. Aprire e scrivere
 -- ---------------------------------------------------------------------------
 
--- Guasto, domanda, attivita' o proposta. Chi ha lo smistamento manda subito a
--- R2D (tranne le proposte, che aspettano la riunione).
+-- Guasto, domanda, attivita' o proposta. Il supporto e i superadmin mandano
+-- subito a R2D (tranne le proposte, che aspettano la riunione).
 create or replace function public.crm_ticket_nuovo(p_tipo text, p_titolo text, p_descrizione text,
                                                    p_utente uuid default null, p_verifiche text[] default '{}',
                                                    p_bloccante boolean default false)
@@ -422,7 +417,7 @@ begin
   if p_tipo is null or p_tipo not in ('guasto', 'domanda', 'attivita', 'proposta') then
     raise exception 'Scegli il tipo: qualcosa non funziona, una domanda, un''attività o una proposta';
   end if;
-  diretto := crm.ha('ticket_smistamento') and p_tipo <> 'proposta';
+  diretto := crm.smista() and p_tipo <> 'proposta';
   insert into public.ticket (tipo, stato, titolo, descrizione, utente_id, contesto, verifiche, bloccante,
                              aperto_da, inviato_da, inviato_il)
   values (p_tipo, case when diretto then 'inviato' else 'da_verificare' end,
@@ -486,14 +481,14 @@ end;
 $$;
 
 -- ---------------------------------------------------------------------------
--- 6. Lo smistamento (Ludovica)
+-- 6. Lo smistamento (il supporto)
 -- ---------------------------------------------------------------------------
 
 create or replace function public.crm_ticket_invia(p_id bigint, p_nota text default null)
 returns void
 language plpgsql volatile security definer set search_path = ''
 as $$
-declare me uuid := crm.ticket_richiedi('ticket_smistamento');
+declare me uuid := crm.ticket_richiedi('smistamento');
         t public.ticket := crm.ticket_prendi_riga(p_id);
 begin
   if t.stato <> 'da_verificare' then
@@ -511,7 +506,7 @@ create or replace function public.crm_ticket_risolvi_desk(p_id bigint, p_natura 
 returns void
 language plpgsql volatile security definer set search_path = ''
 as $$
-declare me uuid := crm.ticket_richiedi('ticket_smistamento');
+declare me uuid := crm.ticket_richiedi('smistamento');
         t public.ticket := crm.ticket_prendi_riga(p_id);
 begin
   if t.stato <> 'da_verificare' then
@@ -528,8 +523,8 @@ begin
 end;
 $$;
 
--- Unire un ticket a un altro gia' aperto sullo stesso problema. Lo fanno lo
--- smistamento e R2D.
+-- Unire un ticket a un altro gia' aperto sullo stesso problema. Lo fanno il
+-- supporto e R2D.
 create or replace function public.crm_ticket_unisci(p_id bigint, p_in bigint)
 returns void
 language plpgsql volatile security definer set search_path = ''
@@ -538,8 +533,8 @@ declare me uuid := crm.ticket_richiedi(null);
         t public.ticket := crm.ticket_prendi_riga(p_id);
         dest public.ticket;
 begin
-  if not (crm.ha('ticket_smistamento') or crm.ha('ticket_assistenza')) then
-    raise exception 'Solo chi smista i ticket o l''assistenza R2D può unirli' using errcode = '42501';
+  if not crm.smista() then
+    raise exception 'Solo il supporto o l''assistenza R2D può unire i ticket' using errcode = '42501';
   end if;
   if t.stato not in ('da_verificare', 'inviato', 'in_lavorazione', 'in_attesa') then
     raise exception 'Si uniscono solo i ticket ancora aperti';
@@ -564,7 +559,7 @@ end;
 $$;
 
 -- Riaprire un ticket chiuso: torna a R2D se c'era gia' arrivato, altrimenti
--- torna da verificare. Lo fanno lo smistamento e R2D, con il motivo.
+-- torna da verificare. Lo fanno il supporto e R2D, con il motivo.
 create or replace function public.crm_ticket_riapri(p_id bigint, p_motivo text)
 returns void
 language plpgsql volatile security definer set search_path = ''
@@ -572,8 +567,8 @@ as $$
 declare me uuid := crm.ticket_richiedi(null);
         t public.ticket := crm.ticket_prendi_riga(p_id);
 begin
-  if not (crm.ha('ticket_smistamento') or crm.ha('ticket_assistenza')) then
-    raise exception 'Solo chi smista i ticket o l''assistenza R2D può riaprirli' using errcode = '42501';
+  if not crm.smista() then
+    raise exception 'Solo il supporto o l''assistenza R2D può riaprire i ticket' using errcode = '42501';
   end if;
   if t.stato not in ('risolto', 'risolto_desk', 'doppione') then
     raise exception 'Il ticket #% non è chiuso', t.id;
@@ -594,7 +589,7 @@ create or replace function public.crm_ticket_prendi(p_id bigint)
 returns void
 language plpgsql volatile security definer set search_path = ''
 as $$
-declare me uuid := crm.ticket_richiedi('ticket_assistenza');
+declare me uuid := crm.ticket_richiedi('assistenza');
         t public.ticket := crm.ticket_prendi_riga(p_id);
 begin
   if t.stato not in ('inviato', 'in_attesa', 'in_lavorazione') then
@@ -611,7 +606,7 @@ create or replace function public.crm_ticket_chiedi(p_id bigint, p_domanda text)
 returns void
 language plpgsql volatile security definer set search_path = ''
 as $$
-declare me uuid := crm.ticket_richiedi('ticket_assistenza');
+declare me uuid := crm.ticket_richiedi('assistenza');
         t public.ticket := crm.ticket_prendi_riga(p_id);
 begin
   if t.stato not in ('inviato', 'in_lavorazione') then
@@ -629,7 +624,7 @@ create or replace function public.crm_ticket_risolvi(p_id bigint, p_natura text,
 returns void
 language plpgsql volatile security definer set search_path = ''
 as $$
-declare me uuid := crm.ticket_richiedi('ticket_assistenza');
+declare me uuid := crm.ticket_richiedi('assistenza');
         t public.ticket := crm.ticket_prendi_riga(p_id);
 begin
   if t.stato not in ('inviato', 'in_lavorazione', 'in_attesa') then
@@ -659,7 +654,7 @@ create or replace function public.crm_modifica_nuova(p_titolo text, p_descrizion
 returns bigint
 language plpgsql volatile security definer set search_path = ''
 as $$
-declare me uuid := crm.ticket_richiedi('ticket_assistenza');
+declare me uuid := crm.ticket_richiedi('assistenza');
         nuovo bigint;
 begin
   insert into public.ticket (tipo, stato, titolo, descrizione, abbonamenti, dal, comunicazione, riunione, aperto_da)
@@ -681,7 +676,7 @@ create or replace function public.crm_modifica_aggiorna(p_id bigint, p_titolo te
 returns void
 language plpgsql volatile security definer set search_path = ''
 as $$
-declare me uuid := crm.ticket_richiedi('ticket_assistenza');
+declare me uuid := crm.ticket_richiedi('assistenza');
         t public.ticket := crm.ticket_prendi_riga(p_id);
 begin
   if t.tipo <> 'modifica' or t.stato <> 'da_confermare' then
@@ -698,12 +693,12 @@ begin
 end;
 $$;
 
--- La conferma di Marco: come e quando e' arrivata (email, WhatsApp, riunione).
+-- La conferma del titolare: chi, come e quando e' arrivata (email, WhatsApp, riunione).
 create or replace function public.crm_modifica_conferma(p_id bigint, p_nota text)
 returns void
 language plpgsql volatile security definer set search_path = ''
 as $$
-declare me uuid := crm.ticket_richiedi('ticket_assistenza');
+declare me uuid := crm.ticket_richiedi('assistenza');
         t public.ticket := crm.ticket_prendi_riga(p_id);
 begin
   if t.tipo <> 'modifica' or t.stato <> 'da_confermare' then
@@ -722,7 +717,7 @@ create or replace function public.crm_modifica_rilascia(p_id bigint, p_verifica 
 returns void
 language plpgsql volatile security definer set search_path = ''
 as $$
-declare me uuid := crm.ticket_richiedi('ticket_assistenza');
+declare me uuid := crm.ticket_richiedi('assistenza');
         t public.ticket := crm.ticket_prendi_riga(p_id);
 begin
   if t.tipo <> 'modifica' or t.stato <> 'confermata' then
@@ -740,7 +735,7 @@ create or replace function public.crm_modifica_annulla(p_id bigint, p_motivo tex
 returns void
 language plpgsql volatile security definer set search_path = ''
 as $$
-declare me uuid := crm.ticket_richiedi('ticket_assistenza');
+declare me uuid := crm.ticket_richiedi('assistenza');
         t public.ticket := crm.ticket_prendi_riga(p_id);
 begin
   if t.tipo <> 'modifica' or t.stato not in ('da_confermare', 'confermata') then

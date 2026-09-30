@@ -344,8 +344,8 @@ function Azioni({ t, io, qui }: { t: Ticket; io: Io; qui: string }) {
         <form key="conferma" action={confermaModifica} className="modulo">
           <Nascosti t={t} qui={qui} />
           <div className="campo">
-            <label htmlFor="nota-conferma">La conferma di Marco</label>
-            <input id="nota-conferma" name="nota" type="text" required placeholder="WhatsApp del 30/09, email, in riunione…" />
+            <label htmlFor="nota-conferma">La conferma del titolare</label>
+            <input id="nota-conferma" name="nota" type="text" required placeholder="Chi, come e quando: WhatsApp del 30/09, email, in riunione…" />
           </div>
           <BottoneInvio testo="Registra la conferma" inCorso="Salvataggio…" />
         </form>,

@@ -1940,7 +1940,7 @@ details.scheda .utenti {
   }
 }
 
-/* ---- Ticket (supabase/migrations/20260930a_ticket.sql) --------------------- */
+/* ---- Ticket (supabase/migrations/20260930b_ticket.sql) --------------------- */
 
 .stack {
   display: grid;

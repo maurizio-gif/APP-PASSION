@@ -33,12 +33,15 @@ export async function edge<T>(funzione: string, corpo: Record<string, unknown>):
   return data as T
 }
 
+// I ruoli: supabase/migrations/20260930a_ruoli.sql e RUOLI in lib/permessi.ts.
+export type Ruolo = 'superadmin' | 'admin' | 'supporto' | 'consulente'
+
 export type Io = {
   id: string
   email: string
   nome: string
   cognome: string | null
-  ruolo: 'admin' | 'consulente'
+  ruolo: Ruolo
   sezioni: string[]
   autorizzazioni: string[]
 } | null
@@ -48,7 +51,7 @@ export type Utente = {
   email: string | null
   nome: string
   cognome: string | null
-  ruolo: 'admin' | 'consulente'
+  ruolo: Ruolo
   attivo: boolean
   sezioni: string[]
   autorizzazioni: string[]
@@ -399,7 +402,7 @@ export type DurataPeriodo = {
   con_cambio: number
 }
 
-// I ticket (supabase/migrations/20260930a_ticket.sql).
+// I ticket (supabase/migrations/20260930b_ticket.sql).
 export type TipoTicket = 'guasto' | 'domanda' | 'attivita' | 'proposta' | 'modifica'
 export type StatoTicket =
   | 'da_verificare' | 'inviato' | 'in_lavorazione' | 'in_attesa' | 'risolto' | 'risolto_desk' | 'doppione'

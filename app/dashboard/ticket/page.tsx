@@ -14,9 +14,9 @@ const VUOTI: Record<string, string> = {
   chiusi: 'Nessun ticket chiuso negli ultimi 90 giorni.',
 }
 
-// I ticket di assistenza: il desk scrive, Ludovica verifica e manda a R2D,
+// I ticket di assistenza: il desk scrive, il supporto verifica e manda a R2D,
 // R2D lavora e chiude con causa e soluzione. Le modifiche le scrive R2D dopo
-// la riunione settimanale con Marco.
+// la riunione settimanale col titolare.
 export default async function Ticket({ searchParams }: { searchParams: { vista?: string; errore?: string } }) {
   const io = await richiediSezione('ticket')
   const conti = await crm.ticketConti()
@@ -37,7 +37,7 @@ export default async function Ticket({ searchParams }: { searchParams: { vista?:
       <div className="testata">
         <div>
           <h1>Ticket</h1>
-          <p>Le segnalazioni del desk arrivano a chi smista, che le verifica, risponde o le manda a R2D.
+          <p>Le segnalazioni del desk arrivano al supporto, che le verifica, risponde o le manda a R2D.
             Se qualcosa blocca tutti (tornello, app giù, pagamenti), chiama anche R2D.</p>
         </div>
         <div className="azioni-riga">

@@ -1,10 +1,9 @@
-import type { Io } from '@/lib/crm'
+import type { Io, Ruolo } from '@/lib/crm'
 
 // Chi vede cosa. Le chiavi sono quelle del database (public.staff.sezioni e
 // public.staff.autorizzazioni, migrazione 20260928q), che le controlla da
 // solo: qui servono per il menu e per le etichette della pagina Utenti.
-// Un admin vede tutto e puo' tutto (tranne le autorizzazioni ESPLICITE); la
-// home e la scheda persona le vedono tutti.
+// Un admin vede tutto e puo' tutto; la home e la scheda persona le vedono tutti.
 
 export const SEZIONI = [
   { chiave: 'lead', href: '/dashboard/lead', testo: 'Lead' },
@@ -31,27 +30,37 @@ export const SEZIONI_ATTIVE = SEZIONI.filter((s) => !SOSPESE.includes(s.chiave))
 export const AUTORIZZAZIONI = [
   { chiave: 'lead_altrui', testo: 'Lead degli altri', descrizione: 'riassegnare e chiudere anche i lead in carico a un altro' },
   { chiave: 'gestione_utenti', testo: 'Gestione utenti', descrizione: 'aprire Utenti e cambiare sezioni e autorizzazioni' },
-  { chiave: 'ticket_smistamento', testo: 'Smistamento ticket', descrizione: 'verificare le segnalazioni del desk, risolverle, unirle o mandarle a R2D' },
-  { chiave: 'ticket_assistenza', testo: 'Assistenza R2D', descrizione: 'lavorare e chiudere i ticket, scrivere le modifiche: solo per lo staff di R2D' },
 ] as const
 
 export type Autorizzazione = (typeof AUTORIZZAZIONI)[number]['chiave']
 
-// Le autorizzazioni che un admin non ha d'ufficio: si danno una per una,
-// anche agli admin. L'assistenza R2D decide da che parte scrive un operatore
-// nei ticket, e un admin di Passion resta Passion.
-export const ESPLICITE: readonly Autorizzazione[] = ['ticket_assistenza']
+// I ruoli (supabase/migrations/20260930a_ruoli.sql). Superadmin, admin e
+// supporto hanno i poteri di un admin: vedono tutte le sezioni e hanno tutte le
+// autorizzazioni. Il supporto in piu' smista i ticket del desk; il superadmin
+// (R2D) li lavora e li chiude, e scrive le modifiche.
+export const RUOLI: { chiave: Ruolo; testo: string; descrizione: string }[] = [
+  { chiave: 'superadmin', testo: 'Superadmin', descrizione: 'R2D: vede e può tutto, lavora e chiude i ticket, scrive le modifiche' },
+  { chiave: 'admin', testo: 'Admin', descrizione: 'vede tutto e può tutto; i suoi ticket passano dal supporto' },
+  { chiave: 'supporto', testo: 'Admin + supporto', descrizione: 'come un admin, e riceve i ticket aperti dagli altri: li verifica e li manda a R2D' },
+  { chiave: 'consulente', testo: 'Consulente', descrizione: 'vede le sezioni e ha le autorizzazioni scelte qui sotto' },
+]
+export const testoRuolo = (ruolo: string | null | undefined) => RUOLI.find((r) => r.chiave === ruolo)?.testo ?? ruolo ?? '—'
+export const ruoloAdmin = (ruolo: string | null | undefined) => ruolo === 'superadmin' || ruolo === 'admin' || ruolo === 'supporto'
 
-export const eAdmin = (io: Io) => io?.ruolo === 'admin'
+export const eAdmin = (io: Io) => ruoloAdmin(io?.ruolo)
+export const eSuperadmin = (io: Io) => io?.ruolo === 'superadmin'
+// Chi puo' dare o togliere un ruolo, o toccare chi ce l'ha (crm.puo_toccare_ruolo()):
+// un superadmin solo un superadmin, un admin o un supporto solo un admin.
+export const puoToccareRuolo = (io: Io, ruolo: string) =>
+  ruolo === 'superadmin' ? eSuperadmin(io) : ruoloAdmin(ruolo) ? eAdmin(io) : true
 export const puoVedere = (io: Io, sezione: Sezione) =>
   !SOSPESE.includes(sezione) && (eAdmin(io) || Boolean(io?.sezioni.includes(sezione)))
-export const ha = (io: Io, autorizzazione: Autorizzazione) =>
-  (eAdmin(io) && !ESPLICITE.includes(autorizzazione)) || Boolean(io?.autorizzazioni.includes(autorizzazione))
+export const ha = (io: Io, autorizzazione: Autorizzazione) => eAdmin(io) || Boolean(io?.autorizzazioni.includes(autorizzazione))
 
-// I ticket (supabase/migrations/20260930a_ticket.sql): tutti scrivono, chi
-// smista verifica e manda a R2D, l'assistenza R2D lavora e chiude.
-export const smista = (io: Io) => ha(io, 'ticket_smistamento')
-export const assiste = (io: Io) => ha(io, 'ticket_assistenza')
+// I ticket (supabase/migrations/20260930b_ticket.sql): tutti scrivono, il
+// supporto (e R2D) verifica e manda a R2D, il superadmin lavora e chiude.
+export const smista = (io: Io) => io?.ruolo === 'supporto' || io?.ruolo === 'superadmin'
+export const assiste = (io: Io) => eSuperadmin(io)
 
 // Riassegnare o chiudere un lead: se e' libero, se e' mio, o con l'autorizzazione.
 export const puoGestireLead = (io: Io, assegnatoA: string | null) => ha(io, 'lead_altrui') || !assegnatoA || assegnatoA === io?.id

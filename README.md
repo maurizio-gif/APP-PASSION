@@ -418,18 +418,36 @@ per non rivelare quali email esistono): chi non ce l'ha va invitato da Utenti.
 Le email partono dall'SMTP impostato in Supabase (Authentication -> Emails), e
 `<sito>/auth/callback` dev'essere fra i Redirect URLs.
 
-### Ticket (`20260930a`)
+### Ruoli (`20260930a`)
+
+Quattro ruoli, dal 30/09/2026:
+
+| ruolo | chi | cosa |
+| --- | --- | --- |
+| **Superadmin** | lo staff di R2D | vede e puo' tutto; lavora e chiude i ticket, scrive le modifiche |
+| **Admin** | i responsabili di Passion | vede e puo' tutto il resto; i suoi ticket passano dal supporto |
+| **Admin + supporto** (`supporto`) | chi segue il desk, e chi lo sostituisce | come un admin, e riceve i ticket aperti dagli altri |
+| **Consulente** | il desk | le sezioni e le autorizzazioni scelte in Utenti |
+
+Superadmin, admin e supporto hanno i poteri di un admin (`crm.e_admin()` nel
+database, `eAdmin` in `lib/permessi.ts`): tutte le sezioni, tutte le
+autorizzazioni. I ruoli admin e supporto li da' e li toglie solo un admin; il
+ruolo superadmin solo un superadmin, e solo un superadmin modifica, invita o
+rimuove un superadmin (`crm.puo_toccare_ruolo()`). Chi ha quale ruolo non sta
+nel repository: si sceglie da Utenti, e il primo superadmin si mette a mano.
+
+### Ticket (`20260930b`)
 
 I ticket di assistenza passano dal CRM e non piu' dal modulo Google e dal
 foglio TICKET ASSISTENZA PASSION (592 ticket da agosto 2024, che restano come
 archivio). Le regole vengono dall'analisi del 30/09/2026:
 
-- **Tutti scrivono, chi smista invia.** Chiunque dello staff apre un ticket da
+- **Tutti scrivono, il supporto invia.** Chiunque dello staff apre un ticket da
   **Ticket** o, se riguarda un socio, dalla sua scheda («+ Apri un ticket»).
-  Resta **Da verificare** finche' chi ha l'autorizzazione **Smistamento
-  ticket** (Ludovica e chi la sostituisce) non lo manda a R2D, lo risolve al
-  desk (con la risposta e di che cosa si trattava) o lo unisce a un ticket gia'
-  aperto sullo stesso problema. Chi smista, quando apre lui, manda subito.
+  Resta **Da verificare** finche' il supporto non lo manda a R2D, lo risolve
+  al desk (con la risposta e di che cosa si trattava) o lo unisce a un ticket
+  gia' aperto sullo stesso problema. Il supporto e i superadmin, quando aprono
+  loro, mandano subito.
 - **I tipi**: *Qualcosa non funziona*, *Domanda*, *Attivita' da fare*,
   *Proposta di modifica*. Le proposte non vanno a R2D: aspettano la riunione
   settimanale e si chiudono al desk con quello che si e' deciso.
@@ -440,19 +458,18 @@ archivio). Le regole vengono dall'analisi del 30/09/2026:
   (abbonamento iniziato, debito, certificato, pacchetto, regola di accesso,
   telefono e app). Se sulla persona c'e' gia' un ticket aperto, prima di
   scrivere lo si vede.
-- **R2D risponde nel CRM.** Chi ha **Assistenza R2D** prende in carico, chiede
+- **R2D risponde nel CRM.** I superadmin prendono in carico, chiedono
   informazioni al desk (il ticket va in **Aspettano Passion** e torna in
-  lavorazione alla prima risposta di Passion) e chiude. Non si chiude senza
+  lavorazione alla prima risposta di Passion) e chiudono. Non si chiude senza
   la natura (errore di configurazione nostro, guasto di terze parti, il sistema
   funzionava come impostato, errore del desk, problema del socio, domanda,
-  attivita', richiesta di modifica), la causa e la soluzione. **Assistenza R2D**
-  e' la prima autorizzazione che un admin non ha d'ufficio (`ESPLICITE` in
-  `lib/permessi.ts`, `crm.ha()` nel database): si da' una per una, anche agli
-  admin, e dice da che parte scrive un operatore nel filo del ticket.
-- **Le modifiche le scrive R2D.** Marco non apre ticket: le modifiche nascono
-  nella riunione settimanale con Michele, che le scrive da «+ Nuova modifica»
-  (cosa cambia, per quali abbonamenti, da quando, cosa si dice ai soci). Poi
-  registra la conferma di Marco (come e quando e' arrivata) e, dopo il
+  attivita', richiesta di modifica), la causa e la soluzione. Nel filo del
+  ticket scrive «R2D» chi e' superadmin; tutti gli altri, admin compresi,
+  scrivono come Passion.
+- **Le modifiche le scrive R2D.** Il titolare non apre ticket: le modifiche
+  nascono nella riunione settimanale con R2D, che le scrive da «+ Nuova
+  modifica» (cosa cambia, per quali abbonamenti, da quando, cosa si dice ai
+  soci). Poi registra la conferma del titolare (chi, come e quando) e, dopo il
   rilascio, cosa ha verificato prima e dopo. Stati: Da confermare ->
   Confermata -> Rilasciata (o Annullata).
 - **Allegati**: foto, video e PDF fino a 25 MB, nel bucket privato `ticket` di
@@ -464,13 +481,13 @@ archivio). Le regole vengono dall'analisi del 30/09/2026:
   chiusi per natura, quanti al desk, quanti uniti, le modifiche rilasciate e le
   ore mediane dall'invio a R2D alla soluzione (`crm_ticket_resoconto()`).
 
-In home: *Ticket da verificare* per chi smista, *Ticket per R2D* per
-l'assistenza, *Ticket in attesa* per tutti. La sezione **Ticket** la ricevono
-tutti gli operatori (anche i nuovi, di default). I numeri partono da 1001,
-per non confondersi con le righe del vecchio foglio.
+In home: *Ticket da verificare* per il supporto (e i superadmin), *Ticket per
+R2D* per i superadmin, *Ticket in attesa* per tutti. La sezione **Ticket** la
+ricevono tutti gli operatori (anche i nuovi, di default). I numeri partono da
+1001, per non confondersi con le righe del vecchio foglio.
 
-Per partire: dare **Smistamento ticket** a Ludovica e al suo sostituto e
-**Assistenza R2D** allo staff di R2D, da Utenti; poi chiudere il modulo Google.
+Per partire: applicare `20260930a` e `20260930b`, poi dare i ruoli (superadmin
+allo staff di R2D, supporto a chi segue il desk) e chiudere il modulo Google.
 Per un blocco che ferma tutti (tornello, app giu', pagamenti) il desk chiama
 anche R2D: il ticket segna «Blocca il lavoro», ma non avvisa nessuno da solo.
 

@@ -4,7 +4,7 @@ import { Logo } from '@/components/Logo'
 import { Menu } from '@/components/Menu'
 import { Navigazione } from '@/components/Navigazione'
 import { crm } from '@/lib/crm'
-import { ha, puoVedere, SEZIONI } from '@/lib/permessi'
+import { ha, puoVedere, SEZIONI, testoRuolo } from '@/lib/permessi'
 import { cerca } from './azioni'
 
 export const dynamic = 'force-dynamic'
@@ -37,7 +37,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
           <div className="barra-piede">
             <div>
               {io.nome} {io.cognome}
-              {io.ruolo === 'admin' && <span className="attenuato"> · admin</span>}
+              {io.ruolo !== 'consulente' && <span className="attenuato"> · {testoRuolo(io.ruolo).toLowerCase()}</span>}
             </div>
             <form action={logout}>
               <button type="submit">Esci</button>

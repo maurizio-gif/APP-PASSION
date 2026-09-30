@@ -7,8 +7,8 @@ import { Avviso } from '@/components/Ui'
 import { ModuloModifica } from '@/components/ModuloModifica'
 import { nuovaModifica } from '../../azioni'
 
-// Una modifica decisa nella riunione settimanale con Marco: la scrive R2D,
-// una per modifica. Poi si registra la conferma di Marco, e dopo il rilascio
+// Una modifica decisa nella riunione settimanale col titolare: la scrive R2D,
+// una per modifica. Poi si registra la conferma del titolare, e dopo il rilascio
 // cosa si e' verificato.
 export default async function NuovaModifica({ searchParams }: { searchParams: { errore?: string } }) {
   const io = await richiediSezione('ticket')
@@ -18,7 +18,7 @@ export default async function NuovaModifica({ searchParams }: { searchParams: { 
       <div className="testata">
         <div>
           <h1>Nuova modifica</h1>
-          <p>Una per modifica, scritta in modo che Marco la possa confermare leggendola una volta sola.</p>
+          <p>Una per modifica, scritta in modo che il titolare la possa confermare leggendola una volta sola.</p>
         </div>
         <Link href="/dashboard/ticket?vista=modifiche">← Modifiche</Link>
       </div>

@@ -25,8 +25,8 @@ export default async function NuovoTicket({ searchParams }: { searchParams: { pe
         <div>
           <h1>Nuovo ticket{nome ? ` per ${nome}` : ''}</h1>
           <p>{smista(io)
-            ? 'Lo mandi subito a R2D. Le proposte di modifica restano per la riunione settimanale.'
-            : 'Arriva a chi smista i ticket: lo verifica, ti risponde o lo manda a R2D.'}</p>
+            ? 'Va subito a R2D. Le proposte di modifica restano per la riunione settimanale.'
+            : 'Arriva al supporto: lo verifica, ti risponde o lo manda a R2D.'}</p>
         </div>
         <Link href={scheda ? `/dashboard/persone/${scheda.persona.id}` : '/dashboard/ticket'}>← {scheda ? 'Scheda' : 'Ticket'}</Link>
       </div>

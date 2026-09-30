@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { crm } from '@/lib/crm'
-import { eAdmin, ha } from '@/lib/permessi'
+import { ha, puoToccareRuolo, RUOLI } from '@/lib/permessi'
 import { Avviso } from '@/components/Ui'
 import { BottoneInvio } from '@/components/BottoneInvio'
 import { SchedaUtente } from '@/components/SchedaUtente'
@@ -9,8 +9,9 @@ import { nuovoUtente } from '../azioni'
 // Utenti: per ogni operatore dello staff, cosa vede (le sezioni del menu) e
 // cosa puo' fare (le autorizzazioni). Le regole le controlla il database
 // (supabase/migrations/20260928q_utenti_catene_guest_pass.sql): un admin vede
-// tutto; nessuno cambia il proprio ruolo o si toglie l'accesso da solo; il
-// ruolo admin lo da' e lo toglie solo un admin. Un utente si rimuove dalla sua
+// tutto; nessuno cambia il proprio ruolo o si toglie l'accesso da solo; i
+// ruoli admin e supporto li da' e li toglie solo un admin, il ruolo superadmin
+// solo un superadmin (20260930a_ruoli.sql). Un utente si rimuove dalla sua
 // scheda (20260929e_utenti_rimuovi.sql).
 export default async function Utenti({ searchParams }: { searchParams: { errore?: string; ok?: string } }) {
   const io = await crm.io()
@@ -70,8 +71,7 @@ export default async function Utenti({ searchParams }: { searchParams: { errore?
           <div className="campo">
             <label htmlFor="nu-ruolo">Ruolo</label>
             <select id="nu-ruolo" name="ruolo" defaultValue="consulente">
-              <option value="consulente">Consulente</option>
-              {eAdmin(io) && <option value="admin">Admin</option>}
+              {RUOLI.filter((r) => puoToccareRuolo(io, r.chiave)).map((r) => <option key={r.chiave} value={r.chiave}>{r.testo}</option>)}
             </select>
           </div>
           <div className="campo invio">

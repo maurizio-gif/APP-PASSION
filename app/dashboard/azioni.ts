@@ -180,7 +180,7 @@ export async function debitoAssegna(f: FormData) {
 
 // --- Ticket -------------------------------------------------------------------
 // Le regole (chi invia, chi chiude, cosa serve per chiudere) le controlla il
-// database: supabase/migrations/20260930a_ticket.sql.
+// database: supabase/migrations/20260930b_ticket.sql.
 
 const numero = (f: FormData, k: string) => {
   const v = Number(testo(f, k))
