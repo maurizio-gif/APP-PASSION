@@ -1,5 +1,8 @@
 import Link from 'next/link'
 import { FASE, FONTE, ORIGINE_TASK, traduci, nomeCompleto, telefonoLink } from '@/lib/formato'
+import { ARGOMENTI } from '@/lib/guida'
+import { ApriGuida } from '@/components/ApriGuida'
+import { TestoGuida } from '@/components/TestoGuida'
 
 // I pezzi che tornano in ogni pagina del CRM.
 
@@ -21,9 +24,16 @@ const MESSAGGI_OK: Record<string, string> = {
   modifica_scritta: 'Modifica scritta. Quando il titolare la conferma, registra qui chi, come e quando.',
 }
 
-// «Come funziona»: dalla descrizione di una sezione al suo argomento della guida (lib/guida).
+// «Come funziona»: accanto alla descrizione di una sezione, apre il suo
+// argomento della guida (lib/guida) in una finestra (components/ApriGuida.tsx).
 export function LinkGuida({ argomento }: { argomento: string }) {
-  return <Link className="link-guida" href={`/dashboard/guida/${argomento}`}>Come funziona →</Link>
+  const a = ARGOMENTI.find((x) => x.chiave === argomento)
+  if (!a) return null
+  return (
+    <ApriGuida titolo={a.titolo} inBreve={a.inBreve} href={`/dashboard/guida/${a.chiave}`}>
+      <TestoGuida testo={a.testo} />
+    </ApriGuida>
+  )
 }
 
 export function Schede({ voci, attiva, base }: { voci: { chiave: string; testo: string; n?: number }[]; attiva: string; base: string }) {

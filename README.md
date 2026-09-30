@@ -503,8 +503,10 @@ anche R2D: il ticket segna «Blocca il lavoro», ma non avvisa nessuno da solo.
 **Guida** nel menu, per tutti: come si usa il CRM, un argomento per sezione
 (cosa si vede, cosa fare, cosa fa il CRM da solo), piu' «Come è fatto il CRM»,
 «La scheda persona» e «Chi vede cosa». Ognuno vede gli argomenti delle sezioni
-che ha; dalla descrizione di ogni sezione ci si arriva con «Come funziona →»
-(`LinkGuida` in `components/Ui.tsx`). I testi stanno in `lib/guida/`, un file
+che ha. Nella descrizione di ogni sezione «Come funziona» apre il suo
+argomento in una finestra, senza lasciare la pagina (`LinkGuida` in
+`components/Ui.tsx`, la finestra in `components/ApriGuida.tsx`), con il link
+alla pagina intera della guida. I testi stanno in `lib/guida/`, un file
 per argomento, in un Markdown ridotto (`components/TestoGuida.tsx`: capitoli,
 elenchi, passi, note, grassetto, link): si correggono senza toccare il codice.
 Quando una regola del CRM cambia, si corregge anche la guida, nella stessa PR.

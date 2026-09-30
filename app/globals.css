@@ -2200,10 +2200,86 @@ details.scheda .utenti {
   flex-wrap: wrap;
   margin-top: 6px;
 }
-/* «Come funziona», accanto al titolo di ogni sezione. */
+/* «Come funziona», in fondo alla descrizione di ogni sezione: un bottone che
+   sembra un link, e apre il capitolo della guida in una finestra. */
 .link-guida {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
   font-size: 0.9rem;
+  color: var(--rosso-scuro);
+  cursor: pointer;
   white-space: nowrap;
+}
+.link-guida:hover {
+  text-decoration: underline;
+}
+.guida-modale {
+  padding: 0;
+  border: 0;
+  border-radius: var(--raggio);
+  width: min(760px, calc(100vw - 32px));
+  max-height: min(86vh, 900px);
+  overflow: auto;
+  background: var(--scheda);
+  color: var(--testo);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+.guida-modale::backdrop {
+  background: rgba(0, 0, 0, 0.45);
+}
+.guida-modale-scheda {
+  padding: 0 24px 22px;
+}
+.guida-modale-testa {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 18px 0 10px;
+  background: var(--scheda);
+  border-bottom: 1px solid var(--bordo);
+  margin-bottom: 12px;
+}
+.guida-modale-testa h2 {
+  margin: 2px 0 0;
+}
+.guida-modale-chiudi {
+  background: none;
+  border: 0;
+  font-size: 1.15rem;
+  line-height: 1;
+  padding: 4px 6px;
+  cursor: pointer;
+  color: var(--testo-attenuato);
+}
+.guida-modale-chiudi:hover {
+  color: var(--testo);
+}
+.guida-modale .guida-testo {
+  max-width: none;
+}
+.guida-modale-piede {
+  border-top: 1px solid var(--bordo);
+  margin-top: 16px;
+  padding-top: 12px;
+}
+@media (max-width: 720px) {
+  /* Sul telefono sale dal basso, a tutta larghezza. */
+  .guida-modale {
+    width: 100vw;
+    max-width: 100vw;
+    max-height: 90vh;
+    margin: auto 0 0;
+    border-radius: var(--raggio) var(--raggio) 0 0;
+  }
+  .guida-modale-scheda {
+    padding: 0 16px 18px;
+  }
 }
 @media (max-width: 860px) {
   .guida {
