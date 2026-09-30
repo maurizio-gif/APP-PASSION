@@ -12,7 +12,7 @@ import { puoGestireLead, puoVedere } from '@/lib/permessi'
 import { TabellaTicket } from '@/components/Ticket'
 import {
   aggiornaDisdetta, aggiornaProva, aggiornaRinnovo, assegnaLead, chiudiLead, completaTask, leadSuPerfectGym, prendiLead,
-  riapriLead,
+  riapriLead, rilasciaLead,
 } from '../../azioni'
 
 const VINTA_DA_SOLA = 'Vinta si segna da sola, quando su PerfectGym compare la prova o il contratto'
@@ -113,6 +113,13 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                       </select>
                       <button className="bottone secondario">Assegna</button>
                     </form>
+                    {l.fase === 'in_gestione' && (
+                      <form action={rilasciaLead} className="azioni-scheda">
+                        <input type="hidden" name="lead" value={l.id} />
+                        <input type="hidden" name="torna" value={qui} />
+                        <button className="bottone secondario" title="Torna fra i lead da gestire, senza nessuno">Rimetti da assegnare</button>
+                      </form>
+                    )}
                     <form action={chiudiLead} className="azioni-scheda chiusura">
                       <input type="hidden" name="lead" value={l.id} />
                       <input type="hidden" name="torna" value={qui} />
