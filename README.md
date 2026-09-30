@@ -184,7 +184,7 @@ Le interfacce della riunione, nello stile del sito (barra nera, rosso #E3032D,
 fondo rosa, titoli in Anton): **Da gestire** (la home: i numeri, i miei task,
 le prove in scadenza, i lead da prendere), **Lead** (prendi in carico,
 assegna, chiudi vinta/persa), la **scheda persona** (i dati di PerfectGym, i
-contenitori con le loro azioni, la storia di commenti e task), **Prove**,
+contenitori con le loro azioni, la storia dei task), **Prove**,
 **Nuovi contratti**, **Disdette**, **Task**, **Cerca**.
 
 **L'icona dell'app** (salvata sulla schermata home): «CRM Passion», dal logo
@@ -490,6 +490,17 @@ Per partire: applicare `20260930a` e `20260930b`, poi dare i ruoli (superadmin
 allo staff di R2D, supporto a chi segue il desk) e chiudere il modulo Google.
 Per un blocco che ferma tutti (tornello, app giu', pagamenti) il desk chiama
 anche R2D: il ticket segna «Blocca il lavoro», ma non avvisa nessuno da solo.
+
+### Guida
+
+**Guida** nel menu, per tutti: come si usa il CRM, un argomento per sezione
+(cosa si vede, cosa fare, cosa fa il CRM da solo), piu' «Come è fatto il CRM»,
+«La scheda persona» e «Chi vede cosa». Ognuno vede gli argomenti delle sezioni
+che ha; dalla descrizione di ogni sezione ci si arriva con «Come funziona →»
+(`LinkGuida` in `components/Ui.tsx`). I testi stanno in `lib/guida/`, un file
+per argomento, in un Markdown ridotto (`components/TestoGuida.tsx`: capitoli,
+elenchi, passi, note, grassetto, link): si correggono senza toccare il codice.
+Quando una regola del CRM cambia, si corregge anche la guida, nella stessa PR.
 
 ## Il mirror di PerfectGym
 

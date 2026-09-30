@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { crm, richiediSezione } from '@/lib/crm'
 import { FONTE } from '@/lib/formato'
-import { Avviso, Schede, Vuoto } from '@/components/Ui'
+import { Avviso, LinkGuida, Schede, Vuoto } from '@/components/Ui'
 import { TabellaLead } from '@/components/TabellaLead'
 
 const VISTE = [
@@ -33,7 +33,7 @@ export default async function Lead({ searchParams }: { searchParams: Filtri }) {
       <div className="testata">
         <div>
           <h1>Lead</h1>
-          <p>Si commenta finché non c&apos;è un contatto, poi lo si prende in carico e lo si chiude.</p>
+          <p>Si prende in carico, si segue coi task e si chiude come persa: vinta la segna PerfectGym, quando compare il contratto o la prova.{' '}<LinkGuida argomento="lead" /></p>
         </div>
         <Link className="bottone" href="/dashboard/lead/nuovo">+ Nuovo lead</Link>
       </div>

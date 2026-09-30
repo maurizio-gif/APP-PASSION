@@ -1,6 +1,7 @@
 import type { Abbonamenti, DurataPeriodo, Vincolo } from '@/lib/crm'
 import { formatoCifra, formatoData, formatoFa } from '@/lib/formato'
 import { Colonne, type Punto } from './Colonne'
+import { LinkGuida } from './Ui'
 
 // La dashboard abbonamenti, disegnata: riceve i numeri di crm_abbonamenti() e
 // non ne calcola nessuno (le regole stanno nel database, in
@@ -215,7 +216,8 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
           <h1>Abbonamenti</h1>
           <p>
             Dal mirror di PerfectGym, aggiornato {formatoFa(d.aggiornato_il)}. Conta ogni contratto non aggiuntivo con canone
-            sopra lo zero: restano fuori pass, certificati, Wellhub e Fitprime, staff e add-on.
+            sopra lo zero: restano fuori pass, certificati, Wellhub e Fitprime, staff e add-on.{' '}
+            <LinkGuida argomento="abbonamenti" />
           </p>
         </div>
       </div>

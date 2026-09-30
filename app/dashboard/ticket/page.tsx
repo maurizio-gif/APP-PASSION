@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { crm, richiediSezione, type ResocontoMese } from '@/lib/crm'
 import { NATURA_TICKET, traduci } from '@/lib/formato'
 import { assiste, smista } from '@/lib/permessi'
-import { Avviso, Schede, Vuoto } from '@/components/Ui'
+import { Avviso, LinkGuida, Schede, Vuoto } from '@/components/Ui'
 import { TabellaTicket } from '@/components/Ticket'
 
 const VUOTI: Record<string, string> = {
@@ -38,7 +38,7 @@ export default async function Ticket({ searchParams }: { searchParams: { vista?:
         <div>
           <h1>Ticket</h1>
           <p>Le segnalazioni del desk arrivano al supporto, che le verifica, risponde o le manda a R2D.
-            Se qualcosa blocca tutti (tornello, app giù, pagamenti), chiama anche R2D.</p>
+            Se qualcosa blocca tutti (tornello, app giù, pagamenti), chiama anche R2D.{' '}<LinkGuida argomento="ticket" /></p>
         </div>
         <div className="azioni-riga">
           {assiste(io) && <Link className="bottone secondario" href="/dashboard/ticket/modifica">+ Nuova modifica</Link>}

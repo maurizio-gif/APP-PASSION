@@ -1,6 +1,6 @@
 import { crm, richiediSezione } from '@/lib/crm'
 import { ESITO_DISDETTA, formatoData, formatoEuro, MOTIVI_DISDETTA, traduci } from '@/lib/formato'
-import { Avviso, Contatti, Gestione, Persona, Schede, Vuoto } from '@/components/Ui'
+import { Avviso, Contatti, Gestione, LinkGuida, Persona, Schede, Vuoto } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
 import { SceltaOperatore } from '@/components/SceltaOperatore'
 import { aggiornaDisdetta } from '../azioni'
@@ -28,7 +28,7 @@ export default async function Disdette({ searchParams }: { searchParams: { vista
       <div className="testata">
         <div>
           <h1>Disdette</h1>
-          <p>Chi ha disdetto su PerfectGym: una telefonata o un appuntamento per capire il motivo e recuperarlo.</p>
+          <p>Chi ha disdetto su PerfectGym: una telefonata o un appuntamento per capire il motivo e recuperarlo.{' '}<LinkGuida argomento="disdette" /></p>
         </div>
       </div>
       <Avviso errore={searchParams.errore} />

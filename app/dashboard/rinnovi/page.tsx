@@ -1,6 +1,6 @@
 import { crm, linkPgm, richiediSezione } from '@/lib/crm'
 import { ESITO_RINNOVO, formatoData, formatoEuro, STATO_CONTRATTO, traduci } from '@/lib/formato'
-import { Avviso, Contatti, Gestione, Persona, Schede, Vuoto } from '@/components/Ui'
+import { Avviso, Contatti, Gestione, LinkGuida, Persona, Schede, Vuoto } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
 import { aggiornaRinnovo } from '../azioni'
 
@@ -29,7 +29,7 @@ export default async function Rinnovi({ searchParams }: { searchParams: { vista?
       <div className="testata">
         <div>
           <h1>Rinnovi</h1>
-          <p>Gli abbonamenti in scadenza: chi li segue, e com&apos;è finita. Il rinnovo su PerfectGym si vede da solo.</p>
+          <p>Gli abbonamenti in scadenza: chi li segue, e com&apos;è finita. Il rinnovo su PerfectGym si vede da solo.{' '}<LinkGuida argomento="rinnovi" /></p>
         </div>
       </div>
       <Avviso errore={searchParams.errore} />
