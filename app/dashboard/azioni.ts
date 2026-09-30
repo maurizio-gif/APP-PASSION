@@ -42,6 +42,11 @@ export async function assegnaLead(f: FormData) {
   await esegui(f, () => rpc('crm_lead_assegna', { p_lead: testo(f, 'lead'), p_staff: testo(f, 'staff') }))
 }
 
+// Toglierselo: il lead torna da gestire, senza nessuno (20260930e).
+export async function rilasciaLead(f: FormData) {
+  await esegui(f, () => rpc('crm_lead_rilascia', { p_lead: testo(f, 'lead') }))
+}
+
 export async function chiudiLead(f: FormData) {
   const scelta = testo(f, 'chiusura') // vinta_prova | vinta_contratto | persa
   const [fase, esito] = scelta === 'persa' ? ['persa', null] : ['vinta', scelta === 'vinta_contratto' ? 'contratto' : 'prova']

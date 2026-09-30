@@ -845,6 +845,39 @@ hr {
 .contatti a {
   color: var(--testo-attenuato);
 }
+/* In cima alla scheda persona: il telefono grande e scuro, l'email accanto. */
+.contatti-scheda {
+  align-items: baseline;
+  gap: 4px 18px;
+  font-size: 0.95rem;
+  margin: 10px 0 8px;
+}
+.contatti a.telefono-grande {
+  color: var(--testo);
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.contatti a.telefono-grande::before {
+  content: '☎ ';
+  color: var(--rosso);
+  font-weight: 400;
+}
+.contatti a.telefono-grande:hover {
+  color: var(--rosso-scuro);
+  text-decoration: none;
+}
+/* Sul telefono i contatti degli elenchi stanno su una riga; qui l'email va sotto. */
+@media (max-width: 720px) {
+  .contatti.contatti-scheda {
+    flex-wrap: wrap;
+  }
+  .contatti.contatti-scheda > * {
+    max-width: 100%;
+  }
+}
 
 .schede-vista .conta {
   margin-left: 6px;

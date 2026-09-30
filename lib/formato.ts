@@ -190,3 +190,9 @@ export function daInputDataOra(v: string | null | undefined): string | null {
 export function telefonoLink(t: string | null | undefined) {
   return t ? `tel:${t.replace(/[^\d+]/g, '')}` : null
 }
+// Per leggerlo a voce: +393331234567 -> +39 333 123 4567. Solo i cellulari
+// italiani; gli altri numeri restano come sono.
+export function telefonoLeggibile(t: string) {
+  const m = /^\+39(3\d{2})(\d{3})(\d{3,4})$/.exec(t.replace(/\s/g, ''))
+  return m ? `+39 ${m[1]} ${m[2]} ${m[3]}` : t
+}

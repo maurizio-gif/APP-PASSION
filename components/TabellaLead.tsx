@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Io, Lead, Operatore } from '@/lib/crm'
 import { formatoData, formatoOra, nomeCompleto } from '@/lib/formato'
 import { BollinoFase, BollinoFonte } from '@/components/Ui'
-import { assegnaLead, prendiLead } from '@/app/dashboard/azioni'
+import { assegnaLead, prendiLead, rilasciaLead } from '@/app/dashboard/azioni'
 import { puoGestireLead } from '@/lib/permessi'
 
 // La tabella dei lead com'e' l'Interface di Airtable (Interface Commerciali ->
@@ -66,7 +66,7 @@ export function TabellaLead({ lead, io, staff, torna }: { lead: Lead[]; io: Io; 
   )
 }
 
-// Si riassegna (tendina e bottone) un lead in gestione che si puo' gestire.
+// Si riassegna (tendina e bottone) o si rimette da assegnare un lead in gestione che si puo' gestire.
 const assegna = (l: Lead, io: Io) => l.fase === 'in_gestione' && puoGestireLead(io, l.assegnato_a)
 
 // Cosa si fa sul lead: prenderlo, riassegnarlo, o solo vederne lo stato.
@@ -82,14 +82,21 @@ function Azione({ l, io, staff, torna }: { l: Lead; io: Io; staff: Operatore[]; 
   }
   if (assegna(l, io)) {
     return (
-      <form action={assegnaLead} className="azioni-riga">
-        <input type="hidden" name="lead" value={l.id} />
-        <input type="hidden" name="torna" value={torna} />
-        <select name="staff" defaultValue={l.assegnato_a ?? ''} aria-label="Assegna a" className="piccola">
-          {staff.map((s) => <option key={s.id} value={s.id}>{s.nome} {s.cognome ?? ''}</option>)}
-        </select>
-        <button className="bottone secondario piccolo">Assegna</button>
-      </form>
+      <div className="azioni-riga">
+        <form action={assegnaLead} className="azioni-riga">
+          <input type="hidden" name="lead" value={l.id} />
+          <input type="hidden" name="torna" value={torna} />
+          <select name="staff" defaultValue={l.assegnato_a ?? ''} aria-label="Assegna a" className="piccola">
+            {staff.map((s) => <option key={s.id} value={s.id}>{s.nome} {s.cognome ?? ''}</option>)}
+          </select>
+          <button className="bottone secondario piccolo">Assegna</button>
+        </form>
+        <form action={rilasciaLead}>
+          <input type="hidden" name="lead" value={l.id} />
+          <input type="hidden" name="torna" value={torna} />
+          <button className="bottone secondario piccolo" title="Torna fra i lead da gestire, senza nessuno">Rimetti da assegnare</button>
+        </form>
+      </div>
     )
   }
   if (l.fase === 'in_gestione') return <span className="piccolo">{l.assegnato_nome}</span>

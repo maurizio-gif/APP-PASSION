@@ -19,7 +19,7 @@ Se la stessa persona manda due volte lo stesso modulo nella mezz'ora, il lead re
 
 ## Le fasi
 1. **Da gestire**: è arrivato, nessuno lo segue ancora.
-2. **In gestione**: qualcuno l'ha preso: con **«Prendo in carico»** è tuo, con **«Assegna»** lo dai a un collega.
+2. **In gestione**: qualcuno l'ha preso: con **«Prendo in carico»** è tuo, con **«Assegna»** lo dai a un collega, con **«Rimetti da assegnare»** torna da gestire.
 3. **Vinta**: la persona si è iscritta o ha attivato una prova. **Non la segni tu**: la segna il CRM da solo quando su PerfectGym compare il suo contratto (**Vinta · contratto**) o il suo pass (**Vinta · prova**).
 4. **Persa**: non si iscrive. La segni tu dalla scheda della persona: **«Perché è persa (facoltativo)»** e **«Persa»**.
 
@@ -47,13 +47,15 @@ Da **«+ Nuovo lead»** (in home, in Lead e in Cerca):
 > Prima di creare un lead, **cercalo**: il nuovo lead si crea sempre, anche se la persona ha già un lead aperto. La ricerca è in cima al menu.
 
 ## Le viste e i filtri
-- **Da gestire**, **In gestione**, **I miei** (quelli in gestione a te), **Vinte**, **Perse**, **Tutti**;
+- **Da gestire**, **In gestione**, **I miei** (quelli in gestione a te), **Senza task**, **Vinte**, **Perse**, **Tutti**;
+- **Senza task**: i lead in gestione su persone che non hanno nessun task aperto da oggi in avanti. Nessuno ha fissato il prossimo passo: o si programma un task, o il lead si chiude. Ci sono anche quelli con solo task arretrati non fatti;
 - in cima: la ricerca per nome, telefono o email, **Tutte le fonti** e **Tutti i consulenti** (il lavoro di un collega), poi **«Filtra»**;
 - l'elenco mostra al massimo 200 lead, i più recenti.
 
 ## Chi può fare cosa
 - Un lead **da gestire** lo può prendere chiunque.
-- Un lead **in carico a un collega** lo riassegna o lo chiude solo lui, un admin o chi ha l'autorizzazione **«Lead degli altri»**.
+- Un lead **in carico a te** lo puoi passare a un collega (**«Assegna»**) o **rimettere da assegnare** (**«Rimetti da assegnare»**, nell'elenco o nella scheda): torna fra i **Da gestire**, senza nessuno, e lo prende chi arriva. I task già programmati restano a chi li aveva.
+- Un lead **in carico a un collega** lo riassegna, lo rimette da assegnare o lo chiude solo lui, un admin o chi ha l'autorizzazione **«Lead degli altri»**.
 - Un lead chiuso si **riapre** dalla scheda con **«Riapri»**: prima compare un avviso (riaprendo si toglie l'esito), poi **«Sì, riapri»**.
 `,
 }
