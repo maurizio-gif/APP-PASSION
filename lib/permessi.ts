@@ -1,4 +1,4 @@
-import type { Io } from '@/lib/crm'
+import type { Io, Ruolo } from '@/lib/crm'
 
 // Chi vede cosa. Le chiavi sono quelle del database (public.staff.sezioni e
 // public.staff.autorizzazioni, migrazione 20260928q), che le controlla da
@@ -15,6 +15,7 @@ export const SEZIONI = [
   { chiave: 'cerca', href: '/dashboard/cerca', testo: 'Cerca' },
   { chiave: 'debitori', href: '/dashboard/debitori', testo: 'Debitori' },
   { chiave: 'abbonamenti', href: '/dashboard/abbonamenti', testo: 'Abbonamenti' },
+  { chiave: 'ticket', href: '/dashboard/ticket', testo: 'Ticket' },
 ] as const
 
 export type Sezione = (typeof SEZIONI)[number]['chiave']
@@ -33,10 +34,33 @@ export const AUTORIZZAZIONI = [
 
 export type Autorizzazione = (typeof AUTORIZZAZIONI)[number]['chiave']
 
-export const eAdmin = (io: Io) => io?.ruolo === 'admin'
+// I ruoli (supabase/migrations/20260930a_ruoli.sql). Superadmin, admin e
+// supporto hanno i poteri di un admin: vedono tutte le sezioni e hanno tutte le
+// autorizzazioni. Il supporto in piu' smista i ticket del desk; il superadmin
+// (R2D) li lavora e li chiude, e scrive le modifiche.
+export const RUOLI: { chiave: Ruolo; testo: string; descrizione: string }[] = [
+  { chiave: 'superadmin', testo: 'Superadmin', descrizione: 'R2D: vede e può tutto, lavora e chiude i ticket, scrive le modifiche' },
+  { chiave: 'admin', testo: 'Admin', descrizione: 'vede tutto e può tutto; i suoi ticket passano dal supporto' },
+  { chiave: 'supporto', testo: 'Admin + supporto', descrizione: 'come un admin, e riceve i ticket aperti dagli altri: li verifica e li manda a R2D' },
+  { chiave: 'consulente', testo: 'Consulente', descrizione: 'vede le sezioni e ha le autorizzazioni scelte qui sotto' },
+]
+export const testoRuolo = (ruolo: string | null | undefined) => RUOLI.find((r) => r.chiave === ruolo)?.testo ?? ruolo ?? '—'
+export const ruoloAdmin = (ruolo: string | null | undefined) => ruolo === 'superadmin' || ruolo === 'admin' || ruolo === 'supporto'
+
+export const eAdmin = (io: Io) => ruoloAdmin(io?.ruolo)
+export const eSuperadmin = (io: Io) => io?.ruolo === 'superadmin'
+// Chi puo' dare o togliere un ruolo, o toccare chi ce l'ha (crm.puo_toccare_ruolo()):
+// un superadmin solo un superadmin, un admin o un supporto solo un admin.
+export const puoToccareRuolo = (io: Io, ruolo: string) =>
+  ruolo === 'superadmin' ? eSuperadmin(io) : ruoloAdmin(ruolo) ? eAdmin(io) : true
 export const puoVedere = (io: Io, sezione: Sezione) =>
   !SOSPESE.includes(sezione) && (eAdmin(io) || Boolean(io?.sezioni.includes(sezione)))
 export const ha = (io: Io, autorizzazione: Autorizzazione) => eAdmin(io) || Boolean(io?.autorizzazioni.includes(autorizzazione))
+
+// I ticket (supabase/migrations/20260930b_ticket.sql): tutti scrivono, il
+// supporto (e R2D) verifica e manda a R2D, il superadmin lavora e chiude.
+export const smista = (io: Io) => io?.ruolo === 'supporto' || io?.ruolo === 'superadmin'
+export const assiste = (io: Io) => eSuperadmin(io)
 
 // Riassegnare o chiudere un lead: se e' libero, se e' mio, o con l'autorizzazione.
 export const puoGestireLead = (io: Io, assegnatoA: string | null) => ha(io, 'lead_altrui') || !assegnatoA || assegnatoA === io?.id

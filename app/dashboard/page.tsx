@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { crm } from '@/lib/crm'
 import { formatoGiornoLungo, formatoOra, oggiRoma, traduci, TIPO_TASK } from '@/lib/formato'
 import { Avviso, Persona, Provenienza, Vuoto } from '@/components/Ui'
-import { puoVedere } from '@/lib/permessi'
+import { assiste, puoVedere, smista } from '@/lib/permessi'
 import { TabellaLead } from '@/components/TabellaLead'
 import { completaTask } from './azioni'
 
@@ -19,6 +19,7 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
     crm.staff(),
   ])
   const task = [...arretrati, ...oggi]
+  const ticket = puoVedere(io, 'ticket') ? await crm.ticketConti() : null
 
   return (
     <>
@@ -65,6 +66,27 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
           <div className="valore">{h.miei_task_oggi + h.miei_task_arretrati}</div>
           <div className="nota">{h.miei_task_oggi} oggi · {h.miei_task_arretrati} arretrati</div>
         </Link>
+        {ticket && smista(io) && (
+          <Link href="/dashboard/ticket?vista=da_verificare" className={`numero${ticket.da_verificare ? ' caldo' : ''}`}>
+            <div className="etichetta">Ticket da verificare</div>
+            <div className="valore">{ticket.da_verificare}</div>
+            <div className="nota">{ticket.proposte ? `${ticket.proposte} proposte per la riunione` : 'segnalazioni del desk'}</div>
+          </Link>
+        )}
+        {ticket && assiste(io) && (
+          <Link href="/dashboard/ticket?vista=r2d" className={`numero${ticket.bloccanti ? ' caldo' : ''}`}>
+            <div className="etichetta">Ticket per R2D</div>
+            <div className="valore">{ticket.r2d}</div>
+            <div className="nota">{ticket.bloccanti ? `${ticket.bloccanti} bloccano il lavoro` : `${ticket.modifiche_da_confermare + ticket.modifiche_da_rilasciare} modifiche aperte`}</div>
+          </Link>
+        )}
+        {ticket && (
+          <Link href="/dashboard/ticket?vista=in_attesa" className={`numero${ticket.in_attesa && !assiste(io) ? ' caldo' : ''}`}>
+            <div className="etichetta">Ticket in attesa</div>
+            <div className="valore">{ticket.in_attesa}</div>
+            <div className="nota">R2D aspetta una risposta · {ticket.miei} aperti da me</div>
+          </Link>
+        )}
       </div>
 
       <section className="scheda">

@@ -3,24 +3,27 @@
 import { useState } from 'react'
 import type { Io, Utente } from '@/lib/crm'
 import { formatoDataOra } from '@/lib/formato'
-import { AUTORIZZAZIONI, eAdmin, SEZIONI_ATTIVE, SOSPESE } from '@/lib/permessi'
+import { AUTORIZZAZIONI, puoToccareRuolo, RUOLI, ruoloAdmin, SEZIONI_ATTIVE, SOSPESE, testoRuolo } from '@/lib/permessi'
 import { BottoneInvio } from '@/components/BottoneInvio'
 import { aggiornaUtente, invitaUtente, rimuoviUtente } from '@/app/dashboard/azioni'
 
 // Un operatore nella pagina Utenti: ruolo, accesso, sezioni e autorizzazioni,
 // con il suo Salva. Quello che non si puo' cambiare (il proprio ruolo, un admin
-// per chi admin non e') resta visibile ma spento; il database lo rifiuterebbe.
-// Un admin vede tutte le sezioni e ha tutte le autorizzazioni: finche' il ruolo
-// scelto e' Admin le spunte sono accese e ferme (e quelle salvate si tengono,
-// per quando tornasse consulente); scegliendo Consulente si possono cambiare.
+// per chi admin non e', un superadmin per chi superadmin non e') resta visibile
+// ma spento; il database lo rifiuterebbe. Superadmin, admin e supporto vedono
+// tutte le sezioni e hanno tutte le autorizzazioni: finche' il ruolo scelto e'
+// uno di questi le spunte sono accese e ferme (e quelle salvate si tengono, per
+// quando tornasse consulente); scegliendo Consulente si possono cambiare.
 // Sotto: l'invito (o il link per la password) e la rimozione, passando il suo
 // lavoro aperto a uno degli `operatori`.
 export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operatori: Utente[] }) {
   const ioStesso = u.id === io?.id
-  // Un admin lo modifica solo un altro admin.
-  const bloccato = u.ruolo === 'admin' && !eAdmin(io)
+  // Un admin lo modifica solo un altro admin, un superadmin solo un superadmin.
+  const bloccato = !puoToccareRuolo(io, u.ruolo)
   const [ruolo, setRuolo] = useState(u.ruolo)
-  const admin = ruolo === 'admin'
+  const admin = ruoloAdmin(ruolo)
+  // I ruoli che si possono scegliere: quello che ha, e quelli che chi guarda puo' dare.
+  const ruoli = RUOLI.filter((r) => r.chiave === u.ruolo || puoToccareRuolo(io, r.chiave))
   const aperto = u.lead_aperti + u.task_aperti + u.altro_aperto
 
   return (
@@ -35,7 +38,7 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
             <div className="piccolo attenuato">{u.email ?? 'senza email'}</div>
           </div>
           <div className="utente-bollini">
-            {u.ruolo === 'admin' && <span className="bollino rosso">Admin</span>}
+            {u.ruolo !== 'consulente' && <span className="bollino rosso">{testoRuolo(u.ruolo)}</span>}
             {ioStesso && <span className="bollino grigio">Sei tu</span>}
             {u.accesso ? (
               <span className="bollino verde" title={u.ultimo_accesso ? `ultimo accesso ${formatoDataOra(u.ultimo_accesso)}` : undefined}>
@@ -55,13 +58,12 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
                 <>
                   <input type="hidden" name="ruolo" value={u.ruolo} />
                   <select value={u.ruolo} disabled>
-                    <option value={u.ruolo}>{u.ruolo === 'admin' ? 'Admin' : 'Consulente'}</option>
+                    <option value={u.ruolo}>{testoRuolo(u.ruolo)}</option>
                   </select>
                 </>
               ) : (
                 <select name="ruolo" value={ruolo} onChange={(e) => setRuolo(e.target.value as Utente['ruolo'])}>
-                  <option value="consulente">Consulente</option>
-                  {(eAdmin(io) || u.ruolo === 'admin') && <option value="admin">Admin</option>}
+                  {ruoli.map((r) => <option key={r.chiave} value={r.chiave}>{r.testo}</option>)}
                 </select>
               )}
             </label>
@@ -75,6 +77,7 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
               Riceve lead e task
             </label>
           </div>
+          <p className="piccolo attenuato">{testoRuolo(ruolo)}: {RUOLI.find((r) => r.chiave === ruolo)?.descrizione}</p>
 
           {/* Da admin le spunte sono spente, e le spunte spente non partono col
               modulo: quelle salvate viaggiano nascoste. */}
@@ -130,7 +133,9 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
           </div>
 
           {bloccato ? (
-            <p className="piccolo attenuato">Un admin lo modifica solo un altro admin.</p>
+            <p className="piccolo attenuato">
+              {u.ruolo === 'superadmin' ? 'Un superadmin lo modifica solo un altro superadmin.' : 'Un admin lo modifica solo un altro admin.'}
+            </p>
           ) : (
             <div className="utente-piede">
               {ioStesso && <span className="piccolo attenuato">Ruolo, accesso e gestione utenti li cambia un altro.</span>}

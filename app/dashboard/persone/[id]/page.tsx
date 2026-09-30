@@ -9,6 +9,7 @@ import { BottoneInvio } from '@/components/BottoneInvio'
 import { NuovoTask } from '@/components/NuovoTask'
 import { SceltaOperatore } from '@/components/SceltaOperatore'
 import { puoGestireLead, puoVedere } from '@/lib/permessi'
+import { TabellaTicket } from '@/components/Ticket'
 import {
   aggiornaDisdetta, aggiornaProva, aggiornaRinnovo, assegnaLead, chiudiLead, completaTask, leadSuPerfectGym, prendiLead,
   riapriLead,
@@ -20,6 +21,8 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
   const [s, io, staff] = await Promise.all([crm.persona(params.id), crm.io(), crm.staff()])
   if (!s) notFound()
   const p = s.persona
+  // I ticket della persona, per chi vede la sezione Ticket.
+  const ticket = puoVedere(io, 'ticket') ? await crm.ticketElenco('tutti', p.id) : null
   const qui = `/dashboard/persone/${p.id}`
   // Nella scheda solo i task: i commenti (quelli di Airtable) non si mostrano.
   const task = s.storia.filter((e): e is Extract<Scheda['storia'][number], { tipo: 'task' }> => e.tipo === 'task')
@@ -335,6 +338,18 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
               <NuovoTask utente={p.id} per={per} torna={qui} staff={staff} io={io?.id ?? null} />
             </div>
           </section>
+
+          {ticket && (
+            <section className="scheda">
+              <div className="testata-scheda">
+                <h2>Ticket</h2>
+                <a className="bottone secondario piccolo" href={`/dashboard/ticket/nuovo?persona=${p.id}`}>+ Apri un ticket</a>
+              </div>
+              {ticket.length === 0
+                ? <Vuoto>Nessun ticket su questa persona.</Vuoto>
+                : <TabellaTicket ticket={ticket} socio={false} />}
+            </section>
+          )}
         </div>
 
         {/* ---- Colonna 2: chi e' su PerfectGym ---- */}
