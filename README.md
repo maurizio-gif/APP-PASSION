@@ -418,6 +418,62 @@ per non rivelare quali email esistono): chi non ce l'ha va invitato da Utenti.
 Le email partono dall'SMTP impostato in Supabase (Authentication -> Emails), e
 `<sito>/auth/callback` dev'essere fra i Redirect URLs.
 
+### Ticket (`20260930a`)
+
+I ticket di assistenza passano dal CRM e non piu' dal modulo Google e dal
+foglio TICKET ASSISTENZA PASSION (592 ticket da agosto 2024, che restano come
+archivio). Le regole vengono dall'analisi del 30/09/2026:
+
+- **Tutti scrivono, chi smista invia.** Chiunque dello staff apre un ticket da
+  **Ticket** o, se riguarda un socio, dalla sua scheda («+ Apri un ticket»).
+  Resta **Da verificare** finche' chi ha l'autorizzazione **Smistamento
+  ticket** (Ludovica e chi la sostituisce) non lo manda a R2D, lo risolve al
+  desk (con la risposta e di che cosa si trattava) o lo unisce a un ticket gia'
+  aperto sullo stesso problema. Chi smista, quando apre lui, manda subito.
+- **I tipi**: *Qualcosa non funziona*, *Domanda*, *Attivita' da fare*,
+  *Proposta di modifica*. Le proposte non vanno a R2D: aspettano la riunione
+  settimanale e si chiudono al desk con quello che si e' deciso.
+- **La fotografia del socio.** Un ticket sul socio si porta dietro la sua
+  situazione all'apertura, letta dal mirror come nella scheda persona:
+  abbonamento (e se non e' ancora iniziato), saldo, certificato, ingressi e
+  prenotazioni. Per un guasto chi apre spunta anche cosa ha gia' controllato
+  (abbonamento iniziato, debito, certificato, pacchetto, regola di accesso,
+  telefono e app). Se sulla persona c'e' gia' un ticket aperto, prima di
+  scrivere lo si vede.
+- **R2D risponde nel CRM.** Chi ha **Assistenza R2D** prende in carico, chiede
+  informazioni al desk (il ticket va in **Aspettano Passion** e torna in
+  lavorazione alla prima risposta di Passion) e chiude. Non si chiude senza
+  la natura (errore di configurazione nostro, guasto di terze parti, il sistema
+  funzionava come impostato, errore del desk, problema del socio, domanda,
+  attivita', richiesta di modifica), la causa e la soluzione. **Assistenza R2D**
+  e' la prima autorizzazione che un admin non ha d'ufficio (`ESPLICITE` in
+  `lib/permessi.ts`, `crm.ha()` nel database): si da' una per una, anche agli
+  admin, e dice da che parte scrive un operatore nel filo del ticket.
+- **Le modifiche le scrive R2D.** Marco non apre ticket: le modifiche nascono
+  nella riunione settimanale con Michele, che le scrive da «+ Nuova modifica»
+  (cosa cambia, per quali abbonamenti, da quando, cosa si dice ai soci). Poi
+  registra la conferma di Marco (come e quando e' arrivata) e, dopo il
+  rilascio, cosa ha verificato prima e dopo. Stati: Da confermare ->
+  Confermata -> Rilasciata (o Annullata).
+- **Allegati**: foto, video e PDF fino a 25 MB, nel bucket privato `ticket` di
+  Storage (cartella del ticket). Li carica il browser con la sessione di chi e'
+  entrato (`components/CaricaAllegati.tsx`: le richieste verso Vercel hanno un
+  limite di 4,5 MB) e li legge solo lo staff (policy su `public.crm_e_staff()`),
+  con link firmati da un'ora.
+- **Resoconto**: nella sezione, per mese, i ticket aperti per tipo e quelli
+  chiusi per natura, quanti al desk, quanti uniti, le modifiche rilasciate e le
+  ore mediane dall'invio a R2D alla soluzione (`crm_ticket_resoconto()`).
+
+In home: *Ticket da verificare* per chi smista, *Ticket per R2D* per
+l'assistenza, *Ticket in attesa* per tutti. La sezione **Ticket** la ricevono
+tutti gli operatori (anche i nuovi, di default). I numeri partono da 1001,
+per non confondersi con le righe del vecchio foglio.
+
+Per partire: dare **Smistamento ticket** a Ludovica e al suo sostituto e
+**Assistenza R2D** allo staff di R2D, da Utenti; poi chiudere il modulo Google.
+Per un blocco che ferma tutti (tornello, app giu', pagamenti) il desk chiama
+anche R2D: il ticket segna «Blocca il lavoro», ma non avvisa nessuno da solo.
+
 ## Il mirror di PerfectGym
 
 Vive nello schema `perfectgym`, che PostgREST non espone: dal client non si

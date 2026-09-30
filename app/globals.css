@@ -1939,3 +1939,189 @@ details.scheda .utenti {
     flex: 1;
   }
 }
+
+/* ---- Ticket (supabase/migrations/20260930a_ticket.sql) --------------------- */
+
+.stack {
+  display: grid;
+  gap: 16px;
+}
+.numero-ticket {
+  font-variant-numeric: tabular-nums;
+  color: var(--testo-attenuato);
+  font-weight: 700;
+}
+.ticket-titolo {
+  color: var(--testo);
+}
+.ticket-bollini {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  margin: 4px 0;
+}
+.bollino.tipo-ticket {
+  background: var(--fondo-grigio);
+  color: var(--grigio);
+}
+.bollino.tipo-guasto {
+  background: var(--fondo-rosso);
+  color: var(--rosso-scuro);
+}
+.bollino.tipo-proposta,
+.bollino.tipo-modifica {
+  background: var(--nero);
+  color: #fff;
+}
+.ticket-testo {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin: 0 0 10px;
+}
+.ticket-soluzione {
+  border-color: var(--verde);
+  box-shadow: inset 4px 0 0 var(--verde);
+}
+.ticket-azioni textarea,
+.ticket-azioni select {
+  width: 100%;
+}
+.elenco-breve {
+  margin: 4px 0 0;
+  padding-left: 1.1em;
+}
+.elenco-breve li {
+  margin: 3px 0;
+}
+
+/* Il filo: Passion a sinistra col bordo rosso, R2D col bordo nero; i passaggi
+   di stato piccoli e grigi. */
+.filo-ticket {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+}
+.filo-ticket > li {
+  border-left: 3px solid var(--rosso);
+  padding: 4px 0 12px 14px;
+}
+.filo-ticket > li.lato-r2d {
+  border-left-color: var(--nero);
+  background: var(--riga-alterna);
+}
+.filo-ticket > li.evento {
+  border-left-color: var(--bordo);
+  background: none;
+  padding-bottom: 8px;
+}
+.filo-ticket > li.evento .storia-testa {
+  color: var(--testo-attenuato);
+}
+.filo-ticket .storia-testo {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.filo-ticket .bollino {
+  margin-left: 6px;
+}
+
+/* Il modulo del nuovo ticket. */
+.ticket-nuovo {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+.ticket-nuovo > form {
+  grid-column: span 2;
+}
+@media (max-width: 720px) {
+  .ticket-nuovo > form {
+    grid-column: auto;
+  }
+}
+.modulo fieldset {
+  border: none;
+  padding: 0;
+  margin: 0 0 12px;
+  min-width: 0;
+}
+.modulo legend {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.scelta-tipo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 8px;
+}
+.scelta-tipo legend {
+  grid-column: 1 / -1;
+}
+.scelta-tipo-voce {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  border: 1px solid var(--bordo);
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  background: var(--scheda);
+}
+.scelta-tipo-voce:has(input:checked) {
+  border-color: var(--rosso);
+  box-shadow: inset 3px 0 0 var(--rosso);
+}
+.scelta-tipo-voce input {
+  margin-top: 3px;
+  accent-color: var(--rosso);
+}
+.scelta-tipo-voce > span {
+  display: grid;
+  gap: 2px;
+}
+.verifiche {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Gli allegati. */
+.allegati-elenco {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+.allegati-elenco img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--bordo);
+}
+.allegato-file {
+  display: block;
+  padding: 18px 10px;
+  border: 1px dashed var(--bordo);
+  border-radius: 8px;
+  overflow-wrap: anywhere;
+  font-size: 0.85rem;
+}
+.allegati-carica label {
+  font-weight: 700;
+  display: block;
+  margin-bottom: 6px;
+}
+.allegati-carica input[type='file'] {
+  flex: 1 1 220px;
+  min-width: 0;
+  font-size: 0.85rem;
+}
+
+/* Il resoconto mensile. */
+.resoconto-ticket th.num,
+.resoconto-ticket td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}

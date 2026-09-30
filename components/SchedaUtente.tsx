@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import type { Io, Utente } from '@/lib/crm'
 import { formatoDataOra } from '@/lib/formato'
-import { AUTORIZZAZIONI, eAdmin, SEZIONI_ATTIVE, SOSPESE } from '@/lib/permessi'
+import { AUTORIZZAZIONI, eAdmin, ESPLICITE, SEZIONI_ATTIVE, SOSPESE } from '@/lib/permessi'
 import { BottoneInvio } from '@/components/BottoneInvio'
 import { aggiornaUtente, invitaUtente, rimuoviUtente } from '@/app/dashboard/azioni'
 
@@ -81,7 +81,7 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
           {admin && u.sezioni.map((s) => <input key={s} type="hidden" name="sezioni" value={s} />)}
           {/* Le sezioni sospese non si vedono, ma chi le aveva le tiene. */}
           {!admin && u.sezioni.filter((s) => SOSPESE.some((x) => x === s)).map((s) => <input key={s} type="hidden" name="sezioni" value={s} />)}
-          {admin && u.autorizzazioni.map((a) => <input key={a} type="hidden" name="autorizzazioni" value={a} />)}
+          {admin && u.autorizzazioni.filter((a) => !(ESPLICITE as readonly string[]).includes(a)).map((a) => <input key={a} type="hidden" name="autorizzazioni" value={a} />)}
 
           <div className="utente-gruppo">
             <div className="utente-etichetta">
@@ -105,14 +105,14 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
           <div className="utente-gruppo">
             <div className="utente-etichetta">
               Autorizzazioni
-              {admin && <span className="attenuato"> · un admin le ha tutte</span>}
+              {admin && <span className="attenuato"> · un admin le ha tutte, tranne l’assistenza R2D</span>}
             </div>
             <div className="autorizzazioni">
               {AUTORIZZAZIONI.map((a) => {
                 const mia = ioStesso && a.chiave === 'gestione_utenti' && u.autorizzazioni.includes(a.chiave)
                 return (
                   <label key={a.chiave} className="spunta">
-                    {admin ? (
+                    {admin && !ESPLICITE.includes(a.chiave) ? (
                       <input type="checkbox" checked readOnly disabled />
                     ) : (
                       <>

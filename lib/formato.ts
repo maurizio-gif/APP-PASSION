@@ -112,6 +112,54 @@ export const TESSERAMENTO: Record<string, string> = { si: 'Tesserato', gia_prese
 export const ESITO_RINNOVO: Record<string, string> = { rinnovato: 'Rinnovato', non_rinnovato: 'Non rinnovato' }
 export const ESITO_DISDETTA: Record<string, string> = { vinto: 'Recuperato', perso: 'Perso', standby: 'In sospeso' }
 
+// I ticket (supabase/migrations/20260930a_ticket.sql).
+export const TIPO_TICKET: Record<string, string> = {
+  guasto: 'Qualcosa non funziona', domanda: 'Domanda', attivita: 'Attività', proposta: 'Proposta di modifica',
+  modifica: 'Modifica',
+}
+// Quello che il desk sceglie aprendo, con la riga che spiega quando usarlo.
+export const TIPI_TICKET_NUOVI: { chiave: string; testo: string; spiega: string }[] = [
+  { chiave: 'guasto', testo: 'Qualcosa non funziona', spiega: 'un socio non entra, non prenota, un pagamento o un’automazione che non va' },
+  { chiave: 'domanda', testo: 'Domanda', spiega: 'come si fa qualcosa su PerfectGym, sul CRM, sull’app' },
+  { chiave: 'attivita', testo: 'Attività da fare', spiega: 'una newsletter, il planning sul sito, un account, un’estrazione di dati' },
+  { chiave: 'proposta', testo: 'Proposta di modifica', spiega: 'un prezzo, una regola, un prodotto nuovo: si decide nella riunione settimanale' },
+]
+export const STATO_TICKET: Record<string, string> = {
+  da_verificare: 'Da verificare', inviato: 'Inviato a R2D', in_lavorazione: 'In lavorazione', in_attesa: 'Aspetta Passion',
+  risolto: 'Risolto', risolto_desk: 'Risolto al desk', doppione: 'Unito',
+  da_confermare: 'Da confermare', confermata: 'Confermata', rilasciata: 'Rilasciata', annullata: 'Annullata',
+}
+export const STATI_TICKET_CHIUSI = ['risolto', 'risolto_desk', 'doppione', 'rilasciata', 'annullata']
+// Di che cosa si trattava: le categorie dell'analisi dei ticket del 30/09/2026.
+export const NATURA_TICKET: Record<string, string> = {
+  errore_configurazione: 'Errore di configurazione o automazione (R2D)',
+  guasto_terze_parti: 'Guasto di terze parti (PerfectGym, app, tornelli)',
+  funziona_come_impostato: 'Il sistema funzionava come impostato',
+  errore_operativo: 'Errore operativo del desk',
+  problema_socio: 'Problema lato socio (telefono, email, banca)',
+  domanda: 'Domanda su come si fa',
+  attivita: 'Attività operativa',
+  richiesta_modifica: 'Richiesta di modifica (va in riunione)',
+}
+// I controlli prima di aprire un guasto: la checklist dell'analisi.
+export const VERIFICHE_TICKET: Record<string, string> = {
+  contratto_iniziato: 'L’abbonamento è già iniziato',
+  saldo: 'Il socio non è in debito (o il pagamento è in corso)',
+  certificato: 'Il certificato medico è valido',
+  pacchetto: 'Il pacchetto o le lezioni non sono scaduti',
+  regola_accesso: 'L’abbonamento permette quell’orario o quella lezione',
+  app_riavviata: 'Telefono riavviato e app reinstallata',
+}
+// I passaggi nel filo del ticket.
+export const EVENTO_TICKET: Record<string, string> = {
+  aperto: 'ha aperto il ticket', aperto_inviato: 'ha aperto il ticket e l’ha mandato a R2D',
+  inviato: 'l’ha mandato a R2D', risolto_desk: 'l’ha risolto al desk', unito: 'l’ha unito a un altro ticket',
+  unito_qui: 'ha unito qui un altro ticket', riaperto: 'l’ha riaperto', preso: 'l’ha preso in carico',
+  in_attesa: 'chiede informazioni a Passion', risposta_passion: 'ha risposto: torna in lavorazione',
+  risolto: 'l’ha risolto', modifica_scritta: 'ha scritto la modifica', modifica_corretta: 'ha corretto la modifica',
+  confermata: 'ha registrato la conferma', rilasciata: 'l’ha rilasciata', annullata: 'l’ha annullata',
+}
+
 // I motivi di disdetta, gli stessi a cui si e' ricondotto lo storico.
 export const MOTIVI_DISDETTA = [
   'Cambio contratto', 'Trasferimento', 'Malattia/Infortunio', 'Mancanza di tempo', 'Prezzo',

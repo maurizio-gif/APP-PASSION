@@ -178,6 +178,117 @@ export async function debitoAssegna(f: FormData) {
   await esegui(f, () => rpc('crm_debito_assegna', { p_member: Number(testo(f, 'socio')), p_staff: testo(f, 'staff') }))
 }
 
+// --- Ticket -------------------------------------------------------------------
+// Le regole (chi invia, chi chiude, cosa serve per chiudere) le controlla il
+// database: supabase/migrations/20260930a_ticket.sql.
+
+const numero = (f: FormData, k: string) => {
+  const v = Number(testo(f, k))
+  return Number.isFinite(v) && v > 0 ? v : null
+}
+
+export async function nuovoTicket(f: FormData) {
+  const persona = testo(f, 'persona')
+  let id: number | null = null
+  try {
+    id = await rpc<number>('crm_ticket_nuovo', {
+      p_tipo: testo(f, 'tipo'), p_titolo: testo(f, 'titolo'), p_descrizione: testo(f, 'descrizione'),
+      p_utente: persona, p_verifiche: lista(f, 'verifiche'), p_bloccante: f.get('bloccante') === 'on',
+    })
+  } catch (e) {
+    const messaggio = encodeURIComponent(e instanceof Error ? e.message : 'Non salvato')
+    redirect(`/dashboard/ticket/nuovo?${persona ? `persona=${persona}&` : ''}errore=${messaggio}`)
+  }
+  revalidatePath('/dashboard', 'layout')
+  redirect(`/dashboard/ticket/${id}?ok=ticket_aperto`)
+}
+
+export async function messaggioTicket(f: FormData) {
+  await esegui(f, () => rpc('crm_ticket_messaggio', { p_id: numero(f, 'ticket'), p_testo: testo(f, 'testo') }))
+}
+
+export async function inviaTicket(f: FormData) {
+  await esegui(f, () => rpc('crm_ticket_invia', { p_id: numero(f, 'ticket'), p_nota: testo(f, 'nota') }))
+}
+
+export async function risolviTicketDesk(f: FormData) {
+  await esegui(f, () =>
+    rpc('crm_ticket_risolvi_desk', { p_id: numero(f, 'ticket'), p_natura: testo(f, 'natura'), p_risposta: testo(f, 'risposta') }))
+}
+
+export async function unisciTicket(f: FormData) {
+  await esegui(f, () => rpc('crm_ticket_unisci', { p_id: numero(f, 'ticket'), p_in: numero(f, 'in') }))
+}
+
+export async function riapriTicket(f: FormData) {
+  await esegui(f, () => rpc('crm_ticket_riapri', { p_id: numero(f, 'ticket'), p_motivo: testo(f, 'motivo') }))
+}
+
+export async function prendiTicket(f: FormData) {
+  await esegui(f, () => rpc('crm_ticket_prendi', { p_id: numero(f, 'ticket') }))
+}
+
+export async function chiediTicket(f: FormData) {
+  await esegui(f, () => rpc('crm_ticket_chiedi', { p_id: numero(f, 'ticket'), p_domanda: testo(f, 'domanda') }))
+}
+
+export async function risolviTicket(f: FormData) {
+  await esegui(f, () =>
+    rpc('crm_ticket_risolvi', {
+      p_id: numero(f, 'ticket'), p_natura: testo(f, 'natura'), p_causa: testo(f, 'causa'), p_soluzione: testo(f, 'soluzione'),
+    }))
+}
+
+const campiModifica = (f: FormData) => ({
+  p_titolo: testo(f, 'titolo'), p_descrizione: testo(f, 'descrizione'), p_abbonamenti: testo(f, 'abbonamenti'),
+  p_dal: testo(f, 'dal'), p_comunicazione: testo(f, 'comunicazione'), p_riunione: testo(f, 'riunione'),
+})
+
+export async function nuovaModifica(f: FormData) {
+  let id: number | null = null
+  try {
+    id = await rpc<number>('crm_modifica_nuova', campiModifica(f))
+  } catch (e) {
+    redirect(`/dashboard/ticket/modifica?errore=${encodeURIComponent(e instanceof Error ? e.message : 'Non salvata')}`)
+  }
+  revalidatePath('/dashboard', 'layout')
+  redirect(`/dashboard/ticket/${id}?ok=modifica_scritta`)
+}
+
+export async function aggiornaModifica(f: FormData) {
+  await esegui(f, () => rpc('crm_modifica_aggiorna', { p_id: numero(f, 'ticket'), ...campiModifica(f) }))
+}
+
+export async function confermaModifica(f: FormData) {
+  await esegui(f, () => rpc('crm_modifica_conferma', { p_id: numero(f, 'ticket'), p_nota: testo(f, 'nota') }))
+}
+
+export async function rilasciaModifica(f: FormData) {
+  await esegui(f, () => rpc('crm_modifica_rilascia', { p_id: numero(f, 'ticket'), p_verifica: testo(f, 'verifica') }))
+}
+
+export async function annullaModifica(f: FormData) {
+  await esegui(f, () => rpc('crm_modifica_annulla', { p_id: numero(f, 'ticket'), p_motivo: testo(f, 'motivo') }))
+}
+
+// Gli allegati li carica il browser su Storage (bucket `ticket`, cartella del
+// ticket): qui si registrano nel ticket. Chiamata da CaricaAllegati.
+export type AllegatoCaricato = { percorso: string; nome: string; tipo: string | null; dimensione: number }
+
+export async function registraAllegati(ticket: number, allegati: AllegatoCaricato[]): Promise<{ errore?: string }> {
+  try {
+    for (const a of allegati) {
+      await rpc('crm_ticket_allegato', {
+        p_id: ticket, p_percorso: a.percorso, p_nome: a.nome, p_tipo: a.tipo, p_dimensione: a.dimensione,
+      })
+    }
+  } catch (e) {
+    return { errore: e instanceof Error ? e.message : 'Allegati non registrati' }
+  }
+  revalidatePath(`/dashboard/ticket/${ticket}`)
+  return {}
+}
+
 // --- Ricerca ------------------------------------------------------------------
 
 export async function cerca(f: FormData) {

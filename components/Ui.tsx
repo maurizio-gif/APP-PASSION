@@ -17,6 +17,8 @@ const MESSAGGI_OK: Record<string, string> = {
   utente_creato: 'Utente creato e invitato: gli arriva un’email con il link per scegliere la password.',
   utente_invitato: 'Invito mandato: gli arriva un’email con il link per scegliere la password.',
   utente_link_password: 'Link mandato: gli arriva un’email per scegliere una nuova password.',
+  ticket_aperto: 'Ticket aperto. Se hai foto, video o PDF, aggiungili qui sotto.',
+  modifica_scritta: 'Modifica scritta. Quando Marco la conferma, registra qui come e quando.',
 }
 
 export function Schede({ voci, attiva, base }: { voci: { chiave: string; testo: string; n?: number }[]; attiva: string; base: string }) {

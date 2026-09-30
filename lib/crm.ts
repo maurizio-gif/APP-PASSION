@@ -399,6 +399,112 @@ export type DurataPeriodo = {
   con_cambio: number
 }
 
+// I ticket (supabase/migrations/20260930a_ticket.sql).
+export type TipoTicket = 'guasto' | 'domanda' | 'attivita' | 'proposta' | 'modifica'
+export type StatoTicket =
+  | 'da_verificare' | 'inviato' | 'in_lavorazione' | 'in_attesa' | 'risolto' | 'risolto_desk' | 'doppione'
+  | 'da_confermare' | 'confermata' | 'rilasciata' | 'annullata'
+
+export type TicketRiga = {
+  id: number
+  tipo: TipoTicket
+  stato: StatoTicket
+  titolo: string
+  bloccante: boolean
+  utente_id: string | null
+  nome: string | null
+  cognome: string | null
+  member_id: number | null
+  aperto_da_nome: string | null
+  aperto_il: string
+  preso_nome: string | null
+  aggiornato_il: string
+  chiuso_il: string | null
+  natura: string | null
+  dal: string | null
+  riunione: string | null
+  doppione_di: number | null
+  messaggi: number
+  allegati: number
+  ultimo_lato: 'passion' | 'r2d' | null
+}
+
+// La situazione del socio al momento dell'apertura (crm.ticket_contesto()).
+export type ContestoTicket = {
+  socio: boolean
+  fotografata_il: string
+  numero?: string | null
+  saldo?: number | null
+  certificato?: { inizio: string | null; scadenza: string | null; temporaneo_inizio: string | null; temporaneo_fine: string | null } | null
+  abbonamenti?: { piano: string | null; stato: string | null; data_inizio: string | null; data_fine: string | null; data_disdetta: string | null }[]
+  ingressi_30gg?: number | null
+  ultimo_ingresso?: string | null
+  prenotazioni?: { inizio: string; lezione: string | null; annullata: boolean | null; presente: boolean | null }[]
+}
+
+export type Ticket = {
+  id: number
+  tipo: TipoTicket
+  stato: StatoTicket
+  titolo: string
+  descrizione: string
+  utente_id: string | null
+  contesto: ContestoTicket | null
+  verifiche: string[]
+  bloccante: boolean
+  aperto_da: string
+  aperto_da_nome: string | null
+  aperto_da_lato: 'passion' | 'r2d'
+  aperto_il: string
+  inviato_nome: string | null
+  inviato_il: string | null
+  preso_da: string | null
+  preso_nome: string | null
+  preso_il: string | null
+  chiuso_nome: string | null
+  chiuso_il: string | null
+  doppione_di: number | null
+  natura: string | null
+  causa: string | null
+  soluzione: string | null
+  abbonamenti: string | null
+  dal: string | null
+  comunicazione: string | null
+  riunione: string | null
+  confermata_nome: string | null
+  confermata_il: string | null
+  confermata_nota: string | null
+  aggiornato_il: string
+  persona: { id: string; nome: string | null; cognome: string | null; member_id: number | null; telefono: string | null; email: string | null } | null
+  messaggi: { id: number; testo: string | null; evento: string | null; lato: 'passion' | 'r2d'; autore: string | null; creato_il: string }[]
+  allegati: { id: number; percorso: string; nome: string; tipo: string | null; dimensione: number | null; messaggio_id: number | null; caricato_nome: string | null; caricato_il: string }[]
+  doppioni: { id: number; titolo: string; aperto_da_nome: string | null; aperto_il: string }[]
+  stessa_persona: { id: number; titolo: string; stato: StatoTicket }[]
+}
+
+export type TicketConti = {
+  da_verificare: number
+  proposte: number
+  r2d: number
+  in_attesa: number
+  bloccanti: number
+  miei: number
+  modifiche_da_confermare: number
+  modifiche_da_rilasciare: number
+}
+
+export type ResocontoMese = {
+  mese: string
+  aperti: number
+  per_tipo: Record<string, number>
+  chiusi: number
+  per_natura: Record<string, number>
+  al_desk: number
+  doppioni: number
+  modifiche_rilasciate: number
+  ore_mediane: number | null
+}
+
 export const crm = {
   // Una volta per richiesta: la chiedono il layout e la pagina.
   io: cache(() => rpc<Io>('crm_io')),
@@ -420,6 +526,11 @@ export const crm = {
     rpc<Debitore[]>('crm_debitori', { p_vista: vista, p_chi: chi, p_consulente: consulente }),
   abbonamenti: () => rpc<Abbonamenti>('crm_abbonamenti'),
   utenti: () => rpc<Utente[]>('crm_utenti'),
+  ticketElenco: (vista: string, utente: string | null = null) =>
+    rpc<TicketRiga[]>('crm_ticket_elenco', { p_vista: vista, p_utente: utente }),
+  ticket: (id: number) => rpc<Ticket | null>('crm_ticket', { p_id: id }),
+  ticketConti: () => rpc<TicketConti>('crm_ticket_conti'),
+  ticketResoconto: (mesi = 6) => rpc<ResocontoMese[]>('crm_ticket_resoconto', { p_mesi: mesi }),
 }
 
 // In cima a ogni pagina di una sezione: chi non la vede torna alla home.
