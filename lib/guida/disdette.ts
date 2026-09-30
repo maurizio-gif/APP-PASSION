@@ -7,7 +7,9 @@ export const disdette: Argomento = {
   inBreve: 'Chi disdice su PerfectGym arriva qui da solo, con una telefonata per oggi: capire il motivo, provare a recuperarlo, segnare com’è finita.',
   testo: `
 ## Da dove arrivano
-Quando su PerfectGym un contratto a pagamento viene disdetto, la disdetta arriva nel CRM da sola, entro 5 minuti. Nello stesso momento il CRM crea un task per **oggi**: una Telefonata, «Disdetta del ... (piano): chiamare per capire il motivo e provare a recuperarlo».
+Da **PerfectGym**, da soli: niente si inserisce a mano. Le disdette sono solo degli **abbonamenti mensili con addebito** (Sala Pesi, Corsi Fitness, Open, Formula 8, con durata minima di 4 o 12 mesi o Flex), che vanno avanti finché il socio non disdice. Quando su PerfectGym compare la disdetta, arriva nel CRM entro 5 minuti. Nello stesso momento il CRM crea un task per **oggi**: una Telefonata, «Disdetta del ... (piano): chiamare per capire il motivo e provare a recuperarlo».
+
+Gli abbonamenti **a scadenza fissa** (Reformer 12 mesi, Percorsi «I ❤️ My Trainer», PT Elite) non sono disdette: quando finiscono sono un [rinnovo](/dashboard/guida/rinnovi).
 
 > Il task va a chi segue la disdetta. Una disdetta appena arrivata non la segue ancora nessuno: il suo task finisce fra i task **Senza assegnatario**. Chi si occupa delle disdette li controlla ogni giorno, in [Task](/dashboard/task) (Chi: **Senza assegnatario**).
 
