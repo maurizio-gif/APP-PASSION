@@ -15,7 +15,7 @@ export default async function Guida() {
         <div>
           <h1>Guida</h1>
           <p>Come si usa il CRM: cosa trovi in ogni sezione, cosa fare e cosa fa il CRM da solo.
-            Da ogni sezione ci si arriva anche con «Come funziona».</p>
+            In ogni sezione, «Come funziona» apre il suo capitolo senza lasciare la pagina.</p>
         </div>
       </div>
       <div className="griglia">
