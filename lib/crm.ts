@@ -511,6 +511,53 @@ export type ResocontoMese = {
   ore_mediane: number | null
 }
 
+// I report delle riunioni (supabase/migrations/20260930j_riunioni.sql): solo
+// superadmin e admin. Il contenuto sta nel database, non nel repository.
+export type StatoAzione = 'da_fare' | 'in_corso' | 'fatto'
+export type RiunioneInElenco = {
+  id: string
+  data: string
+  ora: string | null
+  titolo: string
+  partecipanti: string[]
+  durata: string | null
+  sintesi: string | null
+  decisioni: number
+  azioni: number
+  fatte: number
+  in_corso: number
+}
+export type PuntoRiunione = { titolo: string; testo: string; nel_crm?: string; minuto?: string | null }
+export type AzioneRiunione = {
+  id: string
+  chi: string[]
+  titolo: string
+  descrizione: string | null
+  stato: StatoAzione
+  nota: string | null
+  fatto_il: string | null
+  aggiornato_il: string | null
+  aggiornato_nome: string | null
+}
+export type Riunione = {
+  id: string
+  data: string
+  ora: string | null
+  titolo: string
+  partecipanti: string[]
+  durata: string | null
+  fonte_url: string | null
+  trascrizione_caratteri: number
+  contenuto: {
+    sintesi?: string
+    aree?: { titolo: string; testo: string }[]
+    concordato?: PuntoRiunione[]
+    da_approfondire?: PuntoRiunione[]
+    dettagli?: PuntoRiunione[]
+  }
+  azioni: AzioneRiunione[]
+}
+
 export const crm = {
   // Una volta per richiesta: la chiedono il layout e la pagina.
   io: cache(() => rpc<Io>('crm_io')),
@@ -537,6 +584,9 @@ export const crm = {
   ticket: (id: number) => rpc<Ticket | null>('crm_ticket', { p_id: id }),
   ticketConti: () => rpc<TicketConti>('crm_ticket_conti'),
   ticketResoconto: (mesi = 6) => rpc<ResocontoMese[]>('crm_ticket_resoconto', { p_mesi: mesi }),
+  riunioni: () => rpc<RiunioneInElenco[]>('crm_riunioni'),
+  riunione: (id: string) => rpc<Riunione | null>('crm_riunione', { p_id: id }),
+  riunioneTrascrizione: (id: string) => rpc<string | null>('crm_riunione_trascrizione', { p_id: id }),
 }
 
 // In cima a ogni pagina di una sezione: chi non la vede torna alla home.

@@ -4,7 +4,7 @@ import { Logo } from '@/components/Logo'
 import { Menu } from '@/components/Menu'
 import { Navigazione } from '@/components/Navigazione'
 import { crm } from '@/lib/crm'
-import { ha, puoVedere, SEZIONI, testoRuolo } from '@/lib/permessi'
+import { ha, puoRiunioni, puoVedere, SEZIONI, testoRuolo } from '@/lib/permessi'
 import { cerca } from './azioni'
 
 export const dynamic = 'force-dynamic'
@@ -19,6 +19,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     { href: '/dashboard', testo: 'Da gestire' },
     ...SEZIONI.filter((s) => puoVedere(io, s.chiave)).map(({ href, testo }) => ({ href, testo })),
     ...(ha(io, 'gestione_utenti') ? [{ href: '/dashboard/utenti', testo: 'Utenti' }] : []),
+    ...(puoRiunioni(io) ? [{ href: '/dashboard/riunioni', testo: 'Report riunioni' }] : []),
     { href: '/dashboard/guida', testo: 'Guida' },
   ]
 

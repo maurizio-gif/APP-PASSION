@@ -19,6 +19,8 @@ Il menu mostra solo le sezioni che puoi vedere: Lead, Prove, Disdette, Rinnovi, 
 
 La sezione **Abbonamenti** ha i numeri dell'azienda: la vedono gli admin e chi la riceve apposta.
 
+I **Report riunioni** li vedono solo superadmin e admin: in ogni report il riepilogo, le decisioni, i passaggi successivi con il loro stato (lo aggiornano loro) e la trascrizione completa, da aprire o scaricare.
+
 ## Le autorizzazioni
 Oltre alle sezioni, due permessi in più, che si danno uno per uno:
 

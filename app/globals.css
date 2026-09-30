@@ -2322,3 +2322,472 @@ details.scheda .utenti {
     position: static;
   }
 }
+
+/* --- Report riunioni ------------------------------------------------------ */
+
+.avanzamento {
+  margin: 4px 0 14px;
+}
+.avanzamento.sottile {
+  margin: 10px 0 0;
+}
+.avanzamento-barra {
+  display: flex;
+  height: 12px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--fondo-grigio);
+}
+.avanzamento.sottile .avanzamento-barra {
+  height: 6px;
+}
+.avanzamento-barra .fatto,
+.avanzamento-legenda i.fatto {
+  background: var(--verde);
+}
+.avanzamento-barra .in-corso,
+.avanzamento-legenda i.in-corso {
+  background: #e0a526;
+}
+.avanzamento-legenda i.da-fare {
+  background: var(--fondo-grigio);
+  border: 1px solid var(--bordo);
+}
+.avanzamento-legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  align-items: center;
+  margin-top: 8px;
+  color: var(--testo-attenuato);
+}
+.avanzamento-legenda i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  margin-right: 4px;
+  vertical-align: -1px;
+}
+.avanzamento-legenda strong {
+  margin-left: auto;
+  color: var(--testo);
+  font-variant-numeric: tabular-nums;
+}
+
+.riunione-quadro-numeri {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 36px;
+  margin-bottom: 10px;
+}
+.riunione-quadro-numeri > div {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.riunione-quadro-numeri .valore {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.riunione-quadro-numeri .valore small {
+  font-size: 1.1rem;
+  color: var(--testo-attenuato);
+}
+.riunione-quadro-numeri .etichetta {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--testo-attenuato);
+}
+
+.riunioni-elenco {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.riunione-voce {
+  display: flex;
+  gap: 20px;
+  color: inherit;
+}
+.riunione-voce:hover {
+  border-color: var(--rosso);
+  text-decoration: none;
+}
+.riunione-voce h2 {
+  margin: 4px 0 6px;
+}
+.riunione-voce p {
+  margin: 0 0 10px;
+  color: var(--testo-attenuato);
+}
+.riunione-voce-corpo {
+  flex: 1;
+  min-width: 0;
+}
+.riunione-voce-piede {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 16px;
+}
+.riunione-data {
+  flex: 0 0 76px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+  border-radius: 12px;
+  background: var(--nero);
+  color: #fff;
+  text-transform: uppercase;
+  align-self: flex-start;
+}
+.riunione-data .giorno {
+  font-family: var(--font-display);
+  font-size: 2.1rem;
+  line-height: 1;
+}
+.riunione-data .mese {
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: #ff8fa2;
+}
+.riunione-data .anno {
+  font-size: 0.72rem;
+  opacity: 0.7;
+}
+
+.riunione-quando {
+  margin: 10px 0 6px;
+  font-weight: 700;
+  color: var(--rosso-scuro);
+}
+.riunione-persone,
+.riunione-voci {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+.riunione-persone li,
+.riunione-voci li {
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--bordo);
+  background: var(--scheda);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+.riunione-azioni-testata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.riunione-sintesi {
+  margin: 0 0 18px;
+  font-size: 1.12rem;
+  line-height: 1.45;
+  font-weight: 600;
+}
+.riunione-aree {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.riunione-area {
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--fondo);
+}
+.riunione-area h3 {
+  margin: 6px 0;
+}
+.riunione-area p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--testo-attenuato);
+}
+.riunione-area-n {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--rosso);
+}
+
+.riunione-decisioni {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+}
+.riunione-sottotitolo {
+  font-size: 0.95rem;
+  color: var(--testo-attenuato);
+}
+.riunione-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+.riunione-lista li {
+  position: relative;
+  padding-left: 32px;
+}
+.riunione-lista li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--rosso);
+}
+.riunione-lista li.fatto::before {
+  content: '✓';
+  border-color: var(--verde);
+  background: var(--verde);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+  line-height: 16px;
+}
+.riunione-lista.approfondire li::before {
+  content: '?';
+  border-color: #e0a526;
+  color: var(--giallo);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-align: center;
+  line-height: 16px;
+}
+.riunione-lista .bollino {
+  white-space: normal;
+}
+.riunione-lista p {
+  margin: 2px 0 6px;
+  font-size: 0.9rem;
+  color: var(--testo-attenuato);
+}
+
+.riunione-per-persona {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+}
+.riunione-per-persona li {
+  padding: 6px 12px;
+  border: 1px solid var(--bordo);
+  border-radius: 10px;
+  font-size: 0.85rem;
+  min-width: 150px;
+}
+.riunione-per-persona-barra {
+  display: block;
+  height: 4px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: var(--fondo-grigio);
+  overflow: hidden;
+}
+.riunione-per-persona-barra span {
+  display: block;
+  height: 100%;
+  background: var(--verde);
+}
+
+.riunione-passaggi {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--bordo);
+}
+.riunione-passaggi > li {
+  padding: 12px 0 12px 14px;
+  border-bottom: 1px solid var(--bordo);
+  border-left: 4px solid var(--fondo-grigio);
+}
+.riunione-passaggi > li.stato-in_corso {
+  border-left-color: #e0a526;
+}
+.riunione-passaggi > li.stato-fatto {
+  border-left-color: var(--verde);
+}
+.riunione-passaggio-testa {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+}
+.riunione-chi {
+  margin-left: auto;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--rosso-scuro);
+}
+.riunione-passaggi p {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+}
+.riunione-nota {
+  color: var(--verde);
+  font-weight: 600;
+}
+.riunione-aggiorna {
+  margin-top: 6px;
+}
+.riunione-aggiorna summary {
+  cursor: pointer;
+  color: var(--testo-attenuato);
+}
+.riunione-aggiorna form {
+  margin-top: 8px;
+}
+
+.minuto {
+  display: inline-block;
+  padding: 0 6px;
+  border-radius: 6px;
+  background: var(--fondo-rosso);
+  color: var(--rosso-scuro);
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.riunione-argomenti {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.riunione-argomenti > li {
+  display: grid;
+  grid-template-columns: 78px minmax(0, 1fr);
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--bordo);
+}
+.riunione-argomenti > li:last-child {
+  border-bottom: 0;
+}
+.riunione-argomenti h3 {
+  margin: 0 0 4px;
+  font-size: 0.98rem;
+}
+.riunione-argomenti p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--testo-attenuato);
+}
+.riunione-argomento-minuto {
+  padding-top: 1px;
+}
+
+.riunione-trascrizione > summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  list-style: none;
+}
+.riunione-trascrizione > summary::-webkit-details-marker {
+  display: none;
+}
+.riunione-trascrizione[open] > summary {
+  margin-bottom: 12px;
+}
+.riunione-trascrizione[open] > summary > .piccolo {
+  visibility: hidden;
+}
+.riunione-trascrizione-barra {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--bordo);
+}
+.riunione-trascrizione-barra .riunione-voci {
+  margin: 0;
+}
+.riunione-blocco {
+  display: grid;
+  grid-template-columns: 78px minmax(0, 1fr);
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--bordo);
+  scroll-margin-top: 16px;
+}
+.riunione-blocco:target {
+  background: var(--fondo-giallo);
+}
+.riunione-blocco-minuto {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--testo-attenuato);
+  font-variant-numeric: tabular-nums;
+  padding-top: 2px;
+}
+.riunione-blocco p {
+  margin: 0 0 4px;
+  font-size: 0.9rem;
+}
+.voce-0 {
+  color: var(--rosso-scuro);
+}
+.voce-1 {
+  color: var(--nero);
+}
+.voce-2 {
+  color: var(--verde);
+}
+.voce-3 {
+  color: var(--giallo);
+}
+.voce-4 {
+  color: var(--grigio);
+}
+
+@media (max-width: 720px) {
+  .riunione-voce {
+    gap: 12px;
+  }
+  .riunione-data {
+    flex-basis: 58px;
+  }
+  .riunione-data .giorno {
+    font-size: 1.6rem;
+  }
+  .riunione-decisioni {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .riunione-chi {
+    margin-left: 0;
+    flex-basis: 100%;
+  }
+  .riunione-argomenti > li,
+  .riunione-blocco {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+  .riunione-per-persona li {
+    min-width: 0;
+    flex: 1 1 140px;
+  }
+}
