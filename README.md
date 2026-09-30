@@ -200,6 +200,19 @@ assegna, chiudi vinta/persa), la **scheda persona** (i dati di PerfectGym, i
 contenitori con le loro azioni, la storia dei task), **Prove**,
 **Nuovi contratti**, **Disdette**, **Task**, **Cerca**.
 
+**Report riunioni** (`20260930j`, solo superadmin e admin: `crm.puo_riunioni()`,
+nel menu solo per loro): un report per riunione in `public.riunioni` (data,
+titolo, partecipanti, durata, il documento da cui viene, il report in
+`contenuto` jsonb: sintesi, aree, concordato, da approfondire, argomenti con i
+minuti; la trascrizione a righe «[hh:mm:ss]» e «Nome: testo») e i passaggi
+successivi in `public.riunioni_azioni`, con lo stato (da fare, in corso,
+fatto) e la nota, che gli admin aggiornano dalla pagina
+(`crm_riunione_azione()`). La pagina del report disegna tutto (numeri, barra
+d'avanzamento, per persona, argomenti coi minuti che aprono la trascrizione
+al punto giusto); la trascrizione si apre in fondo o si scarica in .txt
+(`/dashboard/riunioni/<id>/trascrizione`). Il contenuto sta solo nel database,
+non nel repository: si carica da SQL.
+
 **Disdette e rinnovi si prendono in carico come i lead** (`20260930g`): nella
 riga c'e' «Prendo in carico» (`crm_disdetta_assegna()`, `crm_rinnovo_assegna()`
 senza operatore), per chi ce l'ha «Assegna» e «Rimetti da assegnare»

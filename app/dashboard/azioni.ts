@@ -100,6 +100,14 @@ export async function leadSuPerfectGym(f: FormData) {
   })
 }
 
+// --- Report riunioni -------------------------------------------------------
+
+// Lo stato di un passaggio successivo (da fare, in corso, fatto), con la nota.
+export async function aggiornaAzioneRiunione(f: FormData) {
+  await esegui(f, () =>
+    rpc('crm_riunione_azione', { p_id: testo(f, 'azione'), p_stato: testo(f, 'stato'), p_nota: testo(f, 'nota') }))
+}
+
 // --- Commenti e task --------------------------------------------------------
 
 export async function aggiungiCommento(f: FormData) {

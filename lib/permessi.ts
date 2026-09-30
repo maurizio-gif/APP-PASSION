@@ -59,6 +59,9 @@ export const ha = (io: Io, autorizzazione: Autorizzazione) => eAdmin(io) || Bool
 
 // I ticket (supabase/migrations/20260930b_ticket.sql): tutti scrivono, il
 // supporto (e R2D) verifica e manda a R2D, il superadmin lavora e chiude.
+// I report delle riunioni: superadmin e admin (crm.puo_riunioni()).
+export const puoRiunioni = (io: Io) => io?.ruolo === 'superadmin' || io?.ruolo === 'admin'
+
 export const smista = (io: Io) => io?.ruolo === 'supporto' || io?.ruolo === 'superadmin'
 export const assiste = (io: Io) => eSuperadmin(io)
 
