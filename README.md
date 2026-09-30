@@ -129,8 +129,13 @@ select esito -> 'airtable' from crm.alimenta_log order by id desc limit 5;
 **Rinnovi** nel menu: gli abbonamenti in scadenza (`public.rinnovi`, 338
 dallo storico di Airtable il 29/09/2026), da gestire in ordine di scadenza,
 con l'esito (rinnovato / non rinnovato), chi li segue e le note; accanto, se
-su PerfectGym c'e' gia' un abbonamento nuovo della persona. Per ora nascono
-su Airtable (l'automazione di fine mese) e arrivano col sync.
+su PerfectGym c'e' gia' un abbonamento nuovo della persona. Fino al 30/09/2026
+nascevano su Airtable (l'automazione di fine mese); da allora li crea il mirror
+(`20260930c`, `crm.rinnovi_dal_mirror()` in `crm.alimenta()`): ogni
+abbonamento principale a pagamento di un piano **a termine** (che non permette
+l'addebito ricorrente, `crm.piano_ricorrente()`) entra 30 giorni prima della
+fine. I piani ricorrenti finiscono solo con una disdetta, e le disdette dal
+mirror sono solo loro: la fine di un piano a termine non e' una disdetta.
 
 ### Le richieste dei moduli, dritte nel CRM (`20260928n`)
 

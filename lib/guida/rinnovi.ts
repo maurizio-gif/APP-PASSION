@@ -7,7 +7,7 @@ export const rinnovi: Argomento = {
   inBreve: 'Gli abbonamenti che stanno per scadere: chi li segue, la telefonata 15 giorni prima, e l’esito rinnovato o non rinnovato.',
   testo: `
 ## Da dove arrivano
-Per ora gli abbonamenti in scadenza li prepara **Airtable a fine mese**, e arrivano nel CRM da soli. Finché Airtable resta acceso, quello che si cambia lì (esito, chi lo segue, note) arriva anche qui: vale l'ultima modifica, da una parte o dall'altra.
+Da PerfectGym, da soli: ogni abbonamento **a termine** (pagato in un'unica soluzione: annuali, «N mesi», Reformer, percorsi con trainer) entra fra i rinnovi **30 giorni prima della scadenza**. Gli abbonamenti mensili con addebito non scadono: finiscono solo se il socio disdice, e allora sono una [disdetta](/dashboard/guida/disdette).
 
 ## Le viste
 - **Da gestire**: senza esito, in ordine di scadenza (prima quelli scaduti da più tempo);
