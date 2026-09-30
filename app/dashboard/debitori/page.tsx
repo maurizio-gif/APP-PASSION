@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { crm, linkPgm, richiediSezione } from '@/lib/crm'
 import { formatoData, formatoDataOra, formatoEuro, formatoFa, STATO_CONTRATTO, TIPI_TASK_NUOVI, traduci } from '@/lib/formato'
-import { Avviso, Contatti, Persona, Vuoto } from '@/components/Ui'
+import { Avviso, Contatti, LinkGuida, Persona, Vuoto } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
 import { debitoAssegna, debitoTask } from '../azioni'
 
@@ -39,7 +39,7 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
       <div className="testata">
         <div>
           <h1>Debitori</h1>
-          <p>Chi ha il saldo negativo su PerfectGym: si recupera coi task, e quando paga esce da solo.</p>
+          <p>Chi ha il saldo negativo su PerfectGym: si recupera coi task, e quando paga esce da solo.{' '}<LinkGuida argomento="debitori" /></p>
         </div>
       </div>
       <Avviso errore={searchParams.errore} />

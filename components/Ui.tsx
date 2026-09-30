@@ -21,6 +21,11 @@ const MESSAGGI_OK: Record<string, string> = {
   modifica_scritta: 'Modifica scritta. Quando il titolare la conferma, registra qui chi, come e quando.',
 }
 
+// «Come funziona»: dalla descrizione di una sezione al suo argomento della guida (lib/guida).
+export function LinkGuida({ argomento }: { argomento: string }) {
+  return <Link className="link-guida" href={`/dashboard/guida/${argomento}`}>Come funziona →</Link>
+}
+
 export function Schede({ voci, attiva, base }: { voci: { chiave: string; testo: string; n?: number }[]; attiva: string; base: string }) {
   return (
     <div className="schede-vista">

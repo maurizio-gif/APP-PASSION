@@ -1,6 +1,6 @@
 import { crm, richiediSezione } from '@/lib/crm'
 import { formatoData, formatoFa } from '@/lib/formato'
-import { Avviso, BollinoFonte, Contatti, Gestione, Persona, Schede, Vuoto } from '@/components/Ui'
+import { Avviso, BollinoFonte, Contatti, Gestione, LinkGuida, Persona, Schede, Vuoto } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
 import { SceltaOperatore } from '@/components/SceltaOperatore'
 import { aggiornaProva } from '../azioni'
@@ -33,7 +33,8 @@ export default async function Prove({ searchParams }: { searchParams: { vista?: 
           <h1>Prove</h1>
           <p>
             Il Pass arriva da PerfectGym da solo, e anche l&apos;esito: Iscritto quando compare l&apos;abbonamento, Non iscritto 30 giorni
-            dopo la fine del pass. Qui si segue la persona fino all&apos;iscrizione.
+            dopo la fine del pass. Qui si segue la persona fino all&apos;iscrizione.{' '}
+            <LinkGuida argomento="prove" />
           </p>
         </div>
       </div>

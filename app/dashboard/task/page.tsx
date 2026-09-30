@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { crm, richiediSezione } from '@/lib/crm'
 import { formatoDataOra, TIPO_TASK, traduci } from '@/lib/formato'
-import { Avviso, Contatti, Persona, Provenienza, Vuoto } from '@/components/Ui'
+import { Avviso, Contatti, LinkGuida, Persona, Provenienza, Vuoto } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
 import { completaTask } from '../azioni'
 
@@ -33,7 +33,7 @@ export default async function Task({ searchParams }: { searchParams: { chi?: str
       <div className="testata">
         <div>
           <h1>Task</h1>
-          <p>Tutto il lavoro, da ogni sezione: lead, scadenze dei pass, rinnovi, disdette, debiti. Si creano dalla scheda della persona (o nascono da soli) e si chiudono con l&apos;esito.</p>
+          <p>Tutto il lavoro, da ogni sezione: lead, scadenze dei pass, rinnovi, disdette, debiti. Si creano dalla scheda della persona (o nascono da soli) e si chiudono con l&apos;esito.{' '}<LinkGuida argomento="task" /></p>
         </div>
       </div>
       <Avviso errore={searchParams.errore} />

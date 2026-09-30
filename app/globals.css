@@ -2125,3 +2125,91 @@ details.scheda .utenti {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
+
+/* ---- Guida (lib/guida, components/TestoGuida.tsx) ------------------------- */
+
+/* L'elenco degli argomenti: ogni scheda e' un link intero. */
+.guida-voce {
+  display: block;
+  color: var(--testo);
+}
+.guida-voce:hover {
+  text-decoration: none;
+  border-color: var(--rosso);
+}
+.guida-voce p {
+  margin: 0 0 8px;
+}
+/* L'argomento: l'indice a sinistra, fermo mentre si legge; sul telefono sopra. */
+.guida {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: 220px minmax(0, 1fr);
+  align-items: start;
+}
+.guida-indice {
+  position: sticky;
+  top: 18px;
+}
+.guida-indice .elenco-breve {
+  padding-left: 0;
+  list-style: none;
+}
+.guida-testo {
+  max-width: 74ch;
+  line-height: 1.55;
+}
+.guida-testo h2 {
+  margin: 28px 0 10px;
+  scroll-margin-top: 18px;
+}
+.guida-testo h2:first-child {
+  margin-top: 4px;
+}
+.guida-testo h3 {
+  margin: 18px 0 6px;
+}
+.guida-testo p {
+  margin: 0 0 12px;
+}
+.guida-testo .punti {
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+.guida-passi {
+  margin: 0 0 12px;
+  padding-left: 1.5em;
+}
+.guida-passi > li {
+  padding: 4px 0;
+}
+.guida-passi > li::marker {
+  color: var(--rosso);
+  font-weight: 700;
+}
+.guida-nota {
+  background: var(--fondo-giallo);
+  color: var(--giallo);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.guida-piede {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+/* «Come funziona», accanto al titolo di ogni sezione. */
+.link-guida {
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+@media (max-width: 860px) {
+  .guida {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .guida-indice {
+    position: static;
+  }
+}

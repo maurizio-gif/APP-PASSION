@@ -19,6 +19,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     { href: '/dashboard', testo: 'Da gestire' },
     ...SEZIONI.filter((s) => puoVedere(io, s.chiave)).map(({ href, testo }) => ({ href, testo })),
     ...(ha(io, 'gestione_utenti') ? [{ href: '/dashboard/utenti', testo: 'Utenti' }] : []),
+    { href: '/dashboard/guida', testo: 'Guida' },
   ]
 
   return (
