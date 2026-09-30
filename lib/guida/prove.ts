@@ -19,14 +19,14 @@ Chi chiede il Pass dal sito ha subito la sua prova, agganciata al suo lead: part
 
 ## Le viste
 - **In corso**: il pass non è ancora finito; prima quelle che finiscono prima;
-- **In scadenza**: finiscono entro 2 giorni. Sono anche in home, nel riquadro **«Prove in scadenza»**;
+- **In scadenza**: finiscono entro 3 giorni. Sono anche in home, nel riquadro **«Prove in scadenza»**;
 - **Finite senza esito**: il pass è finito e non c'è ancora un abbonamento. **Sono quelle da richiamare**;
 - **Chiuse**: con l'esito, iscritto o non iscritto.
 
 Con **Tutti i consulenti** vedi solo le prove che segue un collega.
 
 ## Cosa vedi per ogni prova
-- il **pass**, le date e quanti giorni mancano (in rosso gli ultimi 2);
+- il **pass**, le date e quanti giorni mancano (in rosso gli ultimi 3, quelle in scadenza);
 - **come va**: gli ingressi e l'ultimo, le lezioni prenotate e quelle fatte;
 - **«mai entrato»**: ha il pass ma non è mai venuto. Chiamalo subito;
 - **«ha già un contratto su PerfectGym»**: si è già abbonato, l'esito arriverà da solo;

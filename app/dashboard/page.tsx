@@ -47,7 +47,7 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
         <Link href="/dashboard/prove?vista=in_scadenza" className={`numero${h.prove_in_scadenza ? ' caldo' : ''}`}>
           <div className="etichetta">Prove in scadenza</div>
           <div className="valore">{h.prove_in_scadenza}</div>
-          <div className="nota">entro 2 giorni · {h.prove_in_corso} in corso</div>
+          <div className="nota">entro 3 giorni · {h.prove_in_corso} in corso</div>
         </Link>
         {puoVedere(io, 'contratti') && (
           <Link href="/dashboard/contratti" className="numero">
@@ -145,13 +145,13 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
         <section className="scheda">
           <h2>Prove in scadenza</h2>
           {scadenza.length === 0 ? (
-            <Vuoto>Nessuna prova finisce nei prossimi due giorni.</Vuoto>
+            <Vuoto>Nessuna prova finisce nei prossimi tre giorni.</Vuoto>
           ) : (
             <ul className="elenco">
               {scadenza.map((p) => (
                 <li key={p.id}>
                   <Persona id={p.utente_id} nome={p.nome} cognome={p.cognome} />{' '}
-                  <span className="bollino giallo">{p.giorni_rimasti != null && p.giorni_rimasti <= 1 ? 'domani' : `tra ${p.giorni_rimasti} gg`}</span>
+                  <span className="bollino giallo">{p.giorni_rimasti === 0 ? 'oggi' : p.giorni_rimasti === 1 ? 'domani' : `tra ${p.giorni_rimasti} gg`}</span>
                   <div className="piccolo attenuato">
                     {p.tipo_pass} · {p.ingressi} ingressi · {p.prenotazioni} lezioni prenotate
                     {p.gestito_nome ? ` · segue ${p.gestito_nome}` : ' · nessuno la segue'}
