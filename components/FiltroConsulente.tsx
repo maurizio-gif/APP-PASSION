@@ -3,11 +3,13 @@ import type { Operatore } from '@/lib/crm'
 // Il filtro per consulente, uguale in ogni sezione: una tendina con gli
 // operatori che ricevono lead e task (`crm.staff()`), che rimanda alla stessa
 // pagina con `consulente=<id>` e gli altri parametri della vista (`tieni`).
-export function FiltroConsulente({ azione, staff, consulente, tieni = {} }: {
+// `children`: altre tendine della sezione, inviate con lo stesso Filtra.
+export function FiltroConsulente({ azione, staff, consulente, tieni = {}, children }: {
   azione: string
   staff: Operatore[]
   consulente: string | null
   tieni?: Record<string, string>
+  children?: React.ReactNode
 }) {
   return (
     <form className="filtri" action={azione}>
@@ -16,6 +18,7 @@ export function FiltroConsulente({ azione, staff, consulente, tieni = {} }: {
         <option value="">Tutti i consulenti</option>
         {staff.map((o) => <option key={o.id} value={o.id}>{o.nome} {o.cognome ?? ''}</option>)}
       </select>
+      {children}
       <button className="bottone secondario" type="submit">Filtra</button>
     </form>
   )
