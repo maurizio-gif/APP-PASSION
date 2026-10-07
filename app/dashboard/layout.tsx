@@ -21,6 +21,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     ...(ha(io, 'gestione_utenti') ? [{ href: '/dashboard/utenti', testo: 'Utenti' }] : []),
     ...(puoRiunioni(io) ? [{ href: '/dashboard/riunioni', testo: 'Report riunioni' }] : []),
     { href: '/dashboard/guida', testo: 'Guida' },
+    { href: '/dashboard/aggiornamenti', testo: 'Aggiornamenti' },
   ]
 
   return (
