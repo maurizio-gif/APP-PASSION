@@ -10,10 +10,17 @@ const VISTE = [
   { chiave: 'mie', testo: 'I miei' },
   // In gestione, ma senza un task aperto da oggi in avanti: nessuno ha fissato il prossimo passo.
   { chiave: 'senza_task', testo: 'Senza task' },
+  // Prove in corso: il Pass e' attivo. Prove scadute: il Pass e' finito senza
+  // abbonamento. Vinte: chiuse con un abbonamento.
+  { chiave: 'in_prova', testo: 'Prove in corso' },
+  { chiave: 'prove_scadute', testo: 'Prove scadute' },
   { chiave: 'vinte', testo: 'Vinte' },
   { chiave: 'perse', testo: 'Perse' },
   { chiave: 'tutte', testo: 'Tutti' },
 ]
+
+// «Nessun consulente»: i lead senza assegnatario (uuid a zero per crm_lead).
+const NESSUN_CONSULENTE = '00000000-0000-0000-0000-000000000000'
 
 type Filtri = { vista?: string; fonte?: string; q?: string; consulente?: string; errore?: string }
 
@@ -24,8 +31,16 @@ export default async function Lead({ searchParams }: { searchParams: Filtri }) {
   const q = searchParams.q?.slice(0, 80) || null
   const staff = await crm.staff()
   // Il consulente a cui e' assegnato il lead: uno degli operatori attivi.
-  const consulente = staff.some((o) => o.id === searchParams.consulente) ? searchParams.consulente! : null
+  const consulente = searchParams.consulente === NESSUN_CONSULENTE || staff.some((o) => o.id === searchParams.consulente) ? searchParams.consulente! : null
   const [lead, io] = await Promise.all([crm.lead(vista, fonte, q, consulente), crm.io()])
+  // Prove in corso, Prove scadute e Vinte: al posto di attivita' e note, il contratto.
+  const conContratto = ['in_prova', 'prove_scadute', 'vinte'].includes(vista)
+  const contratti = conContratto ? await crm.leadContratti(lead.map((l) => l.id)) : null
+  // Nelle Vinte: per data di firma del contratto, dal piu' recente (senza firma in fondo).
+  if (vista === 'vinte' && contratti) {
+    const firma = (id: string) => { const d = contratti[id]?.data_firma; return d ? new Date(d).getTime() : -Infinity }
+    lead.sort((a, b) => firma(b.id) - firma(a.id))
+  }
   const filtri = [fonte && `fonte=${fonte}`, q && `q=${encodeURIComponent(q)}`, consulente && `consulente=${consulente}`].filter(Boolean).join('&')
   const qui = `/dashboard/lead?vista=${vista}${filtri ? `&${filtri}` : ''}`
   const base = `/dashboard/lead${filtri ? `?${filtri}` : ''}`
@@ -52,6 +67,7 @@ export default async function Lead({ searchParams }: { searchParams: Filtri }) {
         </select>
         <select name="consulente" defaultValue={consulente ?? ''} aria-label="Consulente">
           <option value="">Tutti i consulenti</option>
+          <option value={NESSUN_CONSULENTE}>Nessun consulente</option>
           {staff.map((o) => <option key={o.id} value={o.id}>{o.nome} {o.cognome ?? ''}</option>)}
         </select>
         <button className="bottone secondario" type="submit">Filtra</button>
@@ -61,7 +77,7 @@ export default async function Lead({ searchParams }: { searchParams: Filtri }) {
         {lead.length === 0 ? (
           <Vuoto>Nessun lead qui.</Vuoto>
         ) : (
-          <TabellaLead lead={lead} io={io} staff={staff} torna={qui} />
+          <TabellaLead lead={lead} io={io} staff={staff} torna={qui} contratti={contratti} firma={vista === 'vinte'} />
         )}
         <p className="piccolo attenuato conteggio">{lead.length === 200 ? 'I 200 più recenti' : `${lead.length} lead`}</p>
       </div>

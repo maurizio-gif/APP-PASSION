@@ -1,6 +1,7 @@
 import { crm, richiediSezione } from '@/lib/crm'
 import { CONTROLLO, formatoData, formatoEuro, traduci } from '@/lib/formato'
 import { Avviso, Contatti, Persona, Schede, Vuoto } from '@/components/Ui'
+import { BollinoPagamento } from '@/components/Bollini'
 import { aggiornaContratto } from '../azioni'
 
 const VISTE = [
@@ -15,6 +16,7 @@ export default async function Contratti({ searchParams }: { searchParams: { vist
   await richiediSezione('contratti')
   const vista = VISTE.some((v) => v.chiave === searchParams.vista) ? searchParams.vista! : 'da_controllare'
   const contratti = await crm.nuoviContratti(vista)
+  const pagamenti = await crm.pagamenti(contratti.map((c) => c.contract_id))
   const qui = `/dashboard/contratti?vista=${vista}`
 
   return (
@@ -46,7 +48,8 @@ export default async function Contratti({ searchParams }: { searchParams: { vist
             <p className="piccolo">
               <strong>{c.piano ?? '—'}</strong> · {formatoEuro(c.canone)} · firmato {formatoData(c.data_firma)} · dal {formatoData(c.data_inizio)}
               {c.consulente_pgm ? ` · venduto da ${c.consulente_pgm}` : ''}
-              {c.gestito_nome ? ` · controllato da ${c.gestito_nome}` : ''}
+              {c.gestito_nome ? ` · controllato da ${c.gestito_nome}` : ''}{' '}
+              <BollinoPagamento p={pagamenti[c.contract_id]} />
             </p>
             <p className="piccolo">
               Su PerfectGym:{' '}

@@ -3,6 +3,7 @@ import { formatoData, formatoFa } from '@/lib/formato'
 import { Avviso, BollinoFonte, Contatti, Gestione, LinkGuida, Persona, Schede, Vuoto } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
 import { SceltaOperatore } from '@/components/SceltaOperatore'
+import { BollinoPagamento } from '@/components/Bollini'
 import { aggiornaProva } from '../azioni'
 
 const VISTE = [
@@ -47,6 +48,7 @@ export default async function Prove({ searchParams }: { searchParams: { vista?: 
   // Il consulente: chi segue la prova.
   const consulente = consulenteScelto(staff, searchParams.consulente)
   const prove = await crm.prove(vista, consulente)
+  const pagamenti = await crm.pagamenti(prove.map((p) => p.contract_id))
   // sort e' stabile: a parita' resta l'ordine di crm_prove.
   if (ordine.confronto) prove.sort(ordine.confronto)
   // Consulente e ordine restano cambiando scheda e dopo il Salva.
@@ -59,6 +61,7 @@ export default async function Prove({ searchParams }: { searchParams: { vista?: 
         <div>
           <h1>Prove</h1>
           <p>
+            Qui ci sono solo le prove attivate, cioè con il Pass su PerfectGym: chi ha solo chiesto la prova resta fra i Lead.
             Il Pass arriva da PerfectGym da solo, e anche l&apos;esito: Iscritto quando compare l&apos;abbonamento, Non iscritto 30 giorni
             dopo la fine del pass. Qui si segue la persona fino all&apos;iscrizione.{' '}
             <LinkGuida argomento="prove" />
@@ -98,6 +101,7 @@ export default async function Prove({ searchParams }: { searchParams: { vista?: 
                     <td className="piccolo info">
                       <div>{p.tipo_pass ?? '—'}</div>
                       <div className="attenuato nowrap">{formatoData(p.data_inizio)} → {formatoData(p.data_fine)}</div>
+                      {p.contract_id != null && <BollinoPagamento p={pagamenti[p.contract_id]} />}
                       {p.giorni_rimasti != null && p.giorni_rimasti >= 0 && !p.esito && (
                         <span className={`bollino ${p.giorni_rimasti <= 3 ? 'rosso' : 'giallo'}`}>
                           {p.giorni_rimasti === 0 ? 'finisce oggi' : `${p.giorni_rimasti} gg`}

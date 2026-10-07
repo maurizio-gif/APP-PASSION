@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
-import { crm, linkPgm, type Scheda } from '@/lib/crm'
+import { crm, linkPgm, type Pagamento, type Scheda } from '@/lib/crm'
+import { DatiPagamento } from '@/components/Bollini'
 import {
   CONTROLLO, ESITO_DISDETTA, ESITO_RINNOVO, FONTE, formatoData, formatoDataOra, formatoEuro, formatoGiorno, formatoOra,
   MOTIVI_DISDETTA, oggiRoma, STATO_CONTRATTO, TIPO_SOCIO, TIPO_TASK, traduci,
@@ -34,6 +35,8 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
   const controllo = (id: number) =>
     puoVedere(io, 'contratti') ? s.nuovi_contratti.find((n) => n.contract_id === id)?.controllo : undefined
   const rinnovi = s.rinnovi ?? []
+  // Pagato o da pagare: per gli abbonamenti e per il Pass di ogni prova.
+  const pagamenti = await crm.pagamenti([...(s.socio?.contratti ?? []).map((c) => c.id), ...s.prove.map((pr) => pr.contract_id)])
   // Per cosa si fa il nuovo task: quello che della persona e' ancora aperto.
   // Il primo e' scelto; «nessuno» lo lascia solo alla persona.
   const per = [
@@ -58,7 +61,8 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
       <div className="griglia">
         {/* ---- Colonna 1: il lavoro ---- */}
         <div>
-          {s.lead.map((l) => {
+          {(() => {
+            const carta = (l: Scheda['lead'][number]) => {
             const puo = puoGestire(io, l.assegnato_a)
             return (
               <section className="scheda" key={l.id}>
@@ -70,6 +74,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                 </div>
                 <dl className="dati">
                   <dt>Arrivato</dt><dd>{formatoDataOra(l.creato_il)}</dd>
+                  {(l.richieste ?? 1) > 1 && (<><dt>Richieste</dt><dd>{l.richieste} volte{l.ultima_richiesta_il ? `, l'ultima il ${formatoDataOra(l.ultima_richiesta_il)}` : ''}</dd></>)}
                   {l.fonte_dettaglio && (<><dt>Da</dt><dd>{l.fonte_dettaglio}</dd></>)}
                   {l.attivita_interesse && (<><dt>Interesse</dt><dd>{l.attivita_interesse}</dd></>)}
                   {l.orario_ricontatto && (<><dt>Richiamare</dt><dd>{l.orario_ricontatto}</dd></>)}
@@ -143,9 +148,24 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                 )}
               </section>
             )
-          })}
+            }
+            const aperti = s.lead.filter((l) => l.fase === 'da_gestire' || l.fase === 'in_gestione')
+            const chiusi = s.lead.filter((l) => !(l.fase === 'da_gestire' || l.fase === 'in_gestione'))
+            return (
+              <>
+                {aperti.map(carta)}
+                {chiusi.length > 0 && (
+                  <details className="contratti-precedenti" open={aperti.length === 0 && chiusi.length === 1}>
+                    <summary><strong>Storico lead</strong> <span className="attenuato">· {chiusi.length}</span></summary>
+                    {chiusi.map(carta)}
+                  </details>
+                )}
+              </>
+            )
+          })()}
 
-          {s.prove.map((pr) => (
+          {(() => {
+            const carta = (pr: Scheda['prove'][number]) => (
             <section className="scheda" key={pr.id}>
               <div className="testata-scheda">
                 <h2>Prova</h2>
@@ -155,7 +175,8 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
               </div>
               <dl className="dati">
                 <dt>Pass</dt><dd>{pr.tipo_pass ?? '—'}</dd>
-                <dt>Dal</dt><dd>{formatoData(pr.data_inizio)} al {formatoData(pr.data_fine)}</dd>
+                <dt>Dal</dt><dd>{pr.data_fine ? `${formatoData(pr.data_inizio)} al ${formatoData(pr.data_fine)}` : `richiesta del ${formatoData(pr.data_inizio)}, senza pass su PerfectGym`}</dd>
+                <DatiPagamento p={pr.contract_id != null ? pagamenti[pr.contract_id] : null} />
                 <dt>La segue</dt><dd>{pr.gestito_nome ?? <span className="attenuato">nessuno</span>}</dd>
                 {pr.esito && pr.obiezione && (<><dt>Obiezione</dt><dd>{pr.obiezione}</dd></>)}
               </dl>
@@ -220,7 +241,21 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                 </form>
               )}
             </section>
-          ))}
+            )
+            const aperte = s.prove.filter((pr) => !pr.esito)
+            const chiuse = s.prove.filter((pr) => pr.esito)
+            return (
+              <>
+                {aperte.map(carta)}
+                {chiuse.length > 0 && (
+                  <details className="contratti-precedenti" open={aperte.length === 0 && chiuse.length === 1}>
+                    <summary><strong>Storico prove</strong> <span className="attenuato">· {chiuse.length}</span></summary>
+                    {chiuse.map(carta)}
+                  </details>
+                )}
+              </>
+            )
+          })()}
 
           {/* Gli abbonamenti di PerfectGym, senza i certificati medici (che su
               PerfectGym sono contratti aggiuntivi): in vista quello in corso,
@@ -232,13 +267,13 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                 <Vuoto>Nessun abbonamento su PerfectGym.</Vuoto>
               ) : (
                 <>
-                  <Contratto c={ultimo} controllo={controllo(ultimo.id)} />
+                  <Contratto c={ultimo} controllo={controllo(ultimo.id)} pagamento={pagamenti[ultimo.id]} />
                   {precedenti.length > 0 && (
                     <details className="contratti-precedenti">
                       <summary>
                         <strong>Storico abbonamenti</strong> <span className="attenuato">· {precedenti.length}</span>
                       </summary>
-                      {precedenti.map((c) => <Contratto key={c.id} c={c} controllo={controllo(c.id)} />)}
+                      {precedenti.map((c) => <Contratto key={c.id} c={c} controllo={controllo(c.id)} pagamento={pagamenti[c.id]} />)}
                     </details>
                   )}
                 </>
@@ -443,7 +478,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
 type Socio = NonNullable<Scheda['socio']>
 
 // Un abbonamento: il nome del piano, lo stato e le sue date.
-function Contratto({ c, controllo }: { c: Socio['contratti'][number]; controllo?: string }) {
+function Contratto({ c, controllo, pagamento }: { c: Socio['contratti'][number]; controllo?: string; pagamento?: Pagamento }) {
   return (
     <div className="abbonamento">
       <div className="testata-scheda">
@@ -462,6 +497,7 @@ function Contratto({ c, controllo }: { c: Socio['contratti'][number]; controllo?
         {c.giorno_addebito != null && (<><dt>Addebito</dt><dd>il {c.giorno_addebito} del mese</dd></>)}
         <dt>Rinnovo automatico</dt><dd>{c.rinnovo_automatico ? 'sì' : 'no'}</dd>
         {c.aggiuntivo && (<><dt>Tipo</dt><dd>contratto aggiuntivo</dd></>)}
+        <DatiPagamento p={pagamento} />
         {controllo && (<><dt>Controllo</dt><dd>{traduci(CONTROLLO, controllo)}</dd></>)}
       </dl>
     </div>

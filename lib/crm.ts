@@ -270,11 +270,13 @@ export type Scheda = {
     pgm_lead_id?: number | null
     pgm_errore?: string | null
     consenso_privacy?: boolean | null
+    richieste?: number
+    ultima_richiesta_il?: string | null
   }[]
   // automatico: l'esito l'ha messo il mirror (20260929u); abbonamento: quello
   // che l'ha chiusa come iscritto.
   prove: {
-    id: string; tipo_pass: string | null; data_inizio: string | null; data_fine: string | null; esito: Prova['esito']
+    id: string; contract_id?: number | null; tipo_pass: string | null; data_inizio: string | null; data_fine: string | null; esito: Prova['esito']
     obiezione: string | null; gestito_nome: string | null; gestito_da?: string | null; note: string | null
     automatico?: boolean; abbonamento?: { piano: string; dal: string } | null
   }[]
@@ -575,6 +577,24 @@ export type Riunione = {
   azioni: AzioneRiunione[]
 }
 
+// Lo stato dei pagamenti di un contratto, letto dal mirror (20261007c):
+// scaduto = quanto c'e' da pagare sugli addebiti con scadenza fino a oggi.
+export type Pagamento = {
+  contract_id: number
+  member_id: number | null
+  saldo: number | null
+  pagato: number
+  addebiti: number
+  scaduto: number
+  scaduto_dal: string | null
+  da_pagare_futuro: number
+  prossima_scadenza: string | null
+  ultimo_pagamento: string | null
+}
+
+// Il contratto che ha chiuso un lead: abbonamento o Pass (20261007g).
+export type ContrattoLead = { lead_id: string; contract_id: number; piano: string | null; data_firma: string | null; data_inizio: string | null; e_pass: boolean }
+
 export const crm = {
   // Una volta per richiesta: la chiedono il layout e la pagina.
   io: cache(() => rpc<Io>('crm_io')),
@@ -582,7 +602,21 @@ export const crm = {
   home: () => rpc<Home>('crm_home'),
   lead: (vista: string, fonte: string | null, testo: string | null, consulente: string | null = null) =>
     rpc<Lead[]>('crm_lead', { p_vista: vista, p_fonte: fonte, p_testo: testo, p_consulente: consulente }),
+  leadContratti: async (lead: string[]) => {
+    const per: Record<string, ContrattoLead> = {}
+    if (lead.length === 0) return per
+    for (const r of await rpc<ContrattoLead[]>('crm_lead_contratti', { p_lead: lead })) per[r.lead_id] = r
+    return per
+  },
   prove: (vista: string, consulente: string | null = null) => rpc<Prova[]>('crm_prove', { p_vista: vista, p_consulente: consulente }),
+  // Un giro solo per tutti i contratti di una pagina; chi non e' qui non ha dati.
+  pagamenti: async (contratti: (number | null | undefined)[]) => {
+    const ids = Array.from(new Set(contratti.filter((c): c is number => c != null)))
+    const per: Record<number, Pagamento> = {}
+    if (ids.length === 0) return per
+    for (const r of await rpc<Pagamento[]>('crm_pagamenti', { p_contratti: ids })) per[r.contract_id] = r
+    return per
+  },
   nuoviContratti: (vista: string) => rpc<NuovoContratto[]>('crm_nuovi_contratti', { p_vista: vista }),
   disdette: (vista: string, consulente: string | null = null) =>
     rpc<Disdetta[]>('crm_disdette', { p_vista: vista, p_consulente: consulente }),
