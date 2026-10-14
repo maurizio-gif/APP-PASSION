@@ -16,6 +16,13 @@ export type Aggiornamento = {
 
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
+    data: '2026-10-23',
+    titolo: 'Nelle Opportunità con il contratto si vede se è pagato',
+    testo:
+      'Nelle schede Prove in corso, Prove scadute e Vinte c’è la colonna Pagamento: dice se il Pass o l’abbonamento è pagato (verde) o da pagare (rosso, con l’importo). Prima per saperlo bisognava aprire la scheda della persona.',
+    dove: 'Opportunità → Prove in corso, Prove scadute, Vinte',
+  },
+  {
     data: '2026-10-21',
     titolo: 'Chi deve rinnovare non compare più anche fra le disdette',
     testo:

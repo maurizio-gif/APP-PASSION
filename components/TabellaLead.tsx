@@ -1,7 +1,8 @@
 import Link from 'next/link'
-import type { ContrattoLead, Io, Lead, Operatore } from '@/lib/crm'
+import type { ContrattoLead, Io, Lead, Operatore, Pagamento } from '@/lib/crm'
 import { formatoData, formatoOra, nomeCompleto } from '@/lib/formato'
 import { BollinoFase, BollinoFonte } from '@/components/Ui'
+import { BollinoPagamento } from '@/components/Bollini'
 import { assegnaLead, prendiLead, rilasciaLead } from '@/app/dashboard/azioni'
 import { puoGestire } from '@/lib/permessi'
 
@@ -24,7 +25,12 @@ function NomeScheda({ href, l }: { href: string; l: Lead }) {
   )
 }
 
-export function TabellaLead({ lead, io, staff, torna, contratti, firma }: { lead: Lead[]; io: Io; staff: Operatore[]; torna: string; contratti?: Record<string, ContrattoLead> | null; firma?: boolean }) {
+export function TabellaLead({ lead, io, staff, torna, contratti, pagamenti, firma }: { lead: Lead[]; io: Io; staff: Operatore[]; torna: string; contratti?: Record<string, ContrattoLead> | null; pagamenti?: Record<number, Pagamento> | null; firma?: boolean }) {
+  // Pagato / da pagare del contratto di una riga (lo stesso bollino della scheda persona).
+  const pagamento = (id: string) => {
+    const c = contratti?.[id]
+    return c ? pagamenti?.[c.contract_id] : undefined
+  }
   return (
     <>
       <div className="tabella-scorre solo-computer">
@@ -39,6 +45,7 @@ export function TabellaLead({ lead, io, staff, torna, contratti, firma }: { lead
                 <>
                   <th>Abbonamento</th>
                   <th>Inizio</th>
+                  <th>Pagamento</th>
                   <th>Consulente</th>
                 </>
               ) : (
@@ -65,6 +72,7 @@ export function TabellaLead({ lead, io, staff, torna, contratti, firma }: { lead
                     <>
                       <td><span className="taglia" title={contratti[l.id]?.piano ?? undefined}>{contratti[l.id]?.piano || '–'}</span></td>
                       <td className="nowrap">{contratti[l.id]?.data_inizio ? formatoData(contratti[l.id].data_inizio) : '–'}</td>
+                      <td className="nowrap"><BollinoPagamento p={pagamento(l.id)} /></td>
                       <td className="nowrap">{l.assegnato_nome || <span className="attenuato">nessuno</span>}</td>
                     </>
                   ) : (
@@ -92,7 +100,8 @@ export function TabellaLead({ lead, io, staff, torna, contratti, firma }: { lead
             <li key={l.id} className={assegna(l, io) ? 'con-modulo' : undefined}>
               <div className="lead-telefono-testa">
                 <NomeScheda href={`/dashboard/persone/${l.utente_id}`} l={l} />{' '}
-                <BollinoFonte fonte={l.fonte} dettaglio={l.fonte_dettaglio} />
+                <BollinoFonte fonte={l.fonte} dettaglio={l.fonte_dettaglio} />{' '}
+                <BollinoPagamento p={pagamento(l.id)} />
               </div>
               <div className="lead-telefono-dettaglio">{dettaglio}</div>
               <div className="lead-telefono-azione"><Azione l={l} io={io} staff={staff} torna={torna} /></div>
