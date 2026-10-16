@@ -94,6 +94,31 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
           )}
 
           <section className="scheda">
+            <h2>Allegati</h2>
+            {t.allegati.length === 0 ? (
+              <p className="vuoto">Nessun allegato.</p>
+            ) : (
+              <ul className="allegati-elenco">
+                {t.allegati.map((a) => {
+                  const url = link.get(a.percorso)
+                  const immagine = a.tipo?.startsWith('image/') && a.tipo !== 'image/heic' && a.tipo !== 'image/heif'
+                  return (
+                    <li key={a.id}>
+                      {url ? (
+                        <a href={url} target="_blank" rel="noreferrer">
+                          {immagine ? <img src={url} alt={a.nome} loading="lazy" /> : <span className="allegato-file">{a.nome}</span>}
+                        </a>
+                      ) : <span className="allegato-file attenuato">{a.nome} (non raggiungibile)</span>}
+                      <div className="piccolo attenuato">{a.caricato_nome} · {formatoDataOra(a.caricato_il)}</div>
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
+            {t.stato !== 'doppione' && <CaricaAllegati ticket={t.id} />}
+          </section>
+
+          <section className="scheda">
             <h2>Filo</h2>
             <ul className="filo-ticket">
               {t.messaggi.map((m) => (
@@ -117,31 +142,6 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
                 <BottoneInvio testo="Aggiungi al filo" inCorso="Invio…" classe="secondario" />
               </form>
             )}
-          </section>
-
-          <section className="scheda">
-            <h2>Allegati</h2>
-            {t.allegati.length === 0 ? (
-              <p className="vuoto">Nessun allegato.</p>
-            ) : (
-              <ul className="allegati-elenco">
-                {t.allegati.map((a) => {
-                  const url = link.get(a.percorso)
-                  const immagine = a.tipo?.startsWith('image/') && a.tipo !== 'image/heic' && a.tipo !== 'image/heif'
-                  return (
-                    <li key={a.id}>
-                      {url ? (
-                        <a href={url} target="_blank" rel="noreferrer">
-                          {immagine ? <img src={url} alt={a.nome} loading="lazy" /> : <span className="allegato-file">{a.nome}</span>}
-                        </a>
-                      ) : <span className="allegato-file attenuato">{a.nome} (non raggiungibile)</span>}
-                      <div className="piccolo attenuato">{a.caricato_nome} · {formatoDataOra(a.caricato_il)}</div>
-                    </li>
-                  )
-                })}
-              </ul>
-            )}
-            {t.stato !== 'doppione' && <CaricaAllegati ticket={t.id} />}
           </section>
         </div>
 
