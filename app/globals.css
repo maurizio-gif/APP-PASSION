@@ -5831,3 +5831,81 @@ select {
     border-top-right-radius: calc(var(--raggio) - 1px);
   }
 }
+
+/* ---- Ticket: elenco in ordine, colonne con larghezze fisse, avviso e etichette pulite ---- */
+@media (min-width: 721px) {
+  .tabella-ticket {
+    table-layout: fixed;
+    min-width: 860px;
+  }
+  .tabella-ticket.con-cliente th:nth-child(1) { width: 40%; }
+  .tabella-ticket.con-cliente th:nth-child(2) { width: 18%; }
+  .tabella-ticket.con-cliente th:nth-child(3) { width: 17%; }
+  .tabella-ticket.con-cliente th:nth-child(4) { width: 25%; }
+  .tabella-ticket:not(.con-cliente) th:nth-child(1) { width: 50%; }
+  .tabella-ticket:not(.con-cliente) th:nth-child(2) { width: 22%; }
+  .tabella-ticket:not(.con-cliente) th:nth-child(3) { width: 28%; }
+  .tabella-ticket td { overflow-wrap: anywhere; }
+}
+.tabella-ticket .ticket-titolo {
+  display: block;
+  line-height: 1.35;
+}
+.tabella-ticket .ticket-titolo .numero-ticket {
+  margin-right: 4px;
+  font-weight: 600;
+  color: var(--testo-attenuato);
+}
+.ticket-bollini {
+  gap: 6px;
+  margin: 6px 0 0;
+}
+.ticket-bollini .bollino {
+  font-size: 0.72rem;
+  padding: 2px 9px;
+  line-height: 1.5;
+}
+.ticket-bollini .muto {
+  font-size: 0.8rem;
+}
+
+/* Avviso in cima alla pagina: banda rossa sfumata con la barra a sinistra. */
+.contenuto > .avviso {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border-left: 4px solid var(--rosso);
+  background: linear-gradient(to right, rgba(227, 3, 45, 0.32), rgba(227, 3, 45, 0.08) 70%, rgba(227, 3, 45, 0));
+  color: #fff;
+  font-weight: 600;
+}
+.contenuto > .avviso::before {
+  content: '!';
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--rosso);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+:root[data-tema='chiaro'] .contenuto > .avviso {
+  color: var(--rosso-scuro);
+  background: linear-gradient(to right, rgba(227, 3, 45, 0.16), rgba(227, 3, 45, 0.05) 70%, rgba(227, 3, 45, 0));
+}
+.contenuto > .avviso.ok {
+  border-left-color: var(--verde);
+  background: linear-gradient(to right, rgba(15, 123, 63, 0.3), rgba(15, 123, 63, 0.06) 70%, rgba(15, 123, 63, 0));
+}
+.contenuto > .avviso.ok::before {
+  content: '✓';
+  background: var(--verde);
+}
+:root[data-tema='chiaro'] .contenuto > .avviso.ok {
+  color: var(--verde);
+}

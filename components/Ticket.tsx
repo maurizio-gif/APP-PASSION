@@ -27,12 +27,12 @@ export function NumeroTicket({ id }: { id: number }) {
 export function TabellaTicket({ ticket, socio = true }: { ticket: TicketRiga[]; socio?: boolean }) {
   return (
     <div className="tabella-scorre">
-      <table className="schede-mobile tabella-colonne">
+      <table className={`schede-mobile tabella-colonne tabella-ticket${socio ? ' con-cliente' : ''}`}>
         <thead>
           <tr>
             <th>Ticket</th>
-            {socio && <th>Socio</th>}
-            <th>Aperto</th>
+            {socio && <th>Cliente</th>}
+            <th>Aperto da</th>
             <th>Ultimo movimento</th>
           </tr>
         </thead>
