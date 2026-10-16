@@ -5421,3 +5421,11 @@ select {
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.5);
 }
+
+/* Sfumatura rossa leggera: un velo in alto e uno in basso, il centro resta scuro. */
+.barra {
+  background:
+    radial-gradient(130% 30% at 0% 0%, rgba(227, 3, 45, 0.18), rgba(227, 3, 45, 0) 70%),
+    radial-gradient(120% 45% at 0% 100%, rgba(227, 3, 45, 0.24), rgba(227, 3, 45, 0) 70%),
+    var(--nero);
+}
