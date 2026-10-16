@@ -43,7 +43,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
             </div>
             <div className="barra-utente">
               <strong>{io.nome} {io.cognome}</strong>
-              <span>{testoRuolo(io.ruolo)}</span>
+              {io.ruolo !== 'consulente' && <span>{testoRuolo(io.ruolo)}</span>}
             </div>
             <form action={logout}>
               <button type="submit">Esci</button>

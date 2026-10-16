@@ -12,10 +12,10 @@ export function Iniziali({ nome, cognome, classe = '' }: { nome: string | null; 
 // Quanto manca alla fine del pass, a parole: rosso l'ultimo giorno, giallo
 // negli ultimi tre, verde dopo. Niente per le prove chiuse o senza date.
 function StatoPass({ p }: { p: Prova }) {
-  if (p.esito || !p.data_fine || p.giorni_rimasti == null || p.giorni_rimasti < 0) return null
+  if (p.esito || p.giorni_rimasti == null || p.giorni_rimasti < 0) return null
   const g = p.giorni_rimasti
-  const colore = g === 0 ? 'rosso' : g <= 3 ? 'giallo' : 'verde'
-  const testo = g === 0 ? 'Finisce oggi' : g === 1 ? '1 giorno rimasto' : `${g} giorni rimasti`
+  const colore = g <= 3 ? 'rosso' : 'giallo'
+  const testo = g === 0 ? 'Finisce oggi' : `${g} gg`
   return <span className={`stato ${colore}`}>{testo}</span>
 }
 
@@ -30,9 +30,9 @@ export function RigaProva({ p, pagamento, etichette, children }: { p: Prova; pag
           <Persona id={p.utente_id} nome={p.nome} cognome={p.cognome} />
           <Contatti telefono={p.telefono} email={p.email} />
           {p.gestito_nome ? (
-            <span className="muto">Segue {p.gestito_nome}</span>
+            <span className="muto">segue {p.gestito_nome}</span>
           ) : (
-            <span className="etichetta-riga"><span className="bollino giallo">da assegnare</span></span>
+            <span className="muto">nessuno la segue</span>
           )}
         </div>
       </td>
@@ -47,7 +47,7 @@ export function RigaProva({ p, pagamento, etichette, children }: { p: Prova; pag
       <td>
         <div className="riga-dati">
           <span><strong>{p.ingressi}</strong> ingressi</span>
-          <span><strong>{p.presenze}/{p.prenotazioni}</strong> lezioni fatte</span>
+          <span><strong>{p.prenotazioni}</strong> lezioni prenotate · {p.presenze} fatte</span>
           {p.ultimo_ingresso && <span className="muto">Ultimo ingresso {formatoFa(p.ultimo_ingresso)}</span>}
           {p.ingressi === 0 && <span className="stato rosso">Mai entrato</span>}
           {p.iscritto_su_pgm && !p.esito && <span className="etichetta-riga"><span className="bollino verde">ha già un contratto su PerfectGym</span></span>}

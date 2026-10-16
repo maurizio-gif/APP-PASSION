@@ -259,8 +259,8 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
           ) : (
             <div><dt>PerfectGym</dt><dd className="attenuato">non ancora agganciato a un socio</dd></div>
           )}
-          {p.codice_fiscale && <div><dt>Codice fiscale</dt><dd>{p.codice_fiscale}</dd></div>}
-          {p.data_nascita && <div><dt>Nato il</dt><dd>{formatoData(p.data_nascita)}</dd></div>}
+          {s.socio && p.codice_fiscale && <div><dt>Codice fiscale</dt><dd>{p.codice_fiscale}</dd></div>}
+          {s.socio && p.data_nascita && <div><dt>Nato il</dt><dd>{formatoData(p.data_nascita)}</dd></div>}
         </dl>
       </section>
 

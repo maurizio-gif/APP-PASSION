@@ -52,7 +52,7 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
       </div>
       <Avviso errore={searchParams.errore} />
       <SchedeMulti gruppi={[
-        { testo: 'Situazione', tono: 'prova', voci: VISTE.map((v) => ({ testo: v.testo.replace(/^Abbonamento /, '').replace(/^./, (c) => c.toUpperCase()), href: `/dashboard/debitori?vista=${v.chiave}&chi=${chi}${perConsulente}`, attivo: v.chiave === vista })) },
+        { testo: 'Situazione', tono: 'prova', voci: VISTE.map((v) => ({ testo: v.testo, href: `/dashboard/debitori?vista=${v.chiave}&chi=${chi}${perConsulente}`, attivo: v.chiave === vista })) },
         { testo: 'Chi li segue', tono: 'lavoro', voci: CHI.map((v) => ({ testo: v.testo, href: `/dashboard/debitori?vista=${vista}&chi=${v.chiave}${perQ}`, attivo: !consulente && v.chiave === chi })) },
       ]} />
       <FiltroConsulente azione="/dashboard/debitori" staff={staff} consulente={consulente} tieni={{ vista, chi: 'tutti' }} q={q} />
