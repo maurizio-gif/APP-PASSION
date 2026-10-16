@@ -32,7 +32,7 @@ export default async function Ticket({ searchParams }: { searchParams: { vista?:
   const gruppi: GruppoSchede[] = [
     { chiave: 'lavoro', testo: 'Da lavorare', tono: 'lavoro' },
     { chiave: 'tuoi', testo: 'Per te', tono: 'prova' },
-  { chiave: 'modifiche', testo: 'Modifiche al CRM', tono: 'lavoro' },
+  { chiave: 'modifiche', testo: 'Proposte', tono: 'lavoro' },
     { chiave: 'archivio', testo: 'Archivio', tono: 'chiusi' },
   ]
   const predefinita = assiste(io) ? 'r2d' : smista(io) ? 'da_verificare' : 'miei'
