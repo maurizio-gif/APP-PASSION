@@ -1,6 +1,7 @@
 import { crm, richiediSezione, type Prova } from '@/lib/crm'
 import { Avviso, LinkGuida, Schede, Vuoto, type GruppoSchede } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
+import { filtraTesto, testoCercato } from '@/lib/ricerca'
 import { TabellaProve } from '@/components/TabellaProve'
 
 const GRUPPI: GruppoSchede[] = [
@@ -41,19 +42,20 @@ const ORDINI: { chiave: string; testo: string; confronto?: (a: Prova, b: Prova) 
 // (ingressi, lezioni) e com'e' finita. L'esito lo mette il mirror (20260929u):
 // iscritto quando su PerfectGym compare l'abbonamento, non iscritto 30 giorni
 // dopo la fine del pass. A mano si chiude prima come non iscritto.
-export default async function Prove({ searchParams }: { searchParams: { vista?: string; consulente?: string; ordine?: string; errore?: string } }) {
+export default async function Prove({ searchParams }: { searchParams: { vista?: string; consulente?: string; ordine?: string; q?: string; errore?: string } }) {
   await richiediSezione('prove')
   const vista = VISTE.some((v) => v.chiave === searchParams.vista) ? searchParams.vista! : 'in_corso'
   const ordine = ORDINI.find((o) => o.chiave === searchParams.ordine) ?? ORDINI[0]
   const staff = await crm.staff()
   // Il consulente: chi segue la prova.
   const consulente = consulenteScelto(staff, searchParams.consulente)
-  const prove = await crm.prove(vista, consulente)
+  const q = testoCercato(searchParams.q)
+  const prove = filtraTesto(await crm.prove(vista, consulente), q)
   const pagamenti = await crm.pagamenti(prove.map((p) => p.contract_id))
   // sort e' stabile: a parita' resta l'ordine di crm_prove.
   if (ordine.confronto) prove.sort(ordine.confronto)
   // Consulente e ordine restano cambiando scheda e dopo il Salva.
-  const resta = [consulente && `consulente=${consulente}`, ordine.confronto && `ordine=${ordine.chiave}`].filter(Boolean).join('&')
+  const resta = [consulente && `consulente=${consulente}`, ordine.confronto && `ordine=${ordine.chiave}`, q && `q=${encodeURIComponent(q)}`].filter(Boolean).join('&')
   const qui = `/dashboard/prove?vista=${vista}${resta ? `&${resta}` : ''}`
 
   return (
@@ -74,7 +76,7 @@ export default async function Prove({ searchParams }: { searchParams: { vista?: 
       </div>
       <Avviso errore={searchParams.errore} />
       <Schede voci={VISTE} attiva={vista} base={`/dashboard/prove${resta ? `?${resta}` : ''}`} gruppi={GRUPPI} />
-      <FiltroConsulente azione="/dashboard/prove" staff={staff} consulente={consulente} tieni={{ vista }}>
+      <FiltroConsulente azione="/dashboard/prove" staff={staff} consulente={consulente} tieni={{ vista }} q={q}>
         <select name="ordine" defaultValue={ordine.chiave} aria-label="Ordina per">
           {ORDINI.map((o) => <option key={o.chiave} value={o.chiave}>Ordina: {o.testo}</option>)}
         </select>

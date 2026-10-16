@@ -3,6 +3,7 @@ import { crm, richiediSezione } from '@/lib/crm'
 import { formatoDataOra, TIPO_TASK, traduci } from '@/lib/formato'
 import { Avviso, Contatti, LinkGuida, Persona, Provenienza, SchedeMulti, Vuoto } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
+import { filtraTesto, testoCercato } from '@/lib/ricerca'
 import { completaTask } from '../azioni'
 
 const CHI = [
@@ -17,15 +18,17 @@ const QUANDO = [
   { chiave: 'fatti', testo: 'Fatti' },
 ]
 
-export default async function Task({ searchParams }: { searchParams: { chi?: string; quando?: string; consulente?: string; errore?: string } }) {
+export default async function Task({ searchParams }: { searchParams: { chi?: string; quando?: string; consulente?: string; q?: string; errore?: string } }) {
   await richiediSezione('task')
   const staff = await crm.staff()
   // Un consulente scelto: i suoi task, di chiunque sia la vista «chi».
   const consulente = consulenteScelto(staff, searchParams.consulente)
   const chi = consulente ? 'tutti' : CHI.some((v) => v.chiave === searchParams.chi) ? searchParams.chi! : 'miei'
   const quando = QUANDO.some((v) => v.chiave === searchParams.quando) ? searchParams.quando! : 'oggi'
-  const task = await crm.task(chi, quando, consulente)
-  const perConsulente = consulente ? `&consulente=${consulente}` : ''
+  const q = testoCercato(searchParams.q)
+  const task = filtraTesto(await crm.task(chi, quando, consulente), q)
+  const perQ = q ? `&q=${encodeURIComponent(q)}` : ''
+  const perConsulente = `${consulente ? `&consulente=${consulente}` : ''}${perQ}`
   const qui = `/dashboard/task?chi=${chi}&quando=${quando}${perConsulente}`
 
   return (
@@ -43,10 +46,10 @@ export default async function Task({ searchParams }: { searchParams: { chi?: str
       </div>
       <Avviso errore={searchParams.errore} />
       <SchedeMulti gruppi={[
-        { testo: 'Di chi', tono: 'lavoro', voci: CHI.map((v) => ({ testo: v.testo, href: `/dashboard/task?chi=${v.chiave}&quando=${quando}`, attivo: !consulente && v.chiave === chi })) },
+        { testo: 'Di chi', tono: 'lavoro', voci: CHI.map((v) => ({ testo: v.testo, href: `/dashboard/task?chi=${v.chiave}&quando=${quando}${perQ}`, attivo: !consulente && v.chiave === chi })) },
         { testo: 'Quando', tono: 'prova', voci: QUANDO.map((v) => ({ testo: v.testo, href: `/dashboard/task?chi=${chi}&quando=${v.chiave}${perConsulente}`, attivo: v.chiave === quando })) },
       ]} />
-      <FiltroConsulente azione="/dashboard/task" staff={staff} consulente={consulente} tieni={{ chi: 'tutti', quando }} />
+      <FiltroConsulente azione="/dashboard/task" staff={staff} consulente={consulente} tieni={{ chi: 'tutti', quando }} q={q} />
 
       <div className="scheda">
         {task.length === 0 ? (

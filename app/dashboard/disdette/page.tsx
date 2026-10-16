@@ -1,6 +1,7 @@
 import { crm, richiediSezione } from '@/lib/crm'
 import { Avviso, LinkGuida, Schede, Vuoto, type GruppoSchede } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
+import { filtraTesto, testoCercato } from '@/lib/ricerca'
 import { TabellaDisdette } from '@/components/TabellaDisdette'
 
 const GRUPPI: GruppoSchede[] = [
@@ -18,14 +19,15 @@ const VISTE = [
 // Le disdette: quando su PerfectGym compare la data di disdetta di un
 // contratto, arriva qui. Si prende in carico come un lead e si chiama il socio
 // per provare a recuperarlo; l'esito si scrive nella sua scheda.
-export default async function Disdette({ searchParams }: { searchParams: { vista?: string; consulente?: string; errore?: string } }) {
+export default async function Disdette({ searchParams }: { searchParams: { vista?: string; consulente?: string; q?: string; errore?: string } }) {
   const io = await richiediSezione('disdette')
   const vista = VISTE.some((v) => v.chiave === searchParams.vista) ? searchParams.vista! : 'da_gestire'
   const staff = await crm.staff()
   // Il consulente: chi segue la disdetta.
   const consulente = consulenteScelto(staff, searchParams.consulente)
-  const disdette = await crm.disdette(vista, consulente)
-  const perConsulente = consulente ? `consulente=${consulente}` : ''
+  const q = testoCercato(searchParams.q)
+  const disdette = filtraTesto(await crm.disdette(vista, consulente), q)
+  const perConsulente = [consulente && `consulente=${consulente}`, q && `q=${encodeURIComponent(q)}`].filter(Boolean).join('&')
   const qui = `/dashboard/disdette?vista=${vista}${perConsulente ? `&${perConsulente}` : ''}`
 
   return (
@@ -43,7 +45,7 @@ export default async function Disdette({ searchParams }: { searchParams: { vista
       </div>
       <Avviso errore={searchParams.errore} />
       <Schede voci={VISTE} attiva={vista} base={`/dashboard/disdette${perConsulente ? `?${perConsulente}` : ''}`} gruppi={GRUPPI} />
-      <FiltroConsulente azione="/dashboard/disdette" staff={staff} consulente={consulente} tieni={{ vista }} />
+      <FiltroConsulente azione="/dashboard/disdette" staff={staff} consulente={consulente} tieni={{ vista }} q={q} />
 
       <div className="scheda">
         {disdette.length === 0 ? (

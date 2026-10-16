@@ -1,6 +1,7 @@
 import { crm, richiediSezione } from '@/lib/crm'
 import { Avviso, LinkGuida, Schede, Vuoto, type GruppoSchede } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
+import { filtraTesto, testoCercato } from '@/lib/ricerca'
 import { TabellaRinnovi } from '@/components/TabellaRinnovi'
 
 const GRUPPI: GruppoSchede[] = [
@@ -19,14 +20,15 @@ const VISTE = [
 // I rinnovi: gli abbonamenti a scadenza fissa che finiscono, uno per contratto,
 // dal mirror (20260930c). Si prendono in carico come i lead; l'esito si scrive
 // nella scheda della persona, il rinnovo su PerfectGym si vede da solo.
-export default async function Rinnovi({ searchParams }: { searchParams: { vista?: string; consulente?: string; errore?: string } }) {
+export default async function Rinnovi({ searchParams }: { searchParams: { vista?: string; consulente?: string; q?: string; errore?: string } }) {
   const io = await richiediSezione('rinnovi')
   const vista = VISTE.some((v) => v.chiave === searchParams.vista) ? searchParams.vista! : 'da_gestire'
   const staff = await crm.staff()
   // Il consulente: a chi e' assegnato il rinnovo.
   const consulente = consulenteScelto(staff, searchParams.consulente)
-  const rinnovi = await crm.rinnovi(vista, consulente)
-  const perConsulente = consulente ? `consulente=${consulente}` : ''
+  const q = testoCercato(searchParams.q)
+  const rinnovi = filtraTesto(await crm.rinnovi(vista, consulente), q)
+  const perConsulente = [consulente && `consulente=${consulente}`, q && `q=${encodeURIComponent(q)}`].filter(Boolean).join('&')
   const qui = `/dashboard/rinnovi?vista=${vista}${perConsulente ? `&${perConsulente}` : ''}`
 
   return (
@@ -44,7 +46,7 @@ export default async function Rinnovi({ searchParams }: { searchParams: { vista?
       </div>
       <Avviso errore={searchParams.errore} />
       <Schede voci={VISTE} attiva={vista} base={`/dashboard/rinnovi${perConsulente ? `?${perConsulente}` : ''}`} gruppi={GRUPPI} />
-      <FiltroConsulente azione="/dashboard/rinnovi" staff={staff} consulente={consulente} tieni={{ vista }} />
+      <FiltroConsulente azione="/dashboard/rinnovi" staff={staff} consulente={consulente} tieni={{ vista }} q={q} />
 
       <div className="scheda">
         {rinnovi.length === 0 ? (

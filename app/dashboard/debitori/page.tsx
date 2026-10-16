@@ -3,6 +3,7 @@ import { crm, linkPgm, richiediSezione } from '@/lib/crm'
 import { formatoData, formatoDataOra, formatoEuro, formatoFa, STATO_CONTRATTO, TIPI_TASK_NUOVI, traduci } from '@/lib/formato'
 import { Avviso, Contatti, LinkGuida, Persona, SchedeMulti, Vuoto } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
+import { filtraTesto, testoCercato } from '@/lib/ricerca'
 import { debitoAssegna, debitoTask } from '../azioni'
 
 const VISTE = [
@@ -20,15 +21,17 @@ const CHI = [
 // Chi ha il saldo negativo su PerfectGym. Il saldo e' quello del mirror, letto
 // a ogni apertura: chi paga esce dall'elenco da solo e finisce in Rientrati.
 // Il recupero si segue coi task, che restano anche nella scheda della persona.
-export default async function Debitori({ searchParams }: { searchParams: { vista?: string; chi?: string; consulente?: string; errore?: string } }) {
+export default async function Debitori({ searchParams }: { searchParams: { vista?: string; chi?: string; consulente?: string; q?: string; errore?: string } }) {
   const io = await richiediSezione('debitori')
   const vista = VISTE.some((v) => v.chiave === searchParams.vista) ? searchParams.vista! : 'attivi'
   const staff = await crm.staff()
   // Il consulente: a chi e' assegnato il recupero (con lui, «di chi» e' «di tutti»).
   const consulente = consulenteScelto(staff, searchParams.consulente)
   const chi = consulente ? 'tutti' : CHI.some((v) => v.chiave === searchParams.chi) ? searchParams.chi! : 'tutti'
-  const debitori = await crm.debitori(vista, chi, consulente)
-  const perConsulente = consulente ? `&consulente=${consulente}` : ''
+  const q = testoCercato(searchParams.q)
+  const debitori = filtraTesto(await crm.debitori(vista, chi, consulente), q)
+  const perQ = q ? `&q=${encodeURIComponent(q)}` : ''
+  const perConsulente = `${consulente ? `&consulente=${consulente}` : ''}${perQ}`
   const qui = `/dashboard/debitori?vista=${vista}&chi=${chi}${perConsulente}`
   const rientrati = vista === 'rientrati'
   const totale = debitori.reduce((s, d) => s + (d.saldo != null && d.saldo < 0 ? d.saldo : 0), 0)
@@ -50,9 +53,9 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
       <Avviso errore={searchParams.errore} />
       <SchedeMulti gruppi={[
         { testo: 'Situazione', tono: 'prova', voci: VISTE.map((v) => ({ testo: v.testo.replace(/^Abbonamento /, '').replace(/^./, (c) => c.toUpperCase()), href: `/dashboard/debitori?vista=${v.chiave}&chi=${chi}${perConsulente}`, attivo: v.chiave === vista })) },
-        { testo: 'Chi li segue', tono: 'lavoro', voci: CHI.map((v) => ({ testo: v.testo, href: `/dashboard/debitori?vista=${vista}&chi=${v.chiave}`, attivo: !consulente && v.chiave === chi })) },
+        { testo: 'Chi li segue', tono: 'lavoro', voci: CHI.map((v) => ({ testo: v.testo, href: `/dashboard/debitori?vista=${vista}&chi=${v.chiave}${perQ}`, attivo: !consulente && v.chiave === chi })) },
       ]} />
-      <FiltroConsulente azione="/dashboard/debitori" staff={staff} consulente={consulente} tieni={{ vista, chi: 'tutti' }} />
+      <FiltroConsulente azione="/dashboard/debitori" staff={staff} consulente={consulente} tieni={{ vista, chi: 'tutti' }} q={q} />
 
       <div className="scheda">
         {debitori.length > 0 && (
