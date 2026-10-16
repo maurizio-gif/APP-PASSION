@@ -4539,3 +4539,31 @@ section[data-carica] .da-gestire-corpo {
 .numeri-schede .numero.attivo::after {
   transform: scaleX(1);
 }
+
+/* ---- Colonne di larghezza uniforme (Lead, Prove, Rinnovi, Disdette) -----------------
+   Una griglia sola: le prime tre colonne sono sempre larghe uguale e nello stesso punto,
+   cosi' passando da una scheda all'altra non si muove niente. Le tabelle a quattro
+   colonne danno il resto (due parti) all'ultima, quella con i bottoni; Lead, che ne ha
+   cinque, le fa tutte uguali. */
+
+@media (min-width: 721px) {
+  .tabella-uniforme {
+    table-layout: fixed;
+    width: 100%;
+    min-width: 860px;
+  }
+  .tabella-uniforme th:nth-child(1),
+  .tabella-uniforme th:nth-child(2),
+  .tabella-uniforme th:nth-child(3) {
+    width: 20%;
+  }
+  .tabella-uniforme.lead-cinque th:nth-child(4) {
+    width: 20%;
+  }
+  .tabella-uniforme td {
+    overflow-wrap: anywhere;
+  }
+  .tabella-uniforme td .riga-dati {
+    max-width: 100%;
+  }
+}

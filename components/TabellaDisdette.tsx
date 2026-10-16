@@ -8,10 +8,10 @@ import { assegnaDisdetta, rilasciaDisdetta } from '@/app/dashboard/azioni'
 export function TabellaDisdette({ disdette, io, staff, torna }: { disdette: Disdetta[]; io: Io; staff: Operatore[]; torna: string }) {
   return (
     <div className="tabella-scorre">
-      <table className="schede-mobile tabella-colonne">
+      <table className="schede-mobile tabella-colonne tabella-uniforme">
         <thead>
           <tr>
-            <th>Socio</th>
+            <th>Cliente</th>
             <th>Contratto</th>
             <th>Data disdetta</th>
             <th>In carico</th>

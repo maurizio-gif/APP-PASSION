@@ -28,11 +28,10 @@ export function TabellaLead({ lead, io, staff, torna, contratti, firma }: { lead
   return (
     <>
       <div className="tabella-scorre solo-computer">
-        <table className="tabella-lead tabella-colonne">
+        <table className={`tabella-lead tabella-colonne tabella-uniforme${contratti ? '' : ' lead-cinque'}`}>
           <thead>
             <tr>
-              <th>Nome + Cognome</th>
-              <th>Tipologia</th>
+              <th>Cliente</th>
               <th>{firma ? 'Data firma' : 'Data di creazione'}</th>
               {contratti ? (
                 <>
@@ -61,7 +60,6 @@ export function TabellaLead({ lead, io, staff, torna, contratti, firma }: { lead
                       <Contatti telefono={l.telefono} email={l.email} />
                     </div>
                   </td>
-                  <td><span className="etichetta-riga"><BollinoFonte fonte={l.fonte} dettaglio={l.fonte_dettaglio} /></span></td>
                   <td>
                     <div className="riga-dati">
                       <Link href={scheda} target="_blank" rel="noopener noreferrer" className="normale">{firma ? (c?.data_firma ? formatoData(c.data_firma) : '–') : formatoData(l.creato_il)}</Link>

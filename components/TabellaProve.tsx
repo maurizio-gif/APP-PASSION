@@ -9,10 +9,10 @@ import { aggiornaProva } from '@/app/dashboard/azioni'
 export function TabellaProve({ prove, pagamenti, staff, torna }: { prove: Prova[]; pagamenti: Record<number, Pagamento>; staff: Operatore[]; torna: string }) {
   return (
     <div className="tabella-scorre">
-      <table className="schede-mobile tabella-prove">
+      <table className="schede-mobile tabella-prove tabella-uniforme">
         <thead>
           <tr>
-            <th>Persona</th>
+            <th>Cliente</th>
             <th>Pass</th>
             <th>Come va</th>
             <th>Gestione</th>
