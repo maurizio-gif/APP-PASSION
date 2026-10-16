@@ -5726,3 +5726,17 @@ select {
   border-color: #ff4d6a;
   box-shadow: 0 0 0 3px rgba(227, 3, 45, 0.28);
 }
+
+/* Quando il browser propone i testi gia' cercati, il campo non cambia aspetto. */
+.barra .barra-cerca input[type='search']:-webkit-autofill,
+.barra .barra-cerca input[type='search']:-webkit-autofill:hover,
+.barra .barra-cerca input[type='search']:-webkit-autofill:focus,
+.barra .barra-cerca input[type='search']:-webkit-autofill:active,
+.barra .barra-cerca input[type='search']:autofill {
+  -webkit-text-fill-color: #fff;
+  caret-color: #fff;
+  -webkit-box-shadow: 0 0 0 1000px #4d0a1d inset;
+  box-shadow: 0 0 0 1000px #4d0a1d inset;
+  border: 1px solid var(--rosso);
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
