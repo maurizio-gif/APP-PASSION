@@ -4771,3 +4771,18 @@ th {
 .bottone.secondario:active {
   box-shadow: inset 0 1px 2px rgba(21, 23, 28, 0.1);
 }
+
+/* ---- Bottoni sempre allineati a destra, in ogni tabella -------------------------------- */
+@media (min-width: 721px) {
+  tbody td:last-child .azioni-gruppo,
+  tbody td:last-child .gestione-prova,
+  tbody td:last-child .task-azioni {
+    margin-left: auto;
+  }
+  .task-azioni {
+    justify-content: flex-end;
+  }
+  .tabella-uniforme th:last-child {
+    text-align: right;
+  }
+}
