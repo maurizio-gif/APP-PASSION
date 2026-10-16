@@ -3771,3 +3771,66 @@ details.scheda .utenti {
     flex-shrink: 0;
   }
 }
+
+/* ---- Barra dei filtri: compatta, con lente, menu uniformi ------------------- */
+
+select:not([multiple]) {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23667085' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 14px;
+  padding-right: 32px;
+  cursor: pointer;
+}
+select:not([multiple]):hover {
+  border-color: #b9bfca;
+}
+
+.filtri {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 16px;
+}
+.filtri input[type='search'] {
+  flex: 0 1 320px;
+  min-width: 200px;
+  min-height: 38px;
+  padding: 7px 12px 7px 36px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23667085' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M21 21l-4.5-4.5'/%3E%3C/svg%3E") no-repeat 12px 50% / 16px;
+}
+.filtri select {
+  min-height: 38px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+.filtri .bottone {
+  min-height: 38px;
+  padding: 7px 16px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+/* «Filtra» e' l'azione del gruppo: scuro, a fianco dei menu. */
+.filtri .bottone.secondario {
+  background: var(--nero);
+  border-color: var(--nero);
+  color: #fff;
+}
+.filtri .bottone.secondario:hover {
+  background: #2a2c31;
+  border-color: #2a2c31;
+}
+
+@media (max-width: 720px) {
+  .filtri input[type='search'] {
+    flex: 1 1 100%;
+  }
+}
