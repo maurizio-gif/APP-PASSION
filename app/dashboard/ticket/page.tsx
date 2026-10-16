@@ -23,7 +23,7 @@ export default async function Ticket({ searchParams }: { searchParams: { vista?:
   const viste = [
     { chiave: 'da_verificare', testo: 'Da verificare', n: conti.da_verificare, gruppo: 'lavoro' },
     { chiave: 'r2d', testo: 'Per R2D', n: conti.r2d, gruppo: 'lavoro' },
-    { chiave: 'in_attesa', testo: 'Da rispondere', n: conti.in_attesa, gruppo: 'lavoro' },
+    { chiave: 'in_attesa', testo: 'Per Passion', n: conti.in_attesa, gruppo: 'lavoro' },
     { chiave: 'modifiche', testo: 'Modifiche', n: conti.modifiche_da_confermare + conti.modifiche_da_rilasciare, gruppo: 'tuoi' },
     { chiave: 'miei', testo: 'Aperti da me', n: conti.miei, gruppo: 'tuoi' },
     { chiave: 'chiusi', testo: 'Chiusi', gruppo: 'archivio' },

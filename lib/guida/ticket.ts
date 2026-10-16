@@ -44,14 +44,14 @@ Se riguarda un socio, aprilo dalla sua scheda con **«+ Apri un ticket»**: il t
 ## Seguire la risposta
 Tutto passa dal **filo** del ticket: i messaggi di Passion e di R2D, e ogni passaggio (inviato, preso in carico, risolto). Per aggiungere qualcosa scrivi in «Scrivi» e **«Aggiungi al filo»**.
 
-- Quando R2D ha bisogno di un'informazione, il ticket va in **Aspetta Passion**. Lo trovi nella vista **«Da rispondere»** e in home, nel riquadro **«Ticket in attesa»**. Rispondi nel filo: alla prima risposta torna in lavorazione.
+- Quando R2D ha bisogno di un'informazione, il ticket va in **Aspetta Passion**. Lo trovi nella vista **«Per Passion»** e in home, nel riquadro **«Ticket in attesa»**. Rispondi nel filo: alla prima risposta torna in lavorazione.
 - R2D chiude il ticket con **di che cosa si trattava, la causa e la soluzione**: le trovi in cima alla pagina del ticket.
 - Se il problema si ripresenta, il supporto (o R2D) lo **riapre** con il motivo. Non aprirne uno nuovo.
 
 ## Le viste
 - **Da verificare**: le segnalazioni che il supporto deve ancora guardare;
 - **Per R2D**: mandate a R2D e in lavorazione;
-- **Da rispondere**: R2D aspetta una risposta dal desk;
+- **Per Passion**: R2D aspetta una risposta dal desk;
 - **Modifiche**: le modifiche decise in riunione, da confermare o da rilasciare;
 - **Aperti da me**: i tuoi ticket non ancora chiusi;
 - **Chiusi**: gli ultimi 90 giorni;
