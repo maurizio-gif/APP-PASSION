@@ -5076,3 +5076,33 @@ th {
     padding: 0 10px;
   }
 }
+
+/* ---- Titoli delle schede: stessa lingua del titolo di pagina (maiuscolo, barra rossa) ---- */
+.scheda > .testata-scheda h2,
+.scheda > h2,
+.scheda > .testata-scheda h3 {
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--rosso);
+  padding-left: 10px;
+  border-left: 3px solid var(--rosso);
+  line-height: 1.15;
+  margin-bottom: 0;
+}
+.scheda > h2 {
+  margin-bottom: 12px;
+}
+.testata-scheda {
+  align-items: center;
+  margin-bottom: 14px;
+}
+.da-gestire-titolo,
+.scheda h3.da-gestire-titolo {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--testo);
+}
