@@ -48,9 +48,8 @@ export function RigaProva({ p, pagamento, etichette, children }: { p: Prova; pag
         <div className="riga-dati">
           <span><strong>{p.ingressi}</strong> ingressi</span>
           <span><strong>{p.presenze}/{p.prenotazioni}</strong> lezioni fatte</span>
-          {p.ingressi === 0
-            ? <span className="stato rosso">Mai entrato</span>
-            : <span className="muto">Ultimo ingresso {formatoFa(p.ultimo_ingresso)}</span>}
+          {p.ultimo_ingresso && <span className="muto">Ultimo ingresso {formatoFa(p.ultimo_ingresso)}</span>}
+          {p.ingressi === 0 && <span className="stato rosso">Mai entrato</span>}
           {p.iscritto_su_pgm && !p.esito && <span className="etichetta-riga"><span className="bollino verde">ha già un contratto su PerfectGym</span></span>}
           {etichette && <span className="etichetta-riga">{etichette}</span>}
         </div>
