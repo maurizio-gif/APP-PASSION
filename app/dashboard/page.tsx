@@ -6,35 +6,50 @@ import { assiste, puoVedere, smista } from '@/lib/permessi'
 import { TabellaLead } from '@/components/TabellaLead'
 import { TabellaRinnovi } from '@/components/TabellaRinnovi'
 import { TabellaDisdette } from '@/components/TabellaDisdette'
+import { TabellaProve } from '@/components/TabellaProve'
 import { completaTask } from './azioni'
+
+// «Nessun consulente»: i lead senza assegnatario (uuid a zero per crm_lead).
+const NESSUN_CONSULENTE = '00000000-0000-0000-0000-000000000000'
 
 // «Quando aprono c'avranno lead da gestire, prove da gestire, abbonamenti in
 // scadenza» (riunione del 28/09/2026): la home e' il lavoro di oggi.
 export default async function DaGestire({ searchParams }: { searchParams: { errore?: string; vista?: string } }) {
-  const [h, io, arretrati, oggi, scadenza, staff] = await Promise.all([
+  const [h, io, arretrati, oggi, staff] = await Promise.all([
     crm.home(),
     crm.io(),
     crm.task('miei', 'arretrati'),
     crm.task('miei', 'oggi'),
-    crm.prove('in_scadenza'),
     crm.staff(),
   ])
   const task = [...arretrati, ...oggi]
-  // «Da gestire» di Lead, Rinnovi e Disdette in schede: si carica solo la
-  // scheda aperta, come nella sua sezione.
-  const schede = [
-    { chiave: 'lead', testo: 'Lead', n: h.lead_da_gestire },
-    ...(puoVedere(io, 'rinnovi') ? [{ chiave: 'rinnovi', testo: 'Rinnovi', n: h.rinnovi_da_gestire }] : []),
-    ...(puoVedere(io, 'disdette') ? [{ chiave: 'disdette', testo: 'Disdette', n: h.disdette_da_gestire }] : []),
+  // «Da gestire» di Lead, Rinnovi, Disdette e Prove in scadenza in schede, piu'
+  // «Non assegnati»: i lead aperti e le prove in corso senza un consulente. Si
+  // carica solo la scheda aperta, come nella sua sezione.
+  const schede: { chiave: string; testo: string; n?: number; vai: string }[] = [
+    { chiave: 'lead', testo: 'Lead', n: h.lead_da_gestire, vai: '/dashboard/lead?vista=da_gestire' },
+    ...(puoVedere(io, 'rinnovi') ? [{ chiave: 'rinnovi', testo: 'Rinnovi', n: h.rinnovi_da_gestire, vai: '/dashboard/rinnovi?vista=da_gestire' }] : []),
+    ...(puoVedere(io, 'disdette') ? [{ chiave: 'disdette', testo: 'Disdette', n: h.disdette_da_gestire, vai: '/dashboard/disdette?vista=da_gestire' }] : []),
+    { chiave: 'prove', testo: 'Prove in scadenza', n: h.prove_in_scadenza, vai: '/dashboard/prove?vista=in_scadenza' },
+    { chiave: 'non_assegnati', testo: 'Non assegnati', vai: '/dashboard/lead?vista=tutte&consulente=' + NESSUN_CONSULENTE },
   ]
-  const scheda = schede.find((s) => s.chiave === searchParams.vista)?.chiave ?? 'lead'
+  const aperta = schede.find((s) => s.chiave === searchParams.vista) ?? schede[0]
+  const scheda = aperta.chiave
   const qui = scheda === 'lead' ? '/dashboard' : `/dashboard?vista=${scheda}`
-  const [nuovi, rinnovi, disdette, ticket] = await Promise.all([
+  const [nuovi, rinnovi, disdette, prove, liberi, ticket] = await Promise.all([
     scheda === 'lead' ? crm.lead('da_gestire', null, null) : null,
     scheda === 'rinnovi' ? crm.rinnovi('da_gestire') : null,
     scheda === 'disdette' ? crm.disdette('da_gestire') : null,
+    scheda === 'prove' ? crm.prove('in_scadenza') : scheda === 'non_assegnati' ? crm.prove('in_corso') : null,
+    scheda === 'non_assegnati' ? crm.lead('tutte', null, null, NESSUN_CONSULENTE) : null,
     puoVedere(io, 'ticket') ? crm.ticketConti() : null,
   ])
+  // Non assegnati: dei lead solo quelli ancora aperti, delle prove quelle che nessuno segue.
+  const leadLiberi = liberi?.filter((l) => l.fase === 'da_gestire' || l.fase === 'in_gestione') ?? null
+  const proveLibere = scheda === 'non_assegnati' ? prove?.filter((p) => !p.gestito_da && !p.esito) ?? [] : null
+  const proveScadenza = scheda === 'prove' ? prove : null
+  if (leadLiberi && proveLibere) aperta.n = leadLiberi.length + proveLibere.length
+  const pagamenti = await crm.pagamenti([...(proveScadenza ?? []), ...(proveLibere ?? [])].map((p) => p.contract_id))
 
   return (
     <>
@@ -116,7 +131,7 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
       <section className="scheda" id="da-gestire">
         <div className="testata-scheda">
           <h2>Da gestire</h2>
-          <Link href={`/dashboard/${scheda}?vista=da_gestire`}>Vai a {schede.find((s) => s.chiave === scheda)?.testo} →</Link>
+          <Link href={aperta.vai}>Vai a {scheda === 'non_assegnati' ? 'Lead' : aperta.testo} →</Link>
         </div>
         <Schede voci={schede} attiva={scheda} base="/dashboard" />
         <div className="da-gestire-corpo">
@@ -135,62 +150,56 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
           ) : (
             <TabellaDisdette disdette={disdette.slice(0, 15)} io={io} staff={staff} torna={qui} />
           ))}
+          {proveScadenza && (proveScadenza.length === 0 ? (
+            <Vuoto>Nessuna prova finisce nei prossimi tre giorni.</Vuoto>
+          ) : (
+            <TabellaProve prove={proveScadenza} pagamenti={pagamenti} staff={staff} torna={qui} />
+          ))}
+          {leadLiberi && proveLibere && (
+            leadLiberi.length + proveLibere.length === 0 ? (
+              <Vuoto>Tutti i lead aperti e tutte le prove in corso hanno un consulente.</Vuoto>
+            ) : (
+              <>
+                <h3 className="da-gestire-titolo">Lead senza consulente <span className="attenuato">· {leadLiberi.length}</span></h3>
+                {leadLiberi.length === 0 ? <Vuoto>Nessuno.</Vuoto> : <TabellaLead lead={leadLiberi.slice(0, 30)} io={io} staff={staff} torna={qui} />}
+                <h3 className="da-gestire-titolo">Prove in corso che nessuno segue <span className="attenuato">· {proveLibere.length}</span></h3>
+                {proveLibere.length === 0 ? <Vuoto>Nessuna.</Vuoto> : <TabellaProve prove={proveLibere.slice(0, 30)} pagamenti={pagamenti} staff={staff} torna={qui} />}
+              </>
+            )
+          )}
         </div>
       </section>
 
-      <div className="griglia">
-        <section className="scheda">
-          <h2>I miei task</h2>
-          {task.length === 0 ? (
-            <Vuoto>Niente in agenda per oggi.</Vuoto>
-          ) : (
-            <ul className="elenco">
-              {task.slice(0, 15).map((t) => (
-                <li key={t.id}>
-                  <div className="elenco-riga">
-                    <div>
-                      <span className={`bollino${t.data && new Date(t.data) < new Date() ? ' rosso' : ''}`}>
-                        {traduci(TIPO_TASK, t.tipo)} {formatoOra(t.data)}
-                      </span>{' '}
-                      <Provenienza origine={t.origine} />{' '}
-                      <Persona id={t.utente_id} nome={t.nome} cognome={t.cognome} nuovaScheda />
-                      {t.nota && <div className="piccolo">{t.nota}</div>}
-                    </div>
-                    <form action={completaTask} className="azioni-riga pila">
-                      <input type="hidden" name="task" value={t.id} />
-                      <input type="hidden" name="torna" value="/dashboard" />
-                      <button className="bottone piccolo" name="esito" value="positivo">Fatto ✓</button>
-                      <button className="bottone secondario piccolo" name="esito" value="negativo">Non risponde</button>
-                    </form>
+      <section className="scheda">
+        <h2>I miei task</h2>
+        {task.length === 0 ? (
+          <Vuoto>Niente in agenda per oggi.</Vuoto>
+        ) : (
+          <ul className="elenco">
+            {task.slice(0, 15).map((t) => (
+              <li key={t.id}>
+                <div className="elenco-riga">
+                  <div>
+                    <span className={`bollino${t.data && new Date(t.data) < new Date() ? ' rosso' : ''}`}>
+                      {traduci(TIPO_TASK, t.tipo)} {formatoOra(t.data)}
+                    </span>{' '}
+                    <Provenienza origine={t.origine} />{' '}
+                    <Persona id={t.utente_id} nome={t.nome} cognome={t.cognome} nuovaScheda />
+                    {t.nota && <div className="piccolo">{t.nota}</div>}
                   </div>
-                </li>
-              ))}
-            </ul>
-          )}
-          {task.length > 15 && <Link href="/dashboard/task">Tutti i task →</Link>}
-        </section>
-
-        <section className="scheda">
-          <h2>Prove in scadenza</h2>
-          {scadenza.length === 0 ? (
-            <Vuoto>Nessuna prova finisce nei prossimi tre giorni.</Vuoto>
-          ) : (
-            <ul className="elenco">
-              {scadenza.map((p) => (
-                <li key={p.id}>
-                  <Persona id={p.utente_id} nome={p.nome} cognome={p.cognome} />{' '}
-                  <span className="bollino giallo">{p.giorni_rimasti === 0 ? 'oggi' : p.giorni_rimasti === 1 ? 'domani' : `tra ${p.giorni_rimasti} gg`}</span>
-                  <div className="piccolo attenuato">
-                    {p.tipo_pass} · {p.ingressi} ingressi · {p.prenotazioni} lezioni prenotate
-                    {p.gestito_nome ? ` · segue ${p.gestito_nome}` : ' · nessuno la segue'}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-      </div>
-
+                  <form action={completaTask} className="azioni-riga pila">
+                    <input type="hidden" name="task" value={t.id} />
+                    <input type="hidden" name="torna" value="/dashboard" />
+                    <button className="bottone piccolo" name="esito" value="positivo">Fatto ✓</button>
+                    <button className="bottone secondario piccolo" name="esito" value="negativo">Non risponde</button>
+                  </form>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+        {task.length > 15 && <Link href="/dashboard/task">Tutti i task →</Link>}
+      </section>
     </>
   )
 }

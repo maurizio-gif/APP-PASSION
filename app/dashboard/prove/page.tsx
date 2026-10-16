@@ -1,9 +1,7 @@
 import { crm, richiediSezione, type Prova } from '@/lib/crm'
-import { Avviso, Gestione, LinkGuida, Schede, Vuoto } from '@/components/Ui'
+import { Avviso, LinkGuida, Schede, Vuoto } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
-import { SceltaOperatore } from '@/components/SceltaOperatore'
-import { RigaProva } from '@/components/RigaProva'
-import { aggiornaProva } from '../azioni'
+import { TabellaProve } from '@/components/TabellaProve'
 
 const VISTE = [
   { chiave: 'in_corso', testo: 'In corso' },
@@ -79,41 +77,7 @@ export default async function Prove({ searchParams }: { searchParams: { vista?: 
         {prove.length === 0 ? (
           <Vuoto>Nessuna prova qui.</Vuoto>
         ) : (
-          <div className="tabella-scorre">
-            <table className="schede-mobile tabella-prove">
-              <thead>
-                <tr>
-                  <th>Persona</th>
-                  <th>Pass</th>
-                  <th>Come va</th>
-                  <th>La segue</th>
-                  <th>Esito</th>
-                </tr>
-              </thead>
-              <tbody>
-                {prove.map((p) => (
-                  <RigaProva key={p.id} p={p} pagamento={p.contract_id != null ? pagamenti[p.contract_id] : null}>
-                    <Gestione id={p.id}>
-                      <form action={aggiornaProva} className="modulo compatto">
-                        <input type="hidden" name="prova" value={p.id} />
-                        <input type="hidden" name="torna" value={qui} />
-                        {/* Iscritto non si sceglie: resta solo se c'e gia'. */}
-                        <select name="esito" defaultValue={p.esito ?? ''} aria-label="Esito">
-                          <option value="">Ancora aperta</option>
-                          {p.esito === 'iscritto' && <option value="iscritto">Iscritto</option>}
-                          <option value="non_iscritto">Non iscritto</option>
-                        </select>
-                        <SceltaOperatore staff={staff} attuale={p.gestito_da} attualeNome={p.gestito_nome} />
-                        <input type="text" name="obiezione" defaultValue={p.obiezione ?? ''} placeholder="Obiezione" />
-                        <input type="text" name="note" defaultValue={p.note ?? ''} placeholder="Note" />
-                        <button className="bottone piccolo">Salva</button>
-                      </form>
-                    </Gestione>
-                  </RigaProva>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <TabellaProve prove={prove} pagamenti={pagamenti} staff={staff} torna={qui} />
         )}
       </div>
     </>

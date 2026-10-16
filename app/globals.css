@@ -3028,3 +3028,10 @@ details.scheda .utenti {
 .da-gestire-corpo {
   margin-top: 14px;
 }
+.da-gestire-titolo {
+  margin: 18px 0 8px;
+  font-size: 0.92rem;
+}
+.da-gestire-corpo > .da-gestire-titolo:first-child {
+  margin-top: 0;
+}
