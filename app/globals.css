@@ -4643,3 +4643,19 @@ section[data-carica] .da-gestire-corpo {
 .numeri-schede + .da-gestire-corpo {
   padding-top: 20px;
 }
+
+/* ---- Separazione piu' evidente tra un cliente e l'altro ------------------------------ */
+.tabella-colonne tbody td,
+.tabella-lead tbody td {
+  border-bottom: 1px solid #d3d8e0;
+}
+.tabella-colonne tbody tr:last-child td,
+.tabella-lead tbody tr:last-child td {
+  border-bottom-color: transparent;
+}
+@media (max-width: 720px) {
+  .schede-mobile tr {
+    border-bottom-color: #d3d8e0;
+    padding: 13px 0;
+  }
+}
