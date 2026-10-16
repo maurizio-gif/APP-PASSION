@@ -51,7 +51,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
   const passi = [
     { nome: 'Lead', fatto: s.lead.length > 0 },
     { nome: 'Prova', fatto: s.prove.length > 0 },
-    { nome: 'Iscritto', fatto: ultimo?.stato === 'Current' },
+    { nome: 'Abbonamento', fatto: ultimo?.stato === 'Current' },
   ]
   const attuale = passi.reduce((a, x, i) => (x.fatto ? i : a), -1)
 
@@ -262,6 +262,10 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
           {p.codice_fiscale && <div><dt>Codice fiscale</dt><dd>{p.codice_fiscale}</dd></div>}
           {p.data_nascita && <div><dt>Nato il</dt><dd>{formatoData(p.data_nascita)}</dd></div>}
         </dl>
+      </section>
+
+      {/* ---- Il funnel, da sinistra a destra: lead, prova, cliente ---- */}
+      <div className="funnel">
         <ol className="percorso" aria-label="Percorso commerciale">
           {passi.map((x, i) => (
             <li key={x.nome} className={i < attuale ? 'fatto' : i === attuale ? 'attuale' : undefined}>
@@ -270,10 +274,6 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
             </li>
           ))}
         </ol>
-      </section>
-
-      {/* ---- Il funnel, da sinistra a destra: lead, prova, cliente ---- */}
-      <div className="funnel">
         <div className="funnel-colonna">
           <h2 className="funnel-titolo"><span>1</span> Lead</h2>
           {s.lead.length === 0
@@ -289,7 +289,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
         </div>
 
         <div className="funnel-colonna">
-          <h2 className="funnel-titolo"><span>3</span> Cliente</h2>
+          <h2 className="funnel-titolo"><span>3</span> Abbonamento</h2>
           {/* Gli abbonamenti di PerfectGym, senza i certificati medici (che su
               PerfectGym sono contratti aggiuntivi): in vista quello in corso,
               gli altri nella tendina sotto. */}
