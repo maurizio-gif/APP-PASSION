@@ -54,7 +54,7 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
         <p className="avviso">Unito al <Link href={`/dashboard/ticket/${t.doppione_di}`}>#{t.doppione_di}</Link>: si segue lì.</p>
       )}
       {t.stato === 'in_attesa' && (
-        <p className="avviso">R2D aspetta una risposta di Passion: scrivila nel filo qui sotto e il ticket torna in lavorazione.</p>
+        <p className="avviso">R2D aspetta una risposta di Passion: scrivila nel thread qui sotto e il ticket torna in lavorazione.</p>
       )}
 
       <div className="griglia ticket-pagina">
@@ -154,7 +154,7 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
         </section>
 
         <section className="scheda">
-          <h2>Filo</h2>
+          <h2>Thread</h2>
           <ul className="filo-ticket">
             {t.messaggi.map((m) => (
               <li key={m.id} className={`lato-${m.lato}${m.evento ? ' evento' : ''}`}>
@@ -174,7 +174,7 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
                 <label htmlFor="testo">Scrivi</label>
                 <textarea id="testo" name="testo" rows={3} required placeholder={chiuso ? 'Un aggiornamento (il ticket resta chiuso)' : 'Una risposta, un aggiornamento, un dettaglio in più'} />
               </div>
-              <BottoneInvio testo="Aggiungi al filo" inCorso="Invio…" classe="secondario" />
+              <BottoneInvio testo="Aggiungi al thread" inCorso="Invio…" classe="secondario" />
             </form>
           )}
         </section>
