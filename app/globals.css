@@ -5118,3 +5118,55 @@ th {
   border-radius: 16px;
   background: linear-gradient(to right, rgba(227, 3, 45, 0.12), rgba(227, 3, 45, 0.05) 45%, rgba(227, 3, 45, 0) 100%);
 }
+
+/* ---- Menu a tendina: l'elenco che si apre nello stesso stile (dove il browser lo permette) ---- */
+select {
+  accent-color: var(--rosso);
+}
+@supports (appearance: base-select) {
+  select:not([multiple]),
+  select:not([multiple])::picker(select) {
+    appearance: base-select;
+  }
+  select:not([multiple]) {
+    background-image: none;
+    padding-right: 10px;
+  }
+  select:not([multiple])::picker-icon {
+    color: var(--testo-attenuato);
+    transition: transform 0.18s ease;
+  }
+  select:not([multiple]):open::picker-icon {
+    transform: rotate(180deg);
+    color: var(--rosso);
+  }
+  select:not([multiple])::picker(select) {
+    margin-top: 6px;
+    padding: 5px;
+    background: #fff;
+    border: 1px solid #e3cbd1;
+    border-radius: 12px;
+    box-shadow: 0 10px 28px rgba(60, 10, 20, 0.14);
+  }
+  select:not([multiple]) option {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: var(--testo);
+    cursor: pointer;
+  }
+  select:not([multiple]) option:hover,
+  select:not([multiple]) option:focus-visible {
+    background: var(--riga-alterna);
+    color: var(--rosso-scuro);
+    outline: 0;
+  }
+  select:not([multiple]) option:checked {
+    background: linear-gradient(to bottom, rgba(227, 3, 45, 0.04), rgba(227, 3, 45, 0.1));
+    color: var(--rosso-scuro);
+    font-weight: 600;
+  }
+  select:not([multiple]) option::checkmark {
+    color: var(--rosso);
+  }
+}
