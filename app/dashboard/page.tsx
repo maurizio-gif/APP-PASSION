@@ -28,12 +28,12 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
   // «Da gestire» di Lead, Rinnovi, Disdette e Prove in scadenza in schede, piu'
   // «Non assegnati»: i lead aperti e le prove in corso senza un consulente. Si
   // carica solo la scheda aperta, come nella sua sezione.
-  const schede: { chiave: string; testo: string; n?: number; nota?: string; caldo?: boolean; vai: string }[] = [
-    { chiave: 'lead', testo: 'Lead da gestire', n: h.lead_da_gestire, nota: `non ancora presi in carico · ${h.miei_lead} miei`, caldo: h.lead_da_gestire > 0, vai: '/dashboard/lead?vista=da_gestire' },
-    { chiave: 'prove', testo: 'Prove in scadenza', n: h.prove_in_scadenza, nota: `entro 3 giorni · ${h.prove_in_corso} in corso`, caldo: h.prove_in_scadenza > 0, vai: '/dashboard/prove?vista=in_scadenza' },
-    ...(puoVedere(io, 'rinnovi') ? [{ chiave: 'rinnovi', testo: 'Rinnovi da gestire', n: h.rinnovi_da_gestire, nota: `non ancora presi in carico · ${h.miei_rinnovi} miei`, caldo: h.rinnovi_da_gestire > 0, vai: '/dashboard/rinnovi?vista=da_gestire' }] : []),
-    ...(puoVedere(io, 'disdette') ? [{ chiave: 'disdette', testo: 'Disdette da gestire', n: h.disdette_da_gestire, nota: `non ancora prese in carico · ${h.mie_disdette} mie`, caldo: h.disdette_da_gestire > 0, vai: '/dashboard/disdette?vista=da_gestire' }] : []),
-    { chiave: 'non_assegnati', testo: 'Non assegnati', nota: 'lead e prove senza consulente', vai: '/dashboard/lead?vista=tutte&consulente=' + NESSUN_CONSULENTE },
+  const schede: { chiave: string; testo: string; n?: number; nota?: string; caldo?: boolean; vai: string; vaiTesto: string }[] = [
+    { chiave: 'lead', testo: 'Lead da gestire', n: h.lead_da_gestire, nota: `non ancora presi in carico · ${h.miei_lead} miei`, caldo: h.lead_da_gestire > 0, vai: '/dashboard/lead?vista=da_gestire', vaiTesto: 'Vai a Lead' },
+    { chiave: 'prove', testo: 'Prove in scadenza', n: h.prove_in_scadenza, nota: `entro 3 giorni · ${h.prove_in_corso} in corso`, caldo: h.prove_in_scadenza > 0, vai: '/dashboard/prove?vista=in_scadenza', vaiTesto: 'Vai a Prove' },
+    ...(puoVedere(io, 'rinnovi') ? [{ chiave: 'rinnovi', testo: 'Rinnovi da gestire', n: h.rinnovi_da_gestire, nota: `non ancora presi in carico · ${h.miei_rinnovi} miei`, caldo: h.rinnovi_da_gestire > 0, vai: '/dashboard/rinnovi?vista=da_gestire', vaiTesto: 'Vai a Rinnovi' }] : []),
+    ...(puoVedere(io, 'disdette') ? [{ chiave: 'disdette', testo: 'Disdette da gestire', n: h.disdette_da_gestire, nota: `non ancora prese in carico · ${h.mie_disdette} mie`, caldo: h.disdette_da_gestire > 0, vai: '/dashboard/disdette?vista=da_gestire', vaiTesto: 'Vai a Disdette' }] : []),
+    { chiave: 'non_assegnati', testo: 'Non assegnati', nota: 'lead e prove senza consulente', vai: '/dashboard/lead?vista=tutte&consulente=' + NESSUN_CONSULENTE, vaiTesto: 'Vai a Lead' },
   ]
   const aperta = schede.find((s) => s.chiave === searchParams.vista) ?? schede[0]
   const scheda = aperta.chiave
@@ -70,7 +70,6 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
       <section className="scheda" id="da-gestire">
         <div className="testata-scheda">
           <h2>Da gestire</h2>
-          <Link href={aperta.vai}>Vai a {scheda === 'non_assegnati' ? 'Lead' : aperta.testo.replace(' da gestire', '')} →</Link>
         </div>
         <SchedeNumeri voci={schede} attiva={scheda} base="/dashboard" />
         <div className="da-gestire-corpo">
