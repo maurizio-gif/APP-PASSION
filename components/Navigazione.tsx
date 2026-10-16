@@ -29,19 +29,20 @@ const SERVIZIO = '/dashboard/utenti'
 const SERVIZIO_ALT = ['/dashboard/riunioni', '/dashboard/guida', '/dashboard/aggiornamenti']
 
 // Il menu: le voci le sceglie il layout, secondo le sezioni di chi e' entrato.
-export function Navigazione({ voci }: { voci: { href: string; testo: string }[] }) {
+export function Navigazione({ voci }: { voci: { href: string; testo: string; icona?: string }[] }) {
   const percorso = usePathname()
-  const primoServizio = voci.find((v) => v.href === SERVIZIO || SERVIZIO_ALT.includes(v.href))?.href
+  const chiave = (v: { href: string; icona?: string }) => v.icona ?? v.href
+  const primoServizio = voci.find((v) => chiave(v) === SERVIZIO || SERVIZIO_ALT.includes(chiave(v)))?.href
   return (
     <nav>
       {voci.map((v) => {
-        const attivo = v.href === '/dashboard' ? percorso === v.href : percorso.startsWith(v.href)
+        const attivo = chiave(v) === '/dashboard' ? percorso === v.href : percorso.startsWith(v.href)
         return (
           <Fragment key={v.href}>
             {v.href === primoServizio && <div className="separatore" />}
             <Link href={v.href} className={attivo ? 'attivo' : undefined}>
               <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d={ICONE[v.href] ?? 'M5 12h14'} />
+                <path d={ICONE[chiave(v)] ?? 'M5 12h14'} />
               </svg>
               {v.testo}
             </Link>
