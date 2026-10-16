@@ -4848,3 +4848,45 @@ th {
   margin: 6px 0 0 16px;
   font-size: 0.88rem;
 }
+
+/* ---- Home: il saluto come banda di apertura, con il nome grande ------------------------ */
+.testata-saluto {
+  position: relative;
+  overflow: hidden;
+  align-items: center;
+  padding: 22px 26px;
+  border: 1px solid rgba(227, 3, 45, 0.16);
+  border-radius: 16px;
+  background: linear-gradient(110deg, rgba(227, 3, 45, 0.11), rgba(227, 3, 45, 0.03) 55%, #fff);
+}
+.testata-saluto::before {
+  content: '';
+  position: absolute;
+  right: -60px;
+  top: -90px;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(227, 3, 45, 0.14), rgba(227, 3, 45, 0) 70%);
+  pointer-events: none;
+}
+.testata-saluto > * {
+  position: relative;
+}
+.testata-saluto .saluto {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 12px 0 0 16px;
+}
+.testata-saluto .saluto strong {
+  font-size: clamp(1.7rem, 3.2vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: var(--testo);
+}
+.testata-saluto .saluto span {
+  font-size: 0.95rem;
+  color: var(--testo-attenuato);
+}
