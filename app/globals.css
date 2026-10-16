@@ -5923,3 +5923,8 @@ select {
   letter-spacing: 0.04em;
   line-height: 1.2;
 }
+
+/* Ticket: il nome del cliente al centro della riga (la riga e' alta per il titolo e le etichette). */
+.tabella-ticket.con-cliente td:nth-child(2) {
+  vertical-align: middle;
+}
