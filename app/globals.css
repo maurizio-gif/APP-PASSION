@@ -1422,7 +1422,7 @@ details.scheda[open] summary {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: #bdb5b3;
+  color: #c9b5ba;
   margin-bottom: 8px;
 }
 .grafico-riquadro ul {
@@ -1443,7 +1443,7 @@ details.scheda[open] summary {
   font-variant-numeric: tabular-nums;
 }
 .grafico-riquadro-nota {
-  color: #bdb5b3;
+  color: #c9b5ba;
   font-size: 0.8rem;
 }
 .quadratino {
@@ -1477,7 +1477,7 @@ details.scheda[open] summary {
   gap: 16px;
 }
 .grafico-riquadro-piede dt {
-  color: #bdb5b3;
+  color: #c9b5ba;
 }
 .grafico-riquadro-piede dd {
   margin: 0;
@@ -3119,7 +3119,7 @@ details.scheda .utenti {
   place-items: center;
   font-size: 0.72rem;
   background: #fff;
-  border: 1.5px solid #cfd3da;
+  border: 1.5px solid #e3cbd1;
 }
 .percorso li.fatto {
   color: var(--verde);
@@ -3887,7 +3887,7 @@ select:not([multiple]):hover {
   max-width: min(440px, calc(100vw - 32px));
   padding: 12px 14px;
   background: var(--nero);
-  color: #f3f4f6;
+  color: #fff3f4;
   border-radius: 10px;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
   font-size: 0.86rem;
@@ -4463,7 +4463,7 @@ section[data-carica] .da-gestire-corpo {
   right: 0;
   bottom: -1px;
   height: 3px;
-  background: #cfd3da;
+  background: #e3cbd1;
   transform: scaleX(0);
   transform-origin: left center;
   transition: transform 0.26s cubic-bezier(0.2, 0.7, 0.2, 1), background-color 0.16s ease;
