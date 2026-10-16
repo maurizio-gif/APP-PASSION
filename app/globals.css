@@ -6202,3 +6202,12 @@ select {
 .ticket-pagina .ticket-azioni h2 + .stack label {
   font-weight: 600;
 }
+
+/* Sottotitoli dentro i riquadri del ticket: neri, in minuscolo (solo la prima lettera maiuscola). */
+.ticket-pagina .titoletto {
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--testo);
+}
