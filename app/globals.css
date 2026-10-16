@@ -5392,3 +5392,10 @@ select {
   border-color: rgba(227, 3, 45, 0.5);
   color: #fff;
 }
+
+/* Sfondo della barra: dal nero al rosso scuro in basso. */
+.barra {
+  background:
+    radial-gradient(120% 60% at 0% 100%, rgba(227, 3, 45, 0.5), rgba(227, 3, 45, 0) 70%),
+    linear-gradient(to bottom, #15161a, var(--nero) 55%, #3a050f);
+}
