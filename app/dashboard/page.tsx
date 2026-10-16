@@ -144,15 +144,20 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
       <section className="scheda">
         <div className="testata-scheda">
           <h2>I miei task</h2>
-          <Link href="/dashboard/task?chi=miei&quando=arretrati" className={h.miei_task_arretrati ? 'testo-rosso' : undefined}>
-            {h.miei_task_oggi + h.miei_task_arretrati} da fare · {h.miei_task_oggi} oggi · {h.miei_task_arretrati} arretrati →
-          </Link>
+          <div className="chip-gruppo">
+            <span className="chip">{h.miei_task_oggi + h.miei_task_arretrati} da fare</span>
+            <span className="chip">{h.miei_task_oggi} oggi</span>
+            <span className={`chip${h.miei_task_arretrati ? ' rosso' : ''}`}>{h.miei_task_arretrati} arretrati</span>
+          </div>
         </div>
         {task.length === 0 ? (
           <Vuoto>Niente in agenda per oggi.</Vuoto>
         ) : (
           <TabellaTask task={task.slice(0, 15)} torna="/dashboard" compatta completa={completaTask} />
         )}
+        <div className="scheda-piede">
+          <Link className="bottone secondario piccolo" href="/dashboard/task?chi=miei&quando=arretrati">Vai a Task →</Link>
+        </div>
         {task.length > 15 && <Link href="/dashboard/task">Tutti i task →</Link>}
       </section>
     </>

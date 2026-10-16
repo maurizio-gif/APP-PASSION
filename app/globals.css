@@ -4799,3 +4799,38 @@ th {
     margin-left: auto;
   }
 }
+
+/* ---- I miei task: i numeri come etichette vicino al titolo, «Vai a Task» in fondo ---- */
+.testata-scheda:has(.chip-gruppo) {
+  justify-content: flex-start;
+  gap: 14px;
+}
+.chip-gruppo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--riga-alterna);
+  border: 1px solid var(--bordo);
+  color: var(--testo-attenuato);
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.chip.rosso {
+  background: rgba(227, 3, 45, 0.07);
+  border-color: rgba(227, 3, 45, 0.22);
+  color: var(--rosso-scuro);
+}
+.scheda-piede {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 12px;
+  border-top: 1px solid var(--bordo);
+  margin-top: 4px;
+}
