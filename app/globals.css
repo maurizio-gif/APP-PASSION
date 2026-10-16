@@ -6273,11 +6273,14 @@ select {
 .testata-ticket .ticket-bollini .bollino {
   font-size: 0.72rem;
   padding: 2px 10px;
+}
+:root:not([data-tema='chiaro']) .testata-ticket .ticket-bollini .bollino {
   background: rgba(255, 255, 255, 0.12);
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.22);
 }
-.testata-ticket .ticket-bollini .bollino.blocca {
+.testata-ticket .ticket-bollini .bollino.blocca,
+:root:not([data-tema='chiaro']) .testata-ticket .ticket-bollini .bollino.blocca {
   background: var(--rosso);
   border-color: var(--rosso);
   color: #fff;
@@ -6318,4 +6321,8 @@ select {
 }
 :root[data-tema='chiaro'] .testata-ticket .ticket-meta strong {
   color: var(--testo);
+}
+:root[data-tema='chiaro'] .testata-ticket .ticket-bollini .bollino:not(.blocca) {
+  background: #fff;
+  border: 1px solid #e3cbd1;
 }
