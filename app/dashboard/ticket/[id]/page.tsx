@@ -260,6 +260,7 @@ function Azioni({ t, io, qui }: { t: Ticket; io: Io; qui: string }) {
       blocchi.push(
         <form key="risolvi" action={risolviTicket} className="modulo">
           <Nascosti t={t} qui={qui} />
+          <div className="modulo-titolo">Risolvi il ticket</div>
           <SceltaNatura />
           <div className="campo">
             <label htmlFor="causa">Causa</label>
@@ -278,7 +279,7 @@ function Azioni({ t, io, qui }: { t: Ticket; io: Io; qui: string }) {
         <form key="chiedi" action={chiediTicket} className="modulo">
           <Nascosti t={t} qui={qui} />
           <div className="campo">
-            <label htmlFor="domanda">Chiedi informazioni a Passion</label>
+            <label htmlFor="domanda" className="modulo-titolo">Chiedi informazioni a Passion</label>
             <textarea id="domanda" name="domanda" rows={2} required placeholder="Cosa serve sapere per andare avanti" />
           </div>
           <BottoneInvio testo="Chiedi e metti in attesa" inCorso="Invio…" classe="secondario" />
@@ -291,9 +292,11 @@ function Azioni({ t, io, qui }: { t: Ticket; io: Io; qui: string }) {
     blocchi.push(
       <form key="unisci" action={unisciTicket} className="azioni-scheda">
         <Nascosti t={t} qui={qui} />
-        <label htmlFor="unisci-in" className="piccolo">Stesso problema del ticket</label>
-        <input id="unisci-in" name="in" type="number" min={1} required placeholder="#" className="campo-breve" />
-        <button className="bottone secondario piccolo">Unisci</button>
+        <label htmlFor="unisci-in" className="modulo-titolo">Stesso problema del ticket</label>
+        <div className="azioni-riga">
+          <input id="unisci-in" name="in" type="number" min={1} required placeholder="#" className="campo-breve" />
+          <button className="bottone secondario piccolo">Unisci</button>
+        </div>
       </form>,
     )
   }

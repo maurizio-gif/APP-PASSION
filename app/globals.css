@@ -6211,3 +6211,40 @@ select {
   text-transform: none;
   color: var(--testo);
 }
+
+/* «Cosa fare»: i moduli affiancati partono tutti dalla stessa riga (titolo in alto) e i bottoni stanno in fondo, allineati. */
+.ticket-azioni .modulo-titolo {
+  display: block;
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--testo);
+}
+.ticket-azioni .stack > form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+.ticket-azioni .stack > form .campo {
+  margin: 0;
+}
+.ticket-azioni .stack > form > .bottone,
+.ticket-azioni .stack > form > button {
+  align-self: flex-start;
+  margin-top: auto;
+}
+.ticket-azioni .stack > form .azioni-riga {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+.ticket-azioni .stack > form .campo > label.modulo-titolo {
+  margin-bottom: 8px;
+}
+@media (min-width: 900px) {
+  .ticket-azioni .stack {
+    align-items: stretch;
+  }
+}
