@@ -4933,3 +4933,12 @@ th {
 .testata-saluto .saluto span::first-letter {
   text-transform: none;
 }
+
+/* La banda sfuma verso destra fino a sparire. */
+.testata-saluto {
+  border: 0;
+  background: linear-gradient(to right, rgba(227, 3, 45, 0.12), rgba(227, 3, 45, 0.05) 45%, rgba(227, 3, 45, 0) 100%);
+}
+.testata-saluto::before {
+  display: none;
+}
