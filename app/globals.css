@@ -6143,3 +6143,62 @@ select {
   flex-wrap: wrap;
   margin-bottom: 4px;
 }
+
+/* ---- Pagina del ticket: una scala unica di caratteri e colori ---------------------------
+   corpo 0.92rem · dati e moduli 0.9rem · note 0.82rem · etichette 0.72rem maiuscole.
+   Nero per i testi e i titoli dei ticket, rosso per i nomi delle persone, grigio scuro per le note. */
+.ticket-pagina {
+  font-size: 0.92rem;
+}
+.ticket-pagina .ticket-testo,
+.ticket-pagina .elenco-breve li,
+.ticket-pagina .filo-ticket .storia-testo,
+.ticket-pagina .dati dd,
+.ticket-pagina .vuoto {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--testo);
+}
+.ticket-pagina .vuoto {
+  color: var(--testo-attenuato);
+}
+.ticket-pagina .piccolo,
+.ticket-pagina .filo-ticket .storia-testa,
+.ticket-pagina .contatti,
+.ticket-pagina .contatti a {
+  font-size: 0.82rem;
+}
+.ticket-pagina .contatti a {
+  color: var(--testo-attenuato);
+}
+.ticket-pagina .contatti a:hover {
+  color: var(--rosso-scuro);
+}
+.ticket-pagina textarea,
+.ticket-pagina select,
+.ticket-pagina input {
+  font-size: 0.9rem;
+}
+.ticket-pagina .campo label,
+.ticket-pagina label {
+  color: var(--testo);
+}
+.ticket-pagina .elenco-breve a {
+  color: var(--testo);
+  font-weight: 600;
+}
+.ticket-pagina .elenco-breve a:hover {
+  color: var(--rosso-scuro);
+}
+.ticket-pagina .elenco-breve .numero-ticket {
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-right: 4px;
+}
+.ticket-pagina .bollino {
+  font-size: 0.72rem;
+  padding: 2px 9px;
+}
+.ticket-pagina .ticket-azioni h2 + .stack label {
+  font-weight: 600;
+}
