@@ -5507,3 +5507,8 @@ select {
 .contenuto {
   background: linear-gradient(160deg, #2b2c31 0%, #1b1c20 45%, #0f1012 100%);
 }
+
+/* Bianco delle schede: a meta' tra il bianco pieno e il grigio chiaro. */
+:root {
+  --scheda: #f5f5f8;
+}
