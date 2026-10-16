@@ -61,7 +61,7 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
             <h1>Da gestire</h1>
           </div>
           <p className="saluto">
-            <strong>Ciao {io?.nome}</strong>
+            <strong>Ciao <b>{io?.nome}</b></strong>
             <span>{formatoGiornoLungo(oggiRoma())}</span>
           </p>
         </div>
