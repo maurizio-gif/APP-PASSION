@@ -2998,8 +2998,18 @@ details.scheda .utenti {
   .tabella-prove .iniziali:not(.piccole) {
     display: none;
   }
+  .tabella-prove td {
+    padding: 0;
+  }
+  .tabella-prove tr {
+    gap: 8px 10px;
+  }
   .tabella-prove .metriche {
     gap: 14px;
+    margin-bottom: 0;
+  }
+  .tabella-prove .cella-pass .bollino {
+    margin-top: 4px;
   }
 }
 
