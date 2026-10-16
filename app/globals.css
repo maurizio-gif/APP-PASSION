@@ -5308,3 +5308,14 @@ select {
   border-left-color: var(--rosso);
   background: linear-gradient(to right, rgba(227, 3, 45, 0.08), rgba(227, 3, 45, 0.02));
 }
+
+/* I dati del socio occupano tutta la riga, in parti uguali. */
+.persona-fatti {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 14px 24px;
+}
+.persona-fatti > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
