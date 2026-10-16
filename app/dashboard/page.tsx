@@ -1,12 +1,13 @@
 import Link from 'next/link'
 import { crm } from '@/lib/crm'
-import { formatoGiornoLungo, formatoOra, oggiRoma, traduci, TIPO_TASK } from '@/lib/formato'
-import { Avviso, Persona, Provenienza, Schede, Vuoto } from '@/components/Ui'
+import { formatoGiornoLungo, oggiRoma } from '@/lib/formato'
+import { Avviso, Schede, Vuoto } from '@/components/Ui'
 import { assiste, puoVedere, smista } from '@/lib/permessi'
 import { TabellaLead } from '@/components/TabellaLead'
 import { TabellaRinnovi } from '@/components/TabellaRinnovi'
 import { TabellaDisdette } from '@/components/TabellaDisdette'
 import { TabellaProve } from '@/components/TabellaProve'
+import { TabellaTask } from '@/components/TabellaTask'
 import { completaTask } from './azioni'
 
 // «Nessun consulente»: i lead senza assegnatario (uuid a zero per crm_lead).
@@ -177,28 +178,7 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
         {task.length === 0 ? (
           <Vuoto>Niente in agenda per oggi.</Vuoto>
         ) : (
-          <ul className="elenco">
-            {task.slice(0, 15).map((t) => (
-              <li key={t.id}>
-                <div className="elenco-riga">
-                  <div>
-                    <span className={`bollino${t.data && new Date(t.data) < new Date() ? ' rosso' : ''}`}>
-                      {traduci(TIPO_TASK, t.tipo)} {formatoOra(t.data)}
-                    </span>{' '}
-                    <Provenienza origine={t.origine} />{' '}
-                    <Persona id={t.utente_id} nome={t.nome} cognome={t.cognome} nuovaScheda />
-                    {t.nota && <div className="piccolo">{t.nota}</div>}
-                  </div>
-                  <form action={completaTask} className="azioni-riga pila">
-                    <input type="hidden" name="task" value={t.id} />
-                    <input type="hidden" name="torna" value="/dashboard" />
-                    <button className="bottone piccolo" name="esito" value="positivo">Fatto ✓</button>
-                    <button className="bottone secondario piccolo" name="esito" value="negativo">Non risponde</button>
-                  </form>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <TabellaTask task={task.slice(0, 15)} torna="/dashboard" compatta completa={completaTask} />
         )}
         {task.length > 15 && <Link href="/dashboard/task">Tutti i task →</Link>}
       </section>

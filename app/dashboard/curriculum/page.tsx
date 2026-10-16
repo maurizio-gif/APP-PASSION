@@ -37,7 +37,7 @@ export default async function Curriculum({ searchParams }: { searchParams: { vis
           <Vuoto>Nessuna candidatura qui.</Vuoto>
         ) : (
           <div className="tabella-scorre">
-            <table className="schede-mobile">
+            <table className="schede-mobile tabella-colonne">
               <thead>
                 <tr>
                   <th>Candidato</th>
@@ -53,22 +53,28 @@ export default async function Curriculum({ searchParams }: { searchParams: { vis
                   return (
                     <tr key={c.id}>
                       <td>
-                        <strong>{c.nome} {c.cognome}</strong>
-                        <Contatti telefono={c.telefono} email={c.email} />
-                        <div className="piccolo attenuato">Arrivato il {formatoDataOra(c.creato_il)}</div>
+                        <div className="riga-dati">
+                          <strong>{c.nome} {c.cognome}</strong>
+                          <Contatti telefono={c.telefono} email={c.email} />
+                          <span className="muto">Arrivato il {formatoDataOra(c.creato_il)}</span>
+                        </div>
                       </td>
-                      <td>{traduci(POSIZIONE, c.posizione)}</td>
-                      <td className="nowrap">
-                        {formatoData(c.data_nascita)}
-                        {anni != null && <div className="piccolo attenuato">{anni} anni</div>}
+                      <td><div className="riga-dati"><strong>{traduci(POSIZIONE, c.posizione)}</strong></div></td>
+                      <td>
+                        <div className="riga-dati">
+                          <span className="normale">{formatoData(c.data_nascita)}</span>
+                          {anni != null && <span className="muto">{anni} anni</span>}
+                        </div>
                       </td>
                       <td>
-                        {url ? (
-                          <a href={url} target="_blank" rel="noreferrer">{c.file_nome}</a>
-                        ) : (
-                          <span className="attenuato">{c.file_nome} (non raggiungibile)</span>
-                        )}
-                        <div className="piccolo attenuato">{formatoPeso(c.file_dimensione)}</div>
+                        <div className="riga-dati">
+                          {url ? (
+                            <a href={url} target="_blank" rel="noreferrer">{c.file_nome}</a>
+                          ) : (
+                            <span className="muto">{c.file_nome} (non raggiungibile)</span>
+                          )}
+                          <span className="muto">{formatoPeso(c.file_dimensione)}</span>
+                        </div>
                       </td>
                     </tr>
                   )

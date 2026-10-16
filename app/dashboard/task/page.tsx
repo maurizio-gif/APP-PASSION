@@ -1,10 +1,9 @@
-import Link from 'next/link'
 import { crm, richiediSezione } from '@/lib/crm'
-import { formatoDataOra, TIPO_TASK, traduci } from '@/lib/formato'
-import { Avviso, Contatti, LinkGuida, Persona, Provenienza, SchedeMulti, Vuoto } from '@/components/Ui'
+import { Avviso, LinkGuida, SchedeMulti, Vuoto } from '@/components/Ui'
+import { TabellaTask } from '@/components/TabellaTask'
+import { completaTask } from '../azioni'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
 import { filtraTesto, testoCercato } from '@/lib/ricerca'
-import { completaTask } from '../azioni'
 
 const CHI = [
   { chiave: 'miei', testo: 'I miei' },
@@ -55,39 +54,7 @@ export default async function Task({ searchParams }: { searchParams: { chi?: str
         {task.length === 0 ? (
           <Vuoto>Nessun task qui.</Vuoto>
         ) : (
-          <ul className="elenco">
-            {task.map((t) => (
-              <li key={t.id}>
-                <div className="elenco-riga">
-                  <div>
-                    <span className={`bollino${!t.completato_il && t.data && new Date(t.data) < new Date() ? ' rosso' : ''}`}>
-                      {traduci(TIPO_TASK, t.tipo)} · {formatoDataOra(t.data)}
-                    </span>{' '}
-                    <Provenienza origine={t.origine} />{' '}
-                    <Persona id={t.utente_id} nome={t.nome} cognome={t.cognome} nuovaScheda />
-                    {chi !== 'miei' && <span className="piccolo attenuato"> · {t.assegnato_nome ?? 'nessuno'}</span>}
-                    <Contatti telefono={t.telefono} email={null} />
-                    {t.nota && <div className="piccolo">{t.nota}</div>}
-                    {t.completato_il && (
-                      <div className="piccolo attenuato">
-                        fatto {formatoDataOra(t.completato_il)}{' '}
-                        {t.esito && <span className={`bollino ${t.esito === 'positivo' ? 'verde' : 'rosso'}`}>{t.esito}</span>}
-                      </div>
-                    )}
-                  </div>
-                  {!t.completato_il && (
-                    <form action={completaTask} className="azioni-riga">
-                      <input type="hidden" name="task" value={t.id} />
-                      <input type="hidden" name="torna" value={qui} />
-                      <input type="text" name="nota" placeholder="Com'è andata" />
-                      <button className="bottone piccolo" name="esito" value="positivo">Fatto ✓</button>
-                      <button className="bottone secondario piccolo" name="esito" value="negativo">Negativo</button>
-                    </form>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
+          <TabellaTask task={task} chi={chi} torna={qui} completa={completaTask} />
         )}
       </div>
     </>

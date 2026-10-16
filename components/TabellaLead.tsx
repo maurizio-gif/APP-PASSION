@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import type { ContrattoLead, Io, Lead, Operatore } from '@/lib/crm'
 import { formatoData, formatoOra, nomeCompleto } from '@/lib/formato'
-import { BollinoFase, BollinoFonte } from '@/components/Ui'
+import { BollinoFase, BollinoFonte, Contatti } from '@/components/Ui'
 import { assegnaLead, prendiLead, rilasciaLead } from '@/app/dashboard/azioni'
 import { puoGestire } from '@/lib/permessi'
 
@@ -28,13 +28,12 @@ export function TabellaLead({ lead, io, staff, torna, contratti, firma }: { lead
   return (
     <>
       <div className="tabella-scorre solo-computer">
-        <table className="tabella-lead">
+        <table className="tabella-lead tabella-colonne">
           <thead>
             <tr>
-              <th>{firma ? 'Data firma' : 'Data di creazione'}</th>
-              <th></th>
               <th>Nome + Cognome</th>
               <th>Tipologia</th>
+              <th>{firma ? 'Data firma' : 'Data di creazione'}</th>
               {contratti ? (
                 <>
                   <th>Abbonamento</th>
@@ -53,27 +52,35 @@ export function TabellaLead({ lead, io, staff, torna, contratti, firma }: { lead
           <tbody>
             {lead.map((l) => {
               const scheda = `/dashboard/persone/${l.utente_id}`
+              const c = contratti?.[l.id]
               return (
                 <tr key={l.id}>
-                  <td className="nowrap"><Link href={scheda} target="_blank" rel="noopener noreferrer" className="muto">{firma ? (contratti?.[l.id]?.data_firma ? formatoData(contratti[l.id].data_firma) : '–') : formatoData(l.creato_il)}</Link></td>
-                  <td className="nowrap attenuato">{firma ? '' : formatoOra(l.creato_il)}</td>
-                  <td className="nowrap">
-                    <NomeScheda href={scheda} l={l} />
+                  <td>
+                    <div className="riga-dati">
+                      <NomeScheda href={scheda} l={l} />
+                      <Contatti telefono={l.telefono} email={l.email} />
+                    </div>
                   </td>
-                  <td className="nowrap"><BollinoFonte fonte={l.fonte} dettaglio={l.fonte_dettaglio} /></td>
+                  <td><span className="etichetta-riga"><BollinoFonte fonte={l.fonte} dettaglio={l.fonte_dettaglio} /></span></td>
+                  <td>
+                    <div className="riga-dati">
+                      <Link href={scheda} target="_blank" rel="noopener noreferrer" className="normale">{firma ? (c?.data_firma ? formatoData(c.data_firma) : '–') : formatoData(l.creato_il)}</Link>
+                      {!firma && <span className="muto">{formatoOra(l.creato_il)}</span>}
+                    </div>
+                  </td>
                   {contratti ? (
                     <>
-                      <td><span className="taglia" title={contratti[l.id]?.piano ?? undefined}>{contratti[l.id]?.piano || '–'}</span></td>
-                      <td className="nowrap">{contratti[l.id]?.data_inizio ? formatoData(contratti[l.id].data_inizio) : '–'}</td>
-                      <td className="nowrap">{l.assegnato_nome || <span className="attenuato">nessuno</span>}</td>
+                      <td><div className="riga-dati"><strong>{c?.piano || '–'}</strong></div></td>
+                      <td><div className="riga-dati"><span className="normale">{c?.data_inizio ? formatoData(c.data_inizio) : '–'}</span></div></td>
+                      <td><div className="riga-dati">{l.assegnato_nome ? <span className="normale">{l.assegnato_nome}</span> : <span className="muto">nessuno</span>}</div></td>
                     </>
                   ) : (
                     <>
-                      <td><span className="taglia" title={l.attivita_interesse ?? undefined}>{l.attivita_interesse || '–'}</span></td>
-                      <td><span className="taglia" title={l.note_task ?? undefined}>{l.note_task || ''}</span></td>
+                      <td><div className="riga-dati"><span className="normale">{l.attivita_interesse || '–'}</span></div></td>
+                      <td><div className="riga-dati"><span className="muto">{l.note_task || ''}</span></div></td>
                     </>
                   )}
-                  <td className="nowrap"><Azione l={l} io={io} staff={staff} torna={torna} /></td>
+                  <td><Azione l={l} io={io} staff={staff} torna={torna} /></td>
                 </tr>
               )
             })}

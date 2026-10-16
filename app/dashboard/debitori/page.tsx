@@ -74,7 +74,7 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
           <Vuoto>{rientrati ? 'Nessun debito rientrato negli ultimi 90 giorni.' : 'Nessun debitore qui.'}</Vuoto>
         ) : (
           <div className="tabella-scorre">
-            <table className="schede-mobile">
+            <table className="schede-mobile tabella-colonne">
               <thead>
                 <tr>
                   <th>Socio</th>
@@ -90,56 +90,66 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
                   return (
                     <tr key={d.debito_id ?? d.member_id}>
                       <td>
-                        <Persona id={d.utente_id} nome={d.nome} cognome={d.cognome} />
-                        <Contatti telefono={d.telefono} email={d.email} />
-                        {pgm && <a className="piccolo" href={pgm} target="_blank" rel="noreferrer">PerfectGym ↗</a>}
-                      </td>
-                      <td className="nowrap info">
-                        <div className={d.saldo != null && d.saldo < 0 ? 'negativo' : undefined}>{formatoEuro(d.saldo)}</div>
-                        {d.negativo_da && <div className="piccolo attenuato">in negativo dal {formatoData(d.negativo_da)}</div>}
-                        <div className="piccolo attenuato">
-                          {d.ultimo_pagamento ? `ultimo pagamento ${formatoData(d.ultimo_pagamento)} · ${formatoEuro(d.ultimo_importo)}` : 'nessun pagamento'}
+                        <div className="riga-dati">
+                          <Persona id={d.utente_id} nome={d.nome} cognome={d.cognome} />
+                          <Contatti telefono={d.telefono} email={d.email} />
+                          {pgm && <a href={pgm} target="_blank" rel="noreferrer">PerfectGym ↗</a>}
                         </div>
-                        {d.rientrato_il && <span className="bollino verde">Rientrato il {formatoData(d.rientrato_il)}</span>}
                       </td>
-                      <td className="piccolo info">
-                        <span className={`bollino ${d.abbonamento_attivo ? 'verde' : 'grigio'}`}>{d.abbonamento_attivo ? 'Attivo' : 'Scaduto'}</span>
-                        <div><strong>{d.piano ?? 'nessun abbonamento'}</strong></div>
-                        {d.stato_contratto && (
-                          <div className="attenuato">
-                            {traduci(STATO_CONTRATTO, d.stato_contratto)}
-                            {d.data_fine ? ` · fine ${formatoData(d.data_fine)}` : ''}
-                          </div>
-                        )}
+                      <td>
+                        <div className="riga-dati">
+                          <strong className={d.saldo != null && d.saldo < 0 ? 'negativo' : undefined}>{formatoEuro(d.saldo)}</strong>
+                          {d.negativo_da && <span className="muto">in negativo dal {formatoData(d.negativo_da)}</span>}
+                          <span className="muto">
+                            {d.ultimo_pagamento ? `ultimo pagamento ${formatoData(d.ultimo_pagamento)} · ${formatoEuro(d.ultimo_importo)}` : 'nessun pagamento'}
+                          </span>
+                          {d.rientrato_il && <span className="etichetta-riga"><span className="bollino verde">Rientrato il {formatoData(d.rientrato_il)}</span></span>}
+                        </div>
+                      </td>
+                      <td>
+                        <div className="riga-dati">
+                          <strong>{d.piano ?? 'nessun abbonamento'}</strong>
+                          {d.stato_contratto && (
+                            <span className="muto">
+                              {traduci(STATO_CONTRATTO, d.stato_contratto)}
+                              {d.data_fine ? ` · fine ${formatoData(d.data_fine)}` : ''}
+                            </span>
+                          )}
+                          <span className="etichetta-riga"><span className={`bollino ${d.abbonamento_attivo ? 'verde' : 'grigio'}`}>{d.abbonamento_attivo ? 'Attivo' : 'Scaduto'}</span></span>
+                        </div>
                       </td>
                       <td className="recupero">
-                        {rientrati ? (
-                          <span className="piccolo">{d.assegnato_nome ?? '—'}</span>
-                        ) : (
-                          <form action={debitoAssegna} className="azioni-riga">
-                            <input type="hidden" name="socio" value={d.member_id} />
-                            <input type="hidden" name="torna" value={qui} />
-                            {d.assegnato_a ? (
-                              <>
-                                <select name="staff" defaultValue={d.assegnato_a} aria-label="Chi segue il recupero" className="piccola">
-                                  {staff.map((s) => <option key={s.id} value={s.id}>{s.nome} {s.cognome ?? ''}</option>)}
-                                </select>
-                                <button className="bottone secondario piccolo">Assegna</button>
-                              </>
-                            ) : (
-                              <button className="bottone piccolo">Prendo in carico</button>
-                            )}
-                          </form>
-                        )}
-                        <div className="piccolo debitori-task">
-                          {d.task_aperti > 0 ? (
-                            <span className={`bollino${d.prossimo_task && new Date(d.prossimo_task) < new Date() ? ' rosso' : ''}`}>
-                              {d.task_aperti} {d.task_aperti === 1 ? 'task aperto' : 'task aperti'} · {formatoDataOra(d.prossimo_task)}
-                            </span>
+                        <div className="riga-dati">
+                          {rientrati ? (
+                            <span className="normale">{d.assegnato_nome ?? '—'}</span>
                           ) : (
-                            <span className="attenuato">nessun task aperto</span>
+                            <div className="azioni-gruppo">
+                              <form action={debitoAssegna} className="azioni-riga">
+                                <input type="hidden" name="socio" value={d.member_id} />
+                                <input type="hidden" name="torna" value={qui} />
+                                {d.assegnato_a ? (
+                                  <>
+                                    <select name="staff" defaultValue={d.assegnato_a} aria-label="Chi segue il recupero" className="piccola">
+                                      {staff.map((s) => <option key={s.id} value={s.id}>{s.nome} {s.cognome ?? ''}</option>)}
+                                    </select>
+                                    <button className="bottone secondario piccolo">Assegna</button>
+                                  </>
+                                ) : (
+                                  <button className="bottone piccolo">Prendo in carico</button>
+                                )}
+                              </form>
+                            </div>
                           )}
-                          {d.note_task && <span className="taglia larga" title={d.note_task}>{d.note_task}</span>}
+                          <div className="debitori-task">
+                            {d.task_aperti > 0 ? (
+                              <span className={`bollino${d.prossimo_task && new Date(d.prossimo_task) < new Date() ? ' rosso' : ''}`}>
+                                {d.task_aperti} {d.task_aperti === 1 ? 'task aperto' : 'task aperti'} · {formatoDataOra(d.prossimo_task)}
+                              </span>
+                            ) : (
+                              <span className="muto">nessun task aperto</span>
+                            )}
+                            {d.note_task && <span className="muto taglia larga" title={d.note_task}>{d.note_task}</span>}
+                          </div>
                         </div>
                       </td>
                       {!rientrati && (

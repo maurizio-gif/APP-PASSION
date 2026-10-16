@@ -4133,3 +4133,72 @@ select:not([multiple]):hover {
     display: inline;
   }
 }
+
+/* ---- Lo schema unico delle tabelle ------------------------------------------------
+   Persona per prima (nome in rosso, poi telefono, email, etichette), poi le colonne
+   dei dati della sezione, in fondo le azioni. Un solo carattere (0.88rem); in ogni
+   cella la prima riga in grassetto, le altre grigie; stessi rientri, stesse altezze. */
+
+.tabella-colonne,
+.tabella-colonne td {
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+.tabella-colonne td {
+  padding-top: 13px;
+  padding-bottom: 13px;
+  vertical-align: middle;
+}
+.tabella-colonne tbody tr:hover td {
+  background: var(--riga-alterna);
+}
+.tabella-colonne td .riga-dati {
+  max-width: 340px;
+}
+/* Il nome della persona (primo link di una cella) sempre rosso. */
+.tabella-colonne td .riga-dati > a {
+  color: var(--rosso-scuro);
+  font-weight: 600;
+}
+.tabella-colonne td .riga-dati > a.normale {
+  color: var(--testo);
+  font-weight: 400;
+}
+.tabella-colonne td .riga-dati > a:hover {
+  color: var(--rosso);
+}
+.tabella-colonne td .riga-dati sup {
+  font-size: 0.7em;
+}
+/* Campi e bottoni nelle tabelle: stessa altezza ovunque. */
+.tabella-colonne select,
+.tabella-colonne input[type='text'],
+.tabella-colonne .bottone {
+  min-height: 34px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 0.88rem;
+}
+.tabella-colonne .bottone.icona {
+  padding-left: 0;
+  padding-right: 0;
+}
+.tabella-task .task-azioni {
+  flex-wrap: nowrap;
+}
+.tabella-task .task-azioni input[type='text'] {
+  flex: 1 1 180px;
+  min-width: 140px;
+}
+.tabella-task .origine {
+  font-size: 0.74rem;
+}
+/* Lead: la tabella e' l'«Interface» di Airtable, ma con le stesse celle delle altre. */
+.tabella-lead td {
+  vertical-align: middle;
+}
+
+/* Solo il nome della persona e' in grassetto: gli altri link della cella (PerfectGym ↗) sono normali. */
+.tabella-colonne td .riga-dati > a:not(:first-child) {
+  font-weight: 400;
+}

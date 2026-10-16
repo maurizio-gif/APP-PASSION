@@ -27,7 +27,7 @@ export function NumeroTicket({ id }: { id: number }) {
 export function TabellaTicket({ ticket, socio = true }: { ticket: TicketRiga[]; socio?: boolean }) {
   return (
     <div className="tabella-scorre">
-      <table className="schede-mobile">
+      <table className="schede-mobile tabella-colonne">
         <thead>
           <tr>
             <th>Ticket</th>
@@ -40,33 +40,41 @@ export function TabellaTicket({ ticket, socio = true }: { ticket: TicketRiga[]; 
           {ticket.map((t) => (
             <tr key={t.id}>
               <td>
-                <Link href={`/dashboard/ticket/${t.id}`} className="ticket-titolo">
-                  <NumeroTicket id={t.id} /> <strong>{t.titolo}</strong>
-                </Link>
-                <div className="ticket-bollini">
-                  <BollinoTipo tipo={t.tipo} /> <BollinoStato stato={t.stato} />
-                  {t.bloccante && <span className="bollino rosso">Blocca il lavoro</span>}
-                  {t.doppione_di && <span className="piccolo attenuato"> nel #{t.doppione_di}</span>}
+                <div className="riga-dati">
+                  <Link href={`/dashboard/ticket/${t.id}`} className="ticket-titolo">
+                    <NumeroTicket id={t.id} /> <strong>{t.titolo}</strong>
+                  </Link>
+                  <div className="ticket-bollini">
+                    <BollinoTipo tipo={t.tipo} /> <BollinoStato stato={t.stato} />
+                    {t.bloccante && <span className="bollino rosso">Blocca il lavoro</span>}
+                    {t.doppione_di && <span className="muto"> nel #{t.doppione_di}</span>}
+                  </div>
                 </div>
               </td>
               {socio && (
                 <td>
-                  {t.utente_id ? <Persona id={t.utente_id} nome={t.nome} cognome={t.cognome} /> : <span className="attenuato">—</span>}
+                  <div className="riga-dati">
+                    {t.utente_id ? <Persona id={t.utente_id} nome={t.nome} cognome={t.cognome} /> : <span className="muto">—</span>}
+                  </div>
                 </td>
               )}
-              <td className="piccolo">
-                <div>{t.aperto_da_nome ?? '—'}</div>
-                <div className="attenuato">{formatoData(t.aperto_il)}</div>
-                {t.tipo === 'modifica' && t.dal && <div>dal <strong>{formatoData(t.dal)}</strong></div>}
-              </td>
-              <td className="piccolo">
-                <div>{formatoFa(t.aggiornato_il)}</div>
-                <div className="attenuato">
-                  {t.messaggi} {t.messaggi === 1 ? 'messaggio' : 'messaggi'}
-                  {t.allegati > 0 && ` · ${t.allegati} ${t.allegati === 1 ? 'allegato' : 'allegati'}`}
-                  {t.preso_nome && ` · ${t.preso_nome}`}
+              <td>
+                <div className="riga-dati">
+                  <strong>{t.aperto_da_nome ?? '—'}</strong>
+                  <span className="muto">{formatoData(t.aperto_il)}</span>
+                  {t.tipo === 'modifica' && t.dal && <span className="normale">dal {formatoData(t.dal)}</span>}
                 </div>
-                {t.ultimo_lato === 'r2d' && t.stato === 'in_attesa' && <div className="testo-rosso">R2D aspetta una risposta</div>}
+              </td>
+              <td>
+                <div className="riga-dati">
+                  <span className="normale">{formatoFa(t.aggiornato_il)}</span>
+                  <span className="muto">
+                    {t.messaggi} {t.messaggi === 1 ? 'messaggio' : 'messaggi'}
+                    {t.allegati > 0 && ` · ${t.allegati} ${t.allegati === 1 ? 'allegato' : 'allegati'}`}
+                    {t.preso_nome && ` · ${t.preso_nome}`}
+                  </span>
+                  {t.ultimo_lato === 'r2d' && t.stato === 'in_attesa' && <span className="testo-rosso">R2D aspetta una risposta</span>}
+                </div>
               </td>
             </tr>
           ))}
