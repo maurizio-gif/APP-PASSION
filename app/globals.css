@@ -5931,3 +5931,12 @@ select {
 .tabella-ticket td {
   vertical-align: middle;
 }
+
+/* Ticket: i titoli in nero (rosso solo al passaggio). */
+.tabella-colonne td .riga-dati > a.ticket-titolo,
+.tabella-ticket .ticket-titolo strong {
+  color: var(--testo);
+}
+.tabella-colonne td .riga-dati > a.ticket-titolo:hover strong {
+  color: var(--rosso-scuro);
+}
