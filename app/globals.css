@@ -5545,3 +5545,58 @@ select {
 .funnel-titolo {
   color: rgba(255, 255, 255, 0.8);
 }
+
+/* ---- Scheda cliente: nome, contatti e certificato in ordine, con caratteri e misure coerenti ---- */
+.persona-nome {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 9px;
+}
+.persona-nome h1 {
+  font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.persona-nome .contatti-scheda {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 0;
+  margin: 0;
+}
+.persona-nome .contatti-scheda > * {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 18px;
+  border-left: 1px solid #e3cbd1;
+  line-height: 1.2;
+}
+.persona-nome .contatti-scheda > *:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+.persona-nome .contatti a,
+.persona-nome .contatti a.telefono-grande {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--testo);
+}
+.persona-nome .contatti a.telefono-grande::before {
+  font-size: 0.95em;
+  margin-right: 6px;
+}
+.persona-nome .contatti a:hover {
+  color: var(--rosso-scuro);
+}
+.persona-nome .certificato {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--testo-attenuato);
+}
