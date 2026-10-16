@@ -4449,3 +4449,93 @@ section[data-carica] .da-gestire-corpo {
     transition: none !important;
   }
 }
+
+/* ---- Schede: effetto al passaggio e scheda attiva ------------------------------------
+   Riquadri di «Da gestire»: una barra sotto che scorre da sinistra, grigia al passaggio
+   e scura sulla scheda aperta. Pillole delle sezioni: leggero sollevamento al passaggio,
+   la scheda aperta si riempie del colore del suo gruppo. Anello visibile da tastiera. */
+
+.numeri-schede .numero::after {
+  display: block;
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 3px;
+  background: #cfd3da;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.26s cubic-bezier(0.2, 0.7, 0.2, 1), background-color 0.16s ease;
+}
+.numeri-schede .numero:hover::after {
+  transform: scaleX(1);
+}
+.numeri-schede .numero.attivo,
+.numeri-schede .numero.attivo.caldo {
+  border-bottom-color: transparent;
+  background: linear-gradient(to bottom, transparent 40%, rgba(14, 15, 18, 0.035));
+}
+.numeri-schede .numero.attivo::after {
+  transform: scaleX(1);
+  background: var(--nero);
+}
+.numeri-schede .numero .valore {
+  transition: transform 0.2s ease, color 0.16s ease;
+  transform-origin: left center;
+}
+.numeri-schede .numero:hover .valore {
+  transform: translateY(-1px) scale(1.04);
+}
+.numeri-schede .numero.attivo .etichetta {
+  font-weight: 700;
+}
+.numeri-schede .numero:active {
+  background: var(--fondo);
+}
+.numeri-schede .numero:focus-visible,
+.schede-vista a:focus-visible,
+.schede-vista button:focus-visible {
+  outline: 2px solid var(--rosso);
+  outline-offset: -2px;
+}
+
+.schede-gruppo .schede-vista a,
+.schede-vista a,
+.schede-vista button {
+  transition: background-color 0.16s ease, color 0.16s ease, border-color 0.16s ease, box-shadow 0.18s ease, transform 0.16s ease;
+}
+.schede-gruppo .schede-vista a:hover:not(.attivo) {
+  background: var(--fondo);
+  transform: translateY(-1px);
+}
+.schede-gruppo .schede-vista a:active {
+  transform: translateY(0) scale(0.97);
+}
+.schede-gruppo .schede-vista a.attivo {
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(16, 24, 40, 0.28);
+}
+/* Le pillole semplici (senza gruppo), se ce ne sono. */
+.schede-vista a:hover:not(.attivo),
+.schede-vista button:hover:not(.attivo) {
+  transform: translateY(-1px);
+}
+.schede-vista a.attivo,
+.schede-vista button.attivo {
+  box-shadow: 0 2px 6px rgba(16, 24, 40, 0.25);
+}
+.numeri-schede .numero::after,
+.numeri-schede .numero.attivo::after {
+  left: 0;
+  right: 0;
+  width: auto;
+  height: 3px;
+  bottom: -1px;
+  border: 0;
+  box-shadow: none;
+  border-radius: 0;
+}
+.numeri-schede .numero.attivo::after {
+  transform: scaleX(1);
+}
