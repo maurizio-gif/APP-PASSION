@@ -5415,3 +5415,13 @@ select {
   mix-blend-mode: multiply;
   pointer-events: none;
 }
+.barra-logo img {
+  visibility: hidden;
+}
+.barra-logo::after {
+  mix-blend-mode: normal;
+  aspect-ratio: 2 / 1;
+  height: auto;
+  -webkit-mask: url('/logo-passionfitness.svg') center / contain no-repeat;
+  mask: url('/logo-passionfitness.svg') center / contain no-repeat;
+}
