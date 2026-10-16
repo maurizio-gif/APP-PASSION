@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { crm, richiediSezione, type ResocontoMese } from '@/lib/crm'
 import { NATURA_TICKET, traduci } from '@/lib/formato'
 import { assiste, smista } from '@/lib/permessi'
-import { Avviso, LinkGuida, Schede, Vuoto } from '@/components/Ui'
+import { type GruppoSchede, Avviso, LinkGuida, Schede, Vuoto } from '@/components/Ui'
 import { TabellaTicket } from '@/components/Ticket'
 
 const VUOTI: Record<string, string> = {
@@ -21,13 +21,18 @@ export default async function Ticket({ searchParams }: { searchParams: { vista?:
   const io = await richiediSezione('ticket')
   const conti = await crm.ticketConti()
   const viste = [
-    { chiave: 'da_verificare', testo: 'Da verificare', n: conti.da_verificare },
-    { chiave: 'r2d', testo: 'Da R2D', n: conti.r2d },
-    { chiave: 'in_attesa', testo: 'Aspettano Passion', n: conti.in_attesa },
-    { chiave: 'modifiche', testo: 'Modifiche', n: conti.modifiche_da_confermare + conti.modifiche_da_rilasciare },
-    { chiave: 'miei', testo: 'Aperti da me', n: conti.miei },
-    { chiave: 'chiusi', testo: 'Chiusi' },
-    { chiave: 'resoconto', testo: 'Resoconto' },
+    { chiave: 'da_verificare', testo: 'Da verificare', n: conti.da_verificare, gruppo: 'lavoro' },
+    { chiave: 'r2d', testo: 'Da R2D', n: conti.r2d, gruppo: 'lavoro' },
+    { chiave: 'in_attesa', testo: 'Aspettano Passion', n: conti.in_attesa, gruppo: 'lavoro' },
+    { chiave: 'modifiche', testo: 'Modifiche', n: conti.modifiche_da_confermare + conti.modifiche_da_rilasciare, gruppo: 'tuoi' },
+    { chiave: 'miei', testo: 'Aperti da me', n: conti.miei, gruppo: 'tuoi' },
+    { chiave: 'chiusi', testo: 'Chiusi', gruppo: 'archivio' },
+    { chiave: 'resoconto', testo: 'Resoconto', gruppo: 'archivio' },
+  ]
+  const gruppi: GruppoSchede[] = [
+    { chiave: 'lavoro', testo: 'Da lavorare', tono: 'lavoro' },
+    { chiave: 'tuoi', testo: 'Per te', tono: 'prova' },
+    { chiave: 'archivio', testo: 'Archivio', tono: 'chiusi' },
   ]
   const predefinita = assiste(io) ? 'r2d' : smista(io) ? 'da_verificare' : 'miei'
   const vista = viste.some((v) => v.chiave === searchParams.vista) ? searchParams.vista! : predefinita
@@ -54,7 +59,7 @@ export default async function Ticket({ searchParams }: { searchParams: { vista?:
       {conti.bloccanti > 0 && (
         <p className="avviso">{conti.bloccanti === 1 ? 'C’è un ticket aperto che blocca il lavoro.' : `Ci sono ${conti.bloccanti} ticket aperti che bloccano il lavoro.`}</p>
       )}
-      <Schede voci={viste} attiva={vista} base="/dashboard/ticket" />
+      <Schede voci={viste} attiva={vista} base="/dashboard/ticket" gruppi={gruppi} />
 
       {vista === 'resoconto' ? <Resoconto mesi={await crm.ticketResoconto(6)} /> : <Elenco vista={vista} />}
     </>

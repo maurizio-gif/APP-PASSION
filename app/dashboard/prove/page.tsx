@@ -1,13 +1,17 @@
 import { crm, richiediSezione, type Prova } from '@/lib/crm'
-import { Avviso, LinkGuida, Schede, Vuoto } from '@/components/Ui'
+import { Avviso, LinkGuida, Schede, Vuoto, type GruppoSchede } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
 import { TabellaProve } from '@/components/TabellaProve'
 
+const GRUPPI: GruppoSchede[] = [
+  { chiave: 'prova', testo: 'In prova', tono: 'prova' },
+  { chiave: 'finite', testo: 'Finite', tono: 'chiusi' },
+]
 const VISTE = [
-  { chiave: 'in_corso', testo: 'In corso' },
-  { chiave: 'in_scadenza', testo: 'In scadenza' },
-  { chiave: 'senza_esito', testo: 'Finite senza esito' },
-  { chiave: 'chiuse', testo: 'Chiuse' },
+  { chiave: 'in_corso', testo: 'In corso', gruppo: 'prova' },
+  { chiave: 'in_scadenza', testo: 'In scadenza', gruppo: 'prova' },
+  { chiave: 'senza_esito', testo: 'Finite senza esito', gruppo: 'finite' },
+  { chiave: 'chiuse', testo: 'Chiuse', gruppo: 'finite' },
 ]
 
 // L'ordine si sceglie qui, sulle righe gia' arrivate da crm_prove (che ne da'
@@ -69,7 +73,7 @@ export default async function Prove({ searchParams }: { searchParams: { vista?: 
         </div>
       </div>
       <Avviso errore={searchParams.errore} />
-      <Schede voci={VISTE} attiva={vista} base={`/dashboard/prove${resta ? `?${resta}` : ''}`} />
+      <Schede voci={VISTE} attiva={vista} base={`/dashboard/prove${resta ? `?${resta}` : ''}`} gruppi={GRUPPI} />
       <FiltroConsulente azione="/dashboard/prove" staff={staff} consulente={consulente} tieni={{ vista }}>
         <select name="ordine" defaultValue={ordine.chiave} aria-label="Ordina per">
           {ORDINI.map((o) => <option key={o.chiave} value={o.chiave}>Ordina: {o.testo}</option>)}

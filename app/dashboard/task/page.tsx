@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { crm, richiediSezione } from '@/lib/crm'
 import { formatoDataOra, TIPO_TASK, traduci } from '@/lib/formato'
-import { Avviso, Contatti, LinkGuida, Persona, Provenienza, Vuoto } from '@/components/Ui'
+import { Avviso, Contatti, LinkGuida, Persona, Provenienza, SchedeMulti, Vuoto } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
 import { completaTask } from '../azioni'
 
@@ -42,16 +42,10 @@ export default async function Task({ searchParams }: { searchParams: { chi?: str
         </div>
       </div>
       <Avviso errore={searchParams.errore} />
-      <div className="schede-vista">
-        {CHI.map((v) => (
-          <Link key={v.chiave} href={`/dashboard/task?chi=${v.chiave}&quando=${quando}`} className={!consulente && v.chiave === chi ? 'attivo' : undefined}>{v.testo}</Link>
-        ))}
-      </div>
-      <div className="schede-vista">
-        {QUANDO.map((v) => (
-          <Link key={v.chiave} href={`/dashboard/task?chi=${chi}&quando=${v.chiave}${perConsulente}`} className={v.chiave === quando ? 'attivo' : undefined}>{v.testo}</Link>
-        ))}
-      </div>
+      <SchedeMulti gruppi={[
+        { testo: 'Di chi', tono: 'lavoro', voci: CHI.map((v) => ({ testo: v.testo, href: `/dashboard/task?chi=${v.chiave}&quando=${quando}`, attivo: !consulente && v.chiave === chi })) },
+        { testo: 'Quando', tono: 'prova', voci: QUANDO.map((v) => ({ testo: v.testo, href: `/dashboard/task?chi=${chi}&quando=${v.chiave}${perConsulente}`, attivo: v.chiave === quando })) },
+      ]} />
       <FiltroConsulente azione="/dashboard/task" staff={staff} consulente={consulente} tieni={{ chi: 'tutti', quando }} />
 
       <div className="scheda">

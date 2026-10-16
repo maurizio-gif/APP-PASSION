@@ -3920,3 +3920,13 @@ select:not([multiple]):hover {
 .aiuto-testo .guida-modale {
   visibility: visible;
 }
+
+/* InCarico (Rinnovi, Disdette, schede): il blocco e la riga di assegnazione. */
+.azioni-blocco {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.azioni-gruppo select {
+  min-width: 120px;
+}

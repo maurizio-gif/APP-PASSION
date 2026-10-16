@@ -41,6 +41,33 @@ type Voce = { chiave: string; testo: string; n?: number; gruppo?: string }
 // etichetta e il suo colore (tono: lavoro, prova, chiusi).
 export type GruppoSchede = { chiave: string; testo: string; tono: 'lavoro' | 'prova' | 'chiusi' }
 
+// Gruppi di schede con i link gia' fatti: per le pagine che filtrano su due cose
+// insieme (Task: di chi e quando; Debitori: abbonamento e chi li segue).
+export type GruppoLink = {
+  testo: string
+  tono: GruppoSchede['tono']
+  voci: { testo: string; href: string; attivo: boolean; n?: number }[]
+}
+export function SchedeMulti({ gruppi }: { gruppi: GruppoLink[] }) {
+  return (
+    <div className="schede-gruppi">
+      {gruppi.map((g) => (
+        <div key={g.testo} className={`schede-gruppo tono-${g.tono}`}>
+          <span className="gruppo-etichetta">{g.testo}</span>
+          <div className="schede-vista">
+            {g.voci.map((v) => (
+              <Link key={v.href} href={v.href} className={v.attivo ? 'attivo' : undefined}>
+                {v.testo}
+                {v.n != null && <span className="conta">{v.n}</span>}
+              </Link>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export function Schede({ voci, attiva, base, gruppi }: { voci: Voce[]; attiva: string; base: string; gruppi?: GruppoSchede[] }) {
   const link = (v: Voce) => (
     <Link key={v.chiave} href={`${base}${base.includes('?') ? '&' : '?'}vista=${v.chiave}`} className={v.chiave === attiva ? 'attivo' : undefined}>

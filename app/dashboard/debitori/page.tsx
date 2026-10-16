@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { crm, linkPgm, richiediSezione } from '@/lib/crm'
 import { formatoData, formatoDataOra, formatoEuro, formatoFa, STATO_CONTRATTO, TIPI_TASK_NUOVI, traduci } from '@/lib/formato'
-import { Avviso, Contatti, LinkGuida, Persona, Vuoto } from '@/components/Ui'
+import { Avviso, Contatti, LinkGuida, Persona, SchedeMulti, Vuoto } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
 import { debitoAssegna, debitoTask } from '../azioni'
 
@@ -48,16 +48,10 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
         </div>
       </div>
       <Avviso errore={searchParams.errore} />
-      <div className="schede-vista">
-        {VISTE.map((v) => (
-          <Link key={v.chiave} href={`/dashboard/debitori?vista=${v.chiave}&chi=${chi}${perConsulente}`} className={v.chiave === vista ? 'attivo' : undefined}>{v.testo}</Link>
-        ))}
-      </div>
-      <div className="schede-vista">
-        {CHI.map((v) => (
-          <Link key={v.chiave} href={`/dashboard/debitori?vista=${vista}&chi=${v.chiave}`} className={!consulente && v.chiave === chi ? 'attivo' : undefined}>{v.testo}</Link>
-        ))}
-      </div>
+      <SchedeMulti gruppi={[
+        { testo: 'Situazione', tono: 'prova', voci: VISTE.map((v) => ({ testo: v.testo.replace(/^Abbonamento /, '').replace(/^./, (c) => c.toUpperCase()), href: `/dashboard/debitori?vista=${v.chiave}&chi=${chi}${perConsulente}`, attivo: v.chiave === vista })) },
+        { testo: 'Chi li segue', tono: 'lavoro', voci: CHI.map((v) => ({ testo: v.testo, href: `/dashboard/debitori?vista=${vista}&chi=${v.chiave}`, attivo: !consulente && v.chiave === chi })) },
+      ]} />
       <FiltroConsulente azione="/dashboard/debitori" staff={staff} consulente={consulente} tieni={{ vista, chi: 'tutti' }} />
 
       <div className="scheda">
