@@ -6258,3 +6258,64 @@ select {
 .ticket-azioni .stack > form .campo > label.modulo-titolo {
   margin-bottom: 0;
 }
+
+/* ---- Testata del ticket: numero e stato sulla prima riga, titolo, poi chi e quando ---- */
+.testata-ticket .ticket-riga-sopra {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+}
+.testata-ticket .ticket-bollini {
+  margin: 0;
+  gap: 6px;
+}
+.testata-ticket .ticket-bollini .bollino {
+  font-size: 0.72rem;
+  padding: 2px 10px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+.testata-ticket .ticket-bollini .bollino.rosso {
+  background: var(--rosso);
+  border-color: var(--rosso);
+  color: #fff;
+}
+:root[data-tema='chiaro'] .testata-ticket .ticket-bollini .bollino {
+  border-color: transparent;
+}
+.testata-ticket h1 {
+  margin: 10px 0 12px;
+}
+.testata-ticket .ticket-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 26px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+.testata-ticket .ticket-meta span {
+  margin-right: 4px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ff9bab;
+}
+.testata-ticket .ticket-meta strong {
+  color: #fff;
+  font-weight: 600;
+}
+:root[data-tema='chiaro'] .testata-ticket .ticket-meta {
+  color: var(--testo-attenuato);
+}
+:root[data-tema='chiaro'] .testata-ticket .ticket-meta span {
+  color: var(--rosso-scuro);
+}
+:root[data-tema='chiaro'] .testata-ticket .ticket-meta strong {
+  color: var(--testo);
+}

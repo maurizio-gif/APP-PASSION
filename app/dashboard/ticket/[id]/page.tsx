@@ -35,17 +35,24 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
     <>
       <div className="testata">
         <div className="testata-ticket">
-          <div className="ticket-sopra">Ticket <NumeroTicket id={t.id} /></div>
-          <h1>{t.titolo}</h1>
-          <div className="ticket-bollini">
-            <BollinoTipo tipo={t.tipo} /> <BollinoStato stato={t.stato} />
-            {t.bloccante && <span className="bollino rosso">Blocca il lavoro</span>}
+          <div className="ticket-riga-sopra">
+            <span className="ticket-sopra">Ticket <NumeroTicket id={t.id} /></span>
+            <div className="ticket-bollini">
+              <BollinoTipo tipo={t.tipo} /> <BollinoStato stato={t.stato} />
+              {t.bloccante && <span className="bollino rosso">Blocca il lavoro</span>}
+            </div>
           </div>
-          <p className="piccolo attenuato">
-            Aperto da {t.aperto_da_nome ?? '—'} il {formatoDataOra(t.aperto_il)}
-            {t.inviato_il && ` · a R2D il ${formatoDataOra(t.inviato_il)}${t.inviato_nome && t.inviato_nome !== t.aperto_da_nome ? ` da ${t.inviato_nome}` : ''}`}
-            {t.preso_nome && ` · lo segue ${t.preso_nome}`}
-          </p>
+          <h1>{t.titolo}</h1>
+          <ul className="ticket-meta">
+            <li><span>Aperto da</span> <strong>{t.aperto_da_nome ?? '—'}</strong> · {formatoDataOra(t.aperto_il)}</li>
+            {t.inviato_il && (
+              <li>
+                <span>Mandato a R2D</span> {formatoDataOra(t.inviato_il)}
+                {t.inviato_nome && t.inviato_nome !== t.aperto_da_nome && <> · da <strong>{t.inviato_nome}</strong></>}
+              </li>
+            )}
+            {t.preso_nome && <li><span>Lo segue</span> <strong>{t.preso_nome}</strong></li>}
+          </ul>
         </div>
         <Link className="bottone secondario" href="/dashboard/ticket">← Ticket</Link>
       </div>
