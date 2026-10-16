@@ -2884,3 +2884,132 @@ details.scheda .utenti {
     flex: 1 1 140px;
   }
 }
+
+/* ---- Prove: la riga con iniziali, barra del pass e numeri ------------------ */
+
+.iniziali {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--fondo-grigio);
+  color: var(--grigio);
+  font-weight: 700;
+  font-size: 0.74rem;
+  letter-spacing: 0.02em;
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.iniziali.piccole {
+  width: 24px;
+  height: 24px;
+  font-size: 0.64rem;
+}
+.cella-persona {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  min-width: 0;
+}
+.cella-persona > div {
+  min-width: 0;
+}
+.cella-persona .contatti {
+  margin: 1px 0 5px;
+}
+.cella-pass strong {
+  font-weight: 600;
+}
+.cella-pass .bollino {
+  margin-top: 6px;
+}
+.avanzamento-pass {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 7px;
+}
+.avanzamento {
+  width: 110px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--fondo-grigio);
+  overflow: hidden;
+}
+.avanzamento > span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--verde);
+}
+.avanzamento.giallo > span {
+  background: #e0a106;
+}
+.avanzamento.rosso > span {
+  background: var(--rosso);
+}
+.avanzamento-testo {
+  font-size: 0.76rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--verde);
+}
+.avanzamento-testo.giallo {
+  color: var(--giallo);
+}
+.avanzamento-testo.rosso {
+  color: var(--rosso);
+}
+.metriche {
+  display: flex;
+  gap: 18px;
+  margin-bottom: 4px;
+}
+.metrica strong {
+  display: block;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+.metrica strong small {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--testo-attenuato);
+}
+.metrica span {
+  font-size: 0.74rem;
+  color: var(--testo-attenuato);
+}
+.metrica.zero strong {
+  color: var(--rosso);
+}
+.cella-consulente {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+.tabella-prove td {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+@media (max-width: 720px) {
+  .tabella-prove .iniziali:not(.piccole) {
+    display: none;
+  }
+  .tabella-prove .metriche {
+    gap: 14px;
+  }
+}
+
+/* Le viste sopra i filtri: un po' d'aria; le azioni dei lead su una riga. */
+.schede-vista + .filtri {
+  margin-top: 14px;
+}
+.tabella-lead .azioni-riga .azioni-riga {
+  flex-wrap: nowrap;
+}
+.tabella-lead .taglia {
+  max-width: 170px;
+}
