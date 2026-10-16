@@ -5491,3 +5491,11 @@ select {
 .contenuto .filtri select {
   border-color: transparent;
 }
+
+/* Meno contrasto tra il fondo e le schede: fondo piu' chiaro, bianco appena attenuato. */
+:root {
+  --scheda: #f8f8fa;
+}
+.contenuto {
+  background: linear-gradient(160deg, #44454b 0%, #34353a 45%, #26272b 100%);
+}
