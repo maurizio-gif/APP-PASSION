@@ -5512,3 +5512,36 @@ select {
 :root {
   --scheda: #f5f5f8;
 }
+
+/* ---- Scheda cliente sul fondo scuro ------------------------------------------------ */
+.persona-testa {
+  background:
+    linear-gradient(to right, rgba(227, 3, 45, 0.1), rgba(227, 3, 45, 0.03) 40%, rgba(227, 3, 45, 0) 75%),
+    var(--scheda);
+}
+.percorso {
+  border-bottom-color: rgba(255, 255, 255, 0.14);
+}
+.percorso li {
+  color: #fff;
+  border-left-color: rgba(255, 255, 255, 0.1);
+}
+.percorso li:not(.attuale):not(.fatto) .percorso-punto {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.45);
+  color: #fff;
+}
+.percorso li.attuale {
+  color: #fff;
+  background: linear-gradient(to bottom, rgba(227, 3, 45, 0.08), rgba(227, 3, 45, 0.3));
+}
+.percorso li.fatto {
+  color: #fff;
+}
+.fase-vuota {
+  color: rgba(255, 255, 255, 0.75);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+.funnel-titolo {
+  color: rgba(255, 255, 255, 0.8);
+}
