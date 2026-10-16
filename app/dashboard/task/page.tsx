@@ -32,8 +32,13 @@ export default async function Task({ searchParams }: { searchParams: { chi?: str
     <>
       <div className="testata">
         <div>
-          <h1>Task</h1>
-          <p>Tutto il lavoro, da ogni sezione: lead, scadenze dei pass, rinnovi, disdette, debiti. Si creano dalla scheda della persona (o nascono da soli) e si chiudono con l&apos;esito.{' '}<LinkGuida argomento="task" /></p>
+          <div className="titolo-riga">
+            <h1>Task</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">Tutto il lavoro, da ogni sezione: lead, scadenze dei pass, rinnovi, disdette, debiti. Si creano dalla scheda della persona (o nascono da soli) e si chiudono con l&apos;esito.{' '}<LinkGuida argomento="task" /></span>
+            </span>
+          </div>
         </div>
       </div>
       <Avviso errore={searchParams.errore} />

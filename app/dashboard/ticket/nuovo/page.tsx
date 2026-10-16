@@ -23,10 +23,15 @@ export default async function NuovoTicket({ searchParams }: { searchParams: { pe
     <>
       <div className="testata">
         <div>
-          <h1>Nuovo ticket{nome ? ` per ${nome}` : ''}</h1>
-          <p>{smista(io)
+          <div className="titolo-riga">
+            <h1>Nuovo ticket{nome ? ` per ${nome}` : ''}</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">{smista(io)
             ? 'Va subito a R2D. Le proposte di modifica restano per la riunione settimanale.'
-            : 'Arriva al supporto: lo verifica, ti risponde o lo manda a R2D.'}</p>
+            : 'Arriva al supporto: lo verifica, ti risponde o lo manda a R2D.'}</span>
+            </span>
+          </div>
         </div>
         <Link href={scheda ? `/dashboard/persone/${scheda.persona.id}` : '/dashboard/ticket'}>← {scheda ? 'Scheda' : 'Ticket'}</Link>
       </div>

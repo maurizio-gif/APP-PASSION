@@ -22,8 +22,13 @@ export default async function ArgomentoGuida({ params }: { params: { argomento: 
     <>
       <div className="testata">
         <div>
-          <h1>{a.titolo}</h1>
-          <p>{a.inBreve}</p>
+          <div className="titolo-riga">
+            <h1>{a.titolo}</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">{a.inBreve}</span>
+            </span>
+          </div>
         </div>
         <div className="azioni-riga">
           <Link href="/dashboard/guida">← Guida</Link>

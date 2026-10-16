@@ -21,8 +21,13 @@ export default async function Curriculum({ searchParams }: { searchParams: { vis
     <>
       <div className="testata">
         <div>
-          <h1>Curriculum</h1>
-          <p>Le candidature arrivate dal sito, con le risposte del modulo e il curriculum allegato. I più recenti in alto.{' '}<LinkGuida argomento="curriculum" /></p>
+          <div className="titolo-riga">
+            <h1>Curriculum</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">Le candidature arrivate dal sito, con le risposte del modulo e il curriculum allegato. I più recenti in alto.{' '}<LinkGuida argomento="curriculum" /></span>
+            </span>
+          </div>
         </div>
       </div>
       <Schede voci={viste} attiva={vista} base="/dashboard/curriculum" />

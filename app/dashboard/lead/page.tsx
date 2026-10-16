@@ -56,8 +56,13 @@ export default async function Lead({ searchParams }: { searchParams: Filtri }) {
     <>
       <div className="testata">
         <div>
-          <h1>Lead</h1>
-          <p>Si prende in carico, si segue coi task e si chiude come persa: vinta la segna PerfectGym, quando compare il contratto o la prova.{' '}<LinkGuida argomento="lead" /></p>
+          <div className="titolo-riga">
+            <h1>Lead</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">Si prende in carico, si segue coi task e si chiude come persa: vinta la segna PerfectGym, quando compare il contratto o la prova.{' '}<LinkGuida argomento="lead" /></span>
+            </span>
+          </div>
         </div>
         <Link className="bottone" href="/dashboard/lead/nuovo">+ Nuovo lead</Link>
       </div>

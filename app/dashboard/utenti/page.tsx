@@ -24,8 +24,13 @@ export default async function Utenti({ searchParams }: { searchParams: { errore?
     <>
       <div className="testata">
         <div>
-          <h1>Utenti</h1>
-          <p>Chi entra nell’app, quali sezioni vede e cosa può fare. La home e la scheda persona le vedono tutti.</p>
+          <div className="titolo-riga">
+            <h1>Utenti</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">Chi entra nell’app, quali sezioni vede e cosa può fare. La home e la scheda persona le vedono tutti.</span>
+            </span>
+          </div>
         </div>
       </div>
       <Avviso errore={searchParams.errore} ok={searchParams.ok} />

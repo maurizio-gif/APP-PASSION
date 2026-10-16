@@ -13,9 +13,14 @@ export default async function Guida() {
     <>
       <div className="testata">
         <div>
-          <h1>Guida</h1>
-          <p>Come si usa il CRM: cosa trovi in ogni sezione, cosa fare e cosa fa il CRM da solo.
-            In ogni sezione, «Come funziona» apre il suo capitolo senza lasciare la pagina.</p>
+          <div className="titolo-riga">
+            <h1>Guida</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">Come si usa il CRM: cosa trovi in ogni sezione, cosa fare e cosa fa il CRM da solo.
+            In ogni sezione, «Come funziona» apre il suo capitolo senza lasciare la pagina.</span>
+            </span>
+          </div>
         </div>
       </div>
       <div className="griglia">

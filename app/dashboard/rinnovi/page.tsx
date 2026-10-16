@@ -33,8 +33,13 @@ export default async function Rinnovi({ searchParams }: { searchParams: { vista?
     <>
       <div className="testata">
         <div>
-          <h1>Rinnovi</h1>
-          <p>Gli abbonamenti in scadenza: si prendono in carico, e l&apos;esito si scrive nella scheda. Il rinnovo su PerfectGym si vede da solo.{' '}<LinkGuida argomento="rinnovi" /></p>
+          <div className="titolo-riga">
+            <h1>Rinnovi</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">Gli abbonamenti in scadenza: si prendono in carico, e l&apos;esito si scrive nella scheda. Il rinnovo su PerfectGym si vede da solo.{' '}<LinkGuida argomento="rinnovi" /></span>
+            </span>
+          </div>
         </div>
       </div>
       <Avviso errore={searchParams.errore} />

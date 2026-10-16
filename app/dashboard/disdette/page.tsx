@@ -32,8 +32,13 @@ export default async function Disdette({ searchParams }: { searchParams: { vista
     <>
       <div className="testata">
         <div>
-          <h1>Disdette</h1>
-          <p>Chi ha disdetto su PerfectGym: si prende in carico, poi una telefonata o un appuntamento per capire il motivo e recuperarlo. L&apos;esito si scrive nella scheda.{' '}<LinkGuida argomento="disdette" /></p>
+          <div className="titolo-riga">
+            <h1>Disdette</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">Chi ha disdetto su PerfectGym: si prende in carico, poi una telefonata o un appuntamento per capire il motivo e recuperarlo. L&apos;esito si scrive nella scheda.{' '}<LinkGuida argomento="disdette" /></span>
+            </span>
+          </div>
         </div>
       </div>
       <Avviso errore={searchParams.errore} />

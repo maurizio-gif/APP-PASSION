@@ -213,12 +213,15 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
     <>
       <div className="testata">
         <div>
-          <h1>Abbonamenti</h1>
-          <p>
-            Dal mirror di PerfectGym, aggiornato {formatoFa(d.aggiornato_il)}. Conta ogni contratto non aggiuntivo con canone
+          <div className="titolo-riga">
+            <h1>Abbonamenti</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">Dal mirror di PerfectGym, aggiornato {formatoFa(d.aggiornato_il)}. Conta ogni contratto non aggiuntivo con canone
             sopra lo zero: restano fuori pass, certificati, Wellhub e Fitprime, staff e add-on.{' '}
-            <LinkGuida argomento="abbonamenti" />
-          </p>
+            <LinkGuida argomento="abbonamenti" /></span>
+            </span>
+          </div>
         </div>
       </div>
 

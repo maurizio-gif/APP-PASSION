@@ -56,13 +56,16 @@ export default async function Prove({ searchParams }: { searchParams: { vista?: 
     <>
       <div className="testata">
         <div>
-          <h1>Prove</h1>
-          <p>
-            Qui ci sono solo le prove attivate, cioè con il Pass su PerfectGym: chi ha solo chiesto la prova resta fra i Lead.
+          <div className="titolo-riga">
+            <h1>Prove</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">Qui ci sono solo le prove attivate, cioè con il Pass su PerfectGym: chi ha solo chiesto la prova resta fra i Lead.
             Il Pass arriva da PerfectGym da solo, e anche l&apos;esito: Iscritto quando compare l&apos;abbonamento, Non iscritto 30 giorni
             dopo la fine del pass. Qui si segue la persona fino all&apos;iscrizione.{' '}
-            <LinkGuida argomento="prove" />
-          </p>
+            <LinkGuida argomento="prove" /></span>
+            </span>
+          </div>
         </div>
       </div>
       <Avviso errore={searchParams.errore} />

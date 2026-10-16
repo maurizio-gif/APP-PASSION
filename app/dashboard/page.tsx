@@ -55,7 +55,9 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
     <>
       <div className="testata">
         <div>
-          <h1>Da gestire</h1>
+          <div className="titolo-riga">
+            <h1>Da gestire</h1>
+          </div>
           <p>Ciao {io?.nome}, {formatoGiornoLungo(oggiRoma())}.</p>
         </div>
         <Link className="bottone" href="/dashboard/lead/nuovo">+ Nuovo lead</Link>

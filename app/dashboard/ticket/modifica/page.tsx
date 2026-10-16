@@ -17,8 +17,13 @@ export default async function NuovaModifica({ searchParams }: { searchParams: { 
     <>
       <div className="testata">
         <div>
-          <h1>Nuova modifica</h1>
-          <p>Una per modifica, scritta in modo che il titolare la possa confermare leggendola una volta sola.</p>
+          <div className="titolo-riga">
+            <h1>Nuova modifica</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">Una per modifica, scritta in modo che il titolare la possa confermare leggendola una volta sola.</span>
+            </span>
+          </div>
         </div>
         <Link href="/dashboard/ticket?vista=modifiche">← Modifiche</Link>
       </div>

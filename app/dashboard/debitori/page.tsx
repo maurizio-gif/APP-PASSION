@@ -38,8 +38,13 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
     <>
       <div className="testata">
         <div>
-          <h1>Debitori</h1>
-          <p>Chi ha il saldo negativo su PerfectGym: si recupera coi task, e quando paga esce da solo.{' '}<LinkGuida argomento="debitori" /></p>
+          <div className="titolo-riga">
+            <h1>Debitori</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">Chi ha il saldo negativo su PerfectGym: si recupera coi task, e quando paga esce da solo.{' '}<LinkGuida argomento="debitori" /></span>
+            </span>
+          </div>
         </div>
       </div>
       <Avviso errore={searchParams.errore} />

@@ -12,8 +12,13 @@ export default async function Cerca({ searchParams }: { searchParams: { q?: stri
     <>
       <div className="testata">
         <div>
-          <h1>Cerca</h1>
-          <p>Soci, lead e prove: per nome, cognome, telefono o email.</p>
+          <div className="titolo-riga">
+            <h1>Cerca</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">Soci, lead e prove: per nome, cognome, telefono o email.</span>
+            </span>
+          </div>
         </div>
         <Link className="bottone" href="/dashboard/lead/nuovo">+ Nuovo lead</Link>
       </div>

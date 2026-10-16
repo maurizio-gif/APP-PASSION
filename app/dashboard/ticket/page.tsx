@@ -36,9 +36,14 @@ export default async function Ticket({ searchParams }: { searchParams: { vista?:
     <>
       <div className="testata">
         <div>
-          <h1>Ticket</h1>
-          <p>Le segnalazioni del desk arrivano al supporto, che le verifica, risponde o le manda a R2D.
-            Se qualcosa blocca tutti (tornello, app giù, pagamenti), chiama anche R2D.{' '}<LinkGuida argomento="ticket" /></p>
+          <div className="titolo-riga">
+            <h1>Ticket</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">Le segnalazioni del desk arrivano al supporto, che le verifica, risponde o le manda a R2D.
+            Se qualcosa blocca tutti (tornello, app giù, pagamenti), chiama anche R2D.{' '}<LinkGuida argomento="ticket" /></span>
+            </span>
+          </div>
         </div>
         <div className="azioni-riga">
           {assiste(io) && <Link className="bottone secondario" href="/dashboard/ticket/modifica">+ Nuova modifica</Link>}

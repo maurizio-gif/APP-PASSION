@@ -3834,3 +3834,89 @@ select:not([multiple]):hover {
     flex: 1 1 100%;
   }
 }
+
+/* ---- Titolo di sezione: maiuscolo, rosso, con il «?» che spiega la pagina ------ */
+
+.titolo-riga {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.titolo-riga h1 {
+  font-size: clamp(1.3rem, 2vw, 1.6rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--rosso);
+}
+.aiuto-titolo {
+  display: inline-flex;
+  outline: none;
+}
+.aiuto-punto {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-grid;
+  place-items: center;
+  border: 1.5px solid #b9bfca;
+  color: var(--testo-attenuato);
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: help;
+  background: #fff;
+  transition: background-color 0.12s, color 0.12s, border-color 0.12s;
+}
+.aiuto-titolo:hover .aiuto-punto,
+.aiuto-titolo:focus-visible .aiuto-punto,
+.aiuto-titolo:focus-within .aiuto-punto {
+  background: var(--rosso);
+  border-color: var(--rosso);
+  color: #fff;
+}
+/* Il testo: un riquadro sotto il titolo. Nascosto finche' non ci si passa sopra;
+   visibility (non display) cosi' la finestra «Come funziona», se c'e', resta apribile. */
+.aiuto-testo {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 10px);
+  left: 0;
+  width: max-content;
+  max-width: min(440px, calc(100vw - 32px));
+  padding: 12px 14px;
+  background: var(--nero);
+  color: #f3f4f6;
+  border-radius: 10px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+  font-size: 0.86rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0;
+  text-transform: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+.aiuto-testo::before {
+  /* ponte invisibile: il puntatore passa dal «?» al riquadro senza perderlo */
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -12px;
+  height: 12px;
+}
+.aiuto-titolo:hover .aiuto-testo,
+.aiuto-titolo:focus-within .aiuto-testo {
+  visibility: visible;
+  opacity: 1;
+}
+.aiuto-testo .link-guida {
+  color: #ff8fa2;
+  font-weight: 600;
+}
+.aiuto-testo .guida-modale {
+  visibility: visible;
+}
