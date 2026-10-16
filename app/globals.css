@@ -1019,6 +1019,22 @@ hr {
 .modulo.compatto .azioni-riga select {
   flex: 1;
 }
+/* Sul computer il modulo compatto sta su due colonne: righe piu' basse. */
+@media (min-width: 721px) {
+  .modulo.compatto {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    min-width: 330px;
+  }
+  .modulo.compatto > .azioni-riga,
+  .modulo.compatto > .bottone {
+    grid-column: 1 / -1;
+  }
+  .modulo.compatto > .bottone {
+    justify-self: start;
+  }
+}
 .due-colonne {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
