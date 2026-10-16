@@ -4786,3 +4786,9 @@ th {
     text-align: right;
   }
 }
+@media (min-width: 721px) {
+  tbody td:last-child > form:not(.gestione-prova):not(.azioni-riga) {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
