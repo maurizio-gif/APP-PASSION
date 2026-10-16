@@ -5870,7 +5870,7 @@ select {
 }
 
 /* Avviso in cima alla pagina: banda rossa sfumata con la barra a sinistra. */
-.contenuto > .avviso {
+.contenuto .avviso:not(.scheda .avviso) {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -5881,7 +5881,7 @@ select {
   color: #fff;
   font-weight: 600;
 }
-.contenuto > .avviso::before {
+.contenuto .avviso:not(.scheda .avviso)::before {
   content: '!';
   display: inline-grid;
   place-items: center;
@@ -5894,18 +5894,18 @@ select {
   font-size: 0.78rem;
   font-weight: 800;
 }
-:root[data-tema='chiaro'] .contenuto > .avviso {
+:root[data-tema='chiaro'] .contenuto .avviso:not(.scheda .avviso) {
   color: var(--rosso-scuro);
   background: linear-gradient(to right, rgba(227, 3, 45, 0.16), rgba(227, 3, 45, 0.05) 70%, rgba(227, 3, 45, 0));
 }
-.contenuto > .avviso.ok {
+.contenuto .avviso:not(.scheda .avviso).ok {
   border-left-color: var(--verde);
   background: linear-gradient(to right, rgba(15, 123, 63, 0.3), rgba(15, 123, 63, 0.06) 70%, rgba(15, 123, 63, 0));
 }
-.contenuto > .avviso.ok::before {
+.contenuto .avviso:not(.scheda .avviso).ok::before {
   content: '✓';
   background: var(--verde);
 }
-:root[data-tema='chiaro'] .contenuto > .avviso.ok {
+:root[data-tema='chiaro'] .contenuto .avviso:not(.scheda .avviso).ok {
   color: var(--verde);
 }
