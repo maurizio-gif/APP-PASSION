@@ -59,7 +59,11 @@ export function SchedeNumeri({ voci, attiva, base }: { voci: VoceNumero[]; attiv
           >
             <div className="etichetta">{v.testo}</div>
             {v.n != null && <div className="valore">{v.n}</div>}
-            {v.nota && <div className="nota">{v.nota}</div>}
+            {v.nota && (
+              <div className="nota">
+                {v.nota.split(/(d+)/).map((pezzo, i) => (i % 2 ? <b key={i}>{pezzo}</b> : pezzo))}
+              </div>
+            )}
             {/* Sempre presente (nascosto nelle altre schede) cosi' l'altezza non cambia. */}
             {v.vai && (
               <Link

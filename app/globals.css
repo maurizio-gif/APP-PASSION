@@ -7,18 +7,18 @@
   --rosso-scuro: #b50224;
   --nero: #0e0f12;
   --testo: #15171c;
-  --testo-attenuato: #667085;
-  --fondo: #f4f5f8;
+  --testo-attenuato: #3b414d;
+  --fondo: #fbf7f8;
   --scheda: #ffffff;
-  --bordo: #e4e7ec;
-  --riga-alterna: #f8f9fb;
+  --bordo: #eadfe2;
+  --riga-alterna: #fff6f7;
   --verde: #0f7b3f;
   --fondo-verde: #e5f6ec;
   --giallo: #92580a;
   --fondo-giallo: #fdf1d8;
   --fondo-rosso: #fdebee;
-  --grigio: #475467;
-  --fondo-grigio: #eef0f4;
+  --grigio: #3b414d;
+  --fondo-grigio: #fbeff1;
 
   --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --raggio: 12px;
@@ -480,7 +480,7 @@ input[type='date'],
 select {
   font: inherit;
   padding: 9px 12px;
-  border: 1px solid #d3d7de;
+  border: 1px solid #e3cbd1;
   border-radius: 9px;
   background: #fff;
   color: var(--testo);
@@ -521,11 +521,11 @@ select:focus {
 .bottone.secondario {
   background: #fff;
   color: var(--testo);
-  border: 1px solid #d3d7de;
+  border: 1px solid #e3cbd1;
 }
 .bottone.secondario:hover {
   background: var(--riga-alterna);
-  border-color: #b9bfca;
+  border-color: #e3cbd1;
 }
 .schede-vista {
   display: flex;
@@ -538,7 +538,7 @@ select:focus {
   cursor: pointer;
   padding: 6px 14px;
   border-radius: 999px;
-  border: 1px solid #d3d7de;
+  border: 1px solid #e3cbd1;
   background: #fff;
   color: var(--testo);
   font-weight: 500;
@@ -554,7 +554,7 @@ select:focus {
 .schede-vista button:hover {
   text-decoration: none;
   background: var(--riga-alterna);
-  border-color: #b9bfca;
+  border-color: #e3cbd1;
 }
 .schede-vista a.attivo:hover,
 .schede-vista button.attivo:hover {
@@ -3786,7 +3786,7 @@ select:not([multiple]) {
   cursor: pointer;
 }
 select:not([multiple]):hover {
-  border-color: #b9bfca;
+  border-color: #e3cbd1;
 }
 
 .filtri {
@@ -3860,7 +3860,7 @@ select:not([multiple]):hover {
   border-radius: 50%;
   display: inline-grid;
   place-items: center;
-  border: 1.5px solid #b9bfca;
+  border: 1.5px solid #e3cbd1;
   color: var(--testo-attenuato);
   font-size: 0.74rem;
   font-weight: 700;
@@ -4573,7 +4573,7 @@ section[data-carica] .da-gestire-corpo {
 
 .numeri-schede {
   margin: 2px 0 0;
-  border-bottom: 1px solid #cfd4dc;
+  border-bottom: 1px solid #e3cbd1;
 }
 .numeri-schede .numero {
   cursor: pointer;
@@ -4648,7 +4648,7 @@ section[data-carica] .da-gestire-corpo {
 .tabella-colonne tbody td,
 .tabella-prove tbody td,
 .tabella-lead tbody td {
-  border-bottom: 1px solid #d3d8e0;
+  border-bottom: 1px solid #e3cbd1;
 }
 .tabella-colonne tbody tr:last-child td,
 .tabella-prove tbody tr:last-child td,
@@ -4657,7 +4657,7 @@ section[data-carica] .da-gestire-corpo {
 }
 @media (max-width: 720px) {
   .schede-mobile tr {
-    border-bottom-color: #d3d8e0;
+    border-bottom-color: #e3cbd1;
     padding: 13px 0;
   }
 }
@@ -4692,13 +4692,13 @@ th {
   box-shadow: none;
 }
 .bottone.secondario {
-  background: linear-gradient(to bottom, #fff, #f6f7f9);
-  border-color: #d3d7de;
+  background: linear-gradient(to bottom, #fff, #fff3f4);
+  border-color: #e3cbd1;
   box-shadow: 0 1px 2px rgba(21, 23, 28, 0.06), inset 0 1px 0 #fff;
 }
 .bottone.secondario:hover {
-  background: linear-gradient(to bottom, #fff, #eef0f4);
-  border-color: #b9bfca;
+  background: linear-gradient(to bottom, #fff, #fbe9ec);
+  border-color: #e3cbd1;
   box-shadow: 0 3px 8px rgba(21, 23, 28, 0.1), inset 0 1px 0 #fff;
 }
 .bottone.secondario:active {
@@ -4727,12 +4727,12 @@ th {
 }
 .bottone.secondario {
   background: #fff;
-  border-color: #e0e3e9;
+  border-color: #e3cbd1;
   box-shadow: none;
 }
 .bottone.secondario:hover {
   background: var(--riga-alterna);
-  border-color: #c9ced7;
+  border-color: #e3cbd1;
   box-shadow: none;
 }
 .bottone.secondario:active {
@@ -4759,13 +4759,13 @@ th {
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.18);
 }
 .bottone.secondario {
-  background: linear-gradient(to bottom, #fff, #f3f4f7);
-  border-color: #e0e3e9;
+  background: linear-gradient(to bottom, #fff, #fff3f4);
+  border-color: #e3cbd1;
   box-shadow: inset 0 1px 0 #fff;
 }
 .bottone.secondario:hover {
-  background: linear-gradient(to bottom, #fff, #eceef2);
-  border-color: #c9ced7;
+  background: linear-gradient(to bottom, #fff, #fbe9ec);
+  border-color: #e3cbd1;
   box-shadow: inset 0 1px 0 #fff;
 }
 .bottone.secondario:active {
@@ -4949,4 +4949,14 @@ th {
 .tabella-lead td,
 .tabella-uniforme td {
   vertical-align: top;
+}
+
+/* I numeri dentro le note delle schede (7 miei, 21 in corso...) risaltano. */
+.numeri-schede .numero .nota b {
+  font-size: 1.08em;
+  font-weight: 700;
+  color: var(--testo);
+}
+.numeri-schede .numero.attivo .nota b {
+  color: var(--rosso);
 }
