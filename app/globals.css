@@ -5600,3 +5600,106 @@ select {
   font-size: 0.85rem;
   color: var(--testo-attenuato);
 }
+
+/* ---- Tema: scuro (predefinito) e chiaro --------------------------------------------- */
+.barra-piede .cambia-tema {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  flex-shrink: 0;
+  border-radius: 8px;
+}
+.cambia-tema svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+:root[data-tema='chiaro'] {
+  --scheda: #ffffff;
+}
+:root[data-tema='chiaro'] .contenuto {
+  background:
+    radial-gradient(90% 420px at 0% 0%, rgba(227, 3, 45, 0.05), rgba(227, 3, 45, 0) 100%),
+    radial-gradient(80% 520px at 100% 100%, rgba(227, 3, 45, 0.025), rgba(227, 3, 45, 0) 100%),
+    var(--fondo);
+}
+:root[data-tema='chiaro'] .titolo-riga h1 {
+  color: var(--rosso);
+  border-left-color: var(--rosso);
+}
+:root[data-tema='chiaro'] .testata-saluto .saluto strong {
+  color: var(--testo);
+}
+:root[data-tema='chiaro'] .testata-saluto .saluto span {
+  color: var(--testo-attenuato);
+}
+:root[data-tema='chiaro'] .testata-saluto .saluto span em {
+  color: var(--rosso);
+}
+:root[data-tema='chiaro'] .testata-saluto,
+:root[data-tema='chiaro'] .testata:not(:has(.testata-saluto)) > div:first-child {
+  background: linear-gradient(to right, rgba(227, 3, 45, 0.12), rgba(227, 3, 45, 0.05) 45%, rgba(227, 3, 45, 0) 100%);
+}
+:root[data-tema='chiaro'] .aiuto-punto {
+  background: #fff;
+  border-color: #e3cbd1;
+  color: var(--testo-attenuato);
+}
+:root[data-tema='chiaro'] .contenuto .schede-gruppi,
+:root[data-tema='chiaro'] .contenuto .schede-gruppi .schede-vista a {
+  color: var(--testo);
+}
+:root[data-tema='chiaro'] .contenuto .schede-gruppi {
+  border-bottom-color: #e3cbd1;
+}
+:root[data-tema='chiaro'] .contenuto .schede-gruppi .schede-gruppo {
+  border-left-color: var(--bordo);
+}
+:root[data-tema='chiaro'] .contenuto .schede-gruppi .gruppo-etichetta {
+  color: var(--testo-attenuato);
+}
+:root[data-tema='chiaro'] .contenuto .schede-gruppi .schede-vista a:hover:not(.attivo) {
+  background: var(--riga-alterna);
+}
+:root[data-tema='chiaro'] .contenuto .schede-gruppi .schede-vista a.attivo,
+:root[data-tema='chiaro'] .contenuto .schede-gruppi .schede-vista a.attivo:hover {
+  color: var(--rosso-scuro);
+  background: linear-gradient(to bottom, rgba(227, 3, 45, 0.02), rgba(227, 3, 45, 0.07));
+}
+:root[data-tema='chiaro'] .contenuto .filtri input[type='search'],
+:root[data-tema='chiaro'] .contenuto .filtri select {
+  border-color: #e3cbd1;
+}
+:root[data-tema='chiaro'] .percorso {
+  border-bottom-color: #e3cbd1;
+}
+:root[data-tema='chiaro'] .percorso li {
+  color: var(--testo);
+  border-left-color: var(--bordo);
+}
+:root[data-tema='chiaro'] .percorso li:not(.attuale):not(.fatto) .percorso-punto {
+  background: #fff;
+  border-color: #e3cbd1;
+  color: var(--testo);
+}
+:root[data-tema='chiaro'] .percorso li.attuale {
+  color: var(--rosso-scuro);
+  background: linear-gradient(to bottom, rgba(227, 3, 45, 0.02), rgba(227, 3, 45, 0.07));
+}
+:root[data-tema='chiaro'] .percorso li.fatto {
+  color: var(--testo);
+}
+:root[data-tema='chiaro'] .fase-vuota {
+  color: var(--testo-attenuato);
+  border-color: var(--bordo);
+}
+:root[data-tema='chiaro'] .funnel-titolo {
+  color: var(--testo-attenuato);
+}

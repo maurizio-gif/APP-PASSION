@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import { logout } from '@/app/login/actions'
+import { CambiaTema } from '@/components/CambiaTema'
 import { Logo } from '@/components/Logo'
 import { Menu } from '@/components/Menu'
 import { Navigazione } from '@/components/Navigazione'
@@ -45,6 +46,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
               <strong>{io.nome} {io.cognome}</strong>
               {io.ruolo !== 'consulente' && <span>{testoRuolo(io.ruolo)}</span>}
             </div>
+            <CambiaTema />
             <form action={logout}>
               <button type="submit">Esci</button>
             </form>
