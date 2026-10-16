@@ -4094,3 +4094,9 @@ select:not([multiple]):hover {
     justify-self: end;
   }
 }
+
+/* Etichetta «Reformer prenotato»: pronta per quando l'elenco avra' il dato (per ora solo disegno). */
+.bollino.reformer {
+  background: #e0f2f1;
+  color: #0f766e;
+}

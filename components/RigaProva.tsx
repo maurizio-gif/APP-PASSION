@@ -22,7 +22,7 @@ function StatoPass({ p }: { p: Prova }) {
 // Una riga della tabella Prove: ogni cella e' una colonna di righe, una sotto
 // l'altra, tutte della stessa dimensione (la prima in grassetto, le altre grigie).
 // Il modulo dell'esito arriva da fuori (`children`).
-export function RigaProva({ p, pagamento, children }: { p: Prova; pagamento?: Pagamento | null; children: React.ReactNode }) {
+export function RigaProva({ p, pagamento, etichette, children }: { p: Prova; pagamento?: Pagamento | null; etichette?: React.ReactNode; children: React.ReactNode }) {
   return (
     <tr>
       <td>
@@ -52,6 +52,7 @@ export function RigaProva({ p, pagamento, children }: { p: Prova; pagamento?: Pa
             ? <span className="stato rosso">Mai entrato</span>
             : <span className="muto">Ultimo ingresso {formatoFa(p.ultimo_ingresso)}</span>}
           {p.iscritto_su_pgm && !p.esito && <span className="etichetta-riga"><span className="bollino verde">ha già un contratto su PerfectGym</span></span>}
+          {etichette && <span className="etichetta-riga">{etichette}</span>}
         </div>
       </td>
       <td className="gestisci">{children}</td>
