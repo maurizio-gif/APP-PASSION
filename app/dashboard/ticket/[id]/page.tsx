@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { crm, linkPgm, richiediSezione, type ContestoTicket, type Io, type Ticket } from '@/lib/crm'
+import { crm, linkPgm, richiediSezione, type Io, type Ticket } from '@/lib/crm'
 import { createSupabaseServerClient } from '@/lib/supabase/server'
 import {
-  EVENTO_TICKET, formatoData, formatoDataOra, formatoEuro, NATURA_TICKET, STATI_TICKET_CHIUSI, traduci, VERIFICHE_TICKET,
+  EVENTO_TICKET, formatoData, formatoDataOra, NATURA_TICKET, STATI_TICKET_CHIUSI, traduci, VERIFICHE_TICKET,
 } from '@/lib/formato'
 import { assiste, smista } from '@/lib/permessi'
 import { Avviso, Contatti, Persona } from '@/components/Ui'
@@ -83,12 +83,13 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
             <h2>Cliente</h2>
             {t.persona && (
               <>
-                <Persona id={t.persona.id} nome={t.persona.nome} cognome={t.persona.cognome} />
+                <div className="cliente-riga">
+                  <Persona id={t.persona.id} nome={t.persona.nome} cognome={t.persona.cognome} />
+                  {linkPgm(t.persona.member_id) && (
+                    <a className="bottone secondario piccolo" href={linkPgm(t.persona.member_id)!} target="_blank" rel="noreferrer">Apri su PerfectGym ↗</a>
+                  )}
+                </div>
                 <Contatti telefono={t.persona.telefono} email={t.persona.email} />
-                {linkPgm(t.persona.member_id) && (
-                  <p><a href={linkPgm(t.persona.member_id)!} target="_blank" rel="noreferrer">Apri su PerfectGym ↗</a></p>
-                )}
-                {t.contesto && <Fotografia c={t.contesto} />}
               </>
             )}
             {t.stessa_persona.length > 0 && (
@@ -192,30 +193,6 @@ async function linkAllegati(t: Ticket) {
   const { data } = await supabase.storage.from('ticket').createSignedUrls(t.allegati.map((a) => a.percorso), 3600)
   for (const d of data ?? []) if (d.path && d.signedUrl) mappa.set(d.path, d.signedUrl)
   return mappa
-}
-
-// La situazione del socio quando si e' aperto il ticket.
-function Fotografia({ c }: { c: ContestoTicket }) {
-  if (!c.socio) return <p className="piccolo attenuato">Non era un socio di PerfectGym quando si è aperto il ticket.</p>
-  const [abb] = c.abbonamenti ?? []
-  const giorno = c.fotografata_il.slice(0, 10)
-  const scadenza = c.certificato?.scadenza ?? null
-  return (
-    <>
-      <h3 className="titoletto">All’apertura ({formatoDataOra(c.fotografata_il)})</h3>
-      <dl className="dati">
-        <dt>Abbonamento</dt>
-        <dd>{abb ? <>{abb.piano ?? '—'} <span className="piccolo attenuato">dal {formatoData(abb.data_inizio)} al {formatoData(abb.data_fine)}</span>
-          {abb.data_inizio && abb.data_inizio > giorno && <> <span className="bollino rosso">non ancora iniziato</span></>}</> : 'nessuno'}</dd>
-        <dt>Saldo</dt>
-        <dd className={c.saldo != null && c.saldo < 0 ? 'negativo' : undefined}>{formatoEuro(c.saldo)}</dd>
-        <dt>Certificato</dt>
-        <dd>{!scadenza ? 'non presente' : scadenza >= giorno ? `valido fino al ${formatoData(scadenza)}` : <span className="testo-rosso">scaduto il {formatoData(scadenza)}</span>}</dd>
-        <dt>Ingressi</dt>
-        <dd>{c.ingressi_30gg ?? 0} in 30 giorni{c.ultimo_ingresso ? `, l’ultimo il ${formatoDataOra(c.ultimo_ingresso)}` : ''}</dd>
-      </dl>
-    </>
-  )
 }
 
 function Nascosti({ t, qui }: { t: Ticket; qui: string }) {

@@ -6133,3 +6133,13 @@ select {
     border-left: 1px solid var(--bordo);
   }
 }
+
+/* Cliente nel ticket: il nome e, a fianco, «Apri su PerfectGym». */
+.cliente-riga {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
