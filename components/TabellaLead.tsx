@@ -28,7 +28,7 @@ export function TabellaLead({ lead, io, staff, torna, contratti, firma }: { lead
   return (
     <>
       <div className="tabella-scorre solo-computer">
-        <table className={`tabella-lead tabella-colonne tabella-uniforme${contratti ? '' : ' lead-cinque'}`}>
+        <table className={`tabella-lead tabella-colonne${contratti ? '' : ' tabella-uniforme'}`}>
           <thead>
             <tr>
               <th>Cliente</th>
@@ -40,12 +40,9 @@ export function TabellaLead({ lead, io, staff, torna, contratti, firma }: { lead
                   <th>Consulente</th>
                 </>
               ) : (
-                <>
-                  <th>Attività di interesse</th>
-                  <th>Nota task</th>
-                </>
+                <th>Attività di interesse</th>
               )}
-              <th></th>
+              <th>{contratti ? '' : 'In carico'}</th>
             </tr>
           </thead>
           <tbody>
@@ -73,10 +70,12 @@ export function TabellaLead({ lead, io, staff, torna, contratti, firma }: { lead
                       <td><div className="riga-dati">{l.assegnato_nome ? <span className="normale">{l.assegnato_nome}</span> : <span className="muto">nessuno</span>}</div></td>
                     </>
                   ) : (
-                    <>
-                      <td><div className="riga-dati"><span className="normale">{l.attivita_interesse || '–'}</span></div></td>
-                      <td><div className="riga-dati"><span className="muto">{l.note_task || ''}</span></div></td>
-                    </>
+                    <td>
+                      <div className="riga-dati">
+                        <span className="normale">{l.attivita_interesse || '–'}</span>
+                        {l.note_task && <span className="muto">{l.note_task}</span>}
+                      </div>
+                    </td>
                   )}
                   <td><Azione l={l} io={io} staff={staff} torna={torna} /></td>
                 </tr>
