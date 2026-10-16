@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { crm, richiediSezione } from '@/lib/crm'
-import { formatoFa } from '@/lib/formato'
+import { formatoDataOra, formatoFa } from '@/lib/formato'
 import { Contatti, Persona, Vuoto } from '@/components/Ui'
 
 export default async function Cerca({ searchParams }: { searchParams: { q?: string } }) {
@@ -35,10 +35,11 @@ export default async function Cerca({ searchParams }: { searchParams: { q?: stri
           <Vuoto>Nessuno trovato per «{q}». Se è una persona nuova, crea un lead.</Vuoto>
         ) : (
           <div className="tabella-scorre">
-            <table className="schede-mobile tabella-colonne">
+            <table className="schede-mobile tabella-colonne tabella-cerca">
               <thead>
                 <tr>
-                  <th>Persona</th>
+                  <th>Cliente</th>
+                  <th>Contatti</th>
                   <th>Stato</th>
                   <th>Ultima attività</th>
                 </tr>
@@ -49,16 +50,30 @@ export default async function Cerca({ searchParams }: { searchParams: { q?: stri
                     <td>
                       <div className="riga-dati">
                         <Persona id={t.id} nome={t.nome} cognome={t.cognome} />
+                      </div>
+                    </td>
+                    <td>
+                      <div className="riga-dati">
                         <Contatti telefono={t.telefono} email={t.email} />
                       </div>
                     </td>
                     <td>
                       <div className="riga-dati">
                         {t.member_id && <span className="etichetta-riga"><span className="bollino verde">socio</span></span>}
-                        {t.lead_aperti > 0 && <span className="etichetta-riga"><span className="bollino giallo">{t.lead_aperti} lead aperti</span></span>}
+                        {t.member_id && <span className="muto">Tessera n. {t.member_id}</span>}
+                        {t.lead_aperti > 0 ? (
+                          <span className="etichetta-riga"><span className="bollino giallo">{t.lead_aperti} lead aperti</span></span>
+                        ) : (
+                          <span className="muto">Nessun lead aperto</span>
+                        )}
                       </div>
                     </td>
-                    <td><div className="riga-dati"><span className="muto">{t.ultima_attivita ? formatoFa(t.ultima_attivita) : ''}</span></div></td>
+                    <td>
+                      <div className="riga-dati">
+                        <span className="normale">{t.ultima_attivita ? formatoFa(t.ultima_attivita) : '–'}</span>
+                        {t.ultima_attivita && <span className="muto">{formatoDataOra(t.ultima_attivita)}</span>}
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>
