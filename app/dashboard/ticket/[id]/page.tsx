@@ -34,8 +34,9 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
   return (
     <>
       <div className="testata">
-        <div>
-          <h1><NumeroTicket id={t.id} /> {t.titolo}</h1>
+        <div className="testata-ticket">
+          <div className="ticket-sopra">Ticket <NumeroTicket id={t.id} /></div>
+          <h1>{t.titolo}</h1>
           <div className="ticket-bollini">
             <BollinoTipo tipo={t.tipo} /> <BollinoStato stato={t.stato} />
             {t.bloccante && <span className="bollino rosso">Blocca il lavoro</span>}
@@ -46,7 +47,7 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
             {t.preso_nome && ` · lo segue ${t.preso_nome}`}
           </p>
         </div>
-        <Link href="/dashboard/ticket">← Ticket</Link>
+        <Link className="bottone secondario" href="/dashboard/ticket">← Ticket</Link>
       </div>
       <Avviso errore={searchParams.errore} ok={searchParams.ok} />
       {t.doppione_di && (
@@ -56,7 +57,7 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
         <p className="avviso">R2D aspetta una risposta di Passion: scrivila nel filo qui sotto e il ticket torna in lavorazione.</p>
       )}
 
-      <div className="griglia">
+      <div className="griglia ticket-pagina">
         {/* ---- Colonna 1: il ticket e il filo ---- */}
         <div>
           <section className="scheda">

@@ -5940,3 +5940,166 @@ select {
 .tabella-colonne td .riga-dati > a.ticket-titolo:hover strong {
   color: var(--rosso-scuro);
 }
+
+/* ---- Pagina del singolo ticket: testata, filo, moduli e dati in ordine ---------------- */
+.testata-ticket .ticket-sopra {
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ff6b84;
+}
+.testata-ticket .ticket-sopra .numero-ticket {
+  color: inherit;
+  font-weight: 700;
+}
+.testata-ticket h1 {
+  margin: 4px 0 10px;
+  font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: #fff;
+}
+.testata-ticket .ticket-bollini {
+  margin: 0 0 8px;
+}
+.testata-ticket p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.85rem;
+}
+:root[data-tema='chiaro'] .testata-ticket .ticket-sopra {
+  color: var(--rosso);
+}
+:root[data-tema='chiaro'] .testata-ticket h1 {
+  color: var(--testo);
+}
+:root[data-tema='chiaro'] .testata-ticket p {
+  color: var(--testo-attenuato);
+}
+
+@media (min-width: 900px) {
+  .griglia.ticket-pagina {
+    grid-template-columns: minmax(0, 1.75fr) minmax(300px, 1fr);
+    gap: 20px;
+  }
+}
+.ticket-pagina .dati {
+  grid-template-columns: 120px 1fr;
+  gap: 8px 14px;
+}
+.ticket-pagina .dati dt {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--testo-attenuato);
+  padding-top: 2px;
+}
+.ticket-pagina .titoletto {
+  margin: 16px 0 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rosso-scuro);
+}
+.ticket-pagina .elenco-breve {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.ticket-pagina .elenco-breve li {
+  margin: 0;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--bordo);
+}
+.ticket-pagina .elenco-breve li:last-child {
+  border-bottom: 0;
+}
+.ticket-pagina .ticket-testo {
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+/* Il filo: ogni messaggio un riquadro, con la barra del colore di chi scrive. */
+.filo-ticket > li {
+  margin: 0 0 10px;
+  padding: 10px 14px;
+  border: 0;
+  border-left: 3px solid var(--rosso);
+  border-radius: 0 10px 10px 0;
+  background: linear-gradient(to right, rgba(227, 3, 45, 0.07), rgba(227, 3, 45, 0.02));
+}
+.filo-ticket > li.lato-r2d {
+  border-left-color: var(--nero);
+  background: linear-gradient(to right, rgba(21, 23, 28, 0.08), rgba(21, 23, 28, 0.02));
+}
+.filo-ticket > li.evento {
+  margin-bottom: 8px;
+  padding: 4px 14px;
+  border-left-color: #e3cbd1;
+  background: none;
+}
+.filo-ticket .storia-testa {
+  font-size: 0.82rem;
+  color: var(--testo-attenuato);
+}
+.filo-ticket .storia-testa strong {
+  color: var(--testo);
+}
+.filo-ticket .storia-testo {
+  margin-top: 4px;
+  font-size: 0.93rem;
+  line-height: 1.5;
+}
+
+/* I moduli: etichette e campi con la stessa lingua del resto. */
+.ticket-pagina .campo label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+.ticket-pagina textarea,
+.ticket-pagina select,
+.ticket-pagina input[type='number'],
+.ticket-pagina input[type='text'] {
+  border-color: #e3cbd1;
+  border-radius: 9px;
+}
+.ticket-pagina textarea:focus,
+.ticket-pagina input:focus {
+  outline: 0;
+  border-color: var(--rosso);
+  box-shadow: 0 0 0 3px rgba(227, 3, 45, 0.14);
+}
+.ticket-azioni .stack {
+  gap: 18px;
+}
+.ticket-azioni .stack > * + * {
+  padding-top: 18px;
+  border-top: 1px solid var(--bordo);
+}
+.ticket-pagina .modulo {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+}
+.ticket-pagina .modulo .campo,
+.ticket-pagina .modulo select {
+  width: 100%;
+}
+.ticket-pagina .azioni-scheda {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+}
+.ticket-pagina .campo-breve {
+  width: 90px;
+}
+.ticket-pagina .scheda > h2 + p {
+  margin-top: 0;
+}
