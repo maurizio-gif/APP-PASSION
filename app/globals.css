@@ -6103,3 +6103,33 @@ select {
 .ticket-pagina .scheda > h2 + p {
   margin-top: 0;
 }
+
+/* ---- Pagina del ticket: righe da due colonne; «Cosa fare» largo in fondo ------------------- */
+.griglia.ticket-pagina {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  align-items: stretch;
+}
+.ticket-pagina > .scheda {
+  margin-bottom: 0;
+}
+@media (min-width: 900px) {
+  .griglia.ticket-pagina {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ticket-pagina > .piena,
+  .ticket-pagina > .ticket-azioni {
+    grid-column: 1 / -1;
+  }
+  .ticket-azioni .stack {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    align-items: start;
+  }
+  .ticket-azioni .stack > * + * {
+    padding-top: 0;
+    border-top: 0;
+    padding-left: 24px;
+    border-left: 1px solid var(--bordo);
+  }
+}

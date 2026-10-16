@@ -58,132 +58,127 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
       )}
 
       <div className="griglia ticket-pagina">
-        {/* ---- Colonna 1: il ticket e il filo ---- */}
-        <div>
+        <section className="scheda">
+          <h2>{t.tipo === 'modifica' ? 'Cosa cambia' : 'Cosa succede'}</h2>
+          <p className="ticket-testo">{t.descrizione}</p>
+          {t.tipo === 'modifica' && (
+            <dl className="dati">
+              <dt>Per</dt><dd>{t.abbonamenti ?? <span className="attenuato">non indicato</span>}</dd>
+              <dt>Da quando</dt><dd>{t.dal ? formatoData(t.dal) : <span className="attenuato">non indicato</span>}</dd>
+              <dt>Comunicazione</dt><dd>{t.comunicazione ?? <span className="attenuato">nessuna</span>}</dd>
+              <dt>Riunione</dt><dd>{formatoData(t.riunione)}</dd>
+              {t.confermata_il && (<><dt>Conferma</dt><dd>{t.confermata_nota} <span className="piccolo attenuato">(registrata da {t.confermata_nome} il {formatoDataOra(t.confermata_il)})</span></dd></>)}
+            </dl>
+          )}
+          {t.tipo !== 'modifica' && t.verifiche.length > 0 && (
+            <>
+              <h3 className="titoletto">Già controllato</h3>
+              <ul className="elenco-breve">{t.verifiche.map((v) => <li key={v}>✓ {traduci(VERIFICHE_TICKET, v)}</li>)}</ul>
+            </>
+          )}
+        </section>
+
+        {(t.persona || t.doppioni.length > 0 || t.stessa_persona.length > 0) && (
           <section className="scheda">
-            <h2>{t.tipo === 'modifica' ? 'Cosa cambia' : 'Cosa succede'}</h2>
-            <p className="ticket-testo">{t.descrizione}</p>
-            {t.tipo === 'modifica' && (
-              <dl className="dati">
-                <dt>Per</dt><dd>{t.abbonamenti ?? <span className="attenuato">non indicato</span>}</dd>
-                <dt>Da quando</dt><dd>{t.dal ? formatoData(t.dal) : <span className="attenuato">non indicato</span>}</dd>
-                <dt>Comunicazione</dt><dd>{t.comunicazione ?? <span className="attenuato">nessuna</span>}</dd>
-                <dt>Riunione</dt><dd>{formatoData(t.riunione)}</dd>
-                {t.confermata_il && (<><dt>Conferma</dt><dd>{t.confermata_nota} <span className="piccolo attenuato">(registrata da {t.confermata_nome} il {formatoDataOra(t.confermata_il)})</span></dd></>)}
-              </dl>
-            )}
-            {t.tipo !== 'modifica' && t.verifiche.length > 0 && (
+            <h2>Cliente</h2>
+            {t.persona && (
               <>
-                <h3 className="titoletto">Già controllato</h3>
-                <ul className="elenco-breve">{t.verifiche.map((v) => <li key={v}>✓ {traduci(VERIFICHE_TICKET, v)}</li>)}</ul>
+                <Persona id={t.persona.id} nome={t.persona.nome} cognome={t.persona.cognome} />
+                <Contatti telefono={t.persona.telefono} email={t.persona.email} />
+                {linkPgm(t.persona.member_id) && (
+                  <p><a href={linkPgm(t.persona.member_id)!} target="_blank" rel="noreferrer">Apri su PerfectGym ↗</a></p>
+                )}
+                {t.contesto && <Fotografia c={t.contesto} />}
+              </>
+            )}
+            {t.stessa_persona.length > 0 && (
+              <>
+                <h3 className="titoletto">Altri ticket aperti sul cliente</h3>
+                <ul className="elenco-breve">
+                  {t.stessa_persona.map((o) => (
+                    <li key={o.id}><Link href={`/dashboard/ticket/${o.id}`}><NumeroTicket id={o.id} /> {o.titolo}</Link> <BollinoStato stato={o.stato} /></li>
+                  ))}
+                </ul>
+              </>
+            )}
+            {t.doppioni.length > 0 && (
+              <>
+                <h3 className="titoletto">Uniti a questo</h3>
+                <ul className="elenco-breve">
+                  {t.doppioni.map((d) => (
+                    <li key={d.id}><Link href={`/dashboard/ticket/${d.id}`}><NumeroTicket id={d.id} /> {d.titolo}</Link>
+                      <span className="piccolo attenuato"> · {d.aperto_da_nome}, {formatoData(d.aperto_il)}</span></li>
+                  ))}
+                </ul>
               </>
             )}
           </section>
-
-          {(t.soluzione || t.causa) && (
-            <section className="scheda ticket-soluzione">
-              <h2>{t.stato === 'rilasciata' ? 'Rilasciata' : 'Soluzione'}</h2>
-              <dl className="dati">
-                {t.natura && (<><dt>Di cosa si trattava</dt><dd>{traduci(NATURA_TICKET, t.natura)}</dd></>)}
-                {t.causa && (<><dt>Causa</dt><dd className="ticket-testo">{t.causa}</dd></>)}
-                <dt>{t.stato === 'rilasciata' ? 'Verificato' : t.stato === 'risolto_desk' ? 'Risposta del desk' : 'Soluzione'}</dt>
-                <dd className="ticket-testo">{t.soluzione}</dd>
-                {t.chiuso_il && (<><dt>Chiuso</dt><dd>{t.chiuso_nome} · {formatoDataOra(t.chiuso_il)}</dd></>)}
-              </dl>
-            </section>
-          )}
-
-          <section className="scheda">
-            <h2>Allegati</h2>
-            {t.allegati.length === 0 ? (
-              <p className="vuoto">Nessun allegato.</p>
-            ) : (
-              <ul className="allegati-elenco">
-                {t.allegati.map((a) => {
-                  const url = link.get(a.percorso)
-                  const immagine = a.tipo?.startsWith('image/') && a.tipo !== 'image/heic' && a.tipo !== 'image/heif'
-                  return (
-                    <li key={a.id}>
-                      {url ? (
-                        <a href={url} target="_blank" rel="noreferrer">
-                          {immagine ? <img src={url} alt={a.nome} loading="lazy" /> : <span className="allegato-file">{a.nome}</span>}
-                        </a>
-                      ) : <span className="allegato-file attenuato">{a.nome} (non raggiungibile)</span>}
-                      <div className="piccolo attenuato">{a.caricato_nome} · {formatoDataOra(a.caricato_il)}</div>
-                    </li>
-                  )
-                })}
-              </ul>
-            )}
-            {t.stato !== 'doppione' && <CaricaAllegati ticket={t.id} />}
+        )}
+        {(t.soluzione || t.causa) && (
+          <section className="scheda ticket-soluzione piena">
+            <h2>{t.stato === 'rilasciata' ? 'Rilasciata' : 'Soluzione'}</h2>
+            <dl className="dati">
+              {t.natura && (<><dt>Di cosa si trattava</dt><dd>{traduci(NATURA_TICKET, t.natura)}</dd></>)}
+              {t.causa && (<><dt>Causa</dt><dd className="ticket-testo">{t.causa}</dd></>)}
+              <dt>{t.stato === 'rilasciata' ? 'Verificato' : t.stato === 'risolto_desk' ? 'Risposta del desk' : 'Soluzione'}</dt>
+              <dd className="ticket-testo">{t.soluzione}</dd>
+              {t.chiuso_il && (<><dt>Chiuso</dt><dd>{t.chiuso_nome} · {formatoDataOra(t.chiuso_il)}</dd></>)}
+            </dl>
           </section>
+        )}
 
-          <section className="scheda">
-            <h2>Filo</h2>
-            <ul className="filo-ticket">
-              {t.messaggi.map((m) => (
-                <li key={m.id} className={`lato-${m.lato}${m.evento ? ' evento' : ''}`}>
-                  <div className="storia-testa">
-                    <strong>{m.autore ?? '—'}</strong>{m.lato === 'r2d' && <span className="bollino grigio">R2D</span>}
-                    {m.evento && <> {traduci(EVENTO_TICKET, m.evento)}</>} · {formatoDataOra(m.creato_il)}
-                  </div>
-                  {m.testo && <div className="storia-testo">{m.testo}</div>}
-                </li>
-              ))}
+        <section className="scheda">
+          <h2>Allegati</h2>
+          {t.allegati.length === 0 ? (
+            <p className="vuoto">Nessun allegato.</p>
+          ) : (
+            <ul className="allegati-elenco">
+              {t.allegati.map((a) => {
+                const url = link.get(a.percorso)
+                const immagine = a.tipo?.startsWith('image/') && a.tipo !== 'image/heic' && a.tipo !== 'image/heif'
+                return (
+                  <li key={a.id}>
+                    {url ? (
+                      <a href={url} target="_blank" rel="noreferrer">
+                        {immagine ? <img src={url} alt={a.nome} loading="lazy" /> : <span className="allegato-file">{a.nome}</span>}
+                      </a>
+                    ) : <span className="allegato-file attenuato">{a.nome} (non raggiungibile)</span>}
+                    <div className="piccolo attenuato">{a.caricato_nome} · {formatoDataOra(a.caricato_il)}</div>
+                  </li>
+                )
+              })}
             </ul>
-            {t.stato !== 'doppione' && (
-              <form action={messaggioTicket} className="modulo">
-                <input type="hidden" name="ticket" value={t.id} />
-                <input type="hidden" name="torna" value={qui} />
-                <div className="campo">
-                  <label htmlFor="testo">Scrivi</label>
-                  <textarea id="testo" name="testo" rows={3} required placeholder={chiuso ? 'Un aggiornamento (il ticket resta chiuso)' : 'Una risposta, un aggiornamento, un dettaglio in più'} />
+          )}
+          {t.stato !== 'doppione' && <CaricaAllegati ticket={t.id} />}
+        </section>
+
+        <section className="scheda">
+          <h2>Filo</h2>
+          <ul className="filo-ticket">
+            {t.messaggi.map((m) => (
+              <li key={m.id} className={`lato-${m.lato}${m.evento ? ' evento' : ''}`}>
+                <div className="storia-testa">
+                  <strong>{m.autore ?? '—'}</strong>{m.lato === 'r2d' && <span className="bollino grigio">R2D</span>}
+                  {m.evento && <> {traduci(EVENTO_TICKET, m.evento)}</>} · {formatoDataOra(m.creato_il)}
                 </div>
-                <BottoneInvio testo="Aggiungi al filo" inCorso="Invio…" classe="secondario" />
-              </form>
-            )}
-          </section>
-        </div>
-
-        {/* ---- Colonna 2: il socio e le azioni ---- */}
-        <div>
-          <Azioni t={t} io={io} qui={qui} />
-
-          {t.persona && (
-            <section className="scheda">
-              <h2>Socio</h2>
-              <Persona id={t.persona.id} nome={t.persona.nome} cognome={t.persona.cognome} />
-              <Contatti telefono={t.persona.telefono} email={t.persona.email} />
-              {linkPgm(t.persona.member_id) && (
-                <p><a href={linkPgm(t.persona.member_id)!} target="_blank" rel="noreferrer">Apri su PerfectGym ↗</a></p>
-              )}
-              {t.contesto && <Fotografia c={t.contesto} />}
-            </section>
+                {m.testo && <div className="storia-testo">{m.testo}</div>}
+              </li>
+            ))}
+          </ul>
+          {t.stato !== 'doppione' && (
+            <form action={messaggioTicket} className="modulo">
+              <input type="hidden" name="ticket" value={t.id} />
+              <input type="hidden" name="torna" value={qui} />
+              <div className="campo">
+                <label htmlFor="testo">Scrivi</label>
+                <textarea id="testo" name="testo" rows={3} required placeholder={chiuso ? 'Un aggiornamento (il ticket resta chiuso)' : 'Una risposta, un aggiornamento, un dettaglio in più'} />
+              </div>
+              <BottoneInvio testo="Aggiungi al filo" inCorso="Invio…" classe="secondario" />
+            </form>
           )}
+        </section>
 
-          {t.doppioni.length > 0 && (
-            <section className="scheda">
-              <h2>Uniti a questo</h2>
-              <ul className="elenco-breve">
-                {t.doppioni.map((d) => (
-                  <li key={d.id}><Link href={`/dashboard/ticket/${d.id}`}><NumeroTicket id={d.id} /> {d.titolo}</Link>
-                    <span className="piccolo attenuato"> · {d.aperto_da_nome}, {formatoData(d.aperto_il)}</span></li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-          {t.stessa_persona.length > 0 && (
-            <section className="scheda">
-              <h2>Altri ticket aperti sul socio</h2>
-              <ul className="elenco-breve">
-                {t.stessa_persona.map((o) => (
-                  <li key={o.id}><Link href={`/dashboard/ticket/${o.id}`}><NumeroTicket id={o.id} /> {o.titolo}</Link> <BollinoStato stato={o.stato} /></li>
-                ))}
-              </ul>
-            </section>
-          )}
-        </div>
+        <Azioni t={t} io={io} qui={qui} />
       </div>
     </>
   )
