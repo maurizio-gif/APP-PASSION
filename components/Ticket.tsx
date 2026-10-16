@@ -46,7 +46,7 @@ export function TabellaTicket({ ticket, socio = true }: { ticket: TicketRiga[]; 
                   </Link>
                   <div className="ticket-bollini">
                     <BollinoTipo tipo={t.tipo} /> <BollinoStato stato={t.stato} />
-                    {t.bloccante && <span className="bollino rosso">Blocca il lavoro</span>}
+                    {t.bloccante && <span className="bollino rosso blocca">Blocca il lavoro</span>}
                     {t.doppione_di && <span className="muto"> nel #{t.doppione_di}</span>}
                   </div>
                 </div>

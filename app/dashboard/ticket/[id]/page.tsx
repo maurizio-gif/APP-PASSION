@@ -39,7 +39,7 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
             <span className="ticket-sopra">Ticket <NumeroTicket id={t.id} /></span>
             <div className="ticket-bollini">
               <BollinoTipo tipo={t.tipo} /> <BollinoStato stato={t.stato} />
-              {t.bloccante && <span className="bollino rosso">Blocca il lavoro</span>}
+              {t.bloccante && <span className="bollino rosso blocca">Blocca il lavoro</span>}
             </div>
           </div>
           <h1>{t.titolo}</h1>

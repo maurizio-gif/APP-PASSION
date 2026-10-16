@@ -6277,7 +6277,7 @@ select {
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.22);
 }
-.testata-ticket .ticket-bollini .bollino.rosso {
+.testata-ticket .ticket-bollini .bollino.blocca {
   background: var(--rosso);
   border-color: var(--rosso);
   color: #fff;
