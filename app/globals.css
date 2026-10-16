@@ -3415,3 +3415,142 @@ details.scheda .utenti {
 .scheda-azioni .modulo .campo {
   margin-bottom: 12px;
 }
+
+/* ---- Le card sotto il funnel (Task, Ticket, Accessi, Prenotazioni): stessa scala ---- */
+
+.persona-sotto .scheda {
+  padding: 18px 20px;
+  margin-bottom: 18px;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+.persona-sotto .scheda h2 {
+  font-size: 1rem;
+  line-height: 1.3;
+  margin-bottom: 14px;
+}
+.persona-sotto .testata-scheda {
+  align-items: center;
+  margin-bottom: 14px;
+}
+.persona-sotto .testata-scheda h2 {
+  margin-bottom: 0;
+}
+.persona-sotto .vuoto {
+  padding: 4px 0;
+  font-size: 0.9rem;
+}
+
+/* Elenchi (accessi, prenotazioni): una riga per voce, filetto sottile, data in evidenza. */
+.persona-sotto .punti {
+  list-style: none;
+  padding: 0;
+  font-size: 0.9rem;
+}
+.persona-sotto .punti > li {
+  padding: 9px 0;
+  border-bottom: 1px solid var(--bordo);
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  color: var(--testo-attenuato);
+}
+.persona-sotto .punti > li:first-child {
+  padding-top: 0;
+}
+.persona-sotto .punti > li:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+.persona-sotto .punti > li strong {
+  color: var(--testo);
+  font-weight: 600;
+}
+
+/* Task: una voce per riga, intestazione piccola e grigia, testo leggibile. */
+.persona-sotto .storia > li {
+  padding: 2px 0 16px 14px;
+}
+.persona-sotto .storia > li:last-child {
+  padding-bottom: 4px;
+}
+.persona-sotto .storia-testa {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  gap: 4px 8px;
+  margin-bottom: 4px;
+}
+.persona-sotto .storia-testo {
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.persona-sotto .storia .azioni-riga {
+  margin-top: 8px;
+}
+.persona-sotto .storia .azioni-riga input[type='text'] {
+  flex: 1 1 180px;
+}
+.persona-sotto .task-nuovo {
+  margin-top: 16px;
+  padding-top: 16px;
+}
+.persona-sotto .task-nuovo h3 {
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+/* Campi e bottoni di queste card: stessa altezza di quelli delle card del funnel. */
+.persona-sotto select,
+.persona-sotto input[type='text'],
+.persona-sotto input[type='datetime-local'],
+.persona-sotto .bottone {
+  min-height: 36px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  font-size: 0.88rem;
+}
+.persona-sotto .bottone {
+  padding-left: 14px;
+  padding-right: 14px;
+}
+.persona-sotto .azioni-riga {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* I moduli di rinnovo e disdetta nel funnel: campi uno per riga, etichette piccole. */
+.carta-fase .modulo .due-colonne {
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+.carta-fase .modulo .campo {
+  margin-bottom: 12px;
+  gap: 6px;
+}
+.carta-fase .modulo .campo label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--testo-attenuato);
+}
+.carta-fase .modulo .campo select,
+.carta-fase .modulo .campo input[type='text'] {
+  width: 100%;
+  min-height: 36px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  font-size: 0.88rem;
+}
+.carta-fase .modulo > .bottone {
+  margin-top: 2px;
+}
+.carta-fase .contratti-precedenti {
+  margin-top: 16px;
+  padding-top: 12px;
+  font-size: 0.88rem;
+}
+.carta-fase .contratti-precedenti > summary {
+  font-weight: 600;
+}
