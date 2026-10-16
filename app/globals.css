@@ -4264,3 +4264,45 @@ a.numero:hover {
     font-size: 1.6rem;
   }
 }
+
+/* ---- Da gestire: i riquadri sono le schede ---------------------------------------- */
+
+.numeri-schede {
+  margin: 4px 0 20px;
+}
+.numeri-schede .numero {
+  overflow: visible;
+  box-shadow: none;
+  background: var(--riga-alterna);
+}
+.numeri-schede .numero.caldo {
+  background: var(--riga-alterna);
+  box-shadow: none;
+}
+.numeri-schede .numero:hover {
+  background: #fff;
+}
+/* La scheda aperta: riquadro bianco con bordo nero e una punta verso la tabella. */
+.numeri-schede .numero.attivo {
+  background: #fff;
+  border-color: var(--nero);
+  box-shadow: 0 0 0 1px var(--nero);
+}
+.numeri-schede .numero.attivo::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border-right: 1px solid var(--nero);
+  border-bottom: 1px solid var(--nero);
+  box-shadow: 1px 1px 0 var(--nero);
+  transform: translateX(-50%) rotate(45deg);
+}
+@media (max-width: 720px) {
+  .numeri-schede .numero.attivo::after {
+    display: none;
+  }
+}

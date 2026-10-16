@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { crm } from '@/lib/crm'
 import { formatoGiornoLungo, oggiRoma } from '@/lib/formato'
-import { Avviso, Schede, Vuoto } from '@/components/Ui'
+import { Avviso, SchedeNumeri, Vuoto } from '@/components/Ui'
 import { assiste, puoVedere, smista } from '@/lib/permessi'
 import { TabellaLead } from '@/components/TabellaLead'
 import { TabellaRinnovi } from '@/components/TabellaRinnovi'
@@ -27,12 +27,12 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
   // «Da gestire» di Lead, Rinnovi, Disdette e Prove in scadenza in schede, piu'
   // «Non assegnati»: i lead aperti e le prove in corso senza un consulente. Si
   // carica solo la scheda aperta, come nella sua sezione.
-  const schede: { chiave: string; testo: string; n?: number; vai: string }[] = [
-    { chiave: 'lead', testo: 'Lead', n: h.lead_da_gestire, vai: '/dashboard/lead?vista=da_gestire' },
-    ...(puoVedere(io, 'rinnovi') ? [{ chiave: 'rinnovi', testo: 'Rinnovi', n: h.rinnovi_da_gestire, vai: '/dashboard/rinnovi?vista=da_gestire' }] : []),
-    ...(puoVedere(io, 'disdette') ? [{ chiave: 'disdette', testo: 'Disdette', n: h.disdette_da_gestire, vai: '/dashboard/disdette?vista=da_gestire' }] : []),
-    { chiave: 'prove', testo: 'Prove in scadenza', n: h.prove_in_scadenza, vai: '/dashboard/prove?vista=in_scadenza' },
-    { chiave: 'non_assegnati', testo: 'Non assegnati', vai: '/dashboard/lead?vista=tutte&consulente=' + NESSUN_CONSULENTE },
+  const schede: { chiave: string; testo: string; n?: number; nota?: string; caldo?: boolean; vai: string }[] = [
+    { chiave: 'lead', testo: 'Lead da gestire', n: h.lead_da_gestire, nota: `non ancora presi in carico · ${h.miei_lead} miei`, caldo: h.lead_da_gestire > 0, vai: '/dashboard/lead?vista=da_gestire' },
+    { chiave: 'prove', testo: 'Prove in scadenza', n: h.prove_in_scadenza, nota: `entro 3 giorni · ${h.prove_in_corso} in corso`, caldo: h.prove_in_scadenza > 0, vai: '/dashboard/prove?vista=in_scadenza' },
+    ...(puoVedere(io, 'rinnovi') ? [{ chiave: 'rinnovi', testo: 'Rinnovi da gestire', n: h.rinnovi_da_gestire, nota: `non ancora presi in carico · ${h.miei_rinnovi} miei`, caldo: h.rinnovi_da_gestire > 0, vai: '/dashboard/rinnovi?vista=da_gestire' }] : []),
+    ...(puoVedere(io, 'disdette') ? [{ chiave: 'disdette', testo: 'Disdette da gestire', n: h.disdette_da_gestire, nota: `non ancora prese in carico · ${h.mie_disdette} mie`, caldo: h.disdette_da_gestire > 0, vai: '/dashboard/disdette?vista=da_gestire' }] : []),
+    { chiave: 'non_assegnati', testo: 'Non assegnati', nota: 'lead e prove senza consulente', vai: '/dashboard/lead?vista=tutte&consulente=' + NESSUN_CONSULENTE },
   ]
   const aperta = schede.find((s) => s.chiave === searchParams.vista) ?? schede[0]
   const scheda = aperta.chiave
@@ -66,77 +66,12 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
 
       <Avviso errore={searchParams.errore} />
 
-      <div className="numeri">
-        <Link href="/dashboard/lead?vista=da_gestire" className={`numero${h.lead_da_gestire ? ' caldo' : ''}`}>
-          <div className="etichetta">Lead da gestire</div>
-          <div className="valore">{h.lead_da_gestire}</div>
-          <div className="nota">non ancora presi in carico</div>
-        </Link>
-        <Link href="/dashboard/lead?vista=mie" className="numero">
-          <div className="etichetta">I miei lead</div>
-          <div className="valore">{h.miei_lead}</div>
-          <div className="nota">in gestione a me</div>
-        </Link>
-        <Link href="/dashboard/prove?vista=in_scadenza" className={`numero${h.prove_in_scadenza ? ' caldo' : ''}`}>
-          <div className="etichetta">Prove in scadenza</div>
-          <div className="valore">{h.prove_in_scadenza}</div>
-          <div className="nota">entro 3 giorni · {h.prove_in_corso} in corso</div>
-        </Link>
-        {puoVedere(io, 'contratti') && (
-          <Link href="/dashboard/contratti" className="numero">
-            <div className="etichetta">Contratti da controllare</div>
-            <div className="valore">{h.contratti_da_controllare}</div>
-            <div className="nota">pagamento, codice fiscale, tessera</div>
-          </Link>
-        )}
-        {puoVedere(io, 'disdette') && (
-          <Link href="/dashboard/disdette?vista=da_gestire" className={`numero${h.disdette_da_gestire ? ' caldo' : ''}`}>
-            <div className="etichetta">Disdette da gestire</div>
-            <div className="valore">{h.disdette_da_gestire}</div>
-            <div className="nota">non ancora prese in carico · {h.mie_disdette} mie</div>
-          </Link>
-        )}
-        {puoVedere(io, 'rinnovi') && (
-          <Link href="/dashboard/rinnovi?vista=da_gestire" className={`numero${h.rinnovi_da_gestire ? ' caldo' : ''}`}>
-            <div className="etichetta">Rinnovi da gestire</div>
-            <div className="valore">{h.rinnovi_da_gestire}</div>
-            <div className="nota">non ancora presi in carico · {h.miei_rinnovi} miei</div>
-          </Link>
-        )}
-        <Link href="/dashboard/task?chi=miei&quando=arretrati" className={`numero${h.miei_task_arretrati ? ' caldo' : ''}`}>
-          <div className="etichetta">I miei task</div>
-          <div className="valore">{h.miei_task_oggi + h.miei_task_arretrati}</div>
-          <div className="nota">{h.miei_task_oggi} oggi · {h.miei_task_arretrati} arretrati</div>
-        </Link>
-        {ticket && smista(io) && (
-          <Link href="/dashboard/ticket?vista=da_verificare" className={`numero${ticket.da_verificare ? ' caldo' : ''}`}>
-            <div className="etichetta">Ticket da verificare</div>
-            <div className="valore">{ticket.da_verificare}</div>
-            <div className="nota">{ticket.proposte ? `${ticket.proposte} proposte per la riunione` : 'segnalazioni del desk'}</div>
-          </Link>
-        )}
-        {ticket && assiste(io) && (
-          <Link href="/dashboard/ticket?vista=r2d" className={`numero${ticket.bloccanti ? ' caldo' : ''}`}>
-            <div className="etichetta">Ticket per R2D</div>
-            <div className="valore">{ticket.r2d}</div>
-            <div className="nota">{ticket.bloccanti ? `${ticket.bloccanti} bloccano il lavoro` : `${ticket.modifiche_da_confermare + ticket.modifiche_da_rilasciare} modifiche aperte`}</div>
-          </Link>
-        )}
-        {ticket && (
-          <Link href="/dashboard/ticket?vista=in_attesa" className={`numero${ticket.in_attesa && !assiste(io) ? ' caldo' : ''}`}>
-            <div className="etichetta">Ticket in attesa</div>
-            <div className="valore">{ticket.in_attesa}</div>
-            <div className="nota">R2D aspetta una risposta · {ticket.miei} aperti da me</div>
-          </Link>
-        )}
-      </div>
-
       <section className="scheda" id="da-gestire">
         <div className="testata-scheda">
           <h2>Da gestire</h2>
-          <Link href={aperta.vai}>Vai a {scheda === 'non_assegnati' ? 'Lead' : aperta.testo} →</Link>
+          <Link href={aperta.vai}>Vai a {scheda === 'non_assegnati' ? 'Lead' : aperta.testo.replace(' da gestire', '')} →</Link>
         </div>
-        <Schede voci={schede} attiva={scheda} base="/dashboard" />
+        <SchedeNumeri voci={schede} attiva={scheda} base="/dashboard" ancora="da-gestire" />
         <div className="da-gestire-corpo">
           {nuovi && (nuovi.length === 0 ? (
             <Vuoto>Tutti i lead sono presi in carico.</Vuoto>
@@ -173,8 +108,46 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
         </div>
       </section>
 
+      {((ticket) || puoVedere(io, 'contratti')) && (
+        <div className="numeri">
+          {puoVedere(io, 'contratti') && (
+            <Link href="/dashboard/contratti" className="numero">
+              <div className="etichetta">Contratti da controllare</div>
+              <div className="valore">{h.contratti_da_controllare}</div>
+              <div className="nota">pagamento, codice fiscale, tessera</div>
+            </Link>
+          )}
+          {ticket && smista(io) && (
+            <Link href="/dashboard/ticket?vista=da_verificare" className={`numero${ticket.da_verificare ? ' caldo' : ''}`}>
+              <div className="etichetta">Ticket da verificare</div>
+              <div className="valore">{ticket.da_verificare}</div>
+              <div className="nota">{ticket.proposte ? `${ticket.proposte} proposte per la riunione` : 'segnalazioni del desk'}</div>
+            </Link>
+          )}
+          {ticket && assiste(io) && (
+            <Link href="/dashboard/ticket?vista=r2d" className={`numero${ticket.bloccanti ? ' caldo' : ''}`}>
+              <div className="etichetta">Ticket per R2D</div>
+              <div className="valore">{ticket.r2d}</div>
+              <div className="nota">{ticket.bloccanti ? `${ticket.bloccanti} bloccano il lavoro` : `${ticket.modifiche_da_confermare + ticket.modifiche_da_rilasciare} modifiche aperte`}</div>
+            </Link>
+          )}
+          {ticket && (
+            <Link href="/dashboard/ticket?vista=in_attesa" className={`numero${ticket.in_attesa && !assiste(io) ? ' caldo' : ''}`}>
+              <div className="etichetta">Ticket in attesa</div>
+              <div className="valore">{ticket.in_attesa}</div>
+              <div className="nota">R2D aspetta una risposta · {ticket.miei} aperti da me</div>
+            </Link>
+          )}
+        </div>
+      )}
+
       <section className="scheda">
-        <h2>I miei task</h2>
+        <div className="testata-scheda">
+          <h2>I miei task</h2>
+          <Link href="/dashboard/task?chi=miei&quando=arretrati" className={h.miei_task_arretrati ? 'testo-rosso' : undefined}>
+            {h.miei_task_oggi + h.miei_task_arretrati} da fare · {h.miei_task_oggi} oggi · {h.miei_task_arretrati} arretrati →
+          </Link>
+        </div>
         {task.length === 0 ? (
           <Vuoto>Niente in agenda per oggi.</Vuoto>
         ) : (
