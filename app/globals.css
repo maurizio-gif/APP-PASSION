@@ -5928,3 +5928,6 @@ select {
 .tabella-ticket.con-cliente td:nth-child(2) {
   vertical-align: middle;
 }
+.tabella-ticket td {
+  vertical-align: middle;
+}
