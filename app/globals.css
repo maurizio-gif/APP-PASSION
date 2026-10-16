@@ -3930,3 +3930,37 @@ select:not([multiple]):hover {
 .azioni-gruppo select {
   min-width: 120px;
 }
+
+/* ---- Prove: il modulo di gestione in due colonne, tutto alla stessa altezza ---- */
+
+.cella-etichette {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin-top: 2px;
+}
+.cella-etichette .cella-consulente {
+  font-size: 0.8rem;
+  color: var(--testo-attenuato);
+}
+.tabella-prove .modulo.compatto {
+  min-width: 340px;
+  gap: 8px;
+}
+.tabella-prove .modulo.compatto select,
+.tabella-prove .modulo.compatto input[type='text'] {
+  min-height: 36px;
+  padding: 6px 12px;
+  font-size: 0.88rem;
+  width: 100%;
+}
+.tabella-prove .modulo.compatto > .bottone {
+  grid-column: 1 / -1;
+  justify-self: end;
+  min-height: 34px;
+  padding: 6px 18px;
+}
+.tabella-prove td {
+  vertical-align: middle;
+}

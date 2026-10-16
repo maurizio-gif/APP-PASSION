@@ -35,7 +35,17 @@ export function RigaProva({ p, pagamento, children }: { p: Prova; pagamento?: Pa
           <div>
             <Persona id={p.utente_id} nome={p.nome} cognome={p.cognome} />
             <Contatti telefono={p.telefono} email={p.email} />
-            <BollinoFonte fonte={p.fonte} dettaglio={p.fonte_dettaglio} />
+            <div className="cella-etichette">
+              <BollinoFonte fonte={p.fonte} dettaglio={p.fonte_dettaglio} />
+              {p.gestito_nome ? (
+                <span className="cella-consulente" title="Chi la segue">
+                  <Iniziali nome={p.gestito_nome.split(' ')[0] ?? null} cognome={p.gestito_nome.split(' ')[1] ?? null} classe="piccole" />
+                  {p.gestito_nome}
+                </span>
+              ) : (
+                <span className="bollino giallo">da assegnare</span>
+              )}
+            </div>
           </div>
         </div>
       </td>
@@ -60,16 +70,6 @@ export function RigaProva({ p, pagamento, children }: { p: Prova; pagamento?: Pa
         </div>
         <div className="attenuato">{p.ultimo_ingresso ? `ultimo ingresso ${formatoFa(p.ultimo_ingresso)}` : 'mai entrato'}</div>
         {p.iscritto_su_pgm && !p.esito && <span className="bollino verde">ha già un contratto su PerfectGym</span>}
-      </td>
-      <td className="piccolo">
-        {p.gestito_nome ? (
-          <span className="cella-consulente">
-            <Iniziali nome={p.gestito_nome.split(' ')[0] ?? null} cognome={p.gestito_nome.split(' ')[1] ?? null} classe="piccole" />
-            {p.gestito_nome}
-          </span>
-        ) : (
-          <span className="bollino giallo">da assegnare</span>
-        )}
       </td>
       <td className="gestisci">{children}</td>
     </tr>

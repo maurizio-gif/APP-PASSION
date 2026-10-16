@@ -15,8 +15,7 @@ export function TabellaProve({ prove, pagamenti, staff, torna }: { prove: Prova[
             <th>Persona</th>
             <th>Pass</th>
             <th>Come va</th>
-            <th>La segue</th>
-            <th>Esito</th>
+            <th>Gestione</th>
           </tr>
         </thead>
         <tbody>
