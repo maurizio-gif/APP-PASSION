@@ -104,7 +104,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
             )}
             {aperto && puo && (
               <>
-                <div className="azioni-riga">
+                <div className="azioni-gruppo">
                   <form action={assegnaLead} className="azioni-riga">
                     <input type="hidden" name="lead" value={l.id} />
                     <input type="hidden" name="torna" value={qui} />
