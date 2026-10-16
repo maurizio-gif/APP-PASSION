@@ -5909,3 +5909,17 @@ select {
 :root[data-tema='chiaro'] .contenuto .avviso:not(.scheda .avviso).ok {
   color: var(--verde);
 }
+
+/* Ticket: il numero piu' piccolo, sopra il titolo. */
+.tabella-ticket .ticket-titolo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.tabella-ticket .ticket-titolo .numero-ticket {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+}
