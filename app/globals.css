@@ -4123,3 +4123,13 @@ select:not([multiple]):hover {
   width: 300px;
   max-width: 100%;
 }
+
+/* «Disdetto il» davanti alla data: solo sul telefono, dove le colonne non hanno l'intestazione. */
+.prefisso-mobile {
+  display: none;
+}
+@media (max-width: 720px) {
+  .prefisso-mobile {
+    display: inline;
+  }
+}

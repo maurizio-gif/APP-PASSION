@@ -13,6 +13,7 @@ export function TabellaDisdette({ disdette, io, staff, torna }: { disdette: Disd
           <tr>
             <th>Socio</th>
             <th>Contratto</th>
+            <th>Data disdetta</th>
             <th>In carico</th>
           </tr>
         </thead>
@@ -36,8 +37,10 @@ export function TabellaDisdette({ disdette, io, staff, torna }: { disdette: Disd
                   <strong>{d.piano ?? '—'}</strong>
                   <span className="muto">{formatoEuro(d.canone)}</span>
                   <span className="muto">Firmato {formatoData(d.data_firma)} · fine {formatoData(d.data_fine)}</span>
-                  <span className="normale">Disdetto il {formatoData(d.data_disdetta)}</span>
                 </div>
+              </td>
+              <td className="nowrap">
+                <span className="prefisso-mobile">Disdetto il </span>{formatoData(d.data_disdetta)}
               </td>
               <td className="nowrap">
                 <InCarico id={d.id} assegnatoA={d.gestito_da} assegnatoNome={d.gestito_nome}
