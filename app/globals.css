@@ -6248,3 +6248,13 @@ select {
     align-items: stretch;
   }
 }
+.ticket-azioni .stack > form {
+  margin: 0;
+}
+.ticket-azioni .stack > form .campo {
+  display: grid;
+  gap: 10px;
+}
+.ticket-azioni .stack > form .campo > label.modulo-titolo {
+  margin-bottom: 0;
+}
