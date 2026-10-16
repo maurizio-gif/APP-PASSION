@@ -3021,7 +3021,7 @@ details.scheda .utenti {
   flex-wrap: nowrap;
 }
 .tabella-lead .taglia {
-  max-width: 170px;
+  max-width: 140px;
 }
 
 /* Da gestire: le schede Lead, Rinnovi, Disdette sopra la tabella. */
@@ -3612,31 +3612,32 @@ details.scheda .utenti {
 
 /* Assegna: una riga sola. Il menu prende lo spazio che resta, «Assegna» a fianco,
    e «Rimetti da assegnare» e' un bottone con la sola icona (la scritta al passaggio). */
-.scheda-azioni .azioni-gruppo {
+.azioni-gruppo {
+  display: flex;
   flex-direction: row;
   align-items: center;
   flex-wrap: nowrap;
   gap: 8px;
 }
-.scheda-azioni .azioni-gruppo > form {
+.azioni-gruppo > form {
   margin: 0;
 }
-.scheda-azioni .azioni-gruppo > form.azioni-riga {
+.azioni-gruppo > form.azioni-riga {
   flex: 1 1 auto;
   min-width: 0;
   flex-wrap: nowrap;
 }
-.scheda-azioni .azioni-gruppo > .azioni-riga {
+.azioni-gruppo > .azioni-riga {
   flex: 1 1 auto;
   min-width: 0;
   flex-wrap: nowrap;
 }
-.scheda-azioni .azioni-gruppo select {
+.azioni-gruppo select {
   flex: 1 1 0;
   min-width: 0;
   width: auto;
 }
-.scheda-azioni .azioni-gruppo .bottone {
+.azioni-gruppo .bottone {
   flex-shrink: 0;
   white-space: nowrap;
 }
@@ -3654,4 +3655,14 @@ details.scheda .utenti {
   stroke-width: 1.9;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+/* Nelle tabelle la cella si adatta al contenuto: il menu ha una larghezza sua. */
+.tabella-lead .azioni-gruppo select {
+  flex: 0 0 auto;
+  min-width: 120px;
+}
+.lead-telefono-azione .azioni-gruppo select {
+  flex: 1 1 0;
+  min-width: 0;
 }
