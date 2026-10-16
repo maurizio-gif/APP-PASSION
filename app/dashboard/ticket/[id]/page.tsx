@@ -256,18 +256,6 @@ function Azioni({ t, io, qui }: { t: Ticket; io: Io; qui: string }) {
         </form>,
       )
     }
-    if (t.stato === 'inviato' || t.stato === 'in_lavorazione') {
-      blocchi.push(
-        <form key="chiedi" action={chiediTicket} className="modulo">
-          <Nascosti t={t} qui={qui} />
-          <div className="campo">
-            <label htmlFor="domanda">Chiedi informazioni a Passion</label>
-            <textarea id="domanda" name="domanda" rows={2} required placeholder="Cosa serve sapere per andare avanti" />
-          </div>
-          <BottoneInvio testo="Chiedi e metti in attesa" inCorso="Invio…" classe="secondario" />
-        </form>,
-      )
-    }
     if (t.stato !== 'da_verificare') {
       blocchi.push(
         <form key="risolvi" action={risolviTicket} className="modulo">
@@ -282,6 +270,18 @@ function Azioni({ t, io, qui }: { t: Ticket; io: Io; qui: string }) {
             <textarea id="soluzione" name="soluzione" rows={3} required placeholder="Cosa si è fatto, e cosa deve fare il desk la prossima volta" />
           </div>
           <BottoneInvio testo="Risolto" inCorso="Salvataggio…" />
+        </form>,
+      )
+    }
+    if (t.stato === 'inviato' || t.stato === 'in_lavorazione') {
+      blocchi.push(
+        <form key="chiedi" action={chiediTicket} className="modulo">
+          <Nascosti t={t} qui={qui} />
+          <div className="campo">
+            <label htmlFor="domanda">Chiedi informazioni a Passion</label>
+            <textarea id="domanda" name="domanda" rows={2} required placeholder="Cosa serve sapere per andare avanti" />
+          </div>
+          <BottoneInvio testo="Chiedi e metti in attesa" inCorso="Invio…" classe="secondario" />
         </form>,
       )
     }
