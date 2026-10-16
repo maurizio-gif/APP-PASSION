@@ -4646,10 +4646,12 @@ section[data-carica] .da-gestire-corpo {
 
 /* ---- Separazione piu' evidente tra un cliente e l'altro ------------------------------ */
 .tabella-colonne tbody td,
+.tabella-prove tbody td,
 .tabella-lead tbody td {
   border-bottom: 1px solid #d3d8e0;
 }
 .tabella-colonne tbody tr:last-child td,
+.tabella-prove tbody tr:last-child td,
 .tabella-lead tbody tr:last-child td {
   border-bottom-color: transparent;
 }
