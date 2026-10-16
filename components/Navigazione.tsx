@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Fragment } from 'react'
 
 // Le icone sono SVG disegnati qui (nessun file e nessuna libreria da caricare).
 const ICONE: Record<string, string> = {
@@ -24,31 +23,44 @@ const ICONE: Record<string, string> = {
   '/dashboard/aggiornamenti': 'M12 3l2.4 5.6L20 11l-5.6 2.4L12 19l-2.4-5.6L4 11l5.6-2.4z',
 }
 
-// Da qui in poi nel menu c'e' la parte «di servizio», separata da una riga.
-const SERVIZIO = '/dashboard/utenti'
-const SERVIZIO_ALT = ['/dashboard/riunioni', '/dashboard/guida', '/dashboard/aggiornamenti']
+// Le voci raggruppate per categoria (solo presentazione: ogni voce resta com'e', cambia
+// l'ordine in cui compaiono). Le voci che non stanno in nessun gruppo vanno in fondo.
+const GRUPPI: { titolo?: string; voci: string[] }[] = [
+  { voci: ['/dashboard'] },
+  { titolo: 'Clienti', voci: ['/dashboard/lead', '/dashboard/prove', '/dashboard/contratti', '/dashboard/rinnovi', '/dashboard/disdette', '/dashboard/cerca'] },
+  { titolo: 'Lavoro', voci: ['/dashboard/task', '/dashboard/ticket', '/dashboard/debitori'] },
+  { titolo: 'Analisi', voci: ['/dashboard/abbonamenti', '/dashboard/riunioni'] },
+  { titolo: 'Team', voci: ['/dashboard/curriculum', '/dashboard/utenti'] },
+  { titolo: 'Aiuto', voci: ['/dashboard/guida', '/dashboard/aggiornamenti'] },
+]
 
 // Il menu: le voci le sceglie il layout, secondo le sezioni di chi e' entrato.
 export function Navigazione({ voci }: { voci: { href: string; testo: string; icona?: string }[] }) {
   const percorso = usePathname()
   const chiave = (v: { href: string; icona?: string }) => v.icona ?? v.href
-  const primoServizio = voci.find((v) => chiave(v) === SERVIZIO || SERVIZIO_ALT.includes(chiave(v)))?.href
+  const usate = new Set(GRUPPI.flatMap((g) => g.voci))
+  const gruppi = [
+    ...GRUPPI.map((g) => ({ titolo: g.titolo, voci: voci.filter((v) => g.voci.includes(chiave(v))) })),
+    { titolo: 'Altro', voci: voci.filter((v) => !usate.has(chiave(v))) },
+  ].filter((g) => g.voci.length > 0)
   return (
     <nav>
-      {voci.map((v) => {
-        const attivo = chiave(v) === '/dashboard' ? percorso === v.href : percorso.startsWith(v.href)
-        return (
-          <Fragment key={v.href}>
-            {v.href === primoServizio && <div className="separatore" />}
-            <Link href={v.href} className={attivo ? 'attivo' : undefined}>
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d={ICONE[chiave(v)] ?? 'M5 12h14'} />
-              </svg>
-              {v.testo}
-            </Link>
-          </Fragment>
-        )
-      })}
+      {gruppi.map((g) => (
+        <div className="gruppo-menu" key={g.titolo ?? 'principale'}>
+          {g.titolo && <div className="gruppo-menu-titolo">{g.titolo}</div>}
+          {g.voci.map((v) => {
+            const attivo = chiave(v) === '/dashboard' ? percorso === v.href : percorso.startsWith(v.href)
+            return (
+              <Link key={v.href} href={v.href} className={attivo ? 'attivo' : undefined}>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d={ICONE[chiave(v)] ?? 'M5 12h14'} />
+                </svg>
+                {v.testo}
+              </Link>
+            )
+          })}
+        </div>
+      ))}
     </nav>
   )
 }

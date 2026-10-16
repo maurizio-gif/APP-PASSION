@@ -5393,17 +5393,31 @@ select {
   color: #fff;
 }
 
-/* Sfondo della barra: dal nero al rosso scuro in basso. */
+/* Barra: sfondo scuro semplice, scritte bianche, voci raggruppate per categoria. */
 .barra {
-  background:
-    radial-gradient(120% 60% at 0% 100%, rgba(227, 3, 45, 0.5), rgba(227, 3, 45, 0) 70%),
-    linear-gradient(to bottom, #15161a, var(--nero) 55%, #3a050f);
+  background: var(--nero);
 }
-
-/* Sfumatura rossa anche in alto, dietro il logo. */
-.barra {
-  background:
-    radial-gradient(130% 38% at 0% 0%, rgba(227, 3, 45, 0.55), rgba(227, 3, 45, 0) 70%),
-    radial-gradient(120% 60% at 0% 100%, rgba(227, 3, 45, 0.5), rgba(227, 3, 45, 0) 70%),
-    linear-gradient(to bottom, #2a0610, var(--nero) 45%, #3a050f);
+.barra nav a {
+  color: #fff;
+}
+.barra nav a svg {
+  opacity: 0.9;
+}
+.gruppo-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.gruppo-menu + .gruppo-menu {
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.gruppo-menu-titolo {
+  padding: 4px 12px 5px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
 }
