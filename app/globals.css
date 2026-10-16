@@ -5797,3 +5797,13 @@ select {
     height: 38vh;
   }
 }
+
+/* Le onde arrivano fino a meta' schermo. */
+.contenuto::before {
+  height: 78vh;
+}
+@media (max-width: 720px) {
+  .contenuto::before {
+    height: 70vh;
+  }
+}
