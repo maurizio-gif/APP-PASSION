@@ -5499,3 +5499,11 @@ select {
 .contenuto {
   background: linear-gradient(160deg, #44454b 0%, #34353a 45%, #26272b 100%);
 }
+
+/* Fondo com'era; sono le schede ad avere un bianco piu' morbido, per meno contrasto. */
+:root {
+  --scheda: #ededf1;
+}
+.contenuto {
+  background: linear-gradient(160deg, #2b2c31 0%, #1b1c20 45%, #0f1012 100%);
+}
