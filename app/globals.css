@@ -5807,3 +5807,27 @@ select {
     height: 70vh;
   }
 }
+
+/* L'intestazione delle tabelle riempie tutta la larghezza della scheda (e arriva al bordo in alto). */
+@media (min-width: 721px) {
+  .tabella-scorre {
+    padding: 0;
+  }
+  .tabella-scorre th:first-child,
+  .tabella-scorre td:first-child {
+    padding-left: 22px;
+  }
+  .tabella-scorre th:last-child,
+  .tabella-scorre td:last-child {
+    padding-right: 22px;
+  }
+  .scheda > .tabella-scorre:first-child {
+    margin-top: -20px;
+  }
+  .scheda > .tabella-scorre:first-child thead th:first-child {
+    border-top-left-radius: calc(var(--raggio) - 1px);
+  }
+  .scheda > .tabella-scorre:first-child thead th:last-child {
+    border-top-right-radius: calc(var(--raggio) - 1px);
+  }
+}
