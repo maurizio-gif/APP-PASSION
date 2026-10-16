@@ -8,7 +8,7 @@ import { assegnaDisdetta, rilasciaDisdetta } from '@/app/dashboard/azioni'
 export function TabellaDisdette({ disdette, io, staff, torna }: { disdette: Disdetta[]; io: Io; staff: Operatore[]; torna: string }) {
   return (
     <div className="tabella-scorre">
-      <table className="schede-mobile">
+      <table className="schede-mobile tabella-colonne">
         <thead>
           <tr>
             <th>Socio</th>
@@ -31,10 +31,13 @@ export function TabellaDisdette({ disdette, io, staff, torna }: { disdette: Disd
                 {d.gestito_il && <div className="piccolo attenuato">{d.gestito_nome ?? '—'} · {formatoData(d.gestito_il)}</div>}
                 </div>
               </td>
-              <td className="piccolo info">
-                <div><strong>{d.piano ?? '—'}</strong> · {formatoEuro(d.canone)}</div>
-                <div className="attenuato">firmato {formatoData(d.data_firma)} · fine {formatoData(d.data_fine)}</div>
-                <div>disdetto il <strong>{formatoData(d.data_disdetta)}</strong></div>
+              <td>
+                <div className="riga-dati">
+                  <strong>{d.piano ?? '—'}</strong>
+                  <span className="muto">{formatoEuro(d.canone)}</span>
+                  <span className="muto">Firmato {formatoData(d.data_firma)} · fine {formatoData(d.data_fine)}</span>
+                  <span className="normale">Disdetto il {formatoData(d.data_disdetta)}</span>
+                </div>
               </td>
               <td className="nowrap">
                 <InCarico id={d.id} assegnatoA={d.gestito_da} assegnatoNome={d.gestito_nome}

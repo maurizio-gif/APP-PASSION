@@ -8,7 +8,7 @@ import { assegnaRinnovo, rilasciaRinnovo } from '@/app/dashboard/azioni'
 export function TabellaRinnovi({ rinnovi, io, staff, torna }: { rinnovi: Rinnovo[]; io: Io; staff: Operatore[]; torna: string }) {
   return (
     <div className="tabella-scorre">
-      <table className="schede-mobile">
+      <table className="schede-mobile tabella-colonne">
         <thead>
           <tr>
             <th>Socio</th>
@@ -32,12 +32,15 @@ export function TabellaRinnovi({ rinnovi, io, staff, torna }: { rinnovi: Rinnovo
                   {pgm && <a className="piccolo" href={pgm} target="_blank" rel="noreferrer">PerfectGym ↗</a>}
                   </div>
                 </td>
-                <td className="piccolo info">
-                  <div><strong>{r.piano ?? '—'}</strong> · {formatoEuro(r.valore)}</div>
-                  <div>scade il <strong>{formatoData(r.scadenza)}</strong></div>
-                  {r.stato_contratto && <div className="attenuato">{traduci(STATO_CONTRATTO, r.stato_contratto)}</div>}
-                  {r.rinnovato_su_pgm && <span className="bollino verde">Nuovo abbonamento su PerfectGym</span>}
-                  {r.task_aperti > 0 && <div className="attenuato">{r.task_aperti} {r.task_aperti === 1 ? 'task aperto' : 'task aperti'}</div>}
+                <td>
+                  <div className="riga-dati">
+                    <strong>{r.piano ?? '—'}</strong>
+                    <span className="muto">{formatoEuro(r.valore)}</span>
+                    <span className="normale">Scade il {formatoData(r.scadenza)}</span>
+                    {r.stato_contratto && <span className="muto">{traduci(STATO_CONTRATTO, r.stato_contratto)}</span>}
+                    {r.rinnovato_su_pgm && <span className="etichetta-riga"><span className="bollino verde">Nuovo abbonamento su PerfectGym</span></span>}
+                    {r.task_aperti > 0 && <span className="muto">{r.task_aperti} {r.task_aperti === 1 ? 'task aperto' : 'task aperti'}</span>}
+                  </div>
                 </td>
                 <td className="nowrap">
                   <InCarico id={r.id} assegnatoA={r.assegnato_a} assegnatoNome={r.assegnato_nome}

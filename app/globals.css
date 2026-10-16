@@ -4100,3 +4100,26 @@ select:not([multiple]):hover {
   background: #e0f2f1;
   color: #0f766e;
 }
+
+/* ---- Rinnovi e Disdette: stesse regole di Prove ---------------------------------- */
+
+.tabella-colonne,
+.tabella-colonne td {
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+.tabella-colonne td {
+  vertical-align: middle;
+}
+.tabella-colonne .piccolo,
+.tabella-colonne .attenuato {
+  font-size: inherit;
+}
+.riga-dati .normale {
+  color: var(--testo);
+}
+/* Il blocco «In carico»: menu, Assegna e freccia, non piu' larghi del necessario. */
+.tabella-colonne .azioni-gruppo {
+  width: 300px;
+  max-width: 100%;
+}
