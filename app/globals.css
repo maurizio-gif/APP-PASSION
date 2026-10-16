@@ -4202,3 +4202,65 @@ select:not([multiple]):hover {
 .tabella-colonne td .riga-dati > a:not(:first-child) {
   font-weight: 400;
 }
+
+/* ---- I riquadri dei numeri (Da gestire) -------------------------------------------
+   Tutti bianchi e della stessa altezza, in una riga sola finche' ci stanno; quelli che
+   chiedono attenzione hanno il numero rosso e una barretta rossa a sinistra. */
+
+.numeri {
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px;
+}
+.numero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 16px 18px 16px 20px;
+  overflow: hidden;
+}
+.numero .etichetta {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--testo-attenuato);
+}
+.numero .valore {
+  margin-top: 4px;
+  font-size: 2rem;
+  line-height: 1.1;
+}
+.numero .nota {
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+.numero.caldo {
+  background: var(--scheda);
+  border-color: var(--bordo);
+  box-shadow: var(--ombra);
+}
+.numero.caldo::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 14px;
+  bottom: 14px;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+  background: var(--rosso);
+}
+a.numero:hover {
+  border-color: #c9cdd6;
+  box-shadow: 0 3px 10px rgba(16, 24, 40, 0.08);
+}
+@media (max-width: 720px) {
+  .numeri {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .numero {
+    padding: 12px 14px 12px 16px;
+  }
+  .numero .valore {
+    font-size: 1.6rem;
+  }
+}
