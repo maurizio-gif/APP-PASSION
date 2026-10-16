@@ -2,7 +2,6 @@ import { linkPgm, type Io, type Operatore, type Rinnovo } from '@/lib/crm'
 import { ESITO_RINNOVO, formatoData, formatoEuro, STATO_CONTRATTO, traduci } from '@/lib/formato'
 import { Contatti, Persona } from '@/components/Ui'
 import { InCarico } from '@/components/InCarico'
-import { Iniziali } from '@/components/RigaProva'
 import { assegnaRinnovo, rilasciaRinnovo } from '@/app/dashboard/azioni'
 
 // La tabella dei rinnovi: nella sezione Rinnovi e nella home («Da gestire»).
@@ -23,7 +22,7 @@ export function TabellaRinnovi({ rinnovi, io, staff, torna }: { rinnovi: Rinnovo
             return (
               <tr key={r.id}>
                 <td>
-                  <div className="cella-persona"><Iniziali nome={r.nome} cognome={r.cognome} /><div>
+                  <div className="riga-dati">
                   <Persona id={r.utente_id} nome={r.nome} cognome={r.cognome} />
                   <Contatti telefono={r.telefono} email={r.email} />
                   {r.esito && (
@@ -31,7 +30,7 @@ export function TabellaRinnovi({ rinnovi, io, staff, torna }: { rinnovi: Rinnovo
                   )}
                   {r.gestito_il && <div className="piccolo attenuato">{r.assegnato_nome ?? '—'} · {formatoData(r.gestito_il)}</div>}
                   {pgm && <a className="piccolo" href={pgm} target="_blank" rel="noreferrer">PerfectGym ↗</a>}
-                  </div></div>
+                  </div>
                 </td>
                 <td className="piccolo info">
                   <div><strong>{r.piano ?? '—'}</strong> · {formatoEuro(r.valore)}</div>

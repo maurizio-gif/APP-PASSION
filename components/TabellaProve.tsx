@@ -22,7 +22,7 @@ export function TabellaProve({ prove, pagamenti, staff, torna }: { prove: Prova[
           {prove.map((p) => (
             <RigaProva key={p.id} p={p} pagamento={p.contract_id != null ? pagamenti[p.contract_id] : null}>
               <Gestione id={p.id}>
-                <form action={aggiornaProva} className="modulo compatto">
+                <form action={aggiornaProva} className="modulo compatto gestione-prova">
                   <input type="hidden" name="prova" value={p.id} />
                   <input type="hidden" name="torna" value={torna} />
                   {/* Iscritto non si sceglie: resta solo se c'e' gia'. */}
@@ -32,9 +32,14 @@ export function TabellaProve({ prove, pagamenti, staff, torna }: { prove: Prova[
                     <option value="non_iscritto">Non iscritto</option>
                   </select>
                   <SceltaOperatore staff={staff} attuale={p.gestito_da} attualeNome={p.gestito_nome} />
-                  <input type="text" name="obiezione" defaultValue={p.obiezione ?? ''} placeholder="Obiezione" />
-                  <input type="text" name="note" defaultValue={p.note ?? ''} placeholder="Note" />
                   <button className="bottone piccolo">Salva</button>
+                  <details className="gestione-extra" open={Boolean(p.obiezione || p.note)}>
+                    <summary>Obiezione e note</summary>
+                    <div className="gestione-extra-campi">
+                      <input type="text" name="obiezione" defaultValue={p.obiezione ?? ''} placeholder="Obiezione" />
+                      <input type="text" name="note" defaultValue={p.note ?? ''} placeholder="Note" />
+                    </div>
+                  </details>
                 </form>
               </Gestione>
             </RigaProva>

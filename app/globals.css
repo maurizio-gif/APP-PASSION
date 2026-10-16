@@ -3964,3 +3964,133 @@ select:not([multiple]):hover {
 .tabella-prove td {
   vertical-align: middle;
 }
+
+/* ---- Tabelle con celle «a colonna» (Prove, Rinnovi, Disdette) ---------------------
+   Una sola regola per il testo: stessa dimensione ovunque (0.88rem), grassetto
+   solo per la prima riga, grigio per il resto; i dati uno sotto l'altro. */
+
+.tabella-prove,
+.tabella-prove td {
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+.riga-dati {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+.riga-dati > * {
+  font-size: inherit;
+}
+.riga-dati .piccolo,
+.riga-dati .contatti,
+.riga-dati .contatti a {
+  font-size: inherit;
+}
+.riga-dati .contatti {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin: 0;
+}
+.riga-dati .contatti > span {
+  display: block;
+}
+.riga-dati .contatti a {
+  color: var(--testo-attenuato);
+}
+.riga-dati .muto {
+  color: var(--testo-attenuato);
+}
+.riga-dati strong {
+  font-weight: 600;
+}
+.riga-dati .etichetta-riga {
+  display: block;
+  margin: 1px 0;
+}
+.riga-dati .bollino {
+  font-size: 0.78rem;
+}
+.stato {
+  font-weight: 600;
+}
+.stato.rosso {
+  color: var(--rosso);
+}
+.stato.giallo {
+  color: var(--giallo);
+}
+.stato.verde {
+  color: var(--verde);
+}
+
+/* Gestione di una prova: esito, chi la segue e Salva su una riga; obiezione e
+   note si aprono a parte (aperte da sole se c'e' gia' qualcosa di scritto). */
+.tabella-prove .modulo.compatto.gestione-prova {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 8px;
+  width: 330px;
+  max-width: 100%;
+  min-width: 0;
+}
+.tabella-prove .gestione-prova select,
+.tabella-prove .gestione-prova input[type='text'] {
+  width: 100%;
+  min-height: 34px;
+  padding: 5px 10px;
+  font-size: 0.88rem;
+}
+.tabella-prove .gestione-prova select {
+  padding-right: 28px;
+}
+.tabella-prove .modulo.compatto.gestione-prova > .bottone {
+  grid-column: auto;
+  justify-self: stretch;
+  min-height: 34px;
+  padding: 5px 14px;
+}
+.gestione-extra {
+  grid-column: 1 / -1;
+}
+.gestione-extra > summary {
+  cursor: pointer;
+  list-style: none;
+  color: var(--testo-attenuato);
+  font-size: 0.82rem;
+  user-select: none;
+}
+.gestione-extra > summary::-webkit-details-marker {
+  display: none;
+}
+.gestione-extra > summary::before {
+  content: '+ ';
+  font-weight: 700;
+}
+.gestione-extra[open] > summary::before {
+  content: '− ';
+}
+.gestione-extra > summary:hover {
+  color: var(--rosso);
+}
+.gestione-extra-campi {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+@media (max-width: 720px) {
+  .tabella-prove .gestione-prova {
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .tabella-prove .modulo.compatto.gestione-prova > .bottone {
+    grid-column: 1 / -1;
+    justify-self: end;
+  }
+}

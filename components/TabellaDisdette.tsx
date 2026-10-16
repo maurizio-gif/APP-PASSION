@@ -2,7 +2,6 @@ import type { Disdetta, Io, Operatore } from '@/lib/crm'
 import { ESITO_DISDETTA, formatoData, formatoEuro, traduci } from '@/lib/formato'
 import { Contatti, Persona } from '@/components/Ui'
 import { InCarico } from '@/components/InCarico'
-import { Iniziali } from '@/components/RigaProva'
 import { assegnaDisdetta, rilasciaDisdetta } from '@/app/dashboard/azioni'
 
 // La tabella delle disdette: nella sezione Disdette e nella home («Da gestire»).
@@ -21,7 +20,7 @@ export function TabellaDisdette({ disdette, io, staff, torna }: { disdette: Disd
           {disdette.map((d) => (
             <tr key={d.id}>
               <td>
-                <div className="cella-persona"><Iniziali nome={d.nome} cognome={d.cognome} /><div>
+                <div className="riga-dati">
                 <Persona id={d.utente_id} nome={d.nome} cognome={d.cognome} />
                 <Contatti telefono={d.telefono} email={d.email} />
                 {d.esito && (
@@ -30,7 +29,7 @@ export function TabellaDisdette({ disdette, io, staff, torna }: { disdette: Disd
                   </span>
                 )}
                 {d.gestito_il && <div className="piccolo attenuato">{d.gestito_nome ?? '—'} · {formatoData(d.gestito_il)}</div>}
-                </div></div>
+                </div>
               </td>
               <td className="piccolo info">
                 <div><strong>{d.piano ?? '—'}</strong> · {formatoEuro(d.canone)}</div>
