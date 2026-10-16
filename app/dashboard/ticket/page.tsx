@@ -4,6 +4,7 @@ import { NATURA_TICKET, traduci } from '@/lib/formato'
 import { assiste, smista } from '@/lib/permessi'
 import { type GruppoSchede, Avviso, LinkGuida, Schede, Vuoto } from '@/components/Ui'
 import { TabellaTicket } from '@/components/Ticket'
+import { filtraTicket, testoCercato } from '@/lib/ricerca'
 
 const VUOTI: Record<string, string> = {
   da_verificare: 'Nessuna segnalazione da verificare.',
@@ -17,7 +18,7 @@ const VUOTI: Record<string, string> = {
 // I ticket di assistenza: il desk scrive, il supporto verifica e manda a R2D,
 // R2D lavora e chiude con causa e soluzione. Le modifiche le scrive R2D dopo
 // la riunione settimanale col titolare.
-export default async function Ticket({ searchParams }: { searchParams: { vista?: string; errore?: string } }) {
+export default async function Ticket({ searchParams }: { searchParams: { vista?: string; errore?: string; q?: string } }) {
   const io = await richiediSezione('ticket')
   const conti = await crm.ticketConti()
   const viste = [
@@ -37,6 +38,7 @@ export default async function Ticket({ searchParams }: { searchParams: { vista?:
   ]
   const predefinita = assiste(io) ? 'r2d' : smista(io) ? 'da_verificare' : 'miei'
   const vista = viste.some((v) => v.chiave === searchParams.vista) ? searchParams.vista! : predefinita
+  const q = testoCercato(searchParams.q)
 
   return (
     <>
@@ -62,16 +64,24 @@ export default async function Ticket({ searchParams }: { searchParams: { vista?:
       )}
       <Schede voci={viste} attiva={vista} base="/dashboard/ticket" gruppi={gruppi} />
 
-      {vista === 'resoconto' ? <Resoconto mesi={await crm.ticketResoconto(6)} /> : <Elenco vista={vista} />}
+      {vista !== 'resoconto' && (
+        <form className="filtri" action="/dashboard/ticket">
+          <input type="hidden" name="vista" value={vista} />
+          <input type="search" name="q" defaultValue={q ?? ''} placeholder="Numero, titolo, cliente, chi l'ha aperto" aria-label="Cerca nei ticket" />
+          <button className="bottone secondario" type="submit">Cerca</button>
+        </form>
+      )}
+
+      {vista === 'resoconto' ? <Resoconto mesi={await crm.ticketResoconto(6)} /> : <Elenco vista={vista} q={q} />}
     </>
   )
 }
 
-async function Elenco({ vista }: { vista: string }) {
-  const ticket = await crm.ticketElenco(vista)
+async function Elenco({ vista, q }: { vista: string; q: string | null }) {
+  const ticket = filtraTicket(await crm.ticketElenco(vista), q)
   return (
     <div className="scheda">
-      {ticket.length === 0 ? <Vuoto>{VUOTI[vista] ?? 'Nessun ticket.'}</Vuoto> : <TabellaTicket ticket={ticket} />}
+      {ticket.length === 0 ? <Vuoto>{q ? `Nessun ticket trovato per «${q}» in questa scheda.` : VUOTI[vista] ?? 'Nessun ticket.'}</Vuoto> : <TabellaTicket ticket={ticket} />}
     </div>
   )
 }

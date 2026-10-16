@@ -22,3 +22,16 @@ export function filtraTesto<T extends Cercabile>(righe: T[], q: string | null): 
     return parole.every((p) => testo.includes(p) || (cifre(p).length >= 3 && tel.includes(cifre(p))))
   })
 }
+
+// Nei ticket si cerca nelle righe gia' arrivate: numero (anche «#214»), titolo,
+// cliente (nome e cognome), chi l'ha aperto e chi l'ha preso in carico.
+type CercabileTicket = { id: number; titolo: string; nome?: string | null; cognome?: string | null; aperto_da_nome?: string | null; preso_nome?: string | null }
+
+export function filtraTicket<T extends CercabileTicket>(righe: T[], q: string | null): T[] {
+  if (!q) return righe
+  const parole = norma(q).replace(/#/g, '').split(/s+/).filter(Boolean)
+  return righe.filter((r) => {
+    const testo = norma([String(r.id), r.titolo, r.nome, r.cognome, r.aperto_da_nome, r.preso_nome].filter(Boolean).join(' '))
+    return parole.every((w) => testo.includes(w))
+  })
+}
