@@ -4906,3 +4906,9 @@ th {
   letter-spacing: 0.01em;
   text-transform: capitalize;
 }
+.testata-saluto .saluto span {
+  text-transform: none;
+}
+.testata-saluto .saluto span::first-letter {
+  text-transform: uppercase;
+}
