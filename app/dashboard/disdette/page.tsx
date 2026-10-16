@@ -1,13 +1,17 @@
 import { crm, richiediSezione } from '@/lib/crm'
-import { Avviso, LinkGuida, Schede, Vuoto } from '@/components/Ui'
+import { Avviso, LinkGuida, Schede, Vuoto, type GruppoSchede } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
 import { TabellaDisdette } from '@/components/TabellaDisdette'
 
+const GRUPPI: GruppoSchede[] = [
+  { chiave: 'lavoro', testo: 'Da lavorare', tono: 'lavoro' },
+  { chiave: 'chiusi', testo: 'Chiuse', tono: 'chiusi' },
+]
 const VISTE = [
-  { chiave: 'da_gestire', testo: 'Da gestire' },
-  { chiave: 'in_gestione', testo: 'In gestione' },
-  { chiave: 'mie', testo: 'Le mie' },
-  { chiave: 'gestite', testo: 'Gestite' },
+  { chiave: 'da_gestire', testo: 'Da gestire', gruppo: 'lavoro' },
+  { chiave: 'in_gestione', testo: 'In gestione', gruppo: 'lavoro' },
+  { chiave: 'mie', testo: 'Le mie', gruppo: 'lavoro' },
+  { chiave: 'gestite', testo: 'Gestite', gruppo: 'chiusi' },
   { chiave: 'tutte', testo: 'Tutte' },
 ]
 
@@ -33,7 +37,7 @@ export default async function Disdette({ searchParams }: { searchParams: { vista
         </div>
       </div>
       <Avviso errore={searchParams.errore} />
-      <Schede voci={VISTE} attiva={vista} base={`/dashboard/disdette${perConsulente ? `?${perConsulente}` : ''}`} />
+      <Schede voci={VISTE} attiva={vista} base={`/dashboard/disdette${perConsulente ? `?${perConsulente}` : ''}`} gruppi={GRUPPI} />
       <FiltroConsulente azione="/dashboard/disdette" staff={staff} consulente={consulente} tieni={{ vista }} />
 
       <div className="scheda">

@@ -3666,3 +3666,108 @@ details.scheda .utenti {
   flex: 1 1 0;
   min-width: 0;
 }
+
+/* ---- Schede raggruppate per momento del percorso ----------------------------
+   Ogni gruppo ha un'etichetta e un colore (lavoro = rosso, prova = ambra,
+   chiusi = grigio); dentro, le schede stanno in un'unica barra. */
+
+.schede-gruppi {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px 10px;
+  margin-bottom: 14px;
+  --tono: var(--testo-attenuato);
+}
+.schede-gruppo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.schede-gruppo.tono-lavoro {
+  --tono: var(--rosso);
+}
+.schede-gruppo.tono-prova {
+  --tono: #c47a00;
+}
+.schede-gruppo.tono-chiusi {
+  --tono: #667085;
+}
+.schede-gruppo.tono-tutti {
+  --tono: var(--testo);
+}
+.gruppo-etichetta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 4px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tono);
+}
+.schede-gruppo:not(.tono-tutti) .gruppo-etichetta::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--tono);
+}
+.schede-gruppo .schede-vista {
+  flex-wrap: nowrap;
+  gap: 2px;
+  padding: 3px;
+  margin: 0;
+  background: var(--scheda);
+  border: 1px solid var(--bordo);
+  border-top: 3px solid var(--tono);
+  border-radius: 12px;
+  box-shadow: var(--ombra);
+}
+.schede-gruppo .schede-vista a {
+  border: 0;
+  background: transparent;
+  border-radius: 8px;
+  padding: 6px 12px;
+  white-space: nowrap;
+  color: var(--testo);
+}
+.schede-gruppo .schede-vista a:hover {
+  background: var(--fondo);
+  text-decoration: none;
+}
+.schede-gruppo .schede-vista a.attivo,
+.schede-gruppo .schede-vista a.attivo:hover {
+  background: var(--tono);
+  color: #fff;
+}
+.schede-gruppo.tono-tutti .schede-vista {
+  border-top-color: var(--bordo);
+}
+.schede-gruppo.tono-tutti .schede-vista a.attivo {
+  background: var(--nero);
+}
+.schede-gruppi + .filtri {
+  margin-top: 4px;
+}
+
+@media (max-width: 720px) {
+  /* Sul telefono i gruppi scorrono di lato, in una riga sola. */
+  .schede-gruppi {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin-left: -16px;
+    margin-right: -16px;
+    padding: 2px 16px 4px;
+  }
+  .schede-gruppi::-webkit-scrollbar {
+    display: none;
+  }
+  .schede-gruppo {
+    flex-shrink: 0;
+  }
+}

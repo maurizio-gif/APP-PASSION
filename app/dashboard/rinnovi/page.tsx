@@ -1,14 +1,18 @@
 import { crm, richiediSezione } from '@/lib/crm'
-import { Avviso, LinkGuida, Schede, Vuoto } from '@/components/Ui'
+import { Avviso, LinkGuida, Schede, Vuoto, type GruppoSchede } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
 import { TabellaRinnovi } from '@/components/TabellaRinnovi'
 
+const GRUPPI: GruppoSchede[] = [
+  { chiave: 'lavoro', testo: 'Da lavorare', tono: 'lavoro' },
+  { chiave: 'chiusi', testo: 'Chiusi', tono: 'chiusi' },
+]
 const VISTE = [
-  { chiave: 'da_gestire', testo: 'Da gestire' },
-  { chiave: 'in_gestione', testo: 'In gestione' },
-  { chiave: 'mie', testo: 'I miei' },
-  { chiave: 'rinnovati', testo: 'Rinnovati' },
-  { chiave: 'non_rinnovati', testo: 'Non rinnovati' },
+  { chiave: 'da_gestire', testo: 'Da gestire', gruppo: 'lavoro' },
+  { chiave: 'in_gestione', testo: 'In gestione', gruppo: 'lavoro' },
+  { chiave: 'mie', testo: 'I miei', gruppo: 'lavoro' },
+  { chiave: 'rinnovati', testo: 'Rinnovati', gruppo: 'chiusi' },
+  { chiave: 'non_rinnovati', testo: 'Non rinnovati', gruppo: 'chiusi' },
   { chiave: 'tutti', testo: 'Tutti' },
 ]
 
@@ -34,7 +38,7 @@ export default async function Rinnovi({ searchParams }: { searchParams: { vista?
         </div>
       </div>
       <Avviso errore={searchParams.errore} />
-      <Schede voci={VISTE} attiva={vista} base={`/dashboard/rinnovi${perConsulente ? `?${perConsulente}` : ''}`} />
+      <Schede voci={VISTE} attiva={vista} base={`/dashboard/rinnovi${perConsulente ? `?${perConsulente}` : ''}`} gruppi={GRUPPI} />
       <FiltroConsulente azione="/dashboard/rinnovi" staff={staff} consulente={consulente} tieni={{ vista }} />
 
       <div className="scheda">
