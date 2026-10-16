@@ -5400,28 +5400,10 @@ select {
     linear-gradient(to bottom, #15161a, var(--nero) 55%, #3a050f);
 }
 
-/* Logo: le lettere bianche prendono una sfumatura rossa (il resto, scuro, resta com'e'). */
-.barra-logo {
-  position: relative;
-}
-.barra-logo::after {
-  content: '';
-  position: absolute;
-  left: 8px;
-  top: 0;
-  width: 132px;
-  height: 100%;
-  background: linear-gradient(115deg, #ff5d78 0%, #e3032d 55%, #8f0119 100%);
-  mix-blend-mode: multiply;
-  pointer-events: none;
-}
-.barra-logo img {
-  visibility: hidden;
-}
-.barra-logo::after {
-  mix-blend-mode: normal;
-  aspect-ratio: 2 / 1;
-  height: auto;
-  -webkit-mask: url('/logo-passionfitness.svg') center / contain no-repeat;
-  mask: url('/logo-passionfitness.svg') center / contain no-repeat;
+/* Sfumatura rossa anche in alto, dietro il logo. */
+.barra {
+  background:
+    radial-gradient(130% 38% at 0% 0%, rgba(227, 3, 45, 0.55), rgba(227, 3, 45, 0) 70%),
+    radial-gradient(120% 60% at 0% 100%, rgba(227, 3, 45, 0.5), rgba(227, 3, 45, 0) 70%),
+    linear-gradient(to bottom, #2a0610, var(--nero) 45%, #3a050f);
 }
