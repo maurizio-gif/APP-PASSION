@@ -4834,3 +4834,17 @@ th {
   border-top: 1px solid var(--bordo);
   margin-top: 4px;
 }
+
+/* ---- Titolo di pagina: piu' sobrio, con una barra rossa a fianco ----------------------- */
+.titolo-riga h1 {
+  font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  padding-left: 12px;
+  border-left: 4px solid var(--rosso);
+  line-height: 1.15;
+}
+.testata p {
+  margin: 6px 0 0 16px;
+  font-size: 0.88rem;
+}
