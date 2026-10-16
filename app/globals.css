@@ -4792,3 +4792,10 @@ th {
     justify-content: flex-end;
   }
 }
+@media (min-width: 721px) {
+  tbody td:last-child > .bottone {
+    display: flex;
+    width: fit-content;
+    margin-left: auto;
+  }
+}
