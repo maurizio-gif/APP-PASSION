@@ -3035,3 +3035,270 @@ details.scheda .utenti {
 .da-gestire-corpo > .da-gestire-titolo:first-child {
   margin-top: 0;
 }
+
+/* ---- Scheda persona: testata, percorso e funnel a tre colonne --------------- */
+
+.persona-testa {
+  padding: 22px 24px 0;
+  overflow: hidden;
+}
+.persona-chi {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.iniziali.grandi {
+  width: 64px;
+  height: 64px;
+  font-size: 1.3rem;
+  background: var(--nero);
+  color: #fff;
+}
+.persona-nome {
+  min-width: 0;
+  flex: 1 1 280px;
+}
+.persona-nome .contatti-scheda {
+  margin: 6px 0 4px;
+}
+.persona-nome .certificato {
+  margin-top: 4px;
+}
+.persona-pgm {
+  align-self: flex-start;
+}
+.persona-fatti {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 36px;
+  margin: 18px 0 0;
+  padding: 14px 0;
+  border-top: 1px solid var(--bordo);
+}
+.persona-fatti > div {
+  min-width: 0;
+}
+.persona-fatti dt {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--testo-attenuato);
+}
+.persona-fatti dd {
+  margin: 1px 0 0;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.percorso {
+  list-style: none;
+  display: flex;
+  margin: 0 -24px;
+  padding: 0;
+  background: var(--riga-alterna);
+  border-top: 1px solid var(--bordo);
+}
+.percorso li {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 12px 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--testo-attenuato);
+  position: relative;
+}
+.percorso li + li {
+  border-left: 1px solid var(--bordo);
+}
+.percorso-punto {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-grid;
+  place-items: center;
+  font-size: 0.72rem;
+  background: #fff;
+  border: 1.5px solid #cfd3da;
+}
+.percorso li.fatto {
+  color: var(--verde);
+}
+.percorso li.fatto .percorso-punto {
+  background: var(--verde);
+  border-color: var(--verde);
+  color: #fff;
+}
+.percorso li.attuale {
+  color: var(--testo);
+  background: #fff;
+  box-shadow: inset 0 -3px 0 var(--rosso);
+}
+.percorso li.attuale .percorso-punto {
+  background: var(--rosso);
+  border-color: var(--rosso);
+  color: #fff;
+}
+
+.funnel {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+  margin-bottom: 20px;
+}
+.funnel-colonna {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.funnel-titolo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--testo-attenuato);
+}
+.funnel-titolo span {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-grid;
+  place-items: center;
+  background: var(--nero);
+  color: #fff;
+  font-size: 0.7rem;
+  letter-spacing: 0;
+}
+.carta-fase {
+  margin: 0;
+  padding: 16px 18px;
+}
+.carta-fase .testata-scheda {
+  margin-bottom: 10px;
+  align-items: center;
+}
+.carta-fase .testata-scheda h3 {
+  margin: 0;
+}
+.carta-fase .dati {
+  font-size: 0.9rem;
+}
+.carta-fase .abbonamento + .abbonamento {
+  border-top: 1px solid var(--bordo);
+  margin-top: 12px;
+  padding-top: 12px;
+}
+.fase-vuota {
+  margin: 0;
+  padding: 18px;
+  border: 1.5px dashed var(--bordo);
+  border-radius: var(--raggio);
+  color: var(--testo-attenuato);
+  font-size: 0.9rem;
+  text-align: center;
+}
+.scheda-azioni {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--bordo);
+}
+.scheda-azioni .azioni-riga select,
+.scheda-azioni .azioni-riga input[type='text'] {
+  flex: 1 1 120px;
+  min-width: 0;
+}
+.scheda-azioni .aiuto {
+  margin: 0;
+}
+.modulo-griglia {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.modulo-griglia .campo-breve select,
+.modulo-griglia .campo-breve input {
+  width: 100%;
+  font-weight: 400;
+}
+.modulo-griglia .aiuto,
+.modulo-griglia > .bottone,
+.modulo-griglia > button {
+  grid-column: 1 / -1;
+}
+.modulo-griglia > button,
+.modulo-griglia > .bottone {
+  justify-self: start;
+}
+.storico-fase {
+  border: 1px solid var(--bordo);
+  border-radius: var(--raggio);
+  padding: 10px 14px;
+  background: var(--scheda);
+}
+.storico-fase > summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.storico-fase[open] > summary {
+  margin-bottom: 12px;
+}
+.storico-fase .carta-fase {
+  box-shadow: none;
+  background: var(--riga-alterna);
+}
+.storico-fase .carta-fase + .carta-fase {
+  margin-top: 10px;
+}
+.persona-sotto {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+.persona-sotto > div {
+  min-width: 0;
+}
+
+@media (max-width: 1100px) {
+  .funnel {
+    grid-template-columns: 1fr;
+  }
+  .persona-sotto {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 720px) {
+  .persona-testa {
+    padding: 16px 16px 0;
+  }
+  .percorso {
+    margin: 0 -16px;
+  }
+  .percorso li {
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.8rem;
+    padding: 10px 4px;
+  }
+  .persona-fatti {
+    gap: 10px 24px;
+  }
+  .iniziali.grandi {
+    width: 48px;
+    height: 48px;
+    font-size: 1rem;
+  }
+  .modulo-griglia {
+    grid-template-columns: 1fr;
+  }
+}
