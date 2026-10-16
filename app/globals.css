@@ -3023,3 +3023,8 @@ details.scheda .utenti {
 .tabella-lead .taglia {
   max-width: 170px;
 }
+
+/* Da gestire: le schede Lead, Rinnovi, Disdette sopra la tabella. */
+.da-gestire-corpo {
+  margin-top: 14px;
+}

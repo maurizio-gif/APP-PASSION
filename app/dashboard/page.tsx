@@ -1,25 +1,40 @@
 import Link from 'next/link'
 import { crm } from '@/lib/crm'
 import { formatoGiornoLungo, formatoOra, oggiRoma, traduci, TIPO_TASK } from '@/lib/formato'
-import { Avviso, Persona, Provenienza, Vuoto } from '@/components/Ui'
+import { Avviso, Persona, Provenienza, Schede, Vuoto } from '@/components/Ui'
 import { assiste, puoVedere, smista } from '@/lib/permessi'
 import { TabellaLead } from '@/components/TabellaLead'
+import { TabellaRinnovi } from '@/components/TabellaRinnovi'
+import { TabellaDisdette } from '@/components/TabellaDisdette'
 import { completaTask } from './azioni'
 
 // «Quando aprono c'avranno lead da gestire, prove da gestire, abbonamenti in
 // scadenza» (riunione del 28/09/2026): la home e' il lavoro di oggi.
-export default async function DaGestire({ searchParams }: { searchParams: { errore?: string } }) {
-  const [h, io, arretrati, oggi, nuovi, scadenza, staff] = await Promise.all([
+export default async function DaGestire({ searchParams }: { searchParams: { errore?: string; vista?: string } }) {
+  const [h, io, arretrati, oggi, scadenza, staff] = await Promise.all([
     crm.home(),
     crm.io(),
     crm.task('miei', 'arretrati'),
     crm.task('miei', 'oggi'),
-    crm.lead('da_gestire', null, null),
     crm.prove('in_scadenza'),
     crm.staff(),
   ])
   const task = [...arretrati, ...oggi]
-  const ticket = puoVedere(io, 'ticket') ? await crm.ticketConti() : null
+  // «Da gestire» di Lead, Rinnovi e Disdette in schede: si carica solo la
+  // scheda aperta, come nella sua sezione.
+  const schede = [
+    { chiave: 'lead', testo: 'Lead', n: h.lead_da_gestire },
+    ...(puoVedere(io, 'rinnovi') ? [{ chiave: 'rinnovi', testo: 'Rinnovi', n: h.rinnovi_da_gestire }] : []),
+    ...(puoVedere(io, 'disdette') ? [{ chiave: 'disdette', testo: 'Disdette', n: h.disdette_da_gestire }] : []),
+  ]
+  const scheda = schede.find((s) => s.chiave === searchParams.vista)?.chiave ?? 'lead'
+  const qui = scheda === 'lead' ? '/dashboard' : `/dashboard?vista=${scheda}`
+  const [nuovi, rinnovi, disdette, ticket] = await Promise.all([
+    scheda === 'lead' ? crm.lead('da_gestire', null, null) : null,
+    scheda === 'rinnovi' ? crm.rinnovi('da_gestire') : null,
+    scheda === 'disdette' ? crm.disdette('da_gestire') : null,
+    puoVedere(io, 'ticket') ? crm.ticketConti() : null,
+  ])
 
   return (
     <>
@@ -98,16 +113,29 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
         )}
       </div>
 
-      <section className="scheda">
+      <section className="scheda" id="da-gestire">
         <div className="testata-scheda">
-          <h2>Lead da gestire</h2>
-          <Link href="/dashboard/lead?vista=da_gestire">Tutti →</Link>
+          <h2>Da gestire</h2>
+          <Link href={`/dashboard/${scheda}?vista=da_gestire`}>Vai a {schede.find((s) => s.chiave === scheda)?.testo} →</Link>
         </div>
-        {nuovi.length === 0 ? (
-          <Vuoto>Tutti i lead sono presi in carico.</Vuoto>
-        ) : (
-          <TabellaLead lead={nuovi.slice(0, 15)} io={io} staff={staff} torna="/dashboard" />
-        )}
+        <Schede voci={schede} attiva={scheda} base="/dashboard" />
+        <div className="da-gestire-corpo">
+          {nuovi && (nuovi.length === 0 ? (
+            <Vuoto>Tutti i lead sono presi in carico.</Vuoto>
+          ) : (
+            <TabellaLead lead={nuovi.slice(0, 15)} io={io} staff={staff} torna={qui} />
+          ))}
+          {rinnovi && (rinnovi.length === 0 ? (
+            <Vuoto>Tutti i rinnovi sono presi in carico.</Vuoto>
+          ) : (
+            <TabellaRinnovi rinnovi={rinnovi.slice(0, 15)} io={io} staff={staff} torna={qui} />
+          ))}
+          {disdette && (disdette.length === 0 ? (
+            <Vuoto>Tutte le disdette sono prese in carico.</Vuoto>
+          ) : (
+            <TabellaDisdette disdette={disdette.slice(0, 15)} io={io} staff={staff} torna={qui} />
+          ))}
+        </div>
       </section>
 
       <div className="griglia">
