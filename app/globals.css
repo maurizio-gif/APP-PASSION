@@ -5399,3 +5399,19 @@ select {
     radial-gradient(120% 60% at 0% 100%, rgba(227, 3, 45, 0.5), rgba(227, 3, 45, 0) 70%),
     linear-gradient(to bottom, #15161a, var(--nero) 55%, #3a050f);
 }
+
+/* Logo: le lettere bianche prendono una sfumatura rossa (il resto, scuro, resta com'e'). */
+.barra-logo {
+  position: relative;
+}
+.barra-logo::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 0;
+  width: 132px;
+  height: 100%;
+  background: linear-gradient(115deg, #ff5d78 0%, #e3032d 55%, #8f0119 100%);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
