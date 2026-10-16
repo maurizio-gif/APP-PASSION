@@ -5106,3 +5106,15 @@ th {
   text-transform: uppercase;
   color: var(--testo);
 }
+
+/* Titolo di ogni pagina: la stessa banda sfumata della home, senza il bottone a destra dentro. */
+.testata:not(:has(.testata-saluto)) {
+  align-items: center;
+}
+.testata:not(:has(.testata-saluto)) > div:first-child {
+  flex: 1 1 320px;
+  min-width: 0;
+  padding: 20px 26px;
+  border-radius: 16px;
+  background: linear-gradient(to right, rgba(227, 3, 45, 0.12), rgba(227, 3, 45, 0.05) 45%, rgba(227, 3, 45, 0) 100%);
+}
