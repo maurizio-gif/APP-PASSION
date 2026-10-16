@@ -56,7 +56,7 @@ export function SchedeMulti({ gruppi }: { gruppi: GruppoLink[] }) {
           <span className="gruppo-etichetta">{g.testo}</span>
           <div className="schede-vista">
             {g.voci.map((v) => (
-              <Link key={v.href} href={v.href} className={v.attivo ? 'attivo' : undefined}>
+              <Link key={v.href} href={v.href} scroll={false} className={v.attivo ? 'attivo' : undefined}>
                 {v.testo}
                 {v.n != null && <span className="conta">{v.n}</span>}
               </Link>
@@ -68,31 +68,9 @@ export function SchedeMulti({ gruppi }: { gruppi: GruppoLink[] }) {
   )
 }
 
-// Le schede come riquadri con il numero: al posto di una riga di schede e di una di
-// numeri che dicevano le stesse cose (Da gestire).
-export type VoceNumero = { chiave: string; testo: string; n?: number; nota?: string; caldo?: boolean }
-export function SchedeNumeri({ voci, attiva, base, ancora }: { voci: VoceNumero[]; attiva: string; base: string; ancora?: string }) {
-  return (
-    <div className="numeri numeri-schede">
-      {voci.map((v) => (
-        <Link
-          key={v.chiave}
-          href={`${base}${base.includes('?') ? '&' : '?'}vista=${v.chiave}${ancora ? `#${ancora}` : ''}`}
-          className={`numero${v.caldo ? ' caldo' : ''}${v.chiave === attiva ? ' attivo' : ''}`}
-          aria-current={v.chiave === attiva ? 'true' : undefined}
-        >
-          <div className="etichetta">{v.testo}</div>
-          {v.n != null && <div className="valore">{v.n}</div>}
-          {v.nota && <div className="nota">{v.nota}</div>}
-        </Link>
-      ))}
-    </div>
-  )
-}
-
 export function Schede({ voci, attiva, base, gruppi }: { voci: Voce[]; attiva: string; base: string; gruppi?: GruppoSchede[] }) {
   const link = (v: Voce) => (
-    <Link key={v.chiave} href={`${base}${base.includes('?') ? '&' : '?'}vista=${v.chiave}`} className={v.chiave === attiva ? 'attivo' : undefined}>
+    <Link key={v.chiave} href={`${base}${base.includes('?') ? '&' : '?'}vista=${v.chiave}`} scroll={false} className={v.chiave === attiva ? 'attivo' : undefined}>
       {v.testo}
       {v.n != null && <span className="conta">{v.n}</span>}
     </Link>

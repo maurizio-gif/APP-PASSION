@@ -4306,3 +4306,146 @@ a.numero:hover {
     display: none;
   }
 }
+
+/* ---- Da gestire: schede-riquadro, un disegno piu' leggero ---------------------------
+   Niente riquadri dentro il riquadro: una fila di schede divise da una riga sottile,
+   col numero grande; quella aperta ha la barra scura sotto. Rosso solo il numero di
+   quelle che chiedono attenzione. */
+
+.numeri-schede {
+  display: flex;
+  grid-template-columns: none;
+  gap: 0;
+  margin: 2px 0 18px;
+  border-bottom: 1px solid var(--bordo);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.numeri-schede::-webkit-scrollbar {
+  display: none;
+}
+.numeri-schede .numero,
+.numeri-schede .numero.caldo {
+  flex: 1 1 0;
+  min-width: 150px;
+  padding: 10px 18px 14px;
+  background: transparent;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  border-radius: 0;
+  box-shadow: none;
+  margin-bottom: -1px;
+  overflow: visible;
+}
+.numeri-schede .numero + .numero {
+  border-left: 1px solid var(--bordo);
+}
+.numeri-schede .numero::before,
+.numeri-schede .numero::after {
+  display: none;
+}
+.numeri-schede .numero:hover {
+  background: var(--riga-alterna);
+  box-shadow: none;
+}
+.numeri-schede .numero.attivo,
+.numeri-schede .numero.attivo.caldo {
+  background: transparent;
+  border-bottom-color: var(--nero);
+  box-shadow: none;
+}
+.numeri-schede .numero .etichetta {
+  color: var(--testo-attenuato);
+  transition: color 0.18s ease;
+}
+.numeri-schede .numero.attivo .etichetta {
+  color: var(--testo);
+}
+.numeri-schede .numero .valore {
+  margin-top: 2px;
+}
+
+/* ---- Movimento: brevi e leggeri, mai sul contenuto che si legge ---------------------- */
+
+.numero,
+.bottone,
+.schede-vista a,
+.schede-vista button,
+.aiuto-punto,
+.barra nav a,
+input,
+select,
+textarea,
+tbody tr td {
+  transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease;
+}
+.bottone:active,
+.schede-vista a:active {
+  transform: translateY(1px);
+}
+a.numero:not(.numeri-schede .numero):hover {
+  transform: translateY(-1px);
+}
+
+@keyframes entra {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes pulsa {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+/* Il contenuto nuovo entra con una dissolvenza; mentre arriva, il vecchio si attenua. */
+.da-gestire-corpo,
+.contenuto > .scheda {
+  animation: entra 0.22s ease-out both;
+}
+section[data-carica] .da-gestire-corpo {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Lo scheletro di caricamento. */
+.scheletro {
+  animation: pulsa 1.2s ease-in-out infinite;
+}
+.scheletro-riga {
+  height: 14px;
+  margin: 12px 0;
+  border-radius: 7px;
+  background: #e6e8ec;
+}
+.scheletro-riga.titolo {
+  width: 160px;
+  height: 26px;
+}
+.scheletro-riga.sotto {
+  width: 320px;
+}
+.scheletro-scheda {
+  margin-top: 22px;
+  padding: 18px 22px;
+  background: var(--scheda);
+  border: 1px solid var(--bordo);
+  border-radius: var(--raggio);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

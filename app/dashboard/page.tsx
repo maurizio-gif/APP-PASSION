@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { crm } from '@/lib/crm'
 import { formatoGiornoLungo, oggiRoma } from '@/lib/formato'
-import { Avviso, SchedeNumeri, Vuoto } from '@/components/Ui'
+import { Avviso, Vuoto } from '@/components/Ui'
+import { SchedeNumeri } from '@/components/SchedeNumeri'
 import { assiste, puoVedere, smista } from '@/lib/permessi'
 import { TabellaLead } from '@/components/TabellaLead'
 import { TabellaRinnovi } from '@/components/TabellaRinnovi'
@@ -71,7 +72,7 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
           <h2>Da gestire</h2>
           <Link href={aperta.vai}>Vai a {scheda === 'non_assegnati' ? 'Lead' : aperta.testo.replace(' da gestire', '')} →</Link>
         </div>
-        <SchedeNumeri voci={schede} attiva={scheda} base="/dashboard" ancora="da-gestire" />
+        <SchedeNumeri voci={schede} attiva={scheda} base="/dashboard" />
         <div className="da-gestire-corpo">
           {nuovi && (nuovi.length === 0 ? (
             <Vuoto>Tutti i lead sono presi in carico.</Vuoto>
