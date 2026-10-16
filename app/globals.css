@@ -5429,3 +5429,11 @@ select {
     radial-gradient(120% 45% at 0% 100%, rgba(227, 3, 45, 0.24), rgba(227, 3, 45, 0) 70%),
     var(--nero);
 }
+
+/* Fondo del CRM: un velo rosso appena percettibile, per gli occhi di tutti i giorni. */
+.contenuto {
+  background:
+    radial-gradient(90% 420px at 0% 0%, rgba(227, 3, 45, 0.05), rgba(227, 3, 45, 0) 100%),
+    radial-gradient(80% 520px at 100% 100%, rgba(227, 3, 45, 0.04), rgba(227, 3, 45, 0) 100%),
+    var(--fondo);
+}
