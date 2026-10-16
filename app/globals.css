@@ -1,38 +1,29 @@
-/* Il carattere dei titoli e' quello del sito, Anton, servito da qui. Il testo
-   usa i caratteri di sistema, come passionfitness.it. */
-@font-face {
-  font-family: 'Anton';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('/fonts/anton-latin.woff2') format('woff2');
-}
-
-/* I colori sono quelli di src/styles/global.css del sito (docs/TEMPLATE-PAGINA.md):
-   rosso #E3032D, nero, fondo rosa chiaro e mai bianco. Le schede stanno in
-   bianco sopra il rosa, perche' un elenco lungo su rosa si legge male. */
+/* Il restyle grafico: fondo chiaro neutro, schede bianche con bordo sottile,
+   barra scura a sinistra, rosso Passion solo come accento. Il carattere e'
+   quello di sistema (niente font da scaricare, quindi niente attese).
+   Tutto il colore passa da queste variabili: cambiarle qui cambia tutto. */
 :root {
   --rosso: #e3032d;
   --rosso-scuro: #b50224;
-  --nero: #000000;
-  --testo: #1b1b1b;
-  --testo-attenuato: #6b6260;
-  --fondo: #feeded;
+  --nero: #0e0f12;
+  --testo: #15171c;
+  --testo-attenuato: #667085;
+  --fondo: #f4f5f8;
   --scheda: #ffffff;
-  --bordo: #f0d6d6;
-  --riga-alterna: #fff7f7;
-  --verde: #1c7a3e;
-  --fondo-verde: #e7f5ec;
-  --giallo: #8a5a00;
-  --fondo-giallo: #fdf3dc;
-  --fondo-rosso: #fde6ea;
-  --grigio: #57514f;
-  --fondo-grigio: #efeaea;
+  --bordo: #e4e7ec;
+  --riga-alterna: #f8f9fb;
+  --verde: #0f7b3f;
+  --fondo-verde: #e5f6ec;
+  --giallo: #92580a;
+  --fondo-giallo: #fdf1d8;
+  --fondo-rosso: #fdebee;
+  --grigio: #475467;
+  --fondo-grigio: #eef0f4;
 
-  --font-display: 'Anton', Impact, 'Arial Narrow', sans-serif;
-  --font-body: -apple-system, 'Helvetica Neue', Arial, sans-serif;
-  --raggio: 14px;
-  --barra: 228px;
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --raggio: 12px;
+  --ombra: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --barra: 244px;
 }
 
 * {
@@ -61,26 +52,24 @@ a:hover {
 h1,
 h2,
 h3 {
-  font-family: var(--font-display);
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-  line-height: 0.96;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
   margin: 0;
 }
 h1 {
-  font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+  font-size: clamp(1.5rem, 2.4vw, 1.9rem);
 }
 h2 {
-  font-size: 1.35rem;
+  font-size: 1.08rem;
   margin-bottom: 12px;
 }
 h3 {
-  font-size: 1.05rem;
+  font-size: 0.98rem;
   margin-bottom: 8px;
 }
 
-/* --- La struttura: barra nera a sinistra, contenuto sul rosa -------------- */
+/* --- La struttura: barra scura a sinistra, contenuto sul grigio chiaro ----- */
 
 .guscio {
   display: flex;
@@ -92,62 +81,128 @@ h3 {
   flex-shrink: 0;
   background: var(--nero);
   color: #fff;
-  padding: 22px 14px;
+  padding: 20px 12px 16px;
   position: sticky;
   top: 0;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
 }
 .barra-logo img {
-  width: 150px;
+  width: 132px;
   height: auto;
   display: block;
-  margin: 0 6px;
+  margin: 0 8px;
 }
 .barra nav {
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 2px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #2a2c31 transparent;
 }
 .barra nav a {
-  color: #d9d4d3;
-  padding: 9px 12px;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  color: #b4b8c2;
+  padding: 8px 10px;
+  border-radius: 9px;
+  font-weight: 500;
+  font-size: 0.92rem;
+}
+.barra nav a svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.85;
 }
 .barra nav a:hover {
-  background: #1d1a1a;
+  background: #1a1c21;
   color: #fff;
   text-decoration: none;
 }
 .barra nav a.attivo {
-  background: var(--rosso);
+  background: #1f2127;
   color: #fff;
+  font-weight: 600;
+  box-shadow: inset 3px 0 0 var(--rosso);
+}
+.barra nav a.attivo svg {
+  stroke: var(--rosso);
+  opacity: 1;
+}
+.barra nav .separatore {
+  height: 1px;
+  background: #22242a;
+  margin: 8px 10px;
 }
 .barra-piede {
   margin-top: auto;
-  font-size: 0.82rem;
-  color: #a59f9d;
-  padding: 0 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.84rem;
+  color: #a2a7b3;
+  padding: 12px 8px 0;
+  border-top: 1px solid #22242a;
+}
+.barra-utente {
+  min-width: 0;
+  flex: 1;
+  line-height: 1.3;
+}
+.barra-utente strong {
+  display: block;
+  color: #fff;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.barra-utente span {
+  font-size: 0.78rem;
+}
+.barra-iniziali {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #2a2c33;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.8rem;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
 }
 .barra-piede button {
-  margin-top: 6px;
   background: none;
-  border: 1px solid #3a3535;
-  color: #d9d4d3;
+  border: 1px solid #2f323a;
+  color: #c6cad3;
   border-radius: 8px;
-  padding: 6px 10px;
+  padding: 5px 10px;
   cursor: pointer;
   font: inherit;
+  font-size: 0.82rem;
+}
+.barra-piede button:hover {
+  border-color: #4a4e59;
+  color: #fff;
 }
 
 .contenuto {
   flex: 1;
   min-width: 0;
-  padding: 28px 32px 60px;
+  padding: 30px 36px 64px;
+  max-width: 1480px;
 }
 
 .testata {
@@ -156,10 +211,10 @@ h3 {
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
-  margin-bottom: 22px;
+  margin-bottom: 24px;
 }
 .testata p {
-  margin: 6px 0 0;
+  margin: 4px 0 0;
   color: var(--testo-attenuato);
 }
 
@@ -276,8 +331,9 @@ h3 {
   background: var(--scheda);
   border: 1px solid var(--bordo);
   border-radius: var(--raggio);
-  padding: 18px 20px;
-  margin-bottom: 18px;
+  box-shadow: var(--ombra);
+  padding: 20px 22px;
+  margin-bottom: 20px;
   min-width: 0;
 }
 
@@ -291,27 +347,27 @@ h3 {
 .numeri {
   display: grid;
   gap: 14px;
-  grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
-  margin-bottom: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  margin-bottom: 20px;
 }
 .numero {
   background: var(--scheda);
   border: 1px solid var(--bordo);
   border-radius: var(--raggio);
-  padding: 14px 16px;
+  box-shadow: var(--ombra);
+  padding: 16px 18px;
 }
 .numero .etichetta {
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  font-size: 0.82rem;
+  font-weight: 600;
   color: var(--testo-attenuato);
 }
 .numero .valore {
-  font-family: var(--font-display);
+  font-weight: 700;
   font-size: 2rem;
+  letter-spacing: -0.03em;
   line-height: 1.1;
-  margin-top: 4px;
+  margin-top: 6px;
   font-variant-numeric: tabular-nums;
 }
 .numero .nota {
@@ -330,8 +386,8 @@ a.numero {
 
 .tabella-scorre {
   overflow-x: auto;
-  margin: 0 -20px;
-  padding: 0 20px;
+  margin: 0 -22px;
+  padding: 0 22px;
 }
 table {
   width: 100%;
@@ -340,21 +396,25 @@ table {
 }
 th {
   text-align: left;
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   color: var(--testo-attenuato);
-  font-weight: 700;
-  padding: 8px 10px;
+  font-weight: 600;
+  padding: 9px 12px;
+  background: var(--riga-alterna);
   border-bottom: 1px solid var(--bordo);
   white-space: nowrap;
 }
 td {
-  padding: 8px 10px;
-  border-bottom: 1px solid #f7e6e6;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--bordo);
   vertical-align: top;
 }
-tbody tr:nth-child(even) td {
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+tbody tr:hover td {
   background: var(--riga-alterna);
 }
 td.num,
@@ -382,10 +442,10 @@ td.nowrap {
 
 .bollino {
   display: inline-block;
-  padding: 1px 8px;
+  padding: 2px 9px;
   border-radius: 999px;
-  font-size: 0.78rem;
-  font-weight: 700;
+  font-size: 0.76rem;
+  font-weight: 600;
   white-space: nowrap;
   background: var(--fondo-grigio);
   color: var(--grigio);
@@ -420,8 +480,8 @@ input[type='date'],
 select {
   font: inherit;
   padding: 9px 12px;
-  border: 1px solid var(--bordo);
-  border-radius: 10px;
+  border: 1px solid #d3d7de;
+  border-radius: 9px;
   background: #fff;
   color: var(--testo);
   min-height: 40px;
@@ -432,16 +492,17 @@ input[type='search'] {
 }
 input:focus,
 select:focus {
-  outline: 2px solid var(--rosso);
-  outline-offset: 1px;
+  outline: 2px solid rgba(227, 3, 45, 0.35);
+  outline-offset: 0;
+  border-color: var(--rosso);
 }
 .bottone {
   font: inherit;
-  font-weight: 700;
+  font-weight: 600;
   background: var(--rosso);
   color: #fff;
-  border: none;
-  border-radius: 10px;
+  border: 1px solid var(--rosso);
+  border-radius: 9px;
   padding: 9px 16px;
   min-height: 40px;
   cursor: pointer;
@@ -450,6 +511,7 @@ select:focus {
 }
 .bottone:hover {
   background: var(--rosso-scuro);
+  border-color: var(--rosso-scuro);
   text-decoration: none;
 }
 .bottone:disabled {
@@ -459,10 +521,11 @@ select:focus {
 .bottone.secondario {
   background: #fff;
   color: var(--testo);
-  border: 1px solid var(--bordo);
+  border: 1px solid #d3d7de;
 }
 .bottone.secondario:hover {
-  border-color: var(--rosso);
+  background: var(--riga-alterna);
+  border-color: #b9bfca;
 }
 .schede-vista {
   display: flex;
@@ -473,13 +536,13 @@ select:focus {
 .schede-vista button {
   font: inherit;
   cursor: pointer;
-  padding: 7px 14px;
+  padding: 6px 14px;
   border-radius: 999px;
-  border: 1px solid var(--bordo);
+  border: 1px solid #d3d7de;
   background: #fff;
   color: var(--testo);
-  font-weight: 600;
-  font-size: 0.9rem;
+  font-weight: 500;
+  font-size: 0.88rem;
 }
 .schede-vista a.attivo,
 .schede-vista button.attivo {
@@ -490,7 +553,13 @@ select:focus {
 .schede-vista a:hover,
 .schede-vista button:hover {
   text-decoration: none;
-  border-color: var(--rosso);
+  background: var(--riga-alterna);
+  border-color: #b9bfca;
+}
+.schede-vista a.attivo:hover,
+.schede-vista button.attivo:hover {
+  background: var(--nero);
+  border-color: var(--nero);
 }
 
 .scelta-task {
@@ -611,20 +680,22 @@ select:focus {
   display: grid;
   place-items: center;
   padding: 24px 16px;
-  background: var(--nero);
+  background: radial-gradient(900px 500px at 50% -10%, #3a0a14 0%, var(--nero) 62%);
 }
 .login-scheda {
   width: 100%;
-  max-width: 380px;
+  max-width: 400px;
   background: #fff;
   border-radius: 18px;
-  padding: 28px 26px;
+  padding: 28px 28px 24px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
 }
 .login-logo {
   background: var(--nero);
-  margin: -28px -26px 22px;
-  padding: 26px;
+  margin: -28px -28px 24px;
+  padding: 28px;
   border-radius: 18px 18px 0 0;
+  border-bottom: 3px solid var(--rosso);
   text-align: center;
 }
 .login-logo img {
@@ -764,19 +835,25 @@ hr {
 .barra-cerca input[type='search'] {
   width: 100%;
   min-width: 0;
-  background: #1c1c1c;
-  border-color: #333;
+  background: #17181c url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b909c' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M21 21l-4.5-4.5'/%3E%3C/svg%3E") no-repeat 11px 50% / 16px;
+  border-color: #272a31;
   color: #fff;
   font-size: 0.88rem;
+  padding-left: 34px;
+}
+.barra-cerca input[type='search']:focus {
+  border-color: #4a4e59;
+  outline: none;
 }
 .barra-cerca input[type='search']::placeholder {
-  color: #8f8987;
+  color: #7d828e;
 }
 
 /* Il numero che chiede attenzione. */
 .numero.caldo {
-  border-color: var(--rosso);
-  box-shadow: inset 4px 0 0 var(--rosso);
+  border-color: #f4b6c0;
+  background: linear-gradient(180deg, #fff 0%, #fff7f8 100%);
+  box-shadow: inset 0 3px 0 var(--rosso);
 }
 .numero.caldo .valore {
   color: var(--rosso);
@@ -2387,7 +2464,7 @@ details.scheda .utenti {
   gap: 8px;
 }
 .riunione-quadro-numeri .valore {
-  font-family: var(--font-display);
+  font-weight: 700;
   font-size: 2rem;
   line-height: 1;
   font-variant-numeric: tabular-nums;
@@ -2449,7 +2526,7 @@ details.scheda .utenti {
   align-self: flex-start;
 }
 .riunione-data .giorno {
-  font-family: var(--font-display);
+  font-weight: 700;
   font-size: 2.1rem;
   line-height: 1;
 }
@@ -2518,7 +2595,7 @@ details.scheda .utenti {
   color: var(--testo-attenuato);
 }
 .riunione-area-n {
-  font-family: var(--font-display);
+  font-weight: 700;
   font-size: 1.4rem;
   color: var(--rosso);
 }

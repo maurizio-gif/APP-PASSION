@@ -38,9 +38,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
         <Menu>
           <Navigazione voci={voci} />
           <div className="barra-piede">
-            <div>
-              {io.nome} {io.cognome}
-              {io.ruolo !== 'consulente' && <span className="attenuato"> · {testoRuolo(io.ruolo).toLowerCase()}</span>}
+            <div className="barra-iniziali" aria-hidden="true">
+              {(io.nome?.[0] ?? '') + (io.cognome?.[0] ?? '')}
+            </div>
+            <div className="barra-utente">
+              <strong>{io.nome} {io.cognome}</strong>
+              <span>{testoRuolo(io.ruolo)}</span>
             </div>
             <form action={logout}>
               <button type="submit">Esci</button>
