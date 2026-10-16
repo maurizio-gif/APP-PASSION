@@ -118,7 +118,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                     <form action={rilasciaLead}>
                       <input type="hidden" name="lead" value={l.id} />
                       <input type="hidden" name="torna" value={qui} />
-                      <button className="bottone secondario piccolo" title="Torna fra i lead da gestire, senza nessuno">Rimetti da assegnare</button>
+                      <button className="bottone secondario piccolo icona" title="Rimetti da assegnare: torna fra i lead da gestire, senza nessuno" aria-label="Rimetti da assegnare"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5M4 9h10a6 6 0 010 12h-3" /></svg></button>
                     </form>
                   )}
                 </div>

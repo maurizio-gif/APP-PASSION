@@ -3609,3 +3609,49 @@ details.scheda .utenti {
   line-height: 1.5;
   min-height: 64px;
 }
+
+/* Assegna: una riga sola. Il menu prende lo spazio che resta, «Assegna» a fianco,
+   e «Rimetti da assegnare» e' un bottone con la sola icona (la scritta al passaggio). */
+.scheda-azioni .azioni-gruppo {
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+}
+.scheda-azioni .azioni-gruppo > form {
+  margin: 0;
+}
+.scheda-azioni .azioni-gruppo > form.azioni-riga {
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-wrap: nowrap;
+}
+.scheda-azioni .azioni-gruppo > .azioni-riga {
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-wrap: nowrap;
+}
+.scheda-azioni .azioni-gruppo select {
+  flex: 1 1 0;
+  min-width: 0;
+  width: auto;
+}
+.scheda-azioni .azioni-gruppo .bottone {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.bottone.icona {
+  width: 36px;
+  padding-left: 0;
+  padding-right: 0;
+  justify-content: center;
+}
+.bottone.icona svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
