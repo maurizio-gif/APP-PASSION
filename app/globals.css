@@ -4942,3 +4942,11 @@ th {
 .testata-saluto::before {
   display: none;
 }
+
+/* Tutti i dati di una riga partono alla stessa altezza (in alto), non al centro della cella. */
+.tabella-colonne td,
+.tabella-prove td,
+.tabella-lead td,
+.tabella-uniforme td {
+  vertical-align: top;
+}
