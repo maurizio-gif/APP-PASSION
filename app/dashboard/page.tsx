@@ -55,14 +55,16 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
 
   return (
     <>
-      <div className="testata testata-saluto">
-        <div>
+      <div className="testata">
+        <div className="testata-saluto">
           <div className="titolo-riga">
             <h1>Da gestire</h1>
           </div>
           <p className="saluto">
-            <strong>Ciao <b>{io?.nome}</b></strong>
-            <span>{formatoGiornoLungo(oggiRoma())}</span>
+            <strong>Ciao, <b>{io?.nome}</b></strong>
+            <span>
+              <em>{formatoGiornoLungo(oggiRoma()).split(' ')[0]}</em> {formatoGiornoLungo(oggiRoma()).split(' ').slice(1).join(' ')}
+            </span>
           </p>
         </div>
         <Link className="bottone" href="/dashboard/lead/nuovo">+ Nuovo lead</Link>

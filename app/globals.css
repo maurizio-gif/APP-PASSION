@@ -4912,3 +4912,24 @@ th {
 .testata-saluto .saluto span::first-letter {
   text-transform: uppercase;
 }
+
+/* La banda del saluto e' solo a sinistra; «+ Nuovo lead» resta fuori, a destra. */
+.testata:has(.testata-saluto) {
+  align-items: center;
+}
+.testata-saluto {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+.testata-saluto .saluto span {
+  text-transform: none;
+}
+.testata-saluto .saluto span em {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--rosso);
+  text-transform: capitalize;
+}
+.testata-saluto .saluto span::first-letter {
+  text-transform: none;
+}
