@@ -3554,3 +3554,58 @@ details.scheda .utenti {
 .carta-fase .contratti-precedenti > summary {
   font-weight: 600;
 }
+
+/* L'ultima nota di un task fatto si puo' modificare: «Modifica» apre il campo
+   sotto la nota, senza cambiare pagina (details, niente JavaScript). */
+.nota-modificabile {
+  position: relative;
+}
+.nota-modificabile > details {
+  float: right;
+  margin: 0 0 4px 10px;
+  max-width: 100%;
+}
+.nota-modificabile > details > summary {
+  list-style: none;
+  cursor: pointer;
+  min-height: 28px;
+  padding: 3px 10px;
+  gap: 6px;
+  font-size: 0.8rem;
+}
+.nota-modificabile > details > summary::-webkit-details-marker {
+  display: none;
+}
+.nota-modificabile > details > summary svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.nota-modificabile > details[open] {
+  float: none;
+  margin: 0 0 8px;
+  order: 2;
+}
+.nota-modificabile > details[open] > summary {
+  background: var(--nero);
+  border-color: var(--nero);
+  color: #fff;
+}
+.nota-modificabile:has(details[open]) > .storia-testo {
+  display: none;
+}
+.nota-modifica-modulo {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.nota-modifica-modulo textarea {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  min-height: 64px;
+}
