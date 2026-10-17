@@ -16,6 +16,13 @@ export type Aggiornamento = {
 
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
+    data: '2026-10-17',
+    titolo: 'R2D vede un ticket solo quando gli viene inviato',
+    testo:
+      'Finché un ticket è in gestione al supporto, R2D non lo vede: né nell’elenco, né nei numeri della home. Quando il supporto lo manda a R2D, R2D vede subito tutto lo storico: il filo dei messaggi e gli allegati.',
+    dove: 'Ticket',
+  },
+  {
     data: '2026-10-07',
     titolo: 'Nella sezione Prove ci sono solo le prove vere',
     testo:

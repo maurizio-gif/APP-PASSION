@@ -34,8 +34,8 @@ Se riguarda un socio, aprilo dalla sua scheda con **«+ Apri un ticket»**: il t
 5. **«Apri il ticket»**. Nella pagina che si apre aggiungi foto, video o PDF (fino a 25 MB l'uno): uno screenshot dell'errore vale più di tante parole.
 
 ## Dove va il ticket
-- Resta **Da verificare** finché il supporto non lo guarda. Il supporto può:
-  - **mandarlo a R2D**;
+- Resta **Da verificare** finché il supporto non lo guarda, e R2D non lo vede. Il supporto può:
+  - **mandarlo a R2D**: da quel momento R2D lo vede, con tutto lo storico;
   - **risolverlo al desk**, con la risposta e di che cosa si trattava;
   - **unirlo** a un ticket già aperto sullo stesso problema.
 - I ticket aperti dal supporto, e quelli di R2D, vanno subito a R2D. Quelli di un admin passano dal supporto come tutti.
