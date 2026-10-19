@@ -7543,3 +7543,31 @@ details.scheda .utenti {
       linear-gradient(to right, #0e0f12 0%, #0e0f12 5%, #1c0b11 38%, rgba(92, 11, 30, 0.62) 72%, rgba(92, 11, 30, 0) 100%);
   }
 }
+
+/* La sfumatura anche sotto: lo sfondo del titolo sta in un livello a parte che sfuma verso il basso (il testo non sfuma). */
+@media (min-width: 721px) {
+  :root:root .testata:first-child > div:first-child,
+  :root:root[data-tema='chiaro'] .testata:first-child > div:first-child {
+    position: relative;
+    isolation: isolate;
+    background: none;
+    padding-bottom: 40px;
+  }
+  :root:root .testata:first-child > div:first-child::before,
+  :root:root[data-tema='chiaro'] .testata:first-child > div:first-child::before {
+    content: '';
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(48% 210% at 34% 0%, rgba(227, 3, 45, 0.24), rgba(227, 3, 45, 0) 72%),
+      linear-gradient(to right, #0e0f12 0%, #0e0f12 5%, #1c0b11 38%, rgba(92, 11, 30, 0.62) 72%, rgba(92, 11, 30, 0) 100%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 52%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 52%, transparent 100%);
+  }
+  .testata:first-child {
+    margin-bottom: 8px;
+  }
+}
