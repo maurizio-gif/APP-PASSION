@@ -7455,16 +7455,3 @@ details.scheda .utenti {
 .scheda.utente:has(.utente-acc[open])::before {
   width: 7px;
 }
-
-/* Titoli delle pagine: niente fascia, solo il titolo sul fondo della pagina. */
-:root:root .testata-saluto,
-:root:root .testata:not(:has(.testata-saluto)) > div:first-child,
-:root:root[data-tema='chiaro'] .testata-saluto,
-:root:root[data-tema='chiaro'] .testata:not(:has(.testata-saluto)) > div:first-child {
-  background: none;
-  padding: 0;
-  border-radius: 0;
-}
-:root:root .testata-saluto::before {
-  display: none;
-}
