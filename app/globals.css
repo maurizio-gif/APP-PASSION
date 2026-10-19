@@ -6727,3 +6727,63 @@ a.guida-voce > .elenco-breve li {
   margin-top: 2px;
   padding-top: 4px;
 }
+
+/* Le categorie della barra: riquadri ben visibili, con icona; quella aperta si accende di rosso. */
+.barra nav .gruppo-menu-titolo {
+  gap: 10px;
+  margin-top: 6px;
+  padding: 9px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  color: #fff;
+}
+.barra nav .gruppo-menu-titolo:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+.barra nav .gruppo-menu.aperto > .gruppo-menu-titolo {
+  background: linear-gradient(to right, rgba(227, 3, 45, 0.32), rgba(227, 3, 45, 0.08));
+  border-color: rgba(227, 3, 45, 0.5);
+  margin-bottom: 4px;
+}
+.gruppo-menu-nome {
+  flex: 1;
+}
+.gruppo-menu-icona {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: background-color var(--t-rapida) var(--curva);
+}
+.gruppo-menu-icona svg {
+  width: 16px;
+  height: 16px;
+  stroke: #fff;
+  fill: none;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transform: none;
+}
+.gruppo-menu.aperto > .gruppo-menu-titolo .gruppo-menu-icona {
+  background: linear-gradient(to bottom, #f0123b, var(--rosso) 55%, #cc0227);
+}
+.gruppo-menu-titolo .gruppo-menu-freccia {
+  width: 15px;
+  height: 15px;
+  stroke: rgba(255, 255, 255, 0.75);
+  transform: rotate(-90deg);
+}
+.gruppo-menu.aperto > .gruppo-menu-titolo .gruppo-menu-freccia {
+  transform: rotate(0deg);
+}
+.gruppo-menu-titolo > span:first-child {
+  flex: initial;
+}
