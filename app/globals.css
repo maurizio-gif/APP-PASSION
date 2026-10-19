@@ -7364,3 +7364,71 @@ details.scheda .utenti {
 .nuovo-utente-corpo > p {
   margin: 0 0 12px;
 }
+
+/* ---- Utenti: l'accordion dell'operatore, piu' ricco: avatar pieno con pallino di stato, fascia sfumata, freccia che si riempie ---- */
+.scheda.utente {
+  border-left: 5px solid rgba(227, 3, 45, 0.3);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(60, 10, 20, 0.08);
+  transition: border-color var(--t-rapida) var(--curva), transform var(--t-rapida) var(--curva);
+}
+.scheda.utente:hover {
+  border-left-color: var(--rosso);
+}
+.scheda.utente:has(.utente-acc[open]) {
+  border-left-color: var(--rosso);
+}
+.scheda.utente .utente-acc > summary {
+  gap: 14px;
+  padding: 14px 16px 14px 16px;
+  background: linear-gradient(to right, rgba(227, 3, 45, 0.07), rgba(227, 3, 45, 0) 65%);
+}
+.scheda.utente .utente-acc > summary:hover {
+  background: linear-gradient(to right, rgba(227, 3, 45, 0.13), rgba(227, 3, 45, 0.02) 70%);
+}
+.scheda.utente .utente-testa h3 {
+  font-size: 1.08rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.utente-avatar {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  border: 0;
+  background: linear-gradient(145deg, #ff3355, var(--rosso) 50%, #a30120);
+  color: #fff;
+  font-size: 0.95rem;
+  box-shadow: 0 0 0 3px rgba(227, 3, 45, 0.16), 0 3px 8px rgba(227, 3, 45, 0.28);
+}
+.utente-avatar::after {
+  content: '';
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 2.5px solid var(--scheda);
+  background: #f0a30a;
+}
+.utente-avatar.in::after {
+  background: #1fa35c;
+}
+.scheda.utente .utente-acc > summary::after {
+  width: 30px;
+  height: 30px;
+  padding: 6px;
+  border: 1px solid rgba(227, 3, 45, 0.3);
+  background-color: #fff;
+  transition: transform var(--t-rapida) var(--curva), background-color var(--t-rapida) var(--curva);
+}
+.scheda.utente .utente-acc[open] > summary::after {
+  background-color: var(--rosso);
+  border-color: var(--rosso);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  transform: rotate(180deg);
+}
+.scheda.utente .utente-acc[open] > summary {
+  background: linear-gradient(to right, rgba(227, 3, 45, 0.14), rgba(227, 3, 45, 0.02) 70%);
+}
