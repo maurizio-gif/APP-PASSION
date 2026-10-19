@@ -8482,3 +8482,41 @@ a.numero:hover,
 .task-corpo .task-nuovo .modulo { position: relative; }
 .task-corpo .task-nuovo .modulo::before { flex: 1 1 100%; min-height: 26px; display: flex; align-items: center; }
 :root:root .task-corpo .task-nuovo .scelta-task { position: absolute; top: -3px; right: 0; order: 0; }
+
+/* Task a fisarmonica: la testata e' il tasto «Apri / Chiudi»; chiusa, si vedono comunque i conteggi. */
+details.task-fase > summary.fase-titolo {
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+details.task-fase > summary.fase-titolo::-webkit-details-marker { display: none; }
+details.task-fase:not([open]) > summary.fase-titolo {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+}
+.task-apri {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px 5px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.task-apri::before { content: 'Apri'; }
+.task-apri::after {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+}
+details.task-fase[open] .task-apri::before { content: 'Chiudi'; }
+details.task-fase[open] .task-apri::after { transform: translateY(2px) rotate(-135deg); }
+details.task-fase > summary.fase-titolo:hover .task-apri { background: var(--rosso); border-color: var(--rosso); }
+details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(--rosso); outline-offset: 2px; }

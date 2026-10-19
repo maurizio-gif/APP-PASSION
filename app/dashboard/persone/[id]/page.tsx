@@ -274,14 +274,15 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
       </section>
 
       {/* ---- Task: il lavoro di questa persona, in cima. Da fare (gli scaduti prima) e fatti. ---- */}
-      <div className="fase-righe task-fase">
-        <div className="fase-titolo">
+      <details className="fase-righe task-fase" open={scaduti > 0}>
+        <summary className="fase-titolo">
           Task
           <span className="chip-gruppo">
             <span className="chip">{daFare.length} da fare</span>
             {scaduti > 0 && <span className="chip rosso">{scaduti} scaduti</span>}
           </span>
-        </div>
+          <span className="task-apri" aria-hidden="true" />
+</summary>
         <section className="scheda fase-corpo task-corpo">
           <div className="task-nuovo">
             <NuovoTask utente={p.id} per={per} torna={qui} staff={staff} io={io?.id ?? null} />
@@ -338,7 +339,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
             </div>
           </div>
         </section>
-      </div>
+      </details>
 
       {/* ---- Le fasi una sotto l'altra: lead, prova, abbonamento, poi rinnovo e disdetta ---- */}
       <div className="funnel funnel-righe">
