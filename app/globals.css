@@ -7591,3 +7591,17 @@ details.scheda .utenti {
 #da-gestire .da-gestire-corpo {
   margin-top: 0;
 }
+
+/* «Da gestire» (home): la scheda non ha piu' margini interni, quindi le tabelle non devono uscire dai bordi
+   (prima il margine negativo compensava il margine interno). */
+#da-gestire .tabella-scorre {
+  margin-left: 0;
+  margin-right: 0;
+}
+@media (max-width: 720px) {
+  #da-gestire .da-gestire-corpo > ul,
+  #da-gestire .da-gestire-corpo > div > ul {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
