@@ -7608,3 +7608,22 @@ details.scheda .utenti {
     mask-image: linear-gradient(to bottom, #000 0%, #000 55%, rgba(0, 0, 0, 0.82) 66%, rgba(0, 0, 0, 0.5) 78%, rgba(0, 0, 0, 0.18) 90%, transparent 100%);
   }
 }
+
+/* Titolo: la dissolvenza a destra e quella sotto lavorano insieme (nessuna striscia residua a destra). */
+@media (min-width: 721px) {
+  :root:root .testata:first-child > div:first-child::before,
+  :root:root[data-tema='chiaro'] .testata:first-child > div:first-child::before {
+    background:
+      linear-gradient(to bottom, rgba(190, 20, 60, 0) 0%, rgba(190, 20, 60, 0) 55%, rgba(190, 20, 60, 0.5) 100%),
+      radial-gradient(22% 210% at 22% 0%, rgba(227, 3, 45, 0.24), rgba(227, 3, 45, 0) 72%),
+      linear-gradient(to right, #0e0f12 0%, #0e0f12 4%, #1c0b11 22%, #4a0a1b 52%, #5c0b1e 100%);
+    -webkit-mask-image:
+      linear-gradient(to bottom, #000 0%, #000 55%, rgba(0, 0, 0, 0.82) 66%, rgba(0, 0, 0, 0.5) 78%, rgba(0, 0, 0, 0.18) 90%, transparent 100%),
+      linear-gradient(to right, #000 0%, #000 22%, rgba(0, 0, 0, 0.7) 34%, rgba(0, 0, 0, 0.3) 44%, transparent 52%);
+    mask-image:
+      linear-gradient(to bottom, #000 0%, #000 55%, rgba(0, 0, 0, 0.82) 66%, rgba(0, 0, 0, 0.5) 78%, rgba(0, 0, 0, 0.18) 90%, transparent 100%),
+      linear-gradient(to right, #000 0%, #000 22%, rgba(0, 0, 0, 0.7) 34%, rgba(0, 0, 0, 0.3) 44%, transparent 52%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+}
