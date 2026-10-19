@@ -7656,3 +7656,29 @@ details.scheda .utenti {
     margin-bottom: 4px;
   }
 }
+
+/* Titolo: continuita' con la barra lungo tutto il bordo (resta scuro come lei) e dissolvenza che finisce del tutto trasparente
+   nello spazio libero sotto il titolo (nessun taglio netto). Sempre una sola sfumatura. */
+@media (min-width: 721px) {
+  :root:root .testata:first-child > div:first-child,
+  :root:root[data-tema='chiaro'] .testata:first-child > div:first-child {
+    padding: 28px 26px 22px 36px;
+  }
+  :root:root .testata:first-child > div:first-child::before,
+  :root:root[data-tema='chiaro'] .testata:first-child > div:first-child::before {
+    inset: 0 0 -60px 0;
+    background: radial-gradient(
+      ellipse 600px 150px at 0 0,
+      #0e0f12 0%,
+      #0e0f12 30%,
+      #19090f 42%,
+      rgba(86, 11, 30, 0.8) 58%,
+      rgba(150, 18, 52, 0.34) 78%,
+      rgba(190, 20, 60, 0.08) 92%,
+      rgba(190, 20, 60, 0) 100%
+    );
+  }
+  .testata:first-child {
+    margin-bottom: 64px;
+  }
+}
