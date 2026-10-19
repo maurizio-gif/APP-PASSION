@@ -50,16 +50,25 @@ async function chiama(metodo: string, url: string, corpo?: unknown, tipo = 'appl
 }
 
 // Le strade per scrivere isDeleted: UpdateMemberDetails in PATCH (JSON Patch,
-// che PerfectGym vuole come application/json-patch+json) o in POST. Quale
-// funziona lo dice `prova`, e su un member vero lo conferma la rilettura.
+// che PerfectGym vuole come application/json-patch+json) o in POST. La PATCH
+// rifiuta IsDeleted (non e' nel PersonalDataModel); la POST sostituisce i dati
+// anagrafici, quindi li rimanda uguali, presi dal mirror. Quale funziona lo
+// dice la rilettura dopo la scrittura.
 const PATCH = 'application/json-patch+json'
-const STRADE: Record<string, (id: number) => [string, string, unknown, string?]> = {
+type Dati = Record<string, unknown>
+const STRADE: Record<string, (id: number, d: Dati) => [string, string, unknown, string?]> = {
   patch_dettagli: (id) => ['PATCH', `${ORIGINE}/Api/v2.2/Members/UpdateMemberDetails/${id}`,
     [{ op: 'replace', path: 'IsDeleted', value: true }], PATCH],
-  patch_dettagli_slash: (id) => ['PATCH', `${ORIGINE}/Api/v2.2/Members/UpdateMemberDetails/${id}`,
-    [{ op: 'replace', path: '/isDeleted', value: true }], PATCH],
-  post_dettagli: (id) => ['POST', `${ORIGINE}/Api/v2.2/Members/UpdateMemberDetails`,
-    { memberId: id, isDeleted: true }],
+  post_dettagli: (id, d) => ['POST', `${ORIGINE}/Api/v2.2/Members/UpdateMemberDetails`, {
+    memberId: id,
+    isDeleted: true,
+    personalData: {
+      firstName: d.firstName, lastName: d.lastName, email: d.email, phoneNumber: d.phoneNumber,
+      sex: d.sex, personalId: d.personalId,
+      birthDate: typeof d.birthdate === 'string' ? d.birthdate.slice(0, 10) : undefined,
+      isDeleted: true,
+    },
+  }],
 }
 
 async function leggi(id: number): Promise<{ isDeleted?: boolean; errore?: string }> {
@@ -83,7 +92,7 @@ async function prova(sql: postgres.Sql) {
 
   const scritture: Record<string, Esito> = {}
   for (const [nome, strada] of Object.entries(STRADE)) {
-    const [metodo, url, corpo, tipo] = strada(NESSUNO)
+    const [metodo, url, corpo, tipo] = strada(NESSUNO, {})
     scritture[nome] = await chiama(metodo, url, corpo, tipo)
   }
   return { ricerca: { status: ricerca.status, attesi: d?.n ?? null, trovati }, scritture }
@@ -93,7 +102,7 @@ async function cancella(sql: postgres.Sql, ids: number[], forza: Set<number>, st
   const esiti: Record<string, unknown>[] = []
   for (const id of ids) {
     const [m] = await sql`
-      select m.id, m.is_deleted, lower(trim(m.email)) as email,
+      select m.id, m.is_deleted, m.dati, lower(trim(m.email)) as email,
              (select count(*) from perfectgym.members o
                where o.id <> m.id and not o.is_deleted and lower(trim(o.email)) = lower(trim(m.email)))::int as altri,
              ((select count(*) from perfectgym.contracts c where c.member_id = m.id and not c.is_deleted)
@@ -112,7 +121,7 @@ async function cancella(sql: postgres.Sql, ids: number[], forza: Set<number>, st
       esiti.push({ id, esito: 'saltato', motivo: `ha ${m.attivita} attivita' (contratti, ingressi...): serve forza` })
       continue
     }
-    const [metodo, url, corpo, tipo] = STRADE[strada](id)
+    const [metodo, url, corpo, tipo] = STRADE[strada](id, m.dati ?? {})
     const r = await chiama(metodo, url, corpo, tipo)
     if (r.status < 200 || r.status >= 300) {
       esiti.push({ id, esito: 'errore', status: r.status, risposta: r.corpo })
