@@ -15,7 +15,9 @@ export function CambiaTema() {
     setChiaro(nuovo)
     if (nuovo) radice.setAttribute('data-tema', 'chiaro')
     else radice.removeAttribute('data-tema')
-    requestAnimationFrame(() => requestAnimationFrame(() => radice.removeAttribute('data-cambio-tema')))
+    // Si applicano i colori nuovi subito (senza transizioni) e solo dopo si toglie la guardia.
+    void radice.offsetHeight
+    radice.removeAttribute('data-cambio-tema')
     try {
       localStorage.setItem('tema', nuovo ? 'chiaro' : 'scuro')
     } catch {}
