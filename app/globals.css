@@ -8157,3 +8157,6 @@ a.numero:hover,
 :root:root .scheda.fase-corpo:has(> .fase-vuota-righe) {
   display: block;
 }
+.funnel.funnel-righe {
+  align-items: stretch;
+}
