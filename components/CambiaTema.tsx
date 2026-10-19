@@ -9,15 +9,9 @@ export function CambiaTema() {
 
   const cambia = () => {
     const nuovo = !chiaro
-    const radice = document.documentElement
-    // Per un attimo niente transizioni: cambiano i colori di tutta la pagina, e animarli farebbe scattare.
-    radice.setAttribute('data-cambio-tema', '')
     setChiaro(nuovo)
-    if (nuovo) radice.setAttribute('data-tema', 'chiaro')
-    else radice.removeAttribute('data-tema')
-    // Si applicano i colori nuovi subito (senza transizioni) e solo dopo si toglie la guardia.
-    void radice.offsetHeight
-    radice.removeAttribute('data-cambio-tema')
+    if (nuovo) document.documentElement.setAttribute('data-tema', 'chiaro')
+    else document.documentElement.removeAttribute('data-tema')
     try {
       localStorage.setItem('tema', nuovo ? 'chiaro' : 'scuro')
     } catch {}

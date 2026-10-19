@@ -6486,13 +6486,6 @@ select {
   transform: scale(0.99);
 }
 
-/* Cambio di tema: niente transizioni mentre cambiano i colori di tutta la pagina (le fa scattare). */
-:root[data-cambio-tema] *,
-:root[data-cambio-tema] *::before,
-:root[data-cambio-tema] *::after {
-  transition: none !important;
-}
-
 /* Entrata morbida delle schede della pagina (solo trasparenza e spostamento, mai su tabelle intere righe per riga). */
 .contenuto .scheda:not(.scheda .scheda),
 .contenuto > .testata {
