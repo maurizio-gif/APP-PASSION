@@ -7833,3 +7833,15 @@ a.numero:hover,
     display: none;
   }
 }
+
+/* «Non assegnati»: respiro sopra e sotto i titoli delle liste (sopra la prima c'e' il pannello scuro, sotto la tabella). */
+#da-gestire .da-gestire-corpo > .da-gestire-titolo:first-child {
+  margin-top: 22px;
+}
+#da-gestire .da-gestire-titolo {
+  margin-top: 28px;
+  margin-bottom: 14px;
+}
+#da-gestire .da-gestire-corpo > .da-gestire-titolo:first-child ~ .da-gestire-titolo {
+  margin-top: 32px;
+}
