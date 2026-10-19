@@ -56,8 +56,9 @@ async function chiama(metodo: string, url: string, corpo?: unknown, tipo = 'appl
 // dice la rilettura dopo la scrittura.
 //
 // Provate il 19/10/2026 sul member 69398: nessuna scrive isDeleted. Le due
-// POST rispondono 200 e lo ignorano, la PATCH v2.2 lo rifiuta, la PATCH OData
-// v2.1 non esiste (404).
+// POST rispondono 200 e lo ignorano, le PATCH v2.2 e v2.1 lo rifiutano
+// ("There is no property named 'IsDeleted' on type PersonalDataModel"), la
+// PATCH OData v2.1 non esiste (404).
 const PATCH = 'application/json-patch+json'
 type Dati = Record<string, unknown>
 const datiPost = (id: number, d: Dati) => ({
@@ -77,6 +78,8 @@ const STRADE: Record<string, (id: number, d: Dati) => [string, string, unknown, 
   // La v2.1, quella di AddLead.
   post_dettagli_v21: (id, d) => ['POST', `${ORIGINE}/Api/v2.1/Members/UpdateMemberDetails`, datiPost(id, d)],
   patch_odata_v21: (id) => ['PATCH', `${ORIGINE}/Api/v2.1/odata/Members(${id})`, { isDeleted: true }],
+  patch_dettagli_v21: (id) => ['PATCH', `${ORIGINE}/Api/v2.1/Members/UpdateMemberDetails/${id}`,
+    [{ op: 'replace', path: 'IsDeleted', value: true }], PATCH],
 }
 
 async function leggi(id: number): Promise<{ isDeleted?: boolean; errore?: string }> {
