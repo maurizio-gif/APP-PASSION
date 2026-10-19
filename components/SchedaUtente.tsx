@@ -30,6 +30,7 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
     <div className="scheda utente" id={`u-${u.id}`}>
       <details className="utente-acc">
         <summary>
+        <span className="utente-avatar" aria-hidden="true">{(u.nome?.[0] ?? '') + (u.cognome?.[0] ?? '')}</span>
         <div className="utente-testa">
           <div>
             <h3>

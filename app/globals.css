@@ -7265,3 +7265,102 @@ details.scheda .utenti {
 .scheda.utente .utente-gruppo {
   grid-template-columns: 118px minmax(0, 1fr);
 }
+
+/* ---- Utenti: due vesti diverse ------------------------------------------------------------------
+   Gli operatori: schede bianche con l'avatar delle iniziali e una barra rossa a sinistra quando sono aperte.
+   «Aggiungi nuovo utente»: una fascia scura con il «+» rosso, come un invito a fare qualcosa. */
+.scheda.utente {
+  border-left: 4px solid transparent;
+  transition: border-color var(--t-rapida) var(--curva);
+}
+.scheda.utente:has(.utente-acc[open]) {
+  border-left-color: var(--rosso);
+}
+.utente-avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(to bottom, rgba(227, 3, 45, 0.14), rgba(227, 3, 45, 0.06));
+  border: 1px solid rgba(227, 3, 45, 0.3);
+  color: var(--rosso-scuro);
+  font-size: 0.84rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.scheda.utente .utente-acc > summary::after {
+  width: 26px;
+  height: 26px;
+  padding: 4px;
+  border-radius: 50%;
+  background-color: rgba(227, 3, 45, 0.08);
+  background-origin: content-box;
+}
+
+.nuovo-utente-acc {
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(227, 3, 45, 0.55);
+  background: linear-gradient(100deg, #17181c 0%, #2b0d15 60%, #5c0b1e 100%);
+}
+.nuovo-utente-acc > summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 18px;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  color: #fff;
+}
+.nuovo-utente-acc > summary::-webkit-details-marker {
+  display: none;
+}
+.nuovo-utente-acc > summary:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -4px;
+}
+.nuovo-icona {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(to bottom, #f0123b, var(--rosso) 55%, #cc0227);
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1;
+  transition: transform var(--t-rapida) var(--curva);
+}
+.nuovo-utente-acc[open] .nuovo-icona {
+  transform: rotate(45deg);
+}
+.nuovo-titolo {
+  flex: 1;
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.nuovo-utente-acc > summary::after {
+  content: '';
+  width: 16px;
+  height: 16px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
+  transition: transform var(--t-rapida) var(--curva);
+}
+.nuovo-utente-acc[open] > summary::after {
+  transform: rotate(180deg);
+}
+.nuovo-utente-corpo {
+  padding: 14px 18px 16px;
+  background: var(--scheda);
+  color: var(--testo);
+}
+.nuovo-utente-corpo > p {
+  margin: 0 0 12px;
+}
