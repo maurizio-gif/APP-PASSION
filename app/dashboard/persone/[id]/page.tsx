@@ -474,25 +474,26 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
       <div className="persona-sotto">
         <div>
           {ticket && (
-            <section className="scheda">
-              <div className="testata-scheda">
-                <h2>Ticket</h2>
-                <a className="bottone secondario piccolo" href={`/dashboard/ticket/nuovo?persona=${p.id}`}>+ Apri un ticket</a>
-              </div>
+            <div className="fase-righe sotto-fase">
+<div className="fase-titolo">Ticket
+<a className="bottone secondario piccolo fase-azione" href={`/dashboard/ticket/nuovo?persona=${p.id}`}>+ Apri un ticket</a>
+</div>
+<section className="scheda fase-corpo sotto-corpo sotto-tabella">
               {ticket.length === 0
                 ? <Vuoto>Nessun ticket su questa persona.</Vuoto>
                 : <TabellaTicket ticket={ticket} socio={false} />}
             </section>
+</div>
           )}
         </div>
 
         <div>
           {s.socio && (
-            <section className="scheda">
-              <div className="testata-scheda">
-                <h2>Ultimi accessi</h2>
-                <span className="piccolo attenuato">{s.socio.ingressi_30gg} in 30 giorni</span>
-              </div>
+            <div className="fase-righe sotto-fase">
+<div className="fase-titolo">Ultimi accessi
+<span className="fase-nota">{s.socio.ingressi_30gg} in 30 giorni</span>
+</div>
+<section className="scheda fase-corpo sotto-corpo">
               {s.socio.ingressi.length === 0 ? (
                 <Vuoto>Nessun accesso registrato.</Vuoto>
               ) : (
@@ -506,11 +507,13 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                 </ul>
               )}
             </section>
+</div>
           )}
 
           {s.socio && (
-            <section className="scheda">
-              <h2>Prenotazioni</h2>
+            <div className="fase-righe sotto-fase">
+<div className="fase-titolo">Prenotazioni</div>
+<section className="scheda fase-corpo sotto-corpo">
               {s.socio.prenotazioni.length === 0 ? (
                 <Vuoto>Nessuna prenotazione.</Vuoto>
               ) : (
@@ -524,6 +527,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                 </ul>
               )}
             </section>
+</div>
           )}
         </div>
       </div>

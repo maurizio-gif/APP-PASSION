@@ -8622,3 +8622,45 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
 .task-tabs label { flex: 1 1 0; justify-content: center; }
 .task-griglia { align-items: stretch; }
 :root:root .task-corpo .task-nuovo .scelta-task button { white-space: nowrap; padding: 6px 10px; }
+
+/* Ticket, Ultimi accessi, Prenotazioni: stessa testata scura attaccata delle altre schede. */
+.sotto-fase { margin-bottom: 18px; }
+.sotto-fase .fase-titolo .fase-azione {
+  margin-left: auto;
+  height: 28px;
+  min-height: 28px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 0.76rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  box-shadow: none;
+}
+.sotto-fase .fase-titolo .fase-azione:hover { background: var(--rosso); border-color: var(--rosso); }
+.sotto-fase .fase-titolo .fase-nota {
+  margin-left: auto;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: rgba(255, 255, 255, 0.72);
+}
+:root:root .scheda.fase-corpo.sotto-corpo {
+  display: block;
+  margin: 0;
+  padding: 14px 18px 16px;
+}
+:root:root .scheda.fase-corpo.sotto-tabella { padding: 0; overflow: hidden; }
+.sotto-tabella .tabella-scorre { margin: 0; }
+.sotto-tabella table { min-width: 0; width: 100%; }
+.sotto-tabella th, .sotto-tabella td { padding-left: 16px; padding-right: 16px; }
+.sotto-corpo .vuoto { margin: 0; padding: 4px 0; }
+
+/* I miei task: la tabella parte subito sotto la fascia scura, senza striscia bianca in mezzo. */
+:root:root .scheda.scheda-task > .testata-scheda { margin-bottom: 0; }
+:root:root .scheda-task > .tabella-scorre,
+:root:root .scheda-task > .tabella-scorre:first-of-type { margin-top: 0; }
+:root:root .sotto-tabella .tabella-scorre { margin: 0; padding: 0; }
+:root:root .sotto-tabella thead th { position: static; }
