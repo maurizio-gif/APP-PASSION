@@ -8601,3 +8601,24 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   line-height: 26px;
   color: var(--rosso-scuro);
 }
+
+/* Nuovo task ed Elenco task: stesso riquadro, stessa altezza di titolo e interruttore, cosi' stanno allineati. */
+.task-elenco {
+  padding: 14px 16px 16px;
+  border: 1px solid rgba(42, 11, 20, 0.14);
+  border-left: 4px solid #17090f;
+  border-radius: 12px;
+  background: linear-gradient(100deg, rgba(42, 11, 20, 0.05), rgba(42, 11, 20, 0.015) 60%);
+}
+.task-elenco::before,
+.task-corpo .task-nuovo .modulo::before {
+  min-height: 26px;
+  line-height: 26px;
+  margin: 0;
+}
+.task-elenco::before { margin-bottom: 12px; }
+.task-corpo .task-nuovo .modulo { row-gap: 12px; }
+.task-tabs { display: flex; }
+.task-tabs label { flex: 1 1 0; justify-content: center; }
+.task-griglia { align-items: stretch; }
+:root:root .task-corpo .task-nuovo .scelta-task button { white-space: nowrap; padding: 6px 10px; }
