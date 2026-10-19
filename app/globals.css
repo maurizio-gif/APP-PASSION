@@ -6506,3 +6506,73 @@ select {
     content-visibility: visible;
   }
 }
+
+/* ---- Accordion (Allegati, Thread): si apre e si chiude, con il numero nel titolo ---------- */
+.accordion > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+.accordion > summary::-webkit-details-marker {
+  display: none;
+}
+.accordion > summary h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding-left: 10px;
+  border-left: 3px solid var(--rosso);
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  line-height: 1.15;
+  color: var(--rosso);
+}
+.accordion > summary::after {
+  content: '';
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e3032d' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
+  transition: transform var(--t-rapida) var(--curva);
+}
+.accordion[open] > summary::after {
+  transform: rotate(180deg);
+}
+.accordion[open] > summary {
+  margin-bottom: 14px;
+}
+.accordion > summary:focus-visible {
+  outline: 2px solid var(--rosso);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+.accordion .conta-titolo {
+  display: inline-grid;
+  place-items: center;
+  min-width: 24px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: linear-gradient(to bottom, #f0123b, var(--rosso) 55%, #cc0227);
+  color: #fff;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+/* Il numero zero e' grigio rosato: niente da vedere dentro. */
+.accordion .conta-titolo:is([data-zero]),
+.accordion:not([open]) .conta-titolo.vuoto {
+  background: #e3cbd1;
+}
+
+/* Con gli accordion i riquadri non si allungano alla stessa altezza: quello chiuso resta basso. */
+.griglia.ticket-pagina {
+  align-items: start;
+}

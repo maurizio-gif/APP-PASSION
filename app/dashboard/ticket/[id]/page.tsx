@@ -136,54 +136,62 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
         )}
 
         <section className="scheda">
-          <h2>Allegati</h2>
-          {t.allegati.length === 0 ? (
-            <p className="vuoto">Nessun allegato.</p>
-          ) : (
-            <ul className="allegati-elenco">
-              {t.allegati.map((a) => {
-                const url = link.get(a.percorso)
-                const immagine = a.tipo?.startsWith('image/') && a.tipo !== 'image/heic' && a.tipo !== 'image/heif'
-                return (
-                  <li key={a.id}>
-                    {url ? (
-                      <a href={url} target="_blank" rel="noreferrer">
-                        {immagine ? <img src={url} alt={a.nome} loading="lazy" /> : <span className="allegato-file">{a.nome}</span>}
-                      </a>
-                    ) : <span className="allegato-file attenuato">{a.nome} (non raggiungibile)</span>}
-                    <div className="piccolo attenuato">{a.caricato_nome} · {formatoDataOra(a.caricato_il)}</div>
-                  </li>
-                )
-              })}
-            </ul>
-          )}
-          {t.stato !== 'doppione' && <CaricaAllegati ticket={t.id} />}
+          <details className="accordion" open={t.allegati.length > 0}>
+            <summary>
+              <h2>Allegati <span className="conta-titolo">{t.allegati.length}</span></h2>
+            </summary>
+              {t.allegati.length === 0 ? (
+                <p className="vuoto">Nessun allegato.</p>
+              ) : (
+                <ul className="allegati-elenco">
+                  {t.allegati.map((a) => {
+                    const url = link.get(a.percorso)
+                    const immagine = a.tipo?.startsWith('image/') && a.tipo !== 'image/heic' && a.tipo !== 'image/heif'
+                    return (
+                      <li key={a.id}>
+                        {url ? (
+                          <a href={url} target="_blank" rel="noreferrer">
+                            {immagine ? <img src={url} alt={a.nome} loading="lazy" /> : <span className="allegato-file">{a.nome}</span>}
+                          </a>
+                        ) : <span className="allegato-file attenuato">{a.nome} (non raggiungibile)</span>}
+                        <div className="piccolo attenuato">{a.caricato_nome} · {formatoDataOra(a.caricato_il)}</div>
+                      </li>
+                    )
+                  })}
+                </ul>
+              )}
+              {t.stato !== 'doppione' && <CaricaAllegati ticket={t.id} />}
+          </details>
         </section>
 
         <section className="scheda">
-          <h2>Thread</h2>
-          <ul className="filo-ticket">
-            {t.messaggi.map((m) => (
-              <li key={m.id} className={`lato-${m.lato}${m.evento ? ' evento' : ''}`}>
-                <div className="storia-testa">
-                  <strong>{m.autore ?? '—'}</strong>{m.lato === 'r2d' && <span className="bollino grigio">R2D</span>}
-                  {m.evento && <> {traduci(EVENTO_TICKET, m.evento)}</>} · {formatoDataOra(m.creato_il)}
-                </div>
-                {m.testo && <div className="storia-testo">{m.testo}</div>}
-              </li>
-            ))}
-          </ul>
-          {t.stato !== 'doppione' && (
-            <form action={messaggioTicket} className="modulo">
-              <input type="hidden" name="ticket" value={t.id} />
-              <input type="hidden" name="torna" value={qui} />
-              <div className="campo">
-                <label htmlFor="testo">Scrivi</label>
-                <textarea id="testo" name="testo" rows={3} required placeholder={chiuso ? 'Un aggiornamento (il ticket resta chiuso)' : 'Una risposta, un aggiornamento, un dettaglio in più'} />
-              </div>
-              <BottoneInvio testo="Aggiungi al thread" inCorso="Invio…" classe="secondario" />
-            </form>
-          )}
+          <details className="accordion" open>
+            <summary>
+              <h2>Thread <span className="conta-titolo">{t.messaggi.filter((m) => !m.evento).length}</span></h2>
+            </summary>
+              <ul className="filo-ticket">
+                {t.messaggi.map((m) => (
+                  <li key={m.id} className={`lato-${m.lato}${m.evento ? ' evento' : ''}`}>
+                    <div className="storia-testa">
+                      <strong>{m.autore ?? '—'}</strong>{m.lato === 'r2d' && <span className="bollino grigio">R2D</span>}
+                      {m.evento && <> {traduci(EVENTO_TICKET, m.evento)}</>} · {formatoDataOra(m.creato_il)}
+                    </div>
+                    {m.testo && <div className="storia-testo">{m.testo}</div>}
+                  </li>
+                ))}
+              </ul>
+              {t.stato !== 'doppione' && (
+                <form action={messaggioTicket} className="modulo">
+                  <input type="hidden" name="ticket" value={t.id} />
+                  <input type="hidden" name="torna" value={qui} />
+                  <div className="campo">
+                    <label htmlFor="testo">Scrivi</label>
+                    <textarea id="testo" name="testo" rows={3} required placeholder={chiuso ? 'Un aggiornamento (il ticket resta chiuso)' : 'Una risposta, un aggiornamento, un dettaglio in più'} />
+                  </div>
+                  <BottoneInvio testo="Aggiungi al thread" inCorso="Invio…" classe="secondario" />
+                </form>
+              )}
+          </details>
         </section>
 
         <Azioni t={t} io={io} qui={qui} />
