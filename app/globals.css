@@ -6806,3 +6806,9 @@ a.guida-voce > .elenco-breve li {
 .chip span::before {
   border-color: #c9b5ba;
 }
+
+/* Le spunte dei moduli (Attivo, autorizzazioni, ...) in rosso. */
+input[type='checkbox'],
+input[type='radio'] {
+  accent-color: var(--rosso);
+}
