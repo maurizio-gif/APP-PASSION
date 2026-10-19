@@ -35,55 +35,58 @@ export default async function Utenti({ searchParams }: { searchParams: { errore?
       </div>
       <Avviso errore={searchParams.errore} ok={searchParams.ok} />
 
-      <div className="utenti">
-        {attivi.map((u) => (
-          <SchedaUtente key={u.id} u={u} io={io} operatori={attivi} />
-        ))}
-      </div>
-
-      {spenti.length > 0 && (
-        <details className="scheda">
-          <summary>
-            <strong>Non più attivi</strong> <span className="attenuato">· {spenti.length}</span>
-          </summary>
+      <div className="utenti-pagina">
+        <div className="utenti-colonna">
           <div className="utenti">
-            {spenti.map((u) => (
+            {attivi.map((u) => (
               <SchedaUtente key={u.id} u={u} io={io} operatori={attivi} />
             ))}
           </div>
-        </details>
-      )}
 
-      <section className="scheda">
-        <h2>Nuovo utente</h2>
-        <p className="piccolo attenuato sotto-titolo">
-          Nasce con le sezioni operative (Lead, Prove, Disdette, Rinnovi, Task, Cerca, Debitori); il resto lo si abilita qui sopra.
-          Appena creato gli arriva un’email di invito con il link per scegliere la password.
-        </p>
-        <form action={nuovoUtente} className="modulo nuovo-utente">
-          <div className="campo">
-            <label htmlFor="nu-nome">Nome</label>
-            <input id="nu-nome" type="text" name="nome" required />
-          </div>
-          <div className="campo">
-            <label htmlFor="nu-cognome">Cognome</label>
-            <input id="nu-cognome" type="text" name="cognome" />
-          </div>
-          <div className="campo">
-            <label htmlFor="nu-email">Email</label>
-            <input id="nu-email" type="email" name="email" required />
-          </div>
-          <div className="campo">
-            <label htmlFor="nu-ruolo">Ruolo</label>
-            <select id="nu-ruolo" name="ruolo" defaultValue="consulente">
-              {RUOLI.filter((r) => puoToccareRuolo(io, r.chiave)).map((r) => <option key={r.chiave} value={r.chiave}>{r.testo}</option>)}
-            </select>
-          </div>
-          <div className="campo invio">
-            <BottoneInvio testo="Crea utente" inCorso="Creo…" />
-          </div>
-        </form>
-      </section>
+          {spenti.length > 0 && (
+            <details className="scheda">
+              <summary>
+                <strong>Non più attivi</strong> <span className="attenuato">· {spenti.length}</span>
+              </summary>
+              <div className="utenti">
+                {spenti.map((u) => (
+                  <SchedaUtente key={u.id} u={u} io={io} operatori={attivi} />
+                ))}
+              </div>
+            </details>
+          )}
+        </div>
+        <section className="scheda">
+          <h2>Nuovo utente</h2>
+          <p className="piccolo attenuato sotto-titolo">
+            Nasce con le sezioni operative (Lead, Prove, Disdette, Rinnovi, Task, Cerca, Debitori); il resto lo si abilita qui sopra.
+            Appena creato gli arriva un’email di invito con il link per scegliere la password.
+          </p>
+          <form action={nuovoUtente} className="modulo nuovo-utente">
+            <div className="campo">
+              <label htmlFor="nu-nome">Nome</label>
+              <input id="nu-nome" type="text" name="nome" required />
+            </div>
+            <div className="campo">
+              <label htmlFor="nu-cognome">Cognome</label>
+              <input id="nu-cognome" type="text" name="cognome" />
+            </div>
+            <div className="campo">
+              <label htmlFor="nu-email">Email</label>
+              <input id="nu-email" type="email" name="email" required />
+            </div>
+            <div className="campo">
+              <label htmlFor="nu-ruolo">Ruolo</label>
+              <select id="nu-ruolo" name="ruolo" defaultValue="consulente">
+                {RUOLI.filter((r) => puoToccareRuolo(io, r.chiave)).map((r) => <option key={r.chiave} value={r.chiave}>{r.testo}</option>)}
+              </select>
+            </div>
+            <div className="campo invio">
+              <BottoneInvio testo="Crea utente" inCorso="Creo…" />
+            </div>
+          </form>
+        </section>
+      </div>
     </>
   )
 }

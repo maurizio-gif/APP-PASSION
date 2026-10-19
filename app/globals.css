@@ -7088,3 +7088,35 @@ details.scheda .utenti {
 .scheda.utente .utente-acc > summary .utente-bollini {
   justify-content: flex-start;
 }
+
+/* Utenti: l'elenco a sinistra (meta' pagina), «Nuovo utente» a destra. */
+.utenti-pagina {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+.utenti-colonna {
+  min-width: 0;
+}
+.utenti-colonna > .utenti {
+  margin-bottom: 14px;
+}
+@media (min-width: 1000px) {
+  .utenti-pagina {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .utenti-pagina > .scheda {
+    position: sticky;
+    top: 16px;
+    margin: 0;
+  }
+}
+/* Nella colonna stretta il modulo va in verticale. */
+.utenti-pagina .nuovo-utente {
+  grid-template-columns: minmax(0, 1fr);
+}
+.utenti-pagina .nuovo-utente .invio .bottone {
+  width: 100%;
+  justify-content: center;
+}
