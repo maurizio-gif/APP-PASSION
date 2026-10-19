@@ -7563,3 +7563,28 @@ details.scheda .utenti {
   background: var(--rosso);
   box-shadow: 0 0 0 3px rgba(227, 3, 45, 0.25);
 }
+
+/* «Da gestire» (home): niente titolo; il pannello delle schede sta a filo con i bordi della scheda e la tabella subito sotto, senza spazi bianchi. */
+#da-gestire {
+  padding: 0;
+  overflow: hidden;
+}
+:root:root #da-gestire .numeri-schede {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+#da-gestire .numeri-schede + .da-gestire-corpo {
+  padding-top: 0;
+}
+#da-gestire .da-gestire-corpo > .tabella-scorre:first-child,
+#da-gestire .da-gestire-corpo > :first-child > .tabella-scorre:first-child {
+  margin-top: 0;
+}
+#da-gestire .da-gestire-corpo {
+  padding-bottom: 14px;
+}
+#da-gestire .da-gestire-titolo {
+  margin-left: 22px;
+  margin-right: 22px;
+}

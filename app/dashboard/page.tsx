@@ -73,9 +73,6 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
       <Avviso errore={searchParams.errore} />
 
       <section className="scheda" id="da-gestire">
-        <div className="testata-scheda">
-          <h2>Da gestire</h2>
-        </div>
         <SchedeNumeri voci={schede} attiva={scheda} base="/dashboard" />
         <div className="da-gestire-corpo">
           {nuovi && (nuovi.length === 0 ? (
