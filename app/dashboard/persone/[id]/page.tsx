@@ -284,11 +284,18 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
           <span className="task-apri" aria-hidden="true" />
 </summary>
         <section className="scheda fase-corpo task-corpo">
-          <div className="task-nuovo">
+          <div className="task-griglia">
+<div className="task-nuovo">
             <NuovoTask utente={p.id} per={per} torna={qui} staff={staff} io={io?.id ?? null} />
           </div>
-          <div className="task-due">
-            <div className="task-col">
+          <div className="task-elenco">
+<input type="radio" name="task-vista" id="task-v-fare" className="task-radio" defaultChecked />
+<input type="radio" name="task-vista" id="task-v-fatti" className="task-radio" />
+<div className="task-tabs">
+<label htmlFor="task-v-fare">Da fare <span>{daFare.length}</span></label>
+<label htmlFor="task-v-fatti">Fatti <span>{fatti.length}</span></label>
+</div>
+            <div className="task-col task-col-fare">
               <h3 className="task-gruppo">Da fare <span className="conta-titolo">{daFare.length}</span></h3>
               {daFare.length === 0 ? <p className="task-vuoto">Niente da fare su questa persona.</p> : (
                 <ol className="task-lista">
@@ -317,7 +324,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                 </ol>
               )}
             </div>
-            <div className="task-col">
+            <div className="task-col task-col-fatti">
               <h3 className="task-gruppo">Fatti <span className="conta-titolo">{fatti.length}</span></h3>
               {fatti.length === 0 ? <p className="task-vuoto">Ancora nessun task fatto.</p> : (
                 <ol className="task-lista">
@@ -338,6 +345,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
               )}
             </div>
           </div>
+</div>
         </section>
       </details>
 

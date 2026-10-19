@@ -8520,3 +8520,72 @@ details.task-fase[open] .task-apri::before { content: 'Chiudi'; }
 details.task-fase[open] .task-apri::after { transform: translateY(2px) rotate(-135deg); }
 details.task-fase > summary.fase-titolo:hover .task-apri { background: var(--rosso); border-color: var(--rosso); }
 details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(--rosso); outline-offset: 2px; }
+
+/* Task: a sinistra «Nuovo task», a destra l'elenco con un interruttore Da fare / Fatti (se ne vede uno alla volta). */
+.task-griglia {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 20px;
+  align-items: start;
+}
+:root:root .task-corpo .task-griglia > .task-nuovo { margin: 0; }
+.task-elenco { min-width: 0; }
+.task-elenco .task-gruppo { display: none; }
+.task-radio {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.task-tabs {
+  display: inline-flex;
+  gap: 2px;
+  margin: 0 0 12px;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(42, 11, 20, 0.08);
+}
+.task-tabs label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  color: var(--testo-attenuato);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.task-tabs label span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(42, 11, 20, 0.1);
+  font-size: 0.7rem;
+}
+#task-v-fare:checked ~ .task-tabs label[for='task-v-fare'],
+#task-v-fatti:checked ~ .task-tabs label[for='task-v-fatti'] {
+  background: #17090f;
+  color: #fff;
+}
+#task-v-fare:checked ~ .task-tabs label[for='task-v-fare'] span,
+#task-v-fatti:checked ~ .task-tabs label[for='task-v-fatti'] span {
+  background: var(--rosso);
+  color: #fff;
+}
+#task-v-fare:focus-visible ~ .task-tabs label[for='task-v-fare'],
+#task-v-fatti:focus-visible ~ .task-tabs label[for='task-v-fatti'] { outline: 2px solid var(--rosso); outline-offset: 2px; }
+.task-elenco > .task-col { display: none; }
+#task-v-fare:checked ~ .task-col-fare,
+#task-v-fatti:checked ~ .task-col-fatti { display: block; }
+@media (max-width: 999px) {
+  .task-griglia { grid-template-columns: minmax(0, 1fr); }
+}
+:root:root .task-corpo .task-nuovo .scelta-task { position: static; order: -1; flex: 1 1 100%; display: flex; }
+:root:root .task-corpo .task-nuovo .scelta-task button { flex: 1 1 0; }
+.task-corpo .task-nuovo .modulo::before { min-height: 0; }
+.task-corpo .task-nuovo .modulo > .bottone { flex: 1 1 100%; justify-content: center; }
+.task-corpo .task-nuovo .campo:last-of-type { flex: 1 1 100%; }
+.task-corpo .task-nuovo .modulo > .campo:first-of-type { flex: 1 1 100%; }
