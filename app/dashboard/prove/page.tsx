@@ -13,6 +13,7 @@ const VISTE = [
   { chiave: 'in_scadenza', testo: 'In scadenza', gruppo: 'prova' },
   { chiave: 'senza_esito', testo: 'Finite senza esito', gruppo: 'finite' },
   { chiave: 'chiuse', testo: 'Chiuse', gruppo: 'finite' },
+  { chiave: 'perse', testo: 'Perse', gruppo: 'finite' },
 ]
 
 // L'ordine si sceglie qui, sulle righe gia' arrivate da crm_prove (che ne da'
@@ -50,7 +51,9 @@ export default async function Prove({ searchParams }: { searchParams: { vista?: 
   // Il consulente: chi segue la prova.
   const consulente = consulenteScelto(staff, searchParams.consulente)
   const q = testoCercato(searchParams.q)
-  const prove = filtraTesto(await crm.prove(vista, consulente), q)
+  // Perse: fra le chiuse (le piu' recenti, come in Chiuse) quelle finite come «Non iscritto».
+  const arrivate = await crm.prove(vista === 'perse' ? 'chiuse' : vista, consulente)
+  const prove = filtraTesto(vista === 'perse' ? arrivate.filter((p) => p.esito === 'non_iscritto') : arrivate, q)
   const pagamenti = await crm.pagamenti(prove.map((p) => p.contract_id))
   // sort e' stabile: a parita' resta l'ordine di crm_prove.
   if (ordine.confronto) prove.sort(ordine.confronto)
