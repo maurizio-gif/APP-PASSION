@@ -7523,3 +7523,13 @@ details.scheda .utenti {
     margin-top: 30px;
   }
 }
+
+/* Nessuno stacco con la barra: il titolo parte esattamente dal nero della barra (stesso colore sul bordo), poi si scalda. */
+@media (min-width: 721px) {
+  .testata:first-child > div:first-child,
+  :root[data-tema='chiaro'] .testata:first-child > div:first-child {
+    background:
+      radial-gradient(48% 210% at 34% 0%, rgba(227, 3, 45, 0.24), rgba(227, 3, 45, 0) 72%),
+      linear-gradient(to right, #0e0f12 0%, #0e0f12 5%, #1c0b11 38%, rgba(92, 11, 30, 0.62) 72%, rgba(92, 11, 30, 0) 100%);
+  }
+}
