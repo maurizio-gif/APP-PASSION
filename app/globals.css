@@ -7518,3 +7518,16 @@ details.scheda .utenti {
   color: #ffb3c0;
   border-bottom: 1px solid rgba(227, 3, 45, 0.55);
 }
+
+/* Intestazione tabelle: un'unica banda su tutta la riga (non una sfumatura per colonna). */
+:root:root:root th {
+  background: transparent;
+}
+:root:root:root thead tr {
+  background: linear-gradient(100deg, #17181c 0%, #2b0d15 60%, #4a0a1b 100%);
+}
+@media (min-width: 721px) {
+  .scheda > .tabella-scorre:first-child {
+    border-radius: calc(var(--raggio) - 1px) calc(var(--raggio) - 1px) 0 0;
+  }
+}
