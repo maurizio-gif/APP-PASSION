@@ -165,7 +165,7 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
         </section>
 
         <section className="scheda">
-          <details className="accordion" open>
+          <details className="accordion">
             <summary>
               <h2>Thread <span className="conta-titolo">{t.messaggi.filter((m) => !m.evento).length}</span></h2>
             </summary>

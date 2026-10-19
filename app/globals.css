@@ -6576,3 +6576,9 @@ select {
 .griglia.ticket-pagina {
   align-items: start;
 }
+
+/* «Cosa fare»: il bottone sta subito sotto il suo campo (non spinto in fondo alla colonna). */
+.ticket-azioni .stack > form > .bottone,
+.ticket-azioni .stack > form > button {
+  margin-top: 0;
+}
