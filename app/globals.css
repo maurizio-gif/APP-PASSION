@@ -7782,3 +7782,54 @@ a.numero:hover,
 :root:root .scheda td .bottone.secondario {
   color: var(--testo);
 }
+
+/* ---- Il saluto nella barra laterale, sotto il logo ---- */
+.barra-saluto {
+  position: relative;
+  display: grid;
+  gap: 1px;
+  margin: 2px 0 0;
+  padding: 10px 12px 10px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: linear-gradient(100deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  line-height: 1.2;
+}
+.barra-saluto::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(to bottom, #ff3355, var(--rosso));
+}
+.barra-saluto-ciao {
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.7);
+}
+.barra-saluto strong {
+  font-size: 1.12rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+.barra-saluto-data {
+  margin-top: 3px;
+  font-size: 0.74rem;
+  color: rgba(255, 255, 255, 0.62);
+}
+.barra-saluto-data em {
+  font-style: normal;
+  font-weight: 700;
+  text-transform: capitalize;
+  color: #ff6b84;
+}
+@media (max-width: 720px) {
+  .barra-saluto {
+    display: none;
+  }
+}

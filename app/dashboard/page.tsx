@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { crm } from '@/lib/crm'
-import { formatoGiornoLungo, oggiRoma } from '@/lib/formato'
 import { Avviso, Vuoto } from '@/components/Ui'
 import { SchedeNumeri } from '@/components/SchedeNumeri'
 import { assiste, puoVedere, smista } from '@/lib/permessi'
@@ -56,16 +55,10 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
   return (
     <>
       <div className="testata">
-        <div className="testata-saluto">
+        <div>
           <div className="titolo-riga">
             <h1>Da gestire</h1>
           </div>
-          <p className="saluto">
-            <strong>Ciao, <b>{io?.nome}</b></strong>
-            <span>
-              <em>{formatoGiornoLungo(oggiRoma()).split(' ')[0]}</em> {formatoGiornoLungo(oggiRoma()).split(' ').slice(1).join(' ')}
-            </span>
-          </p>
         </div>
         <Link className="bottone" href="/dashboard/lead/nuovo">+ Nuovo lead</Link>
       </div>

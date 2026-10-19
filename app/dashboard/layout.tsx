@@ -5,6 +5,7 @@ import { Logo } from '@/components/Logo'
 import { Menu } from '@/components/Menu'
 import { Navigazione } from '@/components/Navigazione'
 import { crm } from '@/lib/crm'
+import { formatoGiornoLungo, oggiRoma } from '@/lib/formato'
 import { ha, puoRiunioni, puoVedere, SEZIONI, testoRuolo } from '@/lib/permessi'
 import { cerca } from './azioni'
 
@@ -30,6 +31,13 @@ export default async function DashboardLayout({ children }: { children: React.Re
       <aside className="barra">
         <div className="barra-logo">
           <Logo />
+        </div>
+        <div className="barra-saluto">
+          <span className="barra-saluto-ciao">Ciao,</span>
+          <strong>{io.nome}</strong>
+          <span className="barra-saluto-data">
+            <em>{formatoGiornoLungo(oggiRoma()).split(' ')[0]}</em> {formatoGiornoLungo(oggiRoma()).split(' ').slice(1).join(' ')}
+          </span>
         </div>
         {puoVedere(io, 'cerca') && (
           <form action={cerca} className="barra-cerca">
