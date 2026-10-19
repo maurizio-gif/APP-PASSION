@@ -28,8 +28,8 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
 
   return (
     <div className="scheda utente" id={`u-${u.id}`}>
-      <form action={aggiornaUtente}>
-        <input type="hidden" name="utente" value={u.id} />
+      <details className="utente-acc">
+        <summary>
         <div className="utente-testa">
           <div>
             <h3>
@@ -49,7 +49,9 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
             )}
           </div>
         </div>
-
+        </summary>
+      <form action={aggiornaUtente}>
+        <input type="hidden" name="utente" value={u.id} />
         <fieldset disabled={bloccato}>
           <div className="utente-riga">
             <label className="campo-breve">
@@ -193,6 +195,7 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
           </form>
         </details>
       )}
+      </details>
     </div>
   )
 }
