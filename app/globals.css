@@ -6415,3 +6415,40 @@ select {
 .scheda-task thead th {
   background: linear-gradient(to bottom, rgba(227, 3, 45, 0.05), rgba(227, 3, 45, 0.12));
 }
+
+/* I miei task, piu' distinti: fascia scura in alto (come la barra laterale) con titolo e numeri, corpo chiaro. */
+.scheda.scheda-task {
+  border-top: 0;
+  padding-top: 0;
+  overflow: hidden;
+  background:
+    linear-gradient(to bottom, rgba(227, 3, 45, 0.04), rgba(227, 3, 45, 0) 90px),
+    var(--scheda);
+}
+.scheda.scheda-task > .testata-scheda {
+  margin: 0 -22px 14px;
+  padding: 14px 22px;
+  background: linear-gradient(100deg, #17181c 0%, #2b0d15 60%, #5c0b1e 100%);
+}
+.scheda.scheda-task > .testata-scheda h2 {
+  color: #fff;
+}
+.scheda-task .chip {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.24);
+  color: #fff;
+}
+.scheda-task .chip.rosso {
+  background: var(--rosso);
+  border-color: var(--rosso);
+  color: #fff;
+}
+.scheda-task .scheda-piede {
+  border-top-color: #e3cbd1;
+}
+@media (max-width: 720px) {
+  .scheda.scheda-task > .testata-scheda {
+    margin: 0 -14px 12px;
+    padding: 12px 14px;
+  }
+}
