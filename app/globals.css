@@ -6326,3 +6326,36 @@ select {
   background: #fff;
   border: 1px solid #e3cbd1;
 }
+
+/* Sottotitoli delle liste dentro «Da gestire» (Lead senza consulente · 2): piu' evidenti, con il numero in rosso. */
+.da-gestire-titolo,
+.scheda h3.da-gestire-titolo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 26px 0 12px;
+  padding-left: 12px;
+  border-left: 4px solid var(--rosso);
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: var(--testo);
+}
+.da-gestire-corpo > .da-gestire-titolo:first-child {
+  margin-top: 4px;
+}
+.da-gestire-titolo .conta-titolo {
+  display: inline-grid;
+  place-items: center;
+  min-width: 26px;
+  height: 24px;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: linear-gradient(to bottom, #f0123b, var(--rosso) 55%, #cc0227);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}

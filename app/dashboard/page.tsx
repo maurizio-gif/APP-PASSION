@@ -103,9 +103,9 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
               <Vuoto>Tutti i lead aperti e tutte le prove in corso hanno un consulente.</Vuoto>
             ) : (
               <>
-                <h3 className="da-gestire-titolo">Lead senza consulente <span className="attenuato">· {leadLiberi.length}</span></h3>
+                <h3 className="da-gestire-titolo">Lead senza consulente <span className="conta-titolo">{leadLiberi.length}</span></h3>
                 {leadLiberi.length === 0 ? <Vuoto>Nessuno.</Vuoto> : <TabellaLead lead={leadLiberi.slice(0, 30)} io={io} staff={staff} torna={qui} />}
-                <h3 className="da-gestire-titolo">Prove in corso che nessuno segue <span className="attenuato">· {proveLibere.length}</span></h3>
+                <h3 className="da-gestire-titolo">Prove in corso che nessuno segue <span className="conta-titolo">{proveLibere.length}</span></h3>
                 {proveLibere.length === 0 ? <Vuoto>Nessuna.</Vuoto> : <TabellaProve prove={proveLibere.slice(0, 30)} pagamenti={pagamenti} staff={staff} torna={qui} />}
               </>
             )
