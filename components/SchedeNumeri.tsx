@@ -16,6 +16,8 @@ export type VoceNumero = {
   caldo?: boolean
   vai?: string
   vaiTesto?: string
+  // un secondo collegamento, per le schede che riguardano due sezioni
+  vaiAltro?: { href: string; testo: string }
 }
 
 export function SchedeNumeri({ voci, attiva, base }: { voci: VoceNumero[]; attiva: string; base: string }) {
@@ -66,15 +68,16 @@ export function SchedeNumeri({ voci, attiva, base }: { voci: VoceNumero[]; attiv
             )}
             {/* Sempre presente (nascosto nelle altre schede) cosi' l'altezza non cambia. */}
             {v.vai && (
-              <Link
-                href={v.vai}
-                className="numero-vai"
-                onClick={(e) => e.stopPropagation()}
-                tabIndex={aperta ? 0 : -1}
-                aria-hidden={!aperta}
-              >
-                {v.vaiTesto ?? 'Vai'} →
-              </Link>
+              <div className="numero-vai-riga" aria-hidden={!aperta}>
+                <Link href={v.vai} className="numero-vai" onClick={(e) => e.stopPropagation()} tabIndex={aperta ? 0 : -1}>
+                  {v.vaiTesto ?? 'Vai'} →
+                </Link>
+                {v.vaiAltro && (
+                  <Link href={v.vaiAltro.href} className="numero-vai" onClick={(e) => e.stopPropagation()} tabIndex={aperta ? 0 : -1}>
+                    {v.vaiAltro.testo} →
+                  </Link>
+                )}
+              </div>
             )}
           </div>
         )

@@ -6359,3 +6359,59 @@ select {
   font-weight: 700;
   letter-spacing: 0;
 }
+
+/* Due collegamenti dentro la scheda aperta (es. «Vai a Lead» e «Vai a Prove»). */
+.numero-vai-riga {
+  margin-top: auto;
+  padding-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(3px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.numeri-schede .numero.attivo .numero-vai-riga {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+}
+.numero-vai-riga .numero-vai {
+  margin: 0;
+  padding: 0;
+  visibility: inherit;
+  opacity: 1;
+  transform: none;
+}
+
+/* I miei task: una veste un po' diversa dalle altre schede (barra rossa in alto, titolo con la spunta). */
+.scheda-task {
+  border-top: 3px solid var(--rosso);
+  background:
+    linear-gradient(to bottom, rgba(227, 3, 45, 0.07), rgba(227, 3, 45, 0) 110px),
+    var(--scheda);
+}
+.scheda.scheda-task > .testata-scheda h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 0;
+  border-left: 0;
+}
+.scheda.scheda-task > .testata-scheda h2::before {
+  content: '✓';
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(to bottom, #f0123b, var(--rosso) 55%, #cc0227);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+.scheda-task thead th {
+  background: linear-gradient(to bottom, rgba(227, 3, 45, 0.05), rgba(227, 3, 45, 0.12));
+}

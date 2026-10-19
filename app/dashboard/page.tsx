@@ -28,8 +28,8 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
   // «Da gestire» di Lead, Rinnovi, Disdette e Prove in scadenza in schede, piu'
   // «Non assegnati»: i lead aperti e le prove in corso senza un consulente. Si
   // carica solo la scheda aperta, come nella sua sezione.
-  const schede: { chiave: string; testo: string; n?: number; nota?: string; caldo?: boolean; vai: string; vaiTesto: string }[] = [
-    { chiave: 'lead', testo: 'Lead da gestire', n: h.lead_da_gestire, nota: `non ancora presi in carico · ${h.miei_lead} miei`, caldo: h.lead_da_gestire > 0, vai: '/dashboard/lead?vista=da_gestire', vaiTesto: 'Vai a Lead' },
+  const schede: { chiave: string; testo: string; n?: number; nota?: string; caldo?: boolean; vai: string; vaiTesto: string; vaiAltro?: { href: string; testo: string } }[] = [
+    { chiave: 'lead', testo: 'Lead da gestire', n: h.lead_da_gestire, nota: `non ancora presi in carico · ${h.miei_lead} miei`, caldo: h.lead_da_gestire > 0, vai: '/dashboard/lead?vista=da_gestire', vaiTesto: 'Vai a Lead', vaiAltro: { href: '/dashboard/prove?vista=in_corso', testo: 'Vai a Prove' } },
     { chiave: 'prove', testo: 'Prove in scadenza', n: h.prove_in_scadenza, nota: `entro 3 giorni · ${h.prove_in_corso} in corso`, caldo: h.prove_in_scadenza > 0, vai: '/dashboard/prove?vista=in_scadenza', vaiTesto: 'Vai a Prove' },
     ...(puoVedere(io, 'rinnovi') ? [{ chiave: 'rinnovi', testo: 'Rinnovi da gestire', n: h.rinnovi_da_gestire, nota: `non ancora presi in carico · ${h.miei_rinnovi} miei`, caldo: h.rinnovi_da_gestire > 0, vai: '/dashboard/rinnovi?vista=da_gestire', vaiTesto: 'Vai a Rinnovi' }] : []),
     ...(puoVedere(io, 'disdette') ? [{ chiave: 'disdette', testo: 'Disdette da gestire', n: h.disdette_da_gestire, nota: `non ancora prese in carico · ${h.mie_disdette} mie`, caldo: h.disdette_da_gestire > 0, vai: '/dashboard/disdette?vista=da_gestire', vaiTesto: 'Vai a Disdette' }] : []),
@@ -146,7 +146,7 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
         </div>
       )}
 
-      <section className="scheda">
+      <section className="scheda scheda-task">
         <div className="testata-scheda">
           <h2>I miei task</h2>
           <div className="chip-gruppo">
