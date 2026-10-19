@@ -124,7 +124,7 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
                       </>
                     )}
                     <span>
-                      <strong>{a.testo}</strong> <span className="attenuato">— {a.descrizione}</span>
+                      <strong>{a.testo}</strong> <span className="attenuato">{a.descrizione}</span>
                     </span>
                   </label>
                 )

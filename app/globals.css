@@ -7001,3 +7001,16 @@ input[type='radio'] {
     grid-column: 1 / -1;
   }
 }
+
+/* Utenti: il ruolo a tutta larghezza, e sotto i due interruttori affiancati. */
+.scheda.utente .utente-riga {
+  grid-template-columns: 1fr 1fr;
+}
+.scheda.utente .utente-riga .campo-breve {
+  grid-column: 1 / -1;
+  width: auto;
+  max-width: none;
+}
+.scheda.utente .utente-riga .spunta {
+  justify-content: flex-start;
+}
