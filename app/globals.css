@@ -6452,3 +6452,6 @@ select {
     padding: 12px 14px;
   }
 }
+.scheda.scheda-task {
+  border: 1px solid var(--rosso);
+}
