@@ -7627,3 +7627,32 @@ details.scheda .utenti {
     mask-composite: intersect;
   }
 }
+
+/* Titolo: UNA sola sfumatura, ellittica, ancorata all'angolo con la barra laterale (nero li', poi rosso vino, poi svanisce
+   sia verso destra che verso il basso). Niente maschere, niente strati separati. */
+@media (min-width: 721px) {
+  :root:root .testata:first-child > div:first-child,
+  :root:root[data-tema='chiaro'] .testata:first-child > div:first-child {
+    padding: 28px 26px 50px 36px;
+  }
+  :root:root .testata:first-child > div:first-child::before,
+  :root:root[data-tema='chiaro'] .testata:first-child > div:first-child::before {
+    background: radial-gradient(
+      ellipse 600px 118px at 0 0,
+      #0e0f12 0%,
+      #0e0f12 16%,
+      #1f0b12 32%,
+      rgba(86, 11, 30, 0.82) 52%,
+      rgba(150, 18, 52, 0.38) 74%,
+      rgba(190, 20, 60, 0.1) 90%,
+      rgba(190, 20, 60, 0) 100%
+    );
+    -webkit-mask-image: none;
+    mask-image: none;
+    -webkit-mask-composite: initial;
+    mask-composite: initial;
+  }
+  .testata:first-child {
+    margin-bottom: 4px;
+  }
+}
