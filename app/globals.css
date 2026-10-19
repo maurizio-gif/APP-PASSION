@@ -6669,3 +6669,61 @@ a.guida-voce > .elenco-breve li {
   font-weight: 600;
   line-height: 1.6;
 }
+
+/* ---- Barra: le categorie sono sovrasezioni che si aprono e si chiudono ---------------------- */
+.gruppo-menu-titolo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62);
+  cursor: pointer;
+  text-align: left;
+  transition: background-color var(--t-rapida) var(--curva), color var(--t-rapida) var(--curva);
+}
+.gruppo-menu-titolo > span:first-child {
+  flex: 1;
+}
+.gruppo-menu-titolo:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+.gruppo-menu-titolo:focus-visible {
+  outline: 2px solid var(--rosso);
+  outline-offset: -2px;
+}
+.gruppo-menu-titolo svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transform: rotate(-90deg);
+  transition: transform var(--t-rapida) var(--curva);
+}
+.gruppo-menu.aperto > .gruppo-menu-titolo svg {
+  transform: rotate(0deg);
+}
+.gruppo-menu-punto {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--rosso);
+  flex-shrink: 0;
+}
+.gruppo-menu + .gruppo-menu {
+  margin-top: 2px;
+  padding-top: 4px;
+}

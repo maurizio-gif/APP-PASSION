@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 // Le icone sono SVG disegnati qui (nessun file e nessuna libreria da caricare).
 const ICONE: Record<string, string> = {
@@ -34,7 +35,11 @@ const GRUPPI: { titolo?: string; voci: string[] }[] = [
   { titolo: 'Aiuto', voci: ['/dashboard/guida', '/dashboard/aggiornamenti'] },
 ]
 
+const CHIAVE_MEMORIA = 'barra-gruppi'
+
 // Il menu: le voci le sceglie il layout, secondo le sezioni di chi e' entrato.
+// Le categorie sono sovrasezioni che si aprono e si chiudono; quella della pagina
+// in cui sei resta aperta, e la scelta si ricorda in questo browser.
 export function Navigazione({ voci }: { voci: { href: string; testo: string; icona?: string }[] }) {
   const percorso = usePathname()
   const chiave = (v: { href: string; icona?: string }) => v.icona ?? v.href
@@ -43,24 +48,56 @@ export function Navigazione({ voci }: { voci: { href: string; testo: string; ico
     ...GRUPPI.map((g) => ({ titolo: g.titolo, voci: g.voci.flatMap((k) => voci.filter((v) => chiave(v) === k)) })),
     { titolo: 'Altro', voci: voci.filter((v) => !usate.has(chiave(v))) },
   ].filter((g) => g.voci.length > 0)
+  const eAttivo = (v: { href: string; icona?: string }) => (chiave(v) === '/dashboard' ? percorso === v.href : percorso.startsWith(v.href))
+
+  // Aperto/chiuso scelto da chi usa il menu; senza scelta, e' aperta solo la categoria della pagina.
+  const [scelte, setScelte] = useState<Record<string, boolean>>({})
+  useEffect(() => {
+    try {
+      const salvate = localStorage.getItem(CHIAVE_MEMORIA)
+      if (salvate) setScelte(JSON.parse(salvate))
+    } catch {}
+  }, [])
+  // Se vai in una pagina di una categoria chiusa, la categoria si apre.
+  useEffect(() => {
+    const dove = gruppi.find((g) => g.titolo && g.voci.some(eAttivo))?.titolo
+    if (dove) setScelte((s) => (s[dove] === false ? { ...s, [dove]: true } : s))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [percorso])
+  const alterna = (titolo: string, aperto: boolean) => {
+    const nuove = { ...scelte, [titolo]: !aperto }
+    setScelte(nuove)
+    try {
+      localStorage.setItem(CHIAVE_MEMORIA, JSON.stringify(nuove))
+    } catch {}
+  }
+
   return (
     <nav>
-      {gruppi.map((g) => (
-        <div className="gruppo-menu" key={g.titolo ?? 'principale'}>
-          {g.titolo && <div className="gruppo-menu-titolo">{g.titolo}</div>}
-          {g.voci.map((v) => {
-            const attivo = chiave(v) === '/dashboard' ? percorso === v.href : percorso.startsWith(v.href)
-            return (
-              <Link key={v.href} href={v.href} className={attivo ? 'attivo' : undefined}>
+      {gruppi.map((g) => {
+        const titolo = g.titolo
+        const contieneAttivo = g.voci.some(eAttivo)
+        const aperto = !titolo || (scelte[titolo] ?? contieneAttivo)
+        return (
+          <div className={`gruppo-menu${aperto ? ' aperto' : ''}`} key={titolo ?? 'principale'}>
+            {titolo && (
+              <button type="button" className="gruppo-menu-titolo" aria-expanded={aperto} onClick={() => alterna(titolo, aperto)}>
+                <span>{titolo}</span>
+                {!aperto && contieneAttivo && <span className="gruppo-menu-punto" aria-hidden="true" />}
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+              </button>
+            )}
+            {aperto && g.voci.map((v) => (
+              <Link key={v.href} href={v.href} className={eAttivo(v) ? 'attivo' : undefined}>
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d={ICONE[chiave(v)] ?? 'M5 12h14'} />
                 </svg>
                 {v.testo}
               </Link>
-            )
-          })}
-        </div>
-      ))}
+            ))}
+          </div>
+        )
+      })}
     </nav>
   )
 }
