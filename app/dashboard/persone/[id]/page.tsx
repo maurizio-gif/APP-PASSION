@@ -235,6 +235,12 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
     )
   }
 
+  // Task aperti (gli scaduti prima) e fatti: solo come si mostrano, i dati sono gli stessi.
+  const scaduto = (e: (typeof task)[number]) => e.data != null && new Date(e.data).getTime() < Date.now()
+  const daFare = task.filter((e) => !e.completato_il && !e.archiviato).sort((x, y) => Number(scaduto(y)) - Number(scaduto(x)))
+  const fatti = task.filter((e) => e.completato_il || e.archiviato)
+  const scaduti = daFare.filter(scaduto).length
+
   return (
     <>
       <Avviso errore={searchParams.errore} ok={searchParams.ok} />
@@ -265,6 +271,73 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
           {s.socio && p.data_nascita && <div><dt>Nato il</dt><dd>{formatoData(p.data_nascita)}</dd></div>}
         </dl>
       </section>
+
+      {/* ---- Task: il lavoro di questa persona, in cima. Da fare (gli scaduti prima) e fatti. ---- */}
+      <div className="fase-righe task-fase">
+        <div className="fase-titolo">
+          Task
+          <span className="chip-gruppo">
+            <span className="chip">{daFare.length} da fare</span>
+            {scaduti > 0 && <span className="chip rosso">{scaduti} scaduti</span>}
+          </span>
+        </div>
+        <section className="scheda fase-corpo task-corpo">
+          <div className="task-nuovo">
+            <NuovoTask utente={p.id} per={per} torna={qui} staff={staff} io={io?.id ?? null} />
+          </div>
+          <div className="task-due">
+            <div className="task-col">
+              <h3 className="task-gruppo">Da fare <span className="conta-titolo">{daFare.length}</span></h3>
+              {daFare.length === 0 ? <p className="task-vuoto">Niente da fare su questa persona.</p> : (
+                <ol className="task-lista">
+                  {daFare.map((e) => {
+                    const tardi = scaduto(e)
+                    return (
+                      <li key={e.id} className={`task-voce${tardi ? ' scaduta' : ''}`}>
+                        <div className="task-riga">
+                          <span className="bollino">{traduci(TIPO_TASK, e.task_tipo)}</span>
+                          <Provenienza origine={e.origine} />
+                          <span className="task-quando">{tardi ? 'era per' : 'per'} <b>{formatoDataOra(e.data)}</b></span>
+                          {tardi && <span className="bollino rosso">scaduto</span>}
+                          {e.assegnato_nome && <span className="task-chi">{e.assegnato_nome}</span>}
+                        </div>
+                        {e.nota && <div className="task-nota">{e.nota}</div>}
+                        <form action={completaTask} className="azioni-riga task-chiudi">
+                          <input type="hidden" name="task" value={e.id} />
+                          <input type="hidden" name="torna" value={qui} />
+                          <input type="text" name="nota" placeholder="Com'è andata" aria-label="Com'è andata" />
+                          <button className="bottone piccolo" name="esito" value="positivo">Fatto ✓</button>
+                          <button className="bottone secondario piccolo" name="esito" value="negativo">Negativo</button>
+                        </form>
+                      </li>
+                    )
+                  })}
+                </ol>
+              )}
+            </div>
+            <div className="task-col">
+              <h3 className="task-gruppo">Fatti <span className="conta-titolo">{fatti.length}</span></h3>
+              {fatti.length === 0 ? <p className="task-vuoto">Ancora nessun task fatto.</p> : (
+                <ol className="task-lista">
+                  {fatti.map((e) => (
+                    <li key={e.id} className={`task-voce task-chiuso${e.archiviato ? ' archiviata' : ''}`}>
+                      <div className="task-riga">
+                        <span className="bollino">{traduci(TIPO_TASK, e.task_tipo)}</span>
+                        <Provenienza origine={e.origine} />
+                        <span className="task-quando">{e.archiviato ? 'del' : 'fatto'} <b>{formatoDataOra(e.archiviato ? e.data : e.completato_il)}</b>{e.archiviato ? ' · archiviato' : ''}</span>
+                        {e.esito && <span className={`bollino ${e.esito === 'positivo' ? 'verde' : 'rosso'}`}>{e.esito}</span>}
+                        {e.assegnato_nome && <span className="task-chi">{e.assegnato_nome}</span>}
+                      </div>
+                      {e.nota && <div className="task-nota">{e.nota}</div>}
+                      {e.nota_esito && <div className="task-nota"><span><strong>Com&apos;è andata:</strong> {e.nota_esito}</span></div>}
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </div>
+          </div>
+        </section>
+      </div>
 
       {/* ---- Le fasi una sotto l'altra: lead, prova, abbonamento, poi rinnovo e disdetta ---- */}
       <div className="funnel funnel-righe">
@@ -390,44 +463,6 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
       {/* ---- Il lavoro e la presenza in palestra ---- */}
       <div className="persona-sotto">
         <div>
-          {/* I task in un riquadro solo, che sul telefono resta insieme: prima
-              lo storico, sotto il nuovo task. */}
-          <section className="scheda">
-            <h2>Task</h2>
-            {task.length === 0 ? (
-              <Vuoto>Nessun task: lo crei qui sotto.</Vuoto>
-            ) : (
-              <ol className="storia">
-                {task.map((e) => (
-                  <li key={e.id} className={`storia-task${e.archiviato ? ' archiviato' : e.completato_il ? ' fatto' : ''}`}>
-                    <div className="storia-testa">
-                      <span className="bollino">{traduci(TIPO_TASK, e.task_tipo)}</span>{' '}
-                      <Provenienza origine={e.origine} />{' '}
-                      {e.archiviato ? `del ${formatoDataOra(e.data)} · archiviato` : e.completato_il ? `fatto ${formatoDataOra(e.completato_il)}` : `per ${formatoDataOra(e.data)}`}
-                      {e.assegnato_nome ? ` · ${e.assegnato_nome}` : ''}
-                      {e.esito && <span className={`bollino ${e.esito === 'positivo' ? 'verde' : 'rosso'}`}>{e.esito}</span>}
-                    </div>
-                    {e.nota && <div className="storia-testo">{e.nota}</div>}
-                    {e.nota_esito && <div className="storia-testo"><strong>Com&apos;è andata:</strong> {e.nota_esito}</div>}
-                    {!e.completato_il && (
-                      <form action={completaTask} className="azioni-riga">
-                        <input type="hidden" name="task" value={e.id} />
-                        <input type="hidden" name="torna" value={qui} />
-                        <input type="text" name="nota" placeholder="Com'è andata" />
-                        <button className="bottone piccolo" name="esito" value="positivo">Fatto ✓</button>
-                        <button className="bottone secondario piccolo" name="esito" value="negativo">Negativo</button>
-                      </form>
-                    )}
-                  </li>
-                ))}
-              </ol>
-            )}
-            <div className="task-nuovo">
-              <h3>Nuovo task</h3>
-              <NuovoTask utente={p.id} per={per} torna={qui} staff={staff} io={io?.id ?? null} />
-            </div>
-          </section>
-
           {ticket && (
             <section className="scheda">
               <div className="testata-scheda">
