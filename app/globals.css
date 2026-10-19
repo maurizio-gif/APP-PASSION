@@ -7262,3 +7262,6 @@ details.scheda .utenti {
     margin-top: 0;
   }
 }
+.scheda.utente .utente-gruppo {
+  grid-template-columns: 118px minmax(0, 1fr);
+}
