@@ -40,7 +40,7 @@ export function Navigazione({ voci }: { voci: { href: string; testo: string; ico
   const chiave = (v: { href: string; icona?: string }) => v.icona ?? v.href
   const usate = new Set(GRUPPI.flatMap((g) => g.voci))
   const gruppi = [
-    ...GRUPPI.map((g) => ({ titolo: g.titolo, voci: voci.filter((v) => g.voci.includes(chiave(v))) })),
+    ...GRUPPI.map((g) => ({ titolo: g.titolo, voci: g.voci.flatMap((k) => voci.filter((v) => chiave(v) === k)) })),
     { titolo: 'Altro', voci: voci.filter((v) => !usate.has(chiave(v))) },
   ].filter((g) => g.voci.length > 0)
   return (
