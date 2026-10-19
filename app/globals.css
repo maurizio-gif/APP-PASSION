@@ -7975,3 +7975,7 @@ a.numero:hover,
   margin: -18px -20px 14px;
   padding: 12px 20px;
 }
+:root:root:root .funnel-colonna > .funnel-titolo + div > .carta-fase:first-child > .testata-scheda:first-child,
+:root:root:root .funnel-colonna > .funnel-titolo + .carta-fase > .testata-scheda:first-child {
+  margin-top: -18px;
+}
