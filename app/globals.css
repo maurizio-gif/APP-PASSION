@@ -282,7 +282,7 @@ h3 {
     height: 2px;
     background: #fff;
     border-radius: 2px;
-    transition: transform 0.15s, opacity 0.15s;
+    transition: transform var(--t-rapida), opacity var(--t-rapida);
   }
   .barra-hamburger[aria-expanded='true'] span:nth-child(1) {
     transform: translateY(7px) rotate(45deg);
@@ -1309,7 +1309,7 @@ details.scheda[open] summary {
   background: var(--serie);
   border-radius: 4px 4px 0 0;
   min-height: 1px;
-  transition: opacity 0.15s;
+  transition: opacity var(--t-rapida);
 }
 .grafico-barra.negativa {
   background: var(--serie-negativa);
@@ -3867,7 +3867,7 @@ select:not([multiple]):hover {
   line-height: 1;
   cursor: help;
   background: #fff;
-  transition: background-color 0.12s, color 0.12s, border-color 0.12s;
+  transition: background-color var(--t-rapida), color var(--t-rapida), border-color var(--t-rapida);
 }
 .aiuto-titolo:hover .aiuto-punto,
 .aiuto-titolo:focus-visible .aiuto-punto,
@@ -3897,7 +3897,7 @@ select:not([multiple]):hover {
   text-transform: none;
   visibility: hidden;
   opacity: 0;
-  transition: opacity 0.12s;
+  transition: opacity var(--t-rapida);
 }
 .aiuto-testo::before {
   /* ponte invisibile: il puntatore passa dal «?» al riquadro senza perderlo */
@@ -4356,7 +4356,7 @@ a.numero:hover {
 }
 .numeri-schede .numero .etichetta {
   color: var(--testo-attenuato);
-  transition: color 0.18s ease;
+  transition: color var(--t-rapida) var(--curva);
 }
 .numeri-schede .numero.attivo .etichetta {
   color: var(--testo);
@@ -4372,12 +4372,17 @@ a.numero:hover {
 .schede-vista a,
 .schede-vista button,
 .aiuto-punto,
-.barra nav a,
+.barra nav a {
+  transition: background-color var(--t-rapida) var(--curva), border-color var(--t-rapida) var(--curva), color var(--t-rapida) var(--curva), box-shadow var(--t-rapida) var(--curva), opacity var(--t-rapida) var(--curva);
+}
 input,
 select,
-textarea,
+textarea {
+  transition: border-color var(--t-rapida) var(--curva), box-shadow var(--t-rapida) var(--curva);
+}
+/* Le celle delle tabelle sono centinaia: animano solo lo sfondo (passaggio del mouse). */
 tbody tr td {
-  transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease;
+  transition: background-color var(--t-rapida) var(--curva);
 }
 .bottone:active,
 .schede-vista a:active {
@@ -4409,7 +4414,7 @@ a.numero:not(.numeri-schede .numero):hover {
 /* Il contenuto nuovo entra con una dissolvenza; mentre arriva, il vecchio si attenua. */
 .da-gestire-corpo,
 .contenuto > .scheda {
-  animation: entra 0.22s ease-out both;
+  animation: entra var(--t-media) var(--curva) both;
 }
 section[data-carica] .da-gestire-corpo {
   opacity: 0.4;
@@ -4466,7 +4471,7 @@ section[data-carica] .da-gestire-corpo {
   background: #e3cbd1;
   transform: scaleX(0);
   transform-origin: left center;
-  transition: transform 0.26s cubic-bezier(0.2, 0.7, 0.2, 1), background-color 0.16s ease;
+  transition: transform var(--t-media) var(--curva), background-color var(--t-rapida) var(--curva);
 }
 .numeri-schede .numero:hover::after {
   transform: scaleX(1);
@@ -4481,7 +4486,7 @@ section[data-carica] .da-gestire-corpo {
   background: var(--nero);
 }
 .numeri-schede .numero .valore {
-  transition: transform 0.2s ease, color 0.16s ease;
+  transition: transform var(--t-media) var(--curva), color var(--t-rapida) var(--curva);
   transform-origin: left center;
 }
 .numeri-schede .numero:hover .valore {
@@ -4503,7 +4508,7 @@ section[data-carica] .da-gestire-corpo {
 .schede-gruppo .schede-vista a,
 .schede-vista a,
 .schede-vista button {
-  transition: background-color 0.16s ease, color 0.16s ease, border-color 0.16s ease, box-shadow 0.18s ease, transform 0.16s ease;
+  transition: background-color var(--t-rapida) var(--curva), color var(--t-rapida) var(--curva), border-color var(--t-rapida) var(--curva), box-shadow var(--t-rapida) var(--curva), transform var(--t-rapida) var(--curva);
 }
 .schede-gruppo .schede-vista a:hover:not(.attivo) {
   background: var(--fondo);
@@ -4627,7 +4632,7 @@ section[data-carica] .da-gestire-corpo {
   visibility: hidden;
   opacity: 0;
   transform: translateY(3px);
-  transition: opacity 0.2s ease, transform 0.2s ease, color 0.16s ease;
+  transition: opacity var(--t-media) var(--curva), transform var(--t-media) var(--curva), color var(--t-rapida) var(--curva);
 }
 .numeri-schede .numero.attivo .numero-vai {
   visibility: visible;
@@ -4675,7 +4680,7 @@ th {
   border-color: #b80223;
   box-shadow: 0 1px 2px rgba(180, 2, 35, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.22);
   letter-spacing: 0.01em;
-  transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+  transition: transform var(--t-rapida) var(--curva), box-shadow var(--t-rapida) var(--curva), background-color var(--t-rapida) var(--curva), border-color var(--t-rapida) var(--curva), color var(--t-rapida) var(--curva);
 }
 .bottone:hover {
   background: linear-gradient(to bottom, #ff1f48, #e3032d 55%, #b80223);
@@ -5014,7 +5019,7 @@ th {
   background: var(--rosso);
   transform: scaleX(0);
   transform-origin: center;
-  transition: transform 0.22s ease, background-color 0.16s ease;
+  transition: transform var(--t-media) var(--curva), background-color var(--t-rapida) var(--curva);
 }
 .schede-gruppo .schede-vista a:hover:not(.attivo) {
   background: var(--riga-alterna);
@@ -5134,7 +5139,7 @@ select {
   }
   select:not([multiple])::picker-icon {
     color: var(--testo-attenuato);
-    transition: transform 0.18s ease;
+    transition: transform var(--t-rapida) var(--curva);
   }
   select:not([multiple]):open::picker-icon {
     transform: rotate(180deg);
@@ -5262,7 +5267,7 @@ select {
   box-shadow: none;
   color: var(--testo);
   border-left: 1px solid var(--bordo);
-  transition: background-color 0.16s ease, color 0.16s ease;
+  transition: background-color var(--t-rapida) var(--curva), color var(--t-rapida) var(--curva);
 }
 .percorso li:first-child {
   border-left: 0;
@@ -5276,7 +5281,7 @@ select {
   height: 3px;
   background: var(--rosso);
   transform: scaleX(0);
-  transition: transform 0.22s ease;
+  transition: transform var(--t-media) var(--curva);
 }
 .percorso li.attuale {
   color: var(--rosso-scuro);
@@ -5329,10 +5334,10 @@ select {
   position: relative;
   color: #c9ccd4;
   padding: 9px 12px;
-  transition: background-color 0.16s ease, color 0.16s ease;
+  transition: background-color var(--t-rapida) var(--curva), color var(--t-rapida) var(--curva);
 }
 .barra nav a svg {
-  transition: stroke 0.16s ease, opacity 0.16s ease;
+  transition: stroke var(--t-rapida) var(--curva), opacity var(--t-rapida) var(--curva);
 }
 .barra nav a:hover {
   background: rgba(227, 3, 45, 0.1);
@@ -5369,7 +5374,7 @@ select {
   border-radius: 9px;
   border-color: rgba(255, 255, 255, 0.1);
   background-color: rgba(255, 255, 255, 0.05);
-  transition: border-color 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
+  transition: border-color var(--t-rapida) var(--curva), box-shadow var(--t-rapida) var(--curva), background-color var(--t-rapida) var(--curva);
 }
 .barra-cerca input[type='search']:focus {
   border-color: var(--rosso);
@@ -5385,7 +5390,7 @@ select {
 }
 .barra-piede button {
   border-color: rgba(255, 255, 255, 0.14);
-  transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+  transition: background-color var(--t-rapida) var(--curva), border-color var(--t-rapida) var(--curva), color var(--t-rapida) var(--curva);
 }
 .barra-piede button:hover {
   background: rgba(227, 3, 45, 0.16);
@@ -6370,7 +6375,7 @@ select {
   visibility: hidden;
   opacity: 0;
   transform: translateY(3px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: opacity var(--t-media) var(--curva), transform var(--t-media) var(--curva);
 }
 .numeri-schede .numero.attivo .numero-vai-riga {
   visibility: visible;
@@ -6454,4 +6459,57 @@ select {
 }
 .scheda.scheda-task {
   border: 1px solid var(--rosso);
+}
+
+/* ---- Movimento: tempi e curva uguali ovunque, solo cose leggere (trasformazioni e trasparenza) ---- */
+:root {
+  --t-rapida: 140ms;
+  --t-media: 220ms;
+  --curva: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* Risposta al tocco: un leggero affondo, subito. Solo trasformazione, quindi gratis. */
+.bottone,
+.barra nav a,
+.schede-vista a,
+.schede-vista button,
+.numeri-schede .numero {
+  transition-property: background-color, border-color, color, box-shadow, opacity, transform;
+}
+.bottone:active:not(:disabled),
+.barra nav a:active,
+.schede-vista a:active,
+.schede-vista button:active {
+  transform: scale(0.97);
+}
+.numeri-schede .numero:active {
+  transform: scale(0.99);
+}
+
+/* Cambio di tema: niente transizioni mentre cambiano i colori di tutta la pagina (le fa scattare). */
+:root[data-cambio-tema] *,
+:root[data-cambio-tema] *::before,
+:root[data-cambio-tema] *::after {
+  transition: none !important;
+}
+
+/* Entrata morbida delle schede della pagina (solo trasparenza e spostamento, mai su tabelle intere righe per riga). */
+.contenuto .scheda:not(.scheda .scheda),
+.contenuto > .testata {
+  animation: entra var(--t-media) var(--curva) both;
+}
+
+/* Le schede sotto la prima si disegnano quando ci si avvicina scorrendo: pagine lunghe piu' rapide da aprire. */
+.contenuto > .scheda ~ .scheda {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 560px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .contenuto > .scheda ~ .scheda {
+    content-visibility: visible;
+  }
 }
