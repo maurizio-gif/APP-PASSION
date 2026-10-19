@@ -7960,3 +7960,14 @@ a.numero:hover,
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+/* Linguetta e scheda della fase: nessun filo chiaro in mezzo (la scheda non ha bordo suo, ha un contorno esterno sottile). */
+:root:root:root .funnel-colonna > .funnel-titolo + div > .carta-fase:first-child,
+:root:root:root .funnel-colonna > .funnel-titolo + .carta-fase {
+  border: 0;
+  box-shadow: 0 0 0 1px rgba(42, 11, 20, 0.2);
+}
+:root:root:root .funnel-colonna > .funnel-titolo + div > .carta-fase:first-child > .testata-scheda:first-child,
+:root:root:root .funnel-colonna > .funnel-titolo + .carta-fase > .testata-scheda:first-child {
+  margin-top: -16px;
+}
