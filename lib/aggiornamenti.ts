@@ -16,6 +16,20 @@ export type Aggiornamento = {
 
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
+    data: '2026-10-19',
+    titolo: 'Le schede doppie di PerfectGym non contano più',
+    testo:
+      'Su PerfectGym alcune persone avevano due o tre schede uguali, create per errore dai moduli del sito. Il CRM ora usa solo la scheda giusta: chi era collegato a una scheda doppia adesso vede quella vera, e se è socio lo vedi come socio.',
+    dove: 'Scheda persona, Cerca, Lead',
+  },
+  {
+    data: '2026-10-19',
+    titolo: 'Chi è cancellato su PerfectGym non compare più',
+    testo:
+      'Se una scheda viene cancellata su PerfectGym (per esempio un doppione), la persona sparisce da Cerca, dai Lead, dai Task e dai numeri della home. Se della stessa persona resta un’altra scheda su PerfectGym, il CRM la collega a quella e la persona resta visibile. Se la persona fa una nuova richiesta, torna visibile da sola.',
+    dove: 'Cerca, Lead, Task, Home',
+  },
+  {
     data: '2026-10-17',
     titolo: 'R2D vede un ticket solo quando gli viene inviato',
     testo:
