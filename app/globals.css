@@ -7456,101 +7456,56 @@ details.scheda .utenti {
   width: 7px;
 }
 
-/* ==== SOLO PROVA (anteprima Lead): due vesti a confronto per schede, filtri e intestazione tabella ==== */
-.prova-scelta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  margin: 0 0 14px;
-  font-size: 0.82rem;
-}
-.prova-scelta > span {
-  margin-right: 4px;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.7);
-}
-:root[data-tema='chiaro'] .prova-scelta > span {
-  color: var(--testo-attenuato);
-}
-.prova-scelta a {
-  padding: 4px 12px;
-  border-radius: 999px;
-  border: 1px solid #e3cbd1;
-  background: var(--scheda);
-  color: var(--testo);
-  font-weight: 600;
-}
-.prova-scelta a.attiva {
-  background: var(--rosso);
-  border-color: var(--rosso);
-  color: #fff;
-}
-
-/* ---- Versione A · Accenti: la pagina resta chiara/leggera; il nero della barra entra solo nei punti attivi ---- */
-:root:root:root .contenuto .prova-a .schede-gruppi .schede-vista a.attivo,
-:root:root:root .contenuto .prova-a .schede-gruppi .schede-vista a.attivo:hover {
-  background: linear-gradient(to bottom, #2a0b14 0%, #0e0f12 100%);
-  color: #fff;
-  border-radius: 9px 9px 0 0;
-}
-:root:root:root .contenuto .prova-a .filtri .bottone.secondario {
-  background: #0e0f12;
-  border-color: #0e0f12;
-  color: #fff;
-  box-shadow: none;
-}
-:root:root:root .contenuto .prova-a .filtri .bottone.secondario:hover {
-  background: #2a0b14;
-  border-color: var(--rosso);
-}
-:root:root:root .contenuto .prova-a th {
-  background: transparent;
-  color: #ff9bab;
-  border-bottom: 2px solid var(--rosso);
-}
-:root:root:root .contenuto .prova-a thead tr {
-  background: #121317;
-}
-
-/* ---- Versione B · Pannello unico: schede e filtri in un solo pannello scuro come la barra; tabella chiara ---- */
-:root:root:root .contenuto .prova-b .schede-gruppi {
-  margin: 0;
-  padding: 8px 14px 0;
+/* ---- Schede e filtri in un pannello unico scuro, come la barra laterale (versione B scelta) ----
+   Schede in alto, ricerca e menu sotto, divisi da una linea sottile. Se c'e' solo uno dei due, e' un pannello a se'.
+   La tabella sotto resta chiara. */
+:root:root:root .contenuto .schede-gruppi,
+:root:root:root .contenuto .filtri {
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px 14px 0 0;
+  border-radius: 14px;
+  background: linear-gradient(100deg, #0e0f12 0%, #17090f 60%, #2a0b14 100%);
+}
+:root:root:root .contenuto .schede-gruppi {
+  margin: 0 0 18px;
+  padding: 8px 14px 0;
   background:
     radial-gradient(50% 180% at 0% 0%, rgba(227, 3, 45, 0.2), rgba(227, 3, 45, 0) 70%),
     linear-gradient(100deg, #0e0f12 0%, #17090f 60%, #2a0b14 100%);
   color: #fff;
 }
-:root:root:root .contenuto .prova-b .filtri {
+:root:root:root .contenuto .filtri {
   margin: 0 0 18px;
   padding: 12px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+/* Schede seguite dai filtri: un solo pannello. */
+:root:root:root .contenuto .schede-gruppi:has(+ .filtri) {
+  margin-bottom: 0;
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+  border-radius: 14px 14px 0 0;
+}
+:root:root:root .contenuto .schede-gruppi + .filtri {
+  margin-top: 0;
   border-top: 0;
   border-radius: 0 0 14px 14px;
-  background: linear-gradient(100deg, #0e0f12 0%, #17090f 60%, #2a0b14 100%);
 }
-:root:root:root .contenuto .prova-b .schede-gruppi .schede-gruppo {
+:root:root:root .contenuto .schede-gruppi .schede-gruppo {
   border-left-color: rgba(255, 255, 255, 0.1);
 }
-:root:root:root .contenuto .prova-b .schede-gruppi .gruppo-etichetta {
+:root:root:root .contenuto .schede-gruppi .gruppo-etichetta {
   color: rgba(255, 255, 255, 0.6);
 }
-:root:root:root .contenuto .prova-b .schede-gruppi .schede-vista a {
+:root:root:root .contenuto .schede-gruppi .schede-vista a {
   color: #fff;
 }
-:root:root:root .contenuto .prova-b .schede-gruppi .schede-vista a:hover:not(.attivo) {
+:root:root:root .contenuto .schede-gruppi .schede-vista a:hover:not(.attivo) {
   background: rgba(255, 255, 255, 0.07);
 }
-:root:root:root .contenuto .prova-b .schede-gruppi .schede-vista a.attivo,
-:root:root:root .contenuto .prova-b .schede-gruppi .schede-vista a.attivo:hover {
+:root:root:root .contenuto .schede-gruppi .schede-vista a.attivo,
+:root:root:root .contenuto .schede-gruppi .schede-vista a.attivo:hover {
   color: #fff;
   background: linear-gradient(to bottom, rgba(227, 3, 45, 0.06), rgba(227, 3, 45, 0.32));
 }
-:root:root:root .contenuto .prova-b .filtri input[type='search'],
-:root:root:root .contenuto .prova-b .filtri select {
+:root:root:root .contenuto .filtri input[type='search'],
+:root:root:root .contenuto .filtri select {
   border-color: transparent;
 }
