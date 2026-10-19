@@ -28,11 +28,10 @@ const ICONE: Record<string, string> = {
 // l'ordine in cui compaiono). Le voci che non stanno in nessun gruppo vanno in fondo.
 const GRUPPI: { titolo?: string; voci: string[] }[] = [
   { voci: ['/dashboard'] },
-  { titolo: 'Clienti', voci: ['/dashboard/lead', '/dashboard/prove', '/dashboard/contratti', '/dashboard/rinnovi', '/dashboard/disdette', '/dashboard/debitori', '/dashboard/cerca'] },
-  { titolo: 'Lavoro', voci: ['/dashboard/task', '/dashboard/ticket'] },
+  { titolo: 'Clienti', voci: ['/dashboard/lead', '/dashboard/prove', '/dashboard/contratti', '/dashboard/rinnovi', '/dashboard/disdette', '/dashboard/debitori', '/dashboard/task', '/dashboard/cerca'] },
   { titolo: 'Analisi', voci: ['/dashboard/abbonamenti', '/dashboard/riunioni'] },
   { titolo: 'Team', voci: ['/dashboard/curriculum', '/dashboard/utenti'] },
-  { titolo: 'Aiuto', voci: ['/dashboard/guida', '/dashboard/aggiornamenti'] },
+  { titolo: 'Assistenza', voci: ['/dashboard/ticket', '/dashboard/guida', '/dashboard/aggiornamenti'] },
 ]
 
 const CHIAVE_MEMORIA = 'barra-gruppi'
