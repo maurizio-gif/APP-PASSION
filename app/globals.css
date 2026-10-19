@@ -7949,3 +7949,9 @@ a.numero:hover,
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+:root:root:root .funnel-colonna > .funnel-titolo + .carta-fase,
+:root:root:root .funnel-colonna > .funnel-titolo + .fase-vuota,
+:root:root:root .funnel-colonna > .funnel-titolo + details {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
