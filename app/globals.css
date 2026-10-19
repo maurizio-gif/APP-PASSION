@@ -7980,36 +7980,6 @@ a.numero:hover,
   margin-top: -18px;
 }
 
-/* ==== SOLO PROVA (anteprima scheda cliente): le schede delle fasi una sotto l'altra, con i dati in colonne tematiche ==== */
-.prova-scelta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  margin: 0 0 14px;
-  font-size: 0.82rem;
-}
-.prova-scelta > span {
-  margin-right: 4px;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.7);
-}
-:root[data-tema='chiaro'] .prova-scelta > span {
-  color: var(--testo-attenuato);
-}
-.prova-scelta a {
-  padding: 4px 12px;
-  border-radius: 999px;
-  border: 1px solid #e3cbd1;
-  background: var(--scheda);
-  color: var(--testo);
-  font-weight: 600;
-}
-.prova-scelta a.attiva {
-  background: var(--rosso);
-  border-color: var(--rosso);
-  color: #fff;
-}
 /* Fasi una sotto l'altra: titolo scuro attaccato, poi la scheda con i dati in colonne tematiche. */
 .funnel.funnel-righe {
   display: flex;
