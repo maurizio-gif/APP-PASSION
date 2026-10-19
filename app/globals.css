@@ -7500,3 +7500,26 @@ details.scheda .utenti {
 :root[data-tema='chiaro'] .testata-ticket .ticket-meta strong {
   color: #fff;
 }
+
+/* ---- Il titolo attaccato alla barra laterale: parte dal suo bordo e dall'alto, con gli stessi colori ---- */
+@media (min-width: 721px) {
+  .testata:first-child {
+    margin-top: -30px;
+  }
+  .testata:first-child > div:first-child,
+  :root[data-tema='chiaro'] .testata:first-child > div:first-child {
+    margin-left: -36px;
+    padding: 26px 26px 22px 62px;
+    border-radius: 0 0 18px 0;
+    background:
+      radial-gradient(60% 220% at 0% 0%, rgba(227, 3, 45, 0.24), rgba(227, 3, 45, 0) 70%),
+      linear-gradient(to right, #0e0f12 0%, #220b12 36%, rgba(92, 11, 30, 0.62) 70%, rgba(92, 11, 30, 0) 100%);
+  }
+  .testata:first-child {
+    align-items: flex-start;
+  }
+  .testata:first-child > .bottone,
+  .testata:first-child > .azioni-riga {
+    margin-top: 30px;
+  }
+}
