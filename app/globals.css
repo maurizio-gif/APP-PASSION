@@ -7719,3 +7719,44 @@ a.numero:hover,
   border-color: var(--rosso);
   background: rgba(227, 3, 45, 0.2);
 }
+
+/* ---- Tabelle: bordi e colori dei testi nel tono del tema (vino scuro al posto del grigio rosato) ---- */
+:root:root .scheda {
+  border-color: rgba(42, 11, 20, 0.2);
+}
+:root:root tbody td,
+:root:root .tabella-colonne tbody td,
+:root:root .tabella-prove tbody td,
+:root:root .tabella-lead tbody td {
+  border-bottom: 1px solid rgba(42, 11, 20, 0.16);
+}
+:root:root tbody tr:last-child td {
+  border-bottom-color: transparent;
+}
+:root:root th {
+  color: #8a0c26;
+  border-bottom: 1px solid rgba(227, 3, 45, 0.45);
+}
+/* Testi: quasi nero caldo per il principale, vino grigio per il secondario, rosso del marchio per i nomi. */
+:root:root .tabella-colonne td,
+:root:root .tabella-prove td,
+:root:root .tabella-lead td,
+:root:root .tabella-ticket td {
+  color: #1c1114;
+}
+:root:root .tabella-colonne td .riga-dati .muto,
+:root:root .tabella-colonne td .riga-dati .attenuato,
+:root:root .tabella-colonne td .contatti,
+:root:root .tabella-colonne td .contatti a,
+:root:root .tabella-prove td .contatti a,
+:root:root .tabella-lead td .contatti a,
+:root:root .tabella-colonne td .piccolo {
+  color: #5e4a51;
+}
+:root:root .tabella-colonne td .riga-dati > a:first-child,
+:root:root .tabella-colonne td .riga-dati > a.normale {
+  color: #b50224;
+}
+:root:root .tabella-colonne td .riga-dati .normale {
+  color: #1c1114;
+}
