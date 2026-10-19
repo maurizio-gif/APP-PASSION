@@ -8010,94 +8010,97 @@ a.numero:hover,
   border-color: var(--rosso);
   color: #fff;
 }
-@media (min-width: 1000px) {
-  .funnel.funnel-righe {
+/* Fasi una sotto l'altra: titolo scuro attaccato, poi la scheda con i dati in colonne tematiche. */
+.funnel.funnel-righe {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.fase-righe {
+  min-width: 0;
+}
+.fase-titolo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 0;
+  border-radius: 14px 14px 0 0;
+  background:
+    radial-gradient(40% 220% at 0% 0%, rgba(227, 3, 45, 0.2), rgba(227, 3, 45, 0) 70%),
+    linear-gradient(100deg, #0e0f12 0%, #17090f 60%, #2a0b14 100%);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.fase-numero {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(to bottom, #f0123b, var(--rosso) 55%, #cc0227);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+}
+:root:root .scheda.fase-corpo {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  border-top: 0;
+  border-radius: 0 0 12px 12px;
+}
+.fase-col {
+  min-width: 0;
+  padding: 16px 22px 18px;
+  border-left: 1px solid rgba(42, 11, 20, 0.14);
+}
+.fase-col:first-child {
+  border-left: 0;
+}
+.fase-col > h4 {
+  margin: 0 0 10px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--rosso-scuro);
+}
+.fase-col .dati {
+  grid-template-columns: 96px minmax(0, 1fr);
+}
+.fase-col .nota-socio {
+  margin: 12px 0 0;
+}
+.fase-azioni {
+  display: grid;
+  gap: 10px;
+}
+.fase-azioni .azioni-riga {
+  flex-wrap: nowrap;
+  gap: 8px;
+}
+.fase-azioni .azioni-riga select,
+.fase-azioni .azioni-riga input[type='text'] {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.fase-azioni .azioni-riga .bottone {
+  flex-shrink: 0;
+}
+@media (max-width: 999px) {
+  :root:root .scheda.fase-corpo {
     grid-template-columns: minmax(0, 1fr);
-    gap: 22px;
   }
-  .funnel.funnel-righe .percorso {
-    display: none;
+  .fase-col {
+    border-left: 0;
+    border-top: 1px solid rgba(42, 11, 20, 0.14);
   }
-  .funnel.funnel-righe .funnel-colonna {
-    gap: 12px;
-  }
-  /* L'intestazione della fase (1 · Lead) sopra la sua scheda. */
-  .funnel.funnel-righe .funnel-titolo {
-    display: flex;
-    margin: 0;
-    color: rgba(255, 255, 255, 0.85);
-    font-size: 0.8rem;
-    letter-spacing: 0.1em;
-  }
-  :root[data-tema='chiaro'] .funnel.funnel-righe .funnel-titolo {
-    color: var(--testo);
-  }
-  /* La scheda: titolo sopra a tutta larghezza, poi tre colonne (dati · note · azioni). */
-  :root:root:root .funnel.funnel-righe .carta-fase {
-    display: grid;
-    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) minmax(0, 1.25fr);
-    column-gap: 30px;
-    align-items: start;
-    border: 0;
-    border-radius: 12px;
-    box-shadow: 0 0 0 1px rgba(42, 11, 20, 0.2);
-  }
-  :root:root:root .funnel.funnel-righe .carta-fase > .testata-scheda:first-child {
-    grid-column: 1 / -1;
-    grid-row: 1;
-  }
-  .funnel.funnel-righe .carta-fase > .dati {
-    grid-column: 1;
-    grid-row: 2;
-  }
-  .funnel.funnel-righe .carta-fase > .nota-socio,
-  .funnel.funnel-righe .carta-fase > p.piccolo {
-    grid-column: 2;
-    grid-row: 2;
-    margin: 0;
-  }
-  .funnel.funnel-righe .carta-fase > .scheda-azioni {
-    grid-column: 3;
-    grid-row: 2;
-    margin-top: 0;
-  }
-  /* I titoli delle colonne. */
-  .funnel.funnel-righe .carta-fase > .dati::before,
-  .funnel.funnel-righe .carta-fase > .nota-socio::before,
-  .funnel.funnel-righe .carta-fase > .scheda-azioni::before {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    color: var(--rosso-scuro);
-  }
-  .funnel.funnel-righe .carta-fase > .dati::before {
-    content: 'Dati';
-    grid-column: 1 / -1;
-  }
-  .funnel.funnel-righe .carta-fase > .nota-socio::before {
-    content: 'Note';
-  }
-  .funnel.funnel-righe .carta-fase > .scheda-azioni::before {
-    content: 'Azioni';
-    flex-basis: 100%;
-  }
-  /* L'abbonamento: i dati in piu' colonne affiancate. */
-  .funnel.funnel-righe .carta-fase.contratto {
-    display: block;
-  }
-  .funnel.funnel-righe .abbonamento .dati {
-    display: block;
-    column-count: 3;
-    column-gap: 30px;
-  }
-  .funnel.funnel-righe .abbonamento .dati dt {
-    margin-top: 8px;
-    break-after: avoid;
-  }
-  .funnel.funnel-righe .abbonamento .dati dd {
-    margin: 0;
+  .fase-col:first-child {
+    border-top: 0;
   }
 }
