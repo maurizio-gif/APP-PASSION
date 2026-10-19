@@ -7760,3 +7760,9 @@ a.numero:hover,
 :root:root .tabella-colonne td .riga-dati .normale {
   color: #1c1114;
 }
+:root:root .tabella-colonne td .riga-dati > a.normale {
+  color: #1c1114;
+}
+:root:root .tabella-colonne td .riga-dati > a.normale:hover {
+  color: #b50224;
+}
