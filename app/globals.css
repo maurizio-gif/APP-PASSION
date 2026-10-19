@@ -7432,3 +7432,26 @@ details.scheda .utenti {
 .scheda.utente .utente-acc[open] > summary {
   background: linear-gradient(to right, rgba(227, 3, 45, 0.14), rgba(227, 3, 45, 0.02) 70%);
 }
+
+/* Utenti: il bordo sinistro e' una barra che va dal nero al rosso (non piu' rosa). */
+.scheda.utente,
+.scheda.utente:hover,
+.scheda.utente:has(.utente-acc[open]) {
+  position: relative;
+  border-left: 1px solid var(--bordo);
+}
+.scheda.utente::before {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 5px;
+  background: linear-gradient(to bottom, #0e0f12 0%, #3a0a14 45%, var(--rosso) 100%);
+  transition: width var(--t-rapida) var(--curva);
+}
+.scheda.utente:hover::before,
+.scheda.utente:has(.utente-acc[open])::before {
+  width: 7px;
+}
