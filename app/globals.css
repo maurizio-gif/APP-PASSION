@@ -7845,3 +7845,74 @@ a.numero:hover,
 #da-gestire .da-gestire-corpo > .da-gestire-titolo:first-child ~ .da-gestire-titolo {
   margin-top: 32px;
 }
+
+/* ---- Scheda cliente, parte interna: percorso e schede delle fasi nel tema della barra laterale ---- */
+/* Il percorso Lead / Prova / Abbonamento: pannello scuro con il rosso sulla fase attuale. */
+:root:root .percorso {
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  background:
+    radial-gradient(40% 200% at 0% 0%, rgba(227, 3, 45, 0.2), rgba(227, 3, 45, 0) 70%),
+    linear-gradient(100deg, #0e0f12 0%, #17090f 60%, #2a0b14 100%);
+}
+:root:root .percorso li {
+  color: #fff;
+  border-left-color: rgba(255, 255, 255, 0.1);
+}
+:root:root .percorso li:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+:root:root .percorso li.attuale {
+  color: #fff;
+  background: linear-gradient(to bottom, rgba(227, 3, 45, 0.06), rgba(227, 3, 45, 0.34));
+}
+:root:root .percorso li:not(.attuale):not(.fatto) .percorso-punto {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.45);
+  color: #fff;
+}
+:root:root .percorso li.fatto .percorso-punto,
+:root:root .percorso li.attuale .percorso-punto {
+  background: var(--rosso);
+  border-color: var(--rosso);
+  color: #fff;
+}
+
+/* Le schede delle fasi: fascia scura in alto con il titolo e lo stato, corpo chiaro (come «I miei task»). */
+:root:root .carta-fase {
+  overflow: hidden;
+  border-color: rgba(42, 11, 20, 0.2);
+}
+:root:root .carta-fase > .testata-scheda:first-child {
+  margin: -16px -18px 14px;
+  padding: 12px 18px;
+  background: linear-gradient(100deg, #17181c 0%, #2b0d15 60%, #4a0a1b 100%);
+}
+:root:root .carta-fase > .testata-scheda:first-child h3,
+:root:root .carta-fase > .testata-scheda:first-child h2 {
+  color: #ff9bab;
+  border-left-color: #ff4d6a;
+}
+:root:root .carta-fase > .testata-scheda:first-child .bollino.verde {
+  background: rgba(31, 163, 92, 0.26);
+  color: #7ee2a8;
+}
+:root:root .carta-fase > .testata-scheda:first-child .bollino.giallo {
+  background: rgba(240, 163, 10, 0.26);
+  color: #ffd27a;
+}
+:root:root .carta-fase > .testata-scheda:first-child .bollino.rosso {
+  background: rgba(227, 3, 45, 0.32);
+  color: #ffb3c0;
+}
+:root:root .carta-fase > .testata-scheda:first-child .bollino.grigio {
+  background: rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.88);
+}
+/* Il riquadro «Nessun abbonamento»: pannello scuro, testo chiaro. */
+:root:root .fase-vuota {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(100deg, #0e0f12 0%, #17090f 60%, #2a0b14 100%);
+  color: rgba(255, 255, 255, 0.75);
+}
