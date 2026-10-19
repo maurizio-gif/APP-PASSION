@@ -6812,3 +6812,192 @@ input[type='checkbox'],
 input[type='radio'] {
   accent-color: var(--rosso);
 }
+
+/* ---- Utenti: la scheda di ogni operatore in ordine --------------------------------------------
+   testata · ruolo e interruttori su una riga · spiegazione del ruolo · sezioni · autorizzazioni ·
+   Salva · invito · rimozione. Ogni blocco ha la sua altezza e il suo titolo. */
+.scheda.utente {
+  padding: 0;
+  overflow: hidden;
+}
+.scheda.utente > form:first-child {
+  padding: 18px 20px 16px;
+}
+.scheda.utente .utente-testa {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--bordo);
+}
+.scheda.utente .utente-testa h3 {
+  margin: 0 0 2px;
+  font-size: 1.02rem;
+}
+.scheda.utente .utente-bollini {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+/* Ruolo + due interruttori, tutti alti uguale e sulla stessa riga. */
+.scheda.utente .utente-riga {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: end;
+  gap: 10px;
+}
+.scheda.utente .utente-riga .campo-breve {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.scheda.utente .utente-riga select {
+  height: 40px;
+  width: 100%;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.scheda.utente .spunta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0 14px;
+  min-height: 40px;
+  border: 1px solid #e3cbd1;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--t-rapida) var(--curva), border-color var(--t-rapida) var(--curva);
+}
+.scheda.utente .spunta:has(input:checked) {
+  border-color: rgba(227, 3, 45, 0.55);
+  background: rgba(227, 3, 45, 0.06);
+}
+.scheda.utente .spunta:hover:not(:has(input:disabled)) {
+  border-color: var(--rosso);
+}
+.scheda.utente .spunta input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+
+/* La spiegazione del ruolo: una nota, non un paragrafo sciolto. */
+.scheda.utente fieldset > p.piccolo {
+  margin: 12px 0 0;
+  padding: 9px 12px;
+  border-left: 3px solid var(--rosso);
+  border-radius: 0 8px 8px 0;
+  background: rgba(227, 3, 45, 0.05);
+  color: var(--testo);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.scheda.utente .utente-gruppo {
+  margin-top: 18px;
+}
+.scheda.utente .utente-etichetta {
+  margin: 0 0 9px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--testo);
+}
+.scheda.utente .utente-etichetta .attenuato {
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* Le autorizzazioni: una riga a riquadro ciascuna, con il titolo e sotto la spiegazione. */
+.scheda.utente .autorizzazioni {
+  display: grid;
+  gap: 8px;
+}
+.scheda.utente .autorizzazioni .spunta {
+  align-items: flex-start;
+  padding: 10px 14px;
+  white-space: normal;
+  font-weight: 500;
+}
+.scheda.utente .autorizzazioni .spunta input {
+  margin-top: 3px;
+}
+.scheda.utente .autorizzazioni .spunta strong {
+  display: block;
+  font-size: 0.9rem;
+}
+.scheda.utente .autorizzazioni .spunta .attenuato {
+  display: block;
+  margin-top: 1px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.scheda.utente .utente-piede {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--bordo);
+}
+
+/* Invito e rimozione: due fasce in fondo alla scheda. */
+.scheda.utente .utente-invito {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin: 0;
+  padding: 12px 20px;
+  border-top: 1px solid var(--bordo);
+  background: rgba(227, 3, 45, 0.04);
+}
+.scheda.utente .utente-invito .piccolo {
+  flex: 1 1 220px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+.scheda.utente .utente-rimuovi {
+  border-top: 1px solid var(--bordo);
+}
+.scheda.utente .utente-rimuovi > summary {
+  padding: 11px 20px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--testo-attenuato);
+  cursor: pointer;
+}
+.scheda.utente .utente-rimuovi > summary:hover {
+  color: var(--rosso-scuro);
+}
+.scheda.utente .utente-rimuovi > form {
+  padding: 0 20px 16px;
+}
+@media (max-width: 720px) {
+  .scheda.utente .utente-riga {
+    grid-template-columns: 1fr 1fr;
+  }
+  .scheda.utente .utente-riga .campo-breve {
+    grid-column: 1 / -1;
+  }
+}
