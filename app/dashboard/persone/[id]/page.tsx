@@ -274,7 +274,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
       </section>
 
       {/* ---- Task: il lavoro di questa persona, in cima. Da fare (gli scaduti prima) e fatti. ---- */}
-      <details className="fase-righe task-fase" open={scaduti > 0}>
+      <details className="fase-righe task-fase">
         <summary className="fase-titolo">
           Task
           <span className="chip-gruppo">
