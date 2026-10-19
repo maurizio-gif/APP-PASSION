@@ -474,7 +474,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
       <div className="persona-sotto">
         <div>
           {ticket && (
-            <div className="fase-righe sotto-fase">
+            <div className="fase-righe sotto-fase sotto-tick">
 <div className="fase-titolo">Ticket
 <a className="bottone secondario piccolo fase-azione" href={`/dashboard/ticket/nuovo?persona=${p.id}`}>+ Apri un ticket</a>
 </div>
@@ -489,7 +489,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
 
         <div>
           {s.socio && (
-            <div className="fase-righe sotto-fase">
+            <div className="fase-righe sotto-fase sotto-acc">
 <div className="fase-titolo">Ultimi accessi
 <span className="fase-nota">{s.socio.ingressi_30gg} in 30 giorni</span>
 </div>
@@ -511,7 +511,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
           )}
 
           {s.socio && (
-            <div className="fase-righe sotto-fase">
+            <div className="fase-righe sotto-fase sotto-pren">
 <div className="fase-titolo">Prenotazioni</div>
 <section className="scheda fase-corpo sotto-corpo">
               {s.socio.prenotazioni.length === 0 ? (

@@ -8664,3 +8664,26 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
 :root:root .scheda-task > .tabella-scorre:first-of-type { margin-top: 0; }
 :root:root .sotto-tabella .tabella-scorre { margin: 0; padding: 0; }
 :root:root .sotto-tabella thead th { position: static; }
+
+/* Sotto le fasi: Prenotazioni, Accessi e Ticket in riga, in questo ordine. */
+.persona-sotto {
+  display: flex;
+  gap: 18px;
+  align-items: stretch;
+}
+.persona-sotto > div { display: contents; }
+.persona-sotto .sotto-fase {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+}
+.persona-sotto .sotto-fase > .sotto-corpo { flex: 1 1 auto; }
+.persona-sotto .sotto-pren { order: 1; }
+.persona-sotto .sotto-acc { order: 2; }
+.persona-sotto .sotto-tick { order: 3; flex: 1.7 1 0; }
+@media (max-width: 1279px) {
+  .persona-sotto { flex-direction: column; }
+  .persona-sotto .sotto-fase, .persona-sotto .sotto-tick { flex: 0 0 auto; }
+}
