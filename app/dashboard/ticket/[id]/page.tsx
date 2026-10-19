@@ -138,7 +138,7 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
         <section className="scheda">
           <details className="accordion" open={t.allegati.length > 0}>
             <summary>
-              <h2>Allegati <span className="conta-titolo">{t.allegati.length}</span></h2>
+              <h2>Allegati <span className={`conta-titolo${t.allegati.length === 0 ? ' zero' : ''}`}>{t.allegati.length}</span></h2>
             </summary>
               {t.allegati.length === 0 ? (
                 <p className="vuoto">Nessun allegato.</p>

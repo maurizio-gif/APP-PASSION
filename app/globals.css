@@ -6566,10 +6566,10 @@ select {
   font-weight: 700;
   letter-spacing: 0;
 }
-/* Il numero zero e' grigio rosato: niente da vedere dentro. */
-.accordion .conta-titolo:is([data-zero]),
-.accordion:not([open]) .conta-titolo.vuoto {
+/* Il numero zero (nessun allegato) e' spento. */
+.accordion .conta-titolo.zero {
   background: #e3cbd1;
+  color: var(--testo);
 }
 
 /* Con gli accordion i riquadri non si allungano alla stessa altezza: quello chiuso resta basso. */
