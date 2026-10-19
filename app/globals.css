@@ -7120,3 +7120,63 @@ details.scheda .utenti {
   width: 100%;
   justify-content: center;
 }
+
+/* Utenti: la scheda aperta in meno spazio (ruolo e interruttori su una riga, autorizzazioni affiancate). */
+.scheda.utente .utente-acc > form:first-of-type {
+  padding: 14px 18px 14px;
+}
+.scheda.utente .utente-riga {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 8px;
+}
+.scheda.utente .utente-riga .campo-breve {
+  grid-column: auto;
+}
+.scheda.utente .utente-riga .campo-breve select {
+  height: 38px;
+}
+.scheda.utente .spunta {
+  min-height: 38px;
+  padding: 0 12px;
+}
+.scheda.utente fieldset > p.piccolo {
+  margin: 10px 0 0;
+  padding: 7px 12px;
+}
+.scheda.utente .utente-gruppo {
+  margin-top: 14px;
+}
+.scheda.utente .utente-etichetta {
+  margin-bottom: 7px;
+}
+.scheda.utente .spunte {
+  gap: 5px;
+}
+.scheda.utente .autorizzazioni {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.scheda.utente .autorizzazioni .spunta {
+  padding: 8px 12px;
+}
+.scheda.utente .utente-piede {
+  margin-top: 14px;
+  padding-top: 12px;
+}
+.scheda.utente .utente-invito {
+  padding: 9px 18px;
+}
+.scheda.utente .utente-rimuovi > summary {
+  padding: 9px 18px;
+}
+@media (max-width: 720px) {
+  .scheda.utente .utente-riga {
+    grid-template-columns: 1fr 1fr;
+  }
+  .scheda.utente .utente-riga .campo-breve {
+    grid-column: 1 / -1;
+  }
+  .scheda.utente .autorizzazioni {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
