@@ -6582,3 +6582,28 @@ select {
 .ticket-azioni .stack > form > button {
   margin-top: 0;
 }
+
+/* ---- Guida: gli argomenti raggruppati per tema ---------------------------------------------- */
+.guida-gruppo + .guida-gruppo {
+  margin-top: 26px;
+}
+.guida-gruppo-titolo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.82);
+}
+.guida-gruppo-titolo::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, rgba(227, 3, 45, 0.55), rgba(227, 3, 45, 0));
+}
+:root[data-tema='chiaro'] .guida-gruppo-titolo {
+  color: var(--testo);
+}
