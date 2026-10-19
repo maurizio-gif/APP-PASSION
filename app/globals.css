@@ -7180,3 +7180,85 @@ details.scheda .utenti {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Utenti, scheda aperta: ancora piu' compatta (titoli dei gruppi a sinistra, nota del ruolo in una riga). */
+.scheda.utente .utente-acc > summary {
+  padding: 11px 16px 11px 18px;
+}
+.scheda.utente .utente-acc > form:first-of-type {
+  padding: 10px 18px 10px;
+}
+.scheda.utente .utente-riga .campo-breve {
+  gap: 3px;
+}
+.scheda.utente .utente-riga .campo-breve select,
+.scheda.utente .spunta {
+  height: 34px;
+  min-height: 34px;
+}
+.scheda.utente fieldset > p.piccolo {
+  margin: 8px 0 0;
+  padding: 4px 10px;
+  border-left-width: 2px;
+  background: transparent;
+  font-size: 0.8rem;
+  color: var(--testo-attenuato);
+}
+.scheda.utente .utente-gruppo {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  align-items: start;
+  gap: 8px 10px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--bordo);
+}
+.scheda.utente .utente-etichetta {
+  margin: 6px 0 0;
+  line-height: 1.25;
+}
+.scheda.utente .utente-etichetta .attenuato {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.7rem;
+  line-height: 1.3;
+}
+.scheda.utente .chip span {
+  padding: 3px 10px;
+  font-size: 0.82rem;
+}
+.scheda.utente .autorizzazioni .spunta {
+  padding: 6px 10px;
+  min-height: 0;
+  height: auto;
+}
+.scheda.utente .autorizzazioni .spunta strong {
+  font-size: 0.86rem;
+}
+.scheda.utente .autorizzazioni .spunta .attenuato {
+  font-size: 0.78rem;
+  line-height: 1.3;
+}
+.scheda.utente .utente-piede {
+  margin-top: 10px;
+  padding-top: 10px;
+}
+.scheda.utente .utente-invito {
+  padding: 6px 18px;
+  gap: 6px 12px;
+}
+.scheda.utente .utente-invito .piccolo {
+  font-size: 0.76rem;
+}
+.scheda.utente .utente-rimuovi > summary {
+  padding: 7px 18px;
+  font-size: 0.8rem;
+}
+@media (max-width: 720px) {
+  .scheda.utente .utente-gruppo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .scheda.utente .utente-etichetta {
+    margin-top: 0;
+  }
+}
