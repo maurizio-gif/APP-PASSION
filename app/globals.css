@@ -8589,3 +8589,15 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
 .task-corpo .task-nuovo .modulo > .bottone { flex: 1 1 100%; justify-content: center; }
 .task-corpo .task-nuovo .campo:last-of-type { flex: 1 1 100%; }
 .task-corpo .task-nuovo .modulo > .campo:first-of-type { flex: 1 1 100%; }
+.task-elenco { padding-top: 14px; }
+.task-elenco::before {
+  content: 'Elenco task';
+  display: block;
+  margin: 0 0 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 26px;
+  color: var(--rosso-scuro);
+}
