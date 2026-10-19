@@ -8414,3 +8414,71 @@ a.numero:hover,
 .task-voce.task-chiuso .task-nota { background: rgba(42, 11, 20, 0.04); }
 .task-chiudi { padding-top: 2px; }
 .task-chiudi input[type='text'] { background: #fff; }
+
+/* «Nuovo task»: riquadro con titolo, scelta a pillola, campi bianchi e pulsante ben visibile. */
+:root:root .task-corpo .task-nuovo {
+  margin: 0 0 18px;
+  padding: 14px 16px 16px;
+  border: 1px solid rgba(227, 3, 45, 0.2);
+  border-left: 4px solid var(--rosso);
+  border-radius: 12px;
+  background: linear-gradient(100deg, rgba(227, 3, 45, 0.07), rgba(227, 3, 45, 0.02) 60%, rgba(227, 3, 45, 0.01));
+}
+.task-corpo .task-nuovo .modulo { gap: 12px 12px; align-items: flex-end; }
+.task-corpo .task-nuovo .modulo::before {
+  content: 'Nuovo task';
+  order: -2;
+  flex: 1 1 0;
+  align-self: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--rosso-scuro);
+}
+:root:root .task-corpo .task-nuovo .scelta-task {
+  order: -1;
+  flex: 0 0 auto;
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(42, 11, 20, 0.08);
+}
+:root:root .task-corpo .task-nuovo .scelta-task button {
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 14px;
+  background: transparent;
+  color: var(--testo-attenuato);
+  font-size: 0.82rem;
+  font-weight: 600;
+  box-shadow: none;
+}
+:root:root .task-corpo .task-nuovo .scelta-task button.attivo {
+  background: #17090f;
+  color: #fff;
+}
+.task-corpo .task-nuovo select,
+.task-corpo .task-nuovo input[type='text'],
+.task-corpo .task-nuovo input[type='datetime-local'] {
+  background-color: #fff;
+  border: 1px solid rgba(42, 11, 20, 0.18);
+  border-radius: 9px;
+}
+.task-corpo .task-nuovo .campo label { margin-bottom: 4px; display: block; }
+.task-corpo .task-nuovo .modulo > .bottone {
+  height: 34px;
+  padding: 0 18px;
+  border-radius: 9px;
+  font-weight: 700;
+}
+.task-corpo .task-nuovo .modulo > .bottone::before {
+  content: '+';
+  margin-right: 7px;
+  font-size: 1.05em;
+}
+.task-corpo .task-nuovo .modulo { position: relative; }
+.task-corpo .task-nuovo .modulo::before { flex: 1 1 100%; min-height: 26px; display: flex; align-items: center; }
+:root:root .task-corpo .task-nuovo .scelta-task { position: absolute; top: -3px; right: 0; order: 0; }
