@@ -7014,3 +7014,18 @@ input[type='radio'] {
 .scheda.utente .utente-riga .spunta {
   justify-content: flex-start;
 }
+
+/* Utenti: le sezioni accese sono discrete (tinta leggera, bordo e testo rossi), non piene. */
+.chip span {
+  padding: 4px 11px;
+  font-size: 0.84rem;
+}
+.chip input:checked + span {
+  background: rgba(227, 3, 45, 0.08);
+  border-color: rgba(227, 3, 45, 0.4);
+  color: var(--rosso-scuro);
+  box-shadow: none;
+}
+.chip input:checked + span::before {
+  color: var(--rosso);
+}
