@@ -7955,3 +7955,8 @@ a.numero:hover,
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+:root:root:root .funnel-colonna > .funnel-titolo + div > .carta-fase:first-child,
+:root:root:root .funnel-colonna > .funnel-titolo + div > details:first-child {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
