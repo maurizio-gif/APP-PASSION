@@ -7455,3 +7455,48 @@ details.scheda .utenti {
 .scheda.utente:has(.utente-acc[open])::before {
   width: 7px;
 }
+
+/* ---- Titoli delle pagine: stessi colori della barra laterale (nero con i bagliori rossi), con la dissolvenza finale a destra ---- */
+:root .testata-saluto,
+:root .testata:not(:has(.testata-saluto)) > div:first-child,
+:root[data-tema='chiaro'] .testata-saluto,
+:root[data-tema='chiaro'] .testata:not(:has(.testata-saluto)) > div:first-child {
+  background:
+    radial-gradient(70% 160% at 0% 0%, rgba(227, 3, 45, 0.5), rgba(227, 3, 45, 0) 70%),
+    linear-gradient(to right, #17181c 0%, #2b0d15 38%, rgba(92, 11, 30, 0.6) 68%, rgba(92, 11, 30, 0) 100%);
+}
+/* Il testo sul nero e' sempre chiaro, in entrambi i temi. */
+:root[data-tema='chiaro'] .titolo-riga h1 {
+  color: #ff4d6a;
+  border-left-color: #ff4d6a;
+}
+:root[data-tema='chiaro'] .testata-saluto .saluto strong {
+  color: #fff;
+}
+:root[data-tema='chiaro'] .testata-saluto .saluto span {
+  color: rgba(255, 255, 255, 0.78);
+}
+:root[data-tema='chiaro'] .testata-saluto .saluto span em {
+  color: #ff6b84;
+}
+:root[data-tema='chiaro'] .aiuto-punto {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #fff;
+}
+:root[data-tema='chiaro'] .testata-ticket .ticket-sopra {
+  color: #ff6b84;
+}
+:root[data-tema='chiaro'] .testata-ticket h1 {
+  color: #fff;
+}
+:root[data-tema='chiaro'] .testata-ticket p,
+:root[data-tema='chiaro'] .testata-ticket .ticket-meta {
+  color: rgba(255, 255, 255, 0.85);
+}
+:root[data-tema='chiaro'] .testata-ticket .ticket-meta span {
+  color: #ff9bab;
+}
+:root[data-tema='chiaro'] .testata-ticket .ticket-meta strong {
+  color: #fff;
+}
