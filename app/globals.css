@@ -7766,3 +7766,19 @@ a.numero:hover,
 :root:root .tabella-colonne td .riga-dati > a.normale:hover {
   color: #b50224;
 }
+
+/* I bottoni dentro le tabelle tengono i loro colori (rosso con testo bianco; bianco con testo scuro). */
+:root:root .tabella-colonne td .bottone,
+:root:root .tabella-prove td .bottone,
+:root:root .tabella-lead td .bottone,
+:root:root .tabella-ticket td .bottone,
+:root:root .scheda td .bottone:not(.secondario) {
+  color: #fff;
+}
+:root:root .tabella-colonne td .bottone.secondario,
+:root:root .tabella-prove td .bottone.secondario,
+:root:root .tabella-lead td .bottone.secondario,
+:root:root .tabella-ticket td .bottone.secondario,
+:root:root .scheda td .bottone.secondario {
+  color: var(--testo);
+}
