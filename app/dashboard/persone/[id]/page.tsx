@@ -11,6 +11,7 @@ import { NuovoTask } from '@/components/NuovoTask'
 import { SceltaOperatore } from '@/components/SceltaOperatore'
 import { InCarico } from '@/components/InCarico'
 import { Iniziali } from '@/components/RigaProva'
+import { AvatarTask, IconaTask } from '@/components/IconaTask'
 import { Col, Fase, FaseVuota } from '@/components/FaseRighe'
 import { puoGestire, puoVedere } from '@/lib/permessi'
 import { TabellaTicket } from '@/components/Ticket'
@@ -295,11 +296,11 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                     return (
                       <li key={e.id} className={`task-voce${tardi ? ' scaduta' : ''}`}>
                         <div className="task-riga">
-                          <span className="bollino">{traduci(TIPO_TASK, e.task_tipo)}</span>
+                          <IconaTask tipo={e.task_tipo} /><b className="task-tipo">{traduci(TIPO_TASK, e.task_tipo)}</b>
                           <Provenienza origine={e.origine} />
                           <span className="task-quando">{tardi ? 'era per' : 'per'} <b>{formatoDataOra(e.data)}</b></span>
                           {tardi && <span className="bollino rosso">scaduto</span>}
-                          {e.assegnato_nome && <span className="task-chi">{e.assegnato_nome}</span>}
+                          {e.assegnato_nome && <span className="task-chi"><AvatarTask nome={e.assegnato_nome} />{e.assegnato_nome}</span>}
                         </div>
                         {e.nota && <div className="task-nota">{e.nota}</div>}
                         <form action={completaTask} className="azioni-riga task-chiudi">
@@ -322,11 +323,11 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                   {fatti.map((e) => (
                     <li key={e.id} className={`task-voce task-chiuso${e.archiviato ? ' archiviata' : ''}`}>
                       <div className="task-riga">
-                        <span className="bollino">{traduci(TIPO_TASK, e.task_tipo)}</span>
+                        <IconaTask tipo={e.task_tipo} /><b className="task-tipo">{traduci(TIPO_TASK, e.task_tipo)}</b>
                         <Provenienza origine={e.origine} />
                         <span className="task-quando">{e.archiviato ? 'del' : 'fatto'} <b>{formatoDataOra(e.archiviato ? e.data : e.completato_il)}</b>{e.archiviato ? ' · archiviato' : ''}</span>
                         {e.esito && <span className={`bollino ${e.esito === 'positivo' ? 'verde' : 'rosso'}`}>{e.esito}</span>}
-                        {e.assegnato_nome && <span className="task-chi">{e.assegnato_nome}</span>}
+                        {e.assegnato_nome && <span className="task-chi"><AvatarTask nome={e.assegnato_nome} />{e.assegnato_nome}</span>}
                       </div>
                       {e.nota && <div className="task-nota">{e.nota}</div>}
                       {e.nota_esito && <div className="task-nota"><span><strong>Com&apos;è andata:</strong> {e.nota_esito}</span></div>}
