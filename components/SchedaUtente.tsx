@@ -38,7 +38,7 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
             <div className="piccolo attenuato">{u.email ?? 'senza email'}</div>
           </div>
           <div className="utente-bollini">
-            {u.ruolo !== 'consulente' && <span className="bollino rosso">{testoRuolo(u.ruolo)}</span>}
+            <span className={`bollino ${u.ruolo === 'consulente' ? 'grigio' : 'rosso'}`}>{testoRuolo(u.ruolo)}</span>
             {ioStesso && <span className="bollino grigio">Sei tu</span>}
             {u.accesso ? (
               <span className="bollino verde" title={u.ultimo_accesso ? `ultimo accesso ${formatoDataOra(u.ultimo_accesso)}` : undefined}>

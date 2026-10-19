@@ -7074,3 +7074,17 @@ input[type='radio'] {
 .scheda.utente .utente-acc > form:first-of-type {
   padding: 16px 20px;
 }
+
+/* Utenti: gli operatori uno sotto l'altro, tutti con la stessa testata (nome, email, etichette sotto). */
+.utenti,
+details.scheda .utenti {
+  grid-template-columns: minmax(0, 1fr);
+}
+.scheda.utente .utente-acc > summary .utente-testa {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+.scheda.utente .utente-acc > summary .utente-bollini {
+  justify-content: flex-start;
+}
