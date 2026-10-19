@@ -8104,3 +8104,56 @@ a.numero:hover,
     border-top: 0;
   }
 }
+
+/* Fasi a righe: meno aria, etichette in maiuscolo piccolo come nel resto, niente a capo. */
+.fase-titolo {
+  padding: 9px 18px;
+}
+.fase-col {
+  padding: 12px 18px 13px;
+}
+.fase-col > h4 {
+  margin-bottom: 7px;
+}
+.fase-col .dati {
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 5px 12px;
+  font-size: 0.9rem;
+}
+.fase-col .dati dt {
+  padding-top: 2px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--testo-attenuato);
+}
+.fase-col .dati dd {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fase-azioni {
+  gap: 7px;
+}
+.fase-azioni .azioni-riga select,
+.fase-azioni .azioni-riga input[type='text'] {
+  height: 34px;
+  min-height: 34px;
+  font-size: 0.88rem;
+}
+.fase-azioni .aiuto-riga {
+  margin: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 0.76rem;
+}
+.fase-vuota-righe {
+  padding: 14px 20px;
+  color: var(--testo-attenuato);
+  font-size: 0.9rem;
+}
+:root:root .scheda.fase-corpo:has(> .fase-vuota-righe) {
+  display: block;
+}
