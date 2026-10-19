@@ -7916,3 +7916,36 @@ a.numero:hover,
   background: linear-gradient(100deg, #0e0f12 0%, #17090f 60%, #2a0b14 100%);
   color: rgba(255, 255, 255, 0.75);
 }
+
+/* Percorso attaccato alle schede delle fasi: ogni fase e' una linguetta scura sopra la sua scheda (stesse colonne, nessuno spazio in mezzo). */
+:root:root:root .percorso {
+  gap: 18px;
+  margin-bottom: -18px;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  overflow: visible;
+}
+:root:root:root .percorso li {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 0;
+  border-radius: 14px 14px 0 0;
+  background:
+    radial-gradient(60% 200% at 0% 0%, rgba(227, 3, 45, 0.18), rgba(227, 3, 45, 0) 70%),
+    linear-gradient(100deg, #0e0f12 0%, #17090f 60%, #2a0b14 100%);
+  color: #fff;
+}
+:root:root:root .percorso li.fatto,
+:root:root:root .percorso li.attuale {
+  color: #fff;
+}
+:root:root:root .percorso li.attuale {
+  background:
+    linear-gradient(to bottom, rgba(227, 3, 45, 0.1), rgba(227, 3, 45, 0.36)),
+    linear-gradient(100deg, #0e0f12 0%, #17090f 60%, #2a0b14 100%);
+}
+:root:root:root .funnel-colonna > .carta-fase:first-child,
+:root:root:root .funnel-colonna > .fase-vuota:first-child {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
