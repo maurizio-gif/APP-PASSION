@@ -7605,3 +7605,49 @@ details.scheda .utenti {
     padding-right: 14px;
   }
 }
+
+/* ---- Riquadri con i numeri (Abbonamenti, Nuovi contratti, ecc.): stesso pannello scuro della barra laterale ---- */
+:root:root .contenuto :not(.numeri-schede) > .numero {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    radial-gradient(60% 150% at 0% 0%, rgba(227, 3, 45, 0.2), rgba(227, 3, 45, 0) 70%),
+    linear-gradient(100deg, #0e0f12 0%, #17090f 60%, #2a0b14 100%);
+  color: #fff;
+}
+:root:root .contenuto :not(.numeri-schede) > .numero .etichetta {
+  color: rgba(255, 255, 255, 0.82);
+}
+:root:root .contenuto :not(.numeri-schede) > .numero .valore {
+  color: #fff;
+}
+:root:root .contenuto :not(.numeri-schede) > .numero .nota,
+:root:root .contenuto :not(.numeri-schede) > .numero .confronti li,
+:root:root .contenuto :not(.numeri-schede) > .numero .piccolo {
+  color: rgba(255, 255, 255, 0.72);
+}
+:root:root .contenuto :not(.numeri-schede) > .numero .confronti,
+:root:root .contenuto :not(.numeri-schede) > .numero hr {
+  border-color: rgba(255, 255, 255, 0.14);
+}
+:root:root .contenuto :not(.numeri-schede) > .numero b,
+:root:root .contenuto :not(.numeri-schede) > .numero strong {
+  color: #fff;
+}
+/* Le etichette +/- sul nero: vetro verde, vetro rosso, vetro bianco. */
+:root:root .contenuto :not(.numeri-schede) > .numero .bollino.verde {
+  background: rgba(31, 163, 92, 0.22);
+  color: #7ee2a8;
+}
+:root:root .contenuto :not(.numeri-schede) > .numero .bollino.rosso {
+  background: rgba(227, 3, 45, 0.28);
+  color: #ff9bab;
+}
+:root:root .contenuto :not(.numeri-schede) > .numero .bollino.grigio,
+:root:root .contenuto :not(.numeri-schede) > .numero .bollino.giallo {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+}
+a.numero:hover,
+:root:root .contenuto :not(.numeri-schede) > a.numero:hover {
+  border-color: rgba(227, 3, 45, 0.55);
+}
