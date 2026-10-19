@@ -7455,3 +7455,66 @@ details.scheda .utenti {
 .scheda.utente:has(.utente-acc[open])::before {
   width: 7px;
 }
+
+/* ---- Righe di controllo (schede, filtri, intestazione tabella) nel tema della barra laterale, ognuna con la sua veste ---- */
+/* 1) Le schede dei gruppi: pannello scuro con bagliore rosso, testo bianco, scheda attiva rossa. */
+:root:root:root .contenuto .schede-gruppi {
+  margin: 0 0 14px;
+  padding: 8px 14px 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  background:
+    radial-gradient(60% 170% at 0% 0%, rgba(227, 3, 45, 0.22), rgba(227, 3, 45, 0) 70%),
+    linear-gradient(100deg, #0e0f12 0%, #17090f 55%, #2a0b14 100%);
+  color: #fff;
+}
+:root:root:root .contenuto .schede-gruppi .schede-gruppo {
+  border-left-color: rgba(255, 255, 255, 0.1);
+}
+:root:root:root .contenuto .schede-gruppi .gruppo-etichetta {
+  color: rgba(255, 255, 255, 0.62);
+}
+:root:root:root .contenuto .schede-gruppi .schede-vista a {
+  color: #fff;
+}
+:root:root:root .contenuto .schede-gruppi .schede-vista a:hover:not(.attivo) {
+  background: rgba(255, 255, 255, 0.07);
+}
+:root:root:root .contenuto .schede-gruppi .schede-vista a.attivo,
+:root:root:root .contenuto .schede-gruppi .schede-vista a.attivo:hover {
+  color: #fff;
+  background: linear-gradient(to bottom, rgba(227, 3, 45, 0.08), rgba(227, 3, 45, 0.36));
+}
+:root:root:root .contenuto .schede-gruppi .schede-vista a.attivo::after {
+  background: var(--rosso);
+}
+
+/* 2) La barra dei filtri: fascia vino con bordo rosso (come il campo di ricerca della barra), campi bianchi, «Filtra» scuro. */
+:root:root:root .contenuto .filtri {
+  padding: 10px 12px;
+  border: 1px solid rgba(227, 3, 45, 0.55);
+  border-radius: 14px;
+  background: linear-gradient(100deg, #2a0b14 0%, #4a0a1b 100%);
+}
+:root:root:root .contenuto .filtri input[type='search'],
+:root:root:root .contenuto .filtri select {
+  border-color: transparent;
+}
+:root:root:root .contenuto .filtri .bottone.secondario,
+:root:root:root .contenuto .filtri .bottone.secondario:hover {
+  background: #0e0f12;
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: none;
+  color: #fff;
+}
+:root:root:root .contenuto .filtri .bottone.secondario:hover {
+  border-color: var(--rosso);
+  background: #1a0b11;
+}
+
+/* 3) L'intestazione delle tabelle: banda nera con il rosso vino, testo rosa. */
+:root:root:root th {
+  background: linear-gradient(100deg, #17181c 0%, #2b0d15 60%, #4a0a1b 100%);
+  color: #ffb3c0;
+  border-bottom: 1px solid rgba(227, 3, 45, 0.55);
+}
