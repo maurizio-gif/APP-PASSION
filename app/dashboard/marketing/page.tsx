@@ -1,16 +1,17 @@
 import { crm, richiediSezione } from '@/lib/crm'
 import { eGiornoValido, FONTE, oggiRoma, spostaGiorno } from '@/lib/formato'
-import { VISTE_MARKETING, VistaMarketing } from '@/components/VistaMarketing'
+import { LENTI_MARKETING, VISTE_MARKETING, VistaMarketing } from '@/components/VistaMarketing'
 
 // Da dove arrivano i lead e fin dove arrivano: qualificati (hanno risposto),
 // prova attivata (facoltativa) e iscritti. Le regole stanno nel database, in
 // supabase/migrations/20261020a_report_marketing.sql.
 
-type Filtri = { vista?: string; dal?: string; al?: string; fonte?: string }
+type Filtri = { lente?: string; vista?: string; dal?: string; al?: string; fonte?: string }
 
 export default async function Marketing({ searchParams }: { searchParams: Filtri }) {
   await richiediSezione('marketing')
   const vista = VISTE_MARKETING.find((v) => v.chiave === searchParams.vista) ?? VISTE_MARKETING[0]
+  const lente = LENTI_MARKETING.find((l) => l.chiave === searchParams.lente)?.chiave ?? 'percorso'
   const fonte = searchParams.fonte && FONTE[searchParams.fonte] ? searchParams.fonte : null
 
   // Senza date: gli ultimi 90 giorni. Con le date vuote: tutto lo storico.
@@ -29,5 +30,5 @@ export default async function Marketing({ searchParams }: { searchParams: Filtri
   ]
 
   const r = await crm.reportMarketing(vista.chiave, dal, al, fonte)
-  return <VistaMarketing r={r} vista={vista} dal={dal} al={al} fonte={fonte} oggi={oggi} periodi={periodi} />
+  return <VistaMarketing r={r} lente={lente} vista={vista} dal={dal} al={al} fonte={fonte} oggi={oggi} periodi={periodi} />
 }

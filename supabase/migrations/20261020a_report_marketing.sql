@@ -15,7 +15,9 @@
 --
 -- Le regole, lead per lead:
 --
---   qualificato   qualcuno ha registrato un task fatto con esito «positivo» (di
+--   qualificato   (corretto in 20261020b: qui contava solo il task «Positivo»,
+--                 ma fino ad aprile 2026 i task non avevano esito) qualcuno ha
+--                 registrato un task fatto con esito «positivo» (di
 --                 qualunque tipo: telefonata, WhatsApp, email, in sede) sul
 --                 lead, o sulla persona nei giorni in cui il lead era vivo; e
 --                 chi e' arrivato alla prova o all'iscrizione conta qualificato

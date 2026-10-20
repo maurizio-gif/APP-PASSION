@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { ReportMarketing } from '@/lib/crm'
 import { FONTE } from '@/lib/formato'
 import { LinkGuida, Schede, Vuoto } from './Ui'
-import { PercorsoLead, TabellaPercorsi } from './ReportMarketing'
+import { GestioneNumeri, PercorsoLead, TabellaGestione, TabellaPercorsi } from './ReportMarketing'
 
 // La pagina Marketing, disegnata: riceve i numeri di crm_report_marketing() e
 // i filtri scelti, e non ne calcola nessuno (le regole stanno nel database, in
@@ -18,10 +18,16 @@ export const VISTE_MARKETING = [
   { chiave: 'mese', testo: 'Mese di arrivo', voce: 'Mese di arrivo' },
 ]
 
+export const LENTI_MARKETING = [
+  { chiave: 'percorso', testo: 'Il percorso' },
+  { chiave: 'gestione', testo: 'Come vengono gestiti' },
+]
+
 export type PeriodoMarketing = { testo: string; dal: string | null; al: string | null }
 
-export function VistaMarketing({ r, vista, dal, al, fonte, oggi, periodi }: {
+export function VistaMarketing({ r, lente, vista, dal, al, fonte, oggi, periodi }: {
   r: ReportMarketing
+  lente: string
   vista: (typeof VISTE_MARKETING)[number]
   dal: string | null
   al: string | null
@@ -29,7 +35,8 @@ export function VistaMarketing({ r, vista, dal, al, fonte, oggi, periodi }: {
   oggi: string
   periodi: PeriodoMarketing[]
 }) {
-  const filtri = `dal=${dal ?? ''}&al=${al ?? ''}${fonte ? `&fonte=${fonte}` : ''}`
+  const filtri = `lente=${lente}&dal=${dal ?? ''}&al=${al ?? ''}${fonte ? `&fonte=${fonte}` : ''}`
+  const gestione = lente === 'gestione'
   const soloMeta = vista.chiave === 'gruppo' || vista.chiave === 'modulo'
 
   return (
@@ -41,11 +48,23 @@ export function VistaMarketing({ r, vista, dal, al, fonte, oggi, periodi }: {
         </div>
       </div>
 
+      <div className="schede-vista lenti">
+        {LENTI_MARKETING.map((l) => (
+          <Link
+            key={l.chiave}
+            href={`/dashboard/marketing?lente=${l.chiave}&vista=${vista.chiave}&dal=${dal ?? ''}&al=${al ?? ''}${fonte ? `&fonte=${fonte}` : ''}`}
+            className={l.chiave === lente ? 'attivo' : undefined}
+          >
+            {l.testo}
+          </Link>
+        ))}
+      </div>
+
       <div className="schede-vista periodi">
         {periodi.map((p) => (
           <Link
             key={p.testo}
-            href={`/dashboard/marketing?vista=${vista.chiave}&dal=${p.dal ?? ''}&al=${p.al ?? ''}${fonte ? `&fonte=${fonte}` : ''}`}
+            href={`/dashboard/marketing?lente=${lente}&vista=${vista.chiave}&dal=${p.dal ?? ''}&al=${p.al ?? ''}${fonte ? `&fonte=${fonte}` : ''}`}
             className={p.dal === dal && p.al === al ? 'attivo' : undefined}
           >
             {p.testo}
@@ -54,6 +73,7 @@ export function VistaMarketing({ r, vista, dal, al, fonte, oggi, periodi }: {
       </div>
 
       <form className="filtri filtri-marketing" action="/dashboard/marketing">
+        <input type="hidden" name="lente" value={lente} />
         <input type="hidden" name="vista" value={vista.chiave} />
         <label className="piccolo attenuato" htmlFor="mk-dal">Arrivati dal</label>
         <input id="mk-dal" type="date" name="dal" defaultValue={dal ?? ''} max={oggi} />
@@ -67,9 +87,11 @@ export function VistaMarketing({ r, vista, dal, al, fonte, oggi, periodi }: {
       </form>
 
       <section className="scheda">
-        <h2>Il percorso dei lead</h2>
+        <h2>{gestione ? 'Come vengono gestiti i lead' : 'Il percorso dei lead'}</h2>
         {r.totale.lead === 0 ? (
           <Vuoto>Nessun lead arrivato in questo periodo.</Vuoto>
+        ) : gestione ? (
+          <GestioneNumeri t={r.totale} />
         ) : (
           <PercorsoLead t={r.totale} />
         )}
@@ -81,11 +103,14 @@ export function VistaMarketing({ r, vista, dal, al, fonte, oggi, periodi }: {
         {soloMeta && <p className="piccolo attenuato">Gruppi di inserzioni e moduli esistono solo per i lead di Meta: qui vedi solo quelli.</p>}
         {r.righe.length === 0 ? (
           <Vuoto>{soloMeta && fonte && fonte !== 'meta' ? 'Questa scheda riguarda solo Meta: togli il filtro sulla fonte.' : 'Nessun lead in questo periodo.'}</Vuoto>
+        ) : gestione ? (
+          <TabellaGestione righe={r.righe} totale={r.totale} dimensione={vista.chiave} voce={vista.voce} />
         ) : (
           <TabellaPercorsi righe={r.righe} totale={r.totale} dimensione={vista.chiave} voce={vista.voce} />
         )}
         <p className="piccolo attenuato conteggio">
           Le percentuali sono sui lead arrivati. I lead più recenti hanno avuto meno tempo per arrivare in fondo.
+          {gestione && ' «Lavorato» vuol dire che c’è almeno un task fatto o un commento. «Ha risposto» vuol dire un task fatto che non sia Negativo: fino ad aprile 2026 il task si creava solo quando la persona rispondeva, e le chiamate senza risposta erano commenti («nr»).'}
         </p>
       </div>
     </>
