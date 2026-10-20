@@ -8794,3 +8794,6 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
 :root:root:root tbody tr:last-child td { border-bottom-color: transparent; }
 :root:root:root .contenuto .scheda { border-color: rgba(92, 11, 30, 0.38); }
 :root:root:root .tabella-scorre { border-color: rgba(92, 11, 30, 0.38); }
+:root:root:root th,
+:root:root:root .scheda-task thead th,
+:root:root:root .sotto-tabella thead th { color: #fff; font-weight: 700; }
