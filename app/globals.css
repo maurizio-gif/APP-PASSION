@@ -8768,3 +8768,17 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   font-weight: 600;
 }
 .tabella-prove .gestione-extra > summary:hover { border-color: var(--rosso); background: rgba(227, 3, 45, 0.06); }
+
+/* Intestazione delle tabelle: scura e attaccata, come la testata delle fasi (stesso bagliore rosso a sinistra). */
+:root:root:root thead {
+  background:
+    radial-gradient(35% 300% at 0% 0%, rgba(227, 3, 45, 0.2), rgba(227, 3, 45, 0) 70%),
+    linear-gradient(100deg, #0e0f12 0%, #17090f 60%, #2a0b14 100%);
+}
+:root:root:root th {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.86);
+  border-bottom: 1px solid rgba(227, 3, 45, 0.55);
+  letter-spacing: 0.08em;
+}
+:root:root:root .scheda-task thead th { background: transparent; }
