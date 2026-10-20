@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 // Le icone sono SVG disegnati qui (nessun file e nessuna libreria da caricare).
-const ICONE: Record<string, string> = {
+export const ICONE: Record<string, string> = {
   '/dashboard': 'M3 12l9-8 9 8M5 10v10h14V10',
   '/dashboard/lead': 'M16 11a4 4 0 10-8 0 4 4 0 008 0zM4 20c0-3.3 3.6-6 8-6s8 2.7 8 6',
   '/dashboard/prove': 'M12 8v5l3 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z',

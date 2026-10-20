@@ -4,6 +4,7 @@ import { CambiaTema } from '@/components/CambiaTema'
 import { Logo } from '@/components/Logo'
 import { Menu } from '@/components/Menu'
 import { Navigazione } from '@/components/Navigazione'
+import { IconaTitolo } from '@/components/IconaTitolo'
 import { crm } from '@/lib/crm'
 import { formatoGiornoLungo, oggiRoma } from '@/lib/formato'
 import { ha, puoRiunioni, puoVedere, SEZIONI, testoRuolo } from '@/lib/permessi'
@@ -61,7 +62,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
           </div>
         </Menu>
       </aside>
-      <main className="contenuto">{children}</main>
+      <main className="contenuto"><IconaTitolo />{children}</main>
     </div>
   )
 }
