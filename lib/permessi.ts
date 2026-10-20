@@ -29,6 +29,10 @@ export type Sezione = (typeof SEZIONI)[number]['chiave']
 export const SOSPESE: readonly Sezione[] = ['contratti']
 export const SEZIONI_ATTIVE = SEZIONI.filter((s) => !SOSPESE.includes(s.chiave))
 
+// Sezioni che nemmeno un admin vede d'ufficio: le vede solo chi le riceve in
+// Utenti, una persona alla volta (crm.puo_vedere(), 20261020c).
+export const SEZIONI_PER_PERSONA: readonly Sezione[] = ['marketing']
+
 export const AUTORIZZAZIONI = [
   { chiave: 'lead_altrui', testo: 'Lead degli altri', descrizione: 'riassegnare e chiudere anche i lead, le disdette e i rinnovi in carico a un altro' },
   { chiave: 'gestione_utenti', testo: 'Gestione utenti', descrizione: 'aprire Utenti e cambiare sezioni e autorizzazioni' },
@@ -56,7 +60,8 @@ export const eSuperadmin = (io: Io) => io?.ruolo === 'superadmin'
 export const puoToccareRuolo = (io: Io, ruolo: string) =>
   ruolo === 'superadmin' ? eSuperadmin(io) : ruoloAdmin(ruolo) ? eAdmin(io) : true
 export const puoVedere = (io: Io, sezione: Sezione) =>
-  !SOSPESE.includes(sezione) && (eAdmin(io) || Boolean(io?.sezioni.includes(sezione)))
+  !SOSPESE.includes(sezione) &&
+  (Boolean(io?.sezioni.includes(sezione)) || (eAdmin(io) && !SEZIONI_PER_PERSONA.includes(sezione)))
 export const ha = (io: Io, autorizzazione: Autorizzazione) => eAdmin(io) || Boolean(io?.autorizzazioni.includes(autorizzazione))
 
 // I ticket (supabase/migrations/20260930b_ticket.sql): tutti scrivono, il

@@ -19,6 +19,8 @@ Il menu mostra solo le sezioni che puoi vedere: Lead, Prove, Disdette, Rinnovi, 
 
 La sezione **Abbonamenti** ha i numeri dell'azienda: la vedono gli admin e chi la riceve apposta.
 
+La sezione **Marketing** si dà a una persona alla volta: nemmeno gli admin la vedono da soli. Si dà da Utenti, con la spunta nella scheda della persona.
+
 I **Report riunioni** li vedono solo superadmin e admin: in ogni report il riepilogo, le decisioni, i passaggi successivi con il loro stato (lo aggiornano loro) e la trascrizione completa, da aprire o scaricare.
 
 ## Le autorizzazioni
@@ -43,7 +45,7 @@ Se hai dimenticato la password: nella pagina di accesso **«Password dimenticata
 Da **Utenti**, per ogni operatore:
 
 - il **ruolo**, l'accesso (**Attivo**) e **«Riceve lead e task»**;
-- le **sezioni** e le **autorizzazioni**, se è consulente (un admin le ha tutte: le spunte sono ferme);
+- le **sezioni** e le **autorizzazioni**, se è consulente (un admin le ha tutte, tranne Marketing: le spunte sono ferme);
 - **«Manda invito»**, o **«Manda link password»** a chi l'accesso ce l'ha già;
 - **«Rimuovi utente»**: il suo lavoro aperto (lead, task, debitori, rinnovi) passa al collega scelto, o torna da assegnare. Nella storia del CRM resta il suo nome.
 
