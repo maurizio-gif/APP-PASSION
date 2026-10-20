@@ -8782,3 +8782,4 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   letter-spacing: 0.08em;
 }
 :root:root:root .scheda-task thead th { background: transparent; }
+:root:root:root th { border-top: 0; border-left: 0; border-right: 0; }
