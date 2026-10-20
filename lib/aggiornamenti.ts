@@ -16,6 +16,13 @@ export type Aggiornamento = {
 
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
+    data: '2026-10-20',
+    titolo: 'Nuova sezione Marketing: da dove arrivano i lead e quanti si iscrivono',
+    testo:
+      'Per ogni fonte, campagna e mese vedi quanti lead sono arrivati, quanti hanno risposto, quanti hanno attivato la prova e quanti si sono iscritti. La prova è un passaggio facoltativo: si vede anche quanti si iscrivono senza passarci. La sezione la vedono gli admin; agli altri la dai da Utenti.',
+    dove: 'Marketing',
+  },
+  {
     data: '2026-10-19',
     titolo: 'Le schede doppie di PerfectGym non contano più',
     testo:
