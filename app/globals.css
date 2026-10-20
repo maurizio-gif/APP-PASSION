@@ -2791,3 +2791,110 @@ details.scheda .utenti {
     flex: 1 1 140px;
   }
 }
+
+/* --- Report marketing ------------------------------------------------------ */
+
+.periodi {
+  margin-bottom: 12px;
+}
+.periodi + .filtri {
+  margin-top: 4px;
+}
+
+/* Il percorso: una barra per passo, larga quanto la sua parte dei lead. */
+.percorso {
+  display: grid;
+  gap: 12px;
+  margin-top: 10px;
+}
+.percorso-passo {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) 210px;
+  gap: 14px;
+  align-items: center;
+}
+.percorso-nome {
+  font-weight: 700;
+}
+.percorso-nome small {
+  display: block;
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: var(--testo-attenuato);
+}
+.percorso-barra {
+  display: flex;
+  height: 30px;
+  background: var(--fondo-grigio);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.percorso-pieno {
+  display: block;
+  height: 100%;
+  background: var(--rosso);
+}
+.percorso-pieno.dopo-prova {
+  background: var(--nero);
+}
+.percorso-cifre strong {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+.percorso-cifre small {
+  display: block;
+  color: var(--testo-attenuato);
+  font-size: 0.8rem;
+}
+.percorso-legenda {
+  margin: 0;
+}
+.percorso-chiave {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin: 0 6px 0 0;
+  border-radius: 2px;
+  background: var(--rosso);
+}
+.percorso-chiave.dopo-prova {
+  background: var(--nero);
+  margin-left: 18px;
+}
+
+/* La tabella: la percentuale sta sotto il numero, piccola. */
+.tabella-marketing td.voce {
+  min-width: 200px;
+  overflow-wrap: anywhere;
+}
+.tabella-marketing .perc {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--testo-attenuato);
+}
+.tabella-marketing tfoot td {
+  font-weight: 700;
+  border-top: 2px solid var(--bordo);
+  border-bottom: 0;
+}
+
+@media (max-width: 720px) {
+  .filtri-marketing select {
+    flex: 1 1 150px;
+    min-width: 150px;
+  }
+  .percorso-passo {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 4px;
+  }
+  .percorso-barra {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    height: 18px;
+  }
+  .percorso-cifre {
+    text-align: right;
+  }
+}

@@ -11,6 +11,7 @@ import { schedaPersona } from './scheda-persona'
 import { ticket } from './ticket'
 import { curriculum } from './curriculum'
 import { abbonamenti } from './abbonamenti'
+import { marketing } from './marketing'
 import { accessi } from './accessi'
 
 // La guida del CRM: come si usa, sezione per sezione, e cosa fa il CRM da
@@ -39,6 +40,7 @@ export const ARGOMENTI: Argomento[] = [
   ticket,
   curriculum,
   abbonamenti,
+  marketing,
   accessi,
 ]
 
