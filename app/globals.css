@@ -8797,3 +8797,24 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
 :root:root:root th,
 :root:root:root .scheda-task thead th,
 :root:root:root .sotto-tabella thead th { color: #fff; font-weight: 700; }
+
+/* «Da gestire» (home): il pannello delle schede e la tabella sono due blocchi separati, come nelle altre sezioni. */
+:root:root #da-gestire {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  overflow: visible;
+}
+:root:root #da-gestire .numeri-schede {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  overflow: hidden;
+}
+:root:root #da-gestire .da-gestire-corpo {
+  margin-top: 14px;
+  overflow: hidden;
+  background: var(--scheda);
+  border: 1px solid rgba(92, 11, 30, 0.38);
+  border-radius: var(--raggio);
+  box-shadow: var(--ombra);
+}
