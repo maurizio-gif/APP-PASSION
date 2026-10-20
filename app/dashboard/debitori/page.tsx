@@ -59,16 +59,17 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
 
       <div className="scheda">
         {debitori.length > 0 && (
-          <p className="piccolo attenuato debitori-totale">
+          <div className="debitori-totale">
             {rientrati ? (
-              <>{debitori.length} rientrati negli ultimi 90 giorni</>
+              <span className="debitori-label"><strong>{debitori.length}</strong> rientrati negli ultimi 90 giorni</span>
             ) : (
               <>
-                <strong className="negativo">{formatoEuro(totale)}</strong> da {debitori.length} {debitori.length === 1 ? 'socio' : 'soci'}
+                <strong className="negativo debitori-cifra">{formatoEuro(totale)}</strong>
+                <span className="debitori-label">da {debitori.length} {debitori.length === 1 ? 'socio' : 'soci'}</span>
               </>
             )}
-            {controllato && <> · saldi controllati su PerfectGym {formatoFa(controllato)}</>}
-          </p>
+            {controllato && <span className="debitori-controllo">Saldi controllati su PerfectGym {formatoFa(controllato)}</span>}
+          </div>
         )}
         {debitori.length === 0 ? (
           <Vuoto>{rientrati ? 'Nessun debito rientrato negli ultimi 90 giorni.' : 'Nessun debitore qui.'}</Vuoto>
