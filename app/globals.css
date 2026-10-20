@@ -8718,3 +8718,10 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   padding-right: 36px;
 }
 .testata:not(:has(.testata-saluto)) { justify-content: space-between; }
+/* Icona del titolo: stessa sfumatura del filo (dal rosso al bordeaux). */
+:root:root:root:root .testata:not(:has(.testata-saluto)) .titolo-riga h1::before {
+  background:
+    var(--icona-titolo, none) center / 19px 19px no-repeat,
+    linear-gradient(135deg, #f0123b 0%, var(--rosso) 35%, #5c0b1e 100%);
+  box-shadow: 0 2px 8px rgba(92, 11, 30, 0.45);
+}
