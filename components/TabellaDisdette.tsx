@@ -14,6 +14,7 @@ export function TabellaDisdette({ disdette, io, staff, torna }: { disdette: Disd
             <th>Cliente</th>
             <th>Contratto</th>
             <th>Data disdetta</th>
+            <th>Motivo e note</th>
             <th>In carico</th>
           </tr>
         </thead>
@@ -42,6 +43,13 @@ export function TabellaDisdette({ disdette, io, staff, torna }: { disdette: Disd
               <td>
                 <div className="riga-dati">
                   <span className="normale"><span className="prefisso-mobile">Disdetto il </span>{formatoData(d.data_disdetta)}</span>
+                </div>
+              </td>
+              <td>
+                <div className="riga-dati">
+                  {d.motivo ? <span className="normale">{d.motivo}</span> : <span className="muto">–</span>}
+                  {d.contatto && <span className="muto">{d.contatto === 'telefonata' ? 'Telefonata' : 'Appuntamento'}</span>}
+                  {d.note && <span className="muto">{d.note}</span>}
                 </div>
               </td>
               <td className="nowrap">

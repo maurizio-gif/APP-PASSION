@@ -14,6 +14,7 @@ export function TabellaRinnovi({ rinnovi, io, staff, torna }: { rinnovi: Rinnovo
             <th>Cliente</th>
             <th>Abbonamento</th>
             <th>Data rinnovo</th>
+            <th>Note</th>
             <th>In carico</th>
           </tr>
         </thead>
@@ -39,12 +40,17 @@ export function TabellaRinnovi({ rinnovi, io, staff, torna }: { rinnovi: Rinnovo
                     <span className="muto">{formatoEuro(r.valore)}</span>
                       {r.stato_contratto && <span className="muto">{traduci(STATO_CONTRATTO, r.stato_contratto)}</span>}
                     {r.rinnovato_su_pgm && <span className="etichetta-riga"><span className="bollino verde">Nuovo abbonamento su PerfectGym</span></span>}
-                    {r.task_aperti > 0 && <span className="muto">{r.task_aperti} {r.task_aperti === 1 ? 'task aperto' : 'task aperti'}</span>}
                   </div>
                 </td>
                 <td>
                   <div className="riga-dati">
                     <span className="normale"><span className="prefisso-mobile">Scade il </span>{formatoData(r.scadenza)}</span>
+                  </div>
+                </td>
+                <td>
+                  <div className="riga-dati">
+                    {r.note ? <span className="normale">{r.note}</span> : <span className="muto">–</span>}
+                    {r.task_aperti > 0 && <span className="muto">{r.task_aperti} {r.task_aperti === 1 ? 'task aperto' : 'task aperti'}</span>}
                   </div>
                 </td>
                 <td>

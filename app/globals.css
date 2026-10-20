@@ -8818,3 +8818,23 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   border-radius: var(--raggio);
   box-shadow: var(--ombra);
 }
+
+/* Tabelle a cinque colonne (Da gestire e sezioni): larghezze ripartite di nuovo. */
+@media (min-width: 721px) {
+  .tabella-uniforme:has(th:nth-child(5)) { min-width: 1000px; }
+  .tabella-uniforme:has(th:nth-child(5)) th:nth-child(1) { width: 21%; }
+  .tabella-uniforme:has(th:nth-child(5)) th:nth-child(2) { width: 17%; }
+  .tabella-uniforme:has(th:nth-child(5)) th:nth-child(3) { width: 18%; }
+  .tabella-uniforme:has(th:nth-child(5)) th:nth-child(4) { width: 19%; }
+  .tabella-uniforme:has(th:nth-child(5)) th:nth-child(5) { width: 25%; }
+  .tabella-lead.tabella-uniforme:has(th:nth-child(5)) th:nth-child(1) { width: 20%; }
+  .tabella-lead.tabella-uniforme:has(th:nth-child(5)) th:nth-child(2) { width: 12%; }
+  .tabella-lead.tabella-uniforme:has(th:nth-child(5)) th:nth-child(3) { width: 18%; }
+  .tabella-lead.tabella-uniforme:has(th:nth-child(5)) th:nth-child(4) { width: 22%; }
+  .tabella-lead.tabella-uniforme:has(th:nth-child(5)) th:nth-child(5) { width: 28%; }
+  .tabella-prove.tabella-uniforme:has(th:nth-child(5)) th:nth-child(1) { width: 17%; }
+  .tabella-prove.tabella-uniforme:has(th:nth-child(5)) th:nth-child(2) { width: 15%; }
+  .tabella-prove.tabella-uniforme:has(th:nth-child(5)) th:nth-child(3) { width: 20%; }
+  .tabella-prove.tabella-uniforme:has(th:nth-child(5)) th:nth-child(4) { width: 15%; }
+  .tabella-prove.tabella-uniforme:has(th:nth-child(5)) th:nth-child(5) { width: 33%; }
+}

@@ -54,6 +54,13 @@ export function RigaProva({ p, pagamento, etichette, children }: { p: Prova; pag
           {etichette && <span className="etichetta-riga">{etichette}</span>}
         </div>
       </td>
+      <td>
+        <div className="riga-dati">
+          {p.obiezione ? <span className="normale">{p.obiezione}</span> : <span className="muto">–</span>}
+          {p.note && <span className="muto">{p.note}</span>}
+          {p.task_aperti > 0 && <span className="muto">{p.task_aperti} {p.task_aperti === 1 ? 'task aperto' : 'task aperti'}</span>}
+        </div>
+      </td>
       <td className="gestisci">{children}</td>
     </tr>
   )

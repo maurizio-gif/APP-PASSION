@@ -40,7 +40,10 @@ export function TabellaLead({ lead, io, staff, torna, contratti, firma }: { lead
                   <th>Consulente</th>
                 </>
               ) : (
-                <th>Attività di interesse</th>
+                <>
+                  <th>Attività di interesse</th>
+                  <th>Nota task</th>
+                </>
               )}
               <th>{contratti ? '' : 'In carico'}</th>
             </tr>
@@ -70,12 +73,10 @@ export function TabellaLead({ lead, io, staff, torna, contratti, firma }: { lead
                       <td><div className="riga-dati">{l.assegnato_nome ? <span className="normale">{l.assegnato_nome}</span> : <span className="muto">nessuno</span>}</div></td>
                     </>
                   ) : (
-                    <td>
-                      <div className="riga-dati">
-                        <span className="normale">{l.attivita_interesse || '–'}</span>
-                        {l.note_task && <span className="muto">{l.note_task}</span>}
-                      </div>
-                    </td>
+                    <>
+                      <td><div className="riga-dati"><span className="normale">{l.attivita_interesse || '–'}</span></div></td>
+                      <td><div className="riga-dati">{l.note_task ? <span className="normale">{l.note_task}</span> : <span className="muto">–</span>}</div></td>
+                    </>
                   )}
                   <td><Azione l={l} io={io} staff={staff} torna={torna} /></td>
                 </tr>

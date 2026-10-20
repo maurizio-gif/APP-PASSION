@@ -14,6 +14,7 @@ export function TabellaTask({ task, chi = 'miei', torna, compatta = false, compl
           <tr>
             <th>Persona</th>
             <th>Task</th>
+            <th>Quando</th>
             <th>Nota</th>
             <th></th>
           </tr>
@@ -32,9 +33,13 @@ export function TabellaTask({ task, chi = 'miei', torna, compatta = false, compl
                 <td>
                   <div className="riga-dati">
                     <strong>{traduci(TIPO_TASK, t.tipo)}</strong>
-                    <span className={scaduto ? 'stato rosso' : 'muto'}>{compatta ? formatoOra(t.data) : formatoDataOra(t.data)}</span>
                     {t.origine && <span className="etichetta-riga"><Provenienza origine={t.origine} /></span>}
                     {!compatta && chi !== 'miei' && <span className="muto">{t.assegnato_nome ?? 'nessuno'}</span>}
+                  </div>
+                </td>
+                <td>
+                  <div className="riga-dati">
+                    <span className={scaduto ? 'stato rosso' : 'normale'}>{compatta ? formatoOra(t.data) : formatoDataOra(t.data)}</span>
                   </div>
                 </td>
                 <td>
