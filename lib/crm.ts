@@ -603,6 +603,15 @@ export type PercorsoMarketing = {
   prove: number
   iscritti: number
   iscritti_dopo_prova: number
+  // Come vengono gestiti (20261020b)
+  lavorati: number
+  azioni: number
+  mai_lavorati: number
+  senza_risposta: number
+  entro_24h: number
+  primo_contatto_ore: number | null
+  persi: number
+  aperti: number
 }
 export type RigaMarketing = PercorsoMarketing & { fonte: string | null; etichetta: string }
 export type ReportMarketing = { dimensione: string; totale: PercorsoMarketing; righe: RigaMarketing[] }

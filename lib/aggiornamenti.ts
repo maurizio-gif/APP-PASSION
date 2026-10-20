@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-20',
+    titolo: 'In Marketing si vede anche come vengono lavorati i lead',
+    testo:
+      'Accanto al percorso (hanno risposto, prova, iscritti) c’è «Come vengono gestiti»: quanti lead nessuno ha lavorato, quante azioni fanno i colleghi per ogni lead, quanto passa prima del primo contatto e quanti non hanno mai risposto. Serve a capire se un risultato basso dipende dalla campagna o da come si lavora il lead. Per i lead di prima di maggio 2026 i «nr» scritti nei commenti contano come tentativi.',
+    dove: 'Marketing',
+  },
+  {
+    data: '2026-10-20',
     titolo: 'Nuova sezione Marketing: da dove arrivano i lead e quanti si iscrivono',
     testo:
       'Per ogni fonte, campagna e mese vedi quanti lead sono arrivati, quanti hanno risposto, quanti hanno attivato la prova e quanti si sono iscritti. La prova è un passaggio facoltativo: si vede anche quanti si iscrivono senza passarci. La sezione la vedono gli admin; agli altri la dai da Utenti.',

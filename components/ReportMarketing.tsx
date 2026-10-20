@@ -14,6 +14,14 @@ export function perc(parte: number, tutto: number) {
   return `${formatoCifra(v, v > 0 && v < 10 ? 1 : 0)}%`
 }
 
+// Le ore, a parole: "5 ore", "3 giorni".
+export function durata(ore: number | null) {
+  if (ore == null) return '—'
+  if (ore < 1) return 'meno di un’ora'
+  if (ore < 48) return `${formatoCifra(Math.round(ore))} ${Math.round(ore) === 1 ? 'ora' : 'ore'}`
+  return `${formatoCifra(Math.round(ore / 24))} giorni`
+}
+
 const larghezza = (parte: number, tutto: number) => (tutto ? Math.max((parte / tutto) * 100, parte > 0 ? 1 : 0) : 0)
 
 export function PercorsoLead({ t }: { t: PercorsoMarketing }) {
@@ -129,6 +137,88 @@ export function TabellaPercorsi({ righe, totale, dimensione, voce }: {
             <Cifra n={totale.prove} base={totale.lead} />
             <Cifra n={totale.iscritti} base={totale.lead} />
             <td className="num">{formatoCifra(totale.iscritti_dopo_prova)}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  )
+}
+
+// Come vengono gestiti i lead: i numeri che dicono se il lead e' stato
+// lavorato, quante volte e quanto in fretta.
+function Numero({ etichetta, valore, nota }: { etichetta: string; valore: string; nota: string }) {
+  return (
+    <div className="numero">
+      <div className="etichetta">{etichetta}</div>
+      <div className="valore">{valore}</div>
+      <div className="nota">{nota}</div>
+    </div>
+  )
+}
+
+const mediaAzioni = (t: PercorsoMarketing) => (t.lavorati ? formatoCifra(t.azioni / t.lavorati, 1) : '—')
+
+export function GestioneNumeri({ t }: { t: PercorsoMarketing }) {
+  return (
+    <div className="numeri">
+      <Numero etichetta="Nessuno li ha lavorati" valore={perc(t.mai_lavorati, t.lead)} nota={`${formatoCifra(t.mai_lavorati)} lead senza task né commenti, né prova né iscrizione`} />
+      <Numero etichetta="Provati, mai risposto" valore={perc(t.senza_risposta, t.lead)} nota={`${formatoCifra(t.senza_risposta)} lead lavorati ma mai arrivati a rispondere`} />
+      <Numero etichetta="Azioni per lead" valore={mediaAzioni(t)} nota="task fatti e commenti, in media, sui lead lavorati" />
+      <Numero etichetta="Primo contatto" valore={durata(t.primo_contatto_ore)} nota="tempo tipico dall’arrivo al primo task o commento" />
+      <Numero etichetta="Entro 24 ore" valore={perc(t.entro_24h, t.lead)} nota={`${formatoCifra(t.entro_24h)} lead con la prima azione entro un giorno`} />
+      <Numero etichetta="Persi" valore={perc(t.persi, t.lead)} nota={`${formatoCifra(t.persi)} persi, ${formatoCifra(t.aperti)} ancora aperti`} />
+    </div>
+  )
+}
+
+export function TabellaGestione({ righe, totale, dimensione, voce }: {
+  righe: RigaMarketing[]
+  totale: PercorsoMarketing
+  dimensione: string
+  voce: string
+}) {
+  return (
+    <div className="tabella-scorre">
+      <table className="tabella-marketing">
+        <thead>
+          <tr>
+            <th>{voce}</th>
+            <th className="num">Lead</th>
+            <th className="num">Nessuno li ha lavorati</th>
+            <th className="num">Azioni per lead</th>
+            <th className="num">Primo contatto</th>
+            <th className="num">Entro 24 ore</th>
+            <th className="num">Provati, mai risposto</th>
+            <th className="num">Persi</th>
+            <th className="num">Ancora aperti</th>
+          </tr>
+        </thead>
+        <tbody>
+          {righe.map((r) => (
+            <tr key={`${r.fonte ?? ''}|${r.etichetta}`}>
+              <td className="voce"><Voce riga={r} dimensione={dimensione} /></td>
+              <td className="num">{formatoCifra(r.lead)}</td>
+              <Cifra n={r.mai_lavorati} base={r.lead} />
+              <td className="num">{mediaAzioni(r)}</td>
+              <td className="num">{durata(r.primo_contatto_ore)}</td>
+              <Cifra n={r.entro_24h} base={r.lead} />
+              <Cifra n={r.senza_risposta} base={r.lead} />
+              <Cifra n={r.persi} base={r.lead} />
+              <td className="num">{formatoCifra(r.aperti)}</td>
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Totale</td>
+            <td className="num">{formatoCifra(totale.lead)}</td>
+            <Cifra n={totale.mai_lavorati} base={totale.lead} />
+            <td className="num">{mediaAzioni(totale)}</td>
+            <td className="num">{durata(totale.primo_contatto_ore)}</td>
+            <Cifra n={totale.entro_24h} base={totale.lead} />
+            <Cifra n={totale.senza_risposta} base={totale.lead} />
+            <Cifra n={totale.persi} base={totale.lead} />
+            <td className="num">{formatoCifra(totale.aperti)}</td>
           </tr>
         </tfoot>
       </table>
