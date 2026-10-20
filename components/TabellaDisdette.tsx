@@ -14,7 +14,7 @@ export function TabellaDisdette({ disdette, io, staff, torna }: { disdette: Disd
             <th>Cliente</th>
             <th>Contratto</th>
             <th>Data disdetta</th>
-            <th>Motivo e note</th>
+            <th>Nota</th>
             <th>In carico</th>
           </tr>
         </thead>

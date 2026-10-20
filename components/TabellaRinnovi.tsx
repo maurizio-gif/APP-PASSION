@@ -14,7 +14,7 @@ export function TabellaRinnovi({ rinnovi, io, staff, torna }: { rinnovi: Rinnovo
             <th>Cliente</th>
             <th>Abbonamento</th>
             <th>Data rinnovo</th>
-            <th>Note</th>
+            <th>Nota</th>
             <th>In carico</th>
           </tr>
         </thead>

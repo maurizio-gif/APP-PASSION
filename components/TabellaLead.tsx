@@ -42,7 +42,7 @@ export function TabellaLead({ lead, io, staff, torna, contratti, firma }: { lead
               ) : (
                 <>
                   <th>Attività di interesse</th>
-                  <th>Nota task</th>
+                  <th>Nota</th>
                 </>
               )}
               <th>{contratti ? '' : 'In carico'}</th>
