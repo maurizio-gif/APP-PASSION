@@ -8910,3 +8910,40 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   box-shadow: 0 0 0 3px rgba(31, 157, 85, 0.18);
 }
 :root:root .debitori-totale + .tabella-scorre { margin-top: 0; }
+
+/* Debitori: il totale in un blocco scuro a parte (come il pannello delle schede), con l'icona della sezione. */
+:root:root:root:root .debitori-totale {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin: 0 0 14px;
+  padding: 16px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  background:
+    radial-gradient(40% 260% at 0% 0%, rgba(227, 3, 45, 0.24), rgba(227, 3, 45, 0) 70%),
+    linear-gradient(100deg, #0e0f12 0%, #17090f 60%, #2a0b14 100%);
+}
+.debitori-totale::before {
+  content: '';
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  background:
+    var(--icona-titolo, none) center / 22px 22px no-repeat,
+    linear-gradient(135deg, #f0123b 0%, var(--rosso) 35%, #5c0b1e 100%);
+  box-shadow: 0 2px 8px rgba(92, 11, 30, 0.45);
+}
+:root:root:root:root .debitori-totale .debitori-cifra {
+  color: #ff5a76;
+  font-size: 2rem;
+}
+:root:root:root:root .debitori-totale .debitori-label { color: #fff; font-size: 1rem; font-weight: 500; }
+:root:root:root:root .debitori-totale .debitori-label strong { font-weight: 800; }
+:root:root:root:root .debitori-totale .debitori-controllo {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.82);
+}

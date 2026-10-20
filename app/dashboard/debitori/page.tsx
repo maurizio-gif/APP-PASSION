@@ -57,20 +57,20 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
       ]} />
       <FiltroConsulente azione="/dashboard/debitori" staff={staff} consulente={consulente} tieni={{ vista, chi: 'tutti' }} q={q} />
 
+      {debitori.length > 0 && (
+        <div className="debitori-totale">
+          {rientrati ? (
+            <span className="debitori-label"><strong>{debitori.length}</strong> rientrati negli ultimi 90 giorni</span>
+          ) : (
+            <>
+              <strong className="negativo debitori-cifra">{formatoEuro(totale)}</strong>
+              <span className="debitori-label">da {debitori.length} {debitori.length === 1 ? 'socio' : 'soci'}</span>
+            </>
+          )}
+          {controllato && <span className="debitori-controllo">Saldi controllati su PerfectGym {formatoFa(controllato)}</span>}
+        </div>
+      )}
       <div className="scheda">
-        {debitori.length > 0 && (
-          <div className="debitori-totale">
-            {rientrati ? (
-              <span className="debitori-label"><strong>{debitori.length}</strong> rientrati negli ultimi 90 giorni</span>
-            ) : (
-              <>
-                <strong className="negativo debitori-cifra">{formatoEuro(totale)}</strong>
-                <span className="debitori-label">da {debitori.length} {debitori.length === 1 ? 'socio' : 'soci'}</span>
-              </>
-            )}
-            {controllato && <span className="debitori-controllo">Saldi controllati su PerfectGym {formatoFa(controllato)}</span>}
-          </div>
-        )}
         {debitori.length === 0 ? (
           <Vuoto>{rientrati ? 'Nessun debito rientrato negli ultimi 90 giorni.' : 'Nessun debitore qui.'}</Vuoto>
         ) : (
