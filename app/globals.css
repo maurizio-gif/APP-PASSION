@@ -8838,3 +8838,7 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   .tabella-prove.tabella-uniforme:has(th:nth-child(5)) th:nth-child(4) { width: 15%; }
   .tabella-prove.tabella-uniforme:has(th:nth-child(5)) th:nth-child(5) { width: 33%; }
 }
+
+/* I due «Vai a ...» di una scheda (Non assegnati) stanno sulla stessa riga. */
+:root:root .numeri-schede .numero-vai-riga { flex-wrap: nowrap; gap: 10px; }
+:root:root .numeri-schede .numero-vai-riga .numero-vai { white-space: nowrap; font-size: 0.78rem; }
