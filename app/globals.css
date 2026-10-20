@@ -8845,3 +8845,23 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
 /* Intestazione: ogni cella ha il suo fondo scuro (cosi' tra una colonna e l'altra non restano filetti chiari). */
 :root:root:root thead th { background: linear-gradient(100deg, #101114, #17090f); }
 :root:root:root thead th:last-child { background: linear-gradient(100deg, #17090f, #2a0b14); }
+
+/* Ticket (dettaglio): riquadri con testata scura; la fisarmonica ha il tasto a destra. */
+.fase-titolo .task-apri { margin-left: auto; }
+.fase-titolo .chip-gruppo + .task-apri { margin-left: 0; }
+.fase-titolo .conta-titolo {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--rosso);
+  color: #fff;
+  font-size: 0.7rem;
+  letter-spacing: 0;
+}
+.fase-titolo .conta-titolo.zero { background: rgba(255, 255, 255, 0.18); }
+.ticket-pagina > .sotto-fase { margin: 0; min-width: 0; }
+.ticket-pagina > .sotto-fase.piena { grid-column: 1 / -1; }
+.ticket-pagina .sotto-corpo { display: block; }

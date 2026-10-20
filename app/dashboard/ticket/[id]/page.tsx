@@ -8,6 +8,7 @@ import {
 import { assiste, smista } from '@/lib/permessi'
 import { Avviso, Contatti, Persona } from '@/components/Ui'
 import { BottoneInvio } from '@/components/BottoneInvio'
+import { Accordion, Riquadro } from '@/components/FaseRighe'
 import { CaricaAllegati } from '@/components/CaricaAllegati'
 import { ModuloModifica } from '@/components/ModuloModifica'
 import { BollinoStato, BollinoTipo, NumeroTicket } from '@/components/Ticket'
@@ -65,8 +66,7 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
       )}
 
       <div className="griglia ticket-pagina">
-        <section className="scheda">
-          <h2>{t.tipo === 'modifica' ? 'Cosa cambia' : 'Cosa succede'}</h2>
+        <Riquadro titolo={<>{t.tipo === 'modifica' ? 'Cosa cambia' : 'Cosa succede'}</>}>
           <p className="ticket-testo">{t.descrizione}</p>
           {t.tipo === 'modifica' && (
             <dl className="dati">
@@ -83,11 +83,10 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
               <ul className="elenco-breve">{t.verifiche.map((v) => <li key={v}>✓ {traduci(VERIFICHE_TICKET, v)}</li>)}</ul>
             </>
           )}
-        </section>
+        </Riquadro>
 
         {(t.persona || t.doppioni.length > 0 || t.stessa_persona.length > 0) && (
-          <section className="scheda">
-            <h2>Cliente</h2>
+          <Riquadro titolo={<>Cliente</>}>
             {t.persona && (
               <>
                 <div className="cliente-riga">
@@ -120,11 +119,10 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
                 </ul>
               </>
             )}
-          </section>
+          </Riquadro>
         )}
         {(t.soluzione || t.causa) && (
-          <section className="scheda ticket-soluzione piena">
-            <h2>{t.stato === 'rilasciata' ? 'Rilasciata' : 'Soluzione'}</h2>
+          <Riquadro titolo={<>{t.stato === 'rilasciata' ? 'Rilasciata' : 'Soluzione'}</>} classe="ticket-soluzione piena">
             <dl className="dati">
               {t.natura && (<><dt>Di cosa si trattava</dt><dd>{traduci(NATURA_TICKET, t.natura)}</dd></>)}
               {t.causa && (<><dt>Causa</dt><dd className="ticket-testo">{t.causa}</dd></>)}
@@ -132,14 +130,10 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
               <dd className="ticket-testo">{t.soluzione}</dd>
               {t.chiuso_il && (<><dt>Chiuso</dt><dd>{t.chiuso_nome} · {formatoDataOra(t.chiuso_il)}</dd></>)}
             </dl>
-          </section>
+          </Riquadro>
         )}
 
-        <section className="scheda">
-          <details className="accordion" open={t.allegati.length > 0}>
-            <summary>
-              <h2>Allegati <span className={`conta-titolo${t.allegati.length === 0 ? ' zero' : ''}`}>{t.allegati.length}</span></h2>
-            </summary>
+        <Accordion aperto={t.allegati.length > 0} titolo={<>Allegati <span className={`conta-titolo${t.allegati.length === 0 ? ' zero' : ''}`}>{t.allegati.length}</span></>}>
               {t.allegati.length === 0 ? (
                 <p className="vuoto">Nessun allegato.</p>
               ) : (
@@ -161,14 +155,9 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
                 </ul>
               )}
               {t.stato !== 'doppione' && <CaricaAllegati ticket={t.id} />}
-          </details>
-        </section>
+          </Accordion>
 
-        <section className="scheda">
-          <details className="accordion">
-            <summary>
-              <h2>Thread <span className="conta-titolo">{t.messaggi.filter((m) => !m.evento).length}</span></h2>
-            </summary>
+        <Accordion titolo={<>Thread <span className="conta-titolo">{t.messaggi.filter((m) => !m.evento).length}</span></>}>
               <ul className="filo-ticket">
                 {t.messaggi.map((m) => (
                   <li key={m.id} className={`lato-${m.lato}${m.evento ? ' evento' : ''}`}>
@@ -191,8 +180,7 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
                   <BottoneInvio testo="Aggiungi al thread" inCorso="Invio…" classe="secondario" />
                 </form>
               )}
-          </details>
-        </section>
+          </Accordion>
 
         <Azioni t={t} io={io} qui={qui} />
       </div>
@@ -376,9 +364,8 @@ function Azioni({ t, io, qui }: { t: Ticket; io: Io; qui: string }) {
 
   if (blocchi.length === 0) return null
   return (
-    <section className="scheda ticket-azioni">
-      <h2>Cosa fare</h2>
+    <Riquadro titolo={<>Cosa fare</>} classe="ticket-azioni">
       <div className="stack">{blocchi}</div>
-    </section>
+    </Riquadro>
   )
 }

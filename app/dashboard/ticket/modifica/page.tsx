@@ -25,7 +25,7 @@ export default async function NuovaModifica({ searchParams }: { searchParams: { 
             </span>
           </div>
         </div>
-        <Link href="/dashboard/ticket?vista=modifiche">← Modifiche</Link>
+        <Link className="bottone secondario" href="/dashboard/ticket?vista=modifiche">← Modifiche</Link>
       </div>
       <Avviso errore={searchParams.errore} />
       <ModuloModifica azione={nuovaModifica} testo="Scrivi la modifica" riunione={oggiRoma()} />

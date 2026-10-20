@@ -28,3 +28,26 @@ export function FaseVuota({ numero, nome, testo }: { numero?: number; nome: stri
     </Fase>
   )
 }
+
+// Riquadro con la testata scura attaccata (Ticket e altre pagine di dettaglio).
+export function Riquadro({ titolo, classe = '', children }: { titolo: React.ReactNode; classe?: string; children: React.ReactNode }) {
+  return (
+    <div className={`fase-righe sotto-fase ${classe}`}>
+      <div className="fase-titolo">{titolo}</div>
+      <section className="scheda fase-corpo sotto-corpo">{children}</section>
+    </div>
+  )
+}
+
+// Lo stesso riquadro a fisarmonica: la testata e' il tasto Apri / Chiudi.
+export function Accordion({ titolo, aperto = false, classe = '', children }: { titolo: React.ReactNode; aperto?: boolean; classe?: string; children: React.ReactNode }) {
+  return (
+    <details className={`fase-righe sotto-fase task-fase ${classe}`} open={aperto}>
+      <summary className="fase-titolo">
+        {titolo}
+        <span className="task-apri" aria-hidden="true" />
+      </summary>
+      <section className="scheda fase-corpo sotto-corpo">{children}</section>
+    </details>
+  )
+}
