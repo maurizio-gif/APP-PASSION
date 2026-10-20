@@ -8842,3 +8842,6 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
 /* I due «Vai a ...» di una scheda (Non assegnati) stanno sulla stessa riga. */
 :root:root .numeri-schede .numero-vai-riga { flex-wrap: nowrap; gap: 10px; }
 :root:root .numeri-schede .numero-vai-riga .numero-vai { white-space: nowrap; font-size: 0.78rem; }
+/* Intestazione: ogni cella ha il suo fondo scuro (cosi' tra una colonna e l'altra non restano filetti chiari). */
+:root:root:root thead th { background: linear-gradient(100deg, #101114, #17090f); }
+:root:root:root thead th:last-child { background: linear-gradient(100deg, #17090f, #2a0b14); }
