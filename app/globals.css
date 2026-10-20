@@ -8711,3 +8711,10 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   color: #fff;
 }
 :root:root:root:root[data-tema='chiaro'] .testata:not(:has(.testata-saluto)) .aiuto-punto { background: #fff; border-color: #e3cbd1; color: var(--testo-attenuato); }
+/* Il filo sotto il titolo e' lungo quanto il titolo (non tutta la pagina). */
+:root:root:root:root .testata:not(:has(.testata-saluto)) > div:first-child {
+  flex: 0 1 auto;
+  min-width: 260px;
+  padding-right: 36px;
+}
+.testata:not(:has(.testata-saluto)) { justify-content: space-between; }
