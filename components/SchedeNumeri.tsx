@@ -70,11 +70,11 @@ export function SchedeNumeri({ voci, attiva, base }: { voci: VoceNumero[]; attiv
             {v.vai && (
               <div className="numero-vai-riga" aria-hidden={!aperta}>
                 <Link href={v.vai} className="numero-vai" onClick={(e) => e.stopPropagation()} tabIndex={aperta ? 0 : -1}>
-                  {v.vaiTesto ?? 'Vai'} →
+                  {v.vaiAltro ? (v.vaiTesto ?? 'Vai').replace(/^Vai a /, '') : (v.vaiTesto ?? 'Vai')} →
                 </Link>
                 {v.vaiAltro && (
                   <Link href={v.vaiAltro.href} className="numero-vai" onClick={(e) => e.stopPropagation()} tabIndex={aperta ? 0 : -1}>
-                    {v.vaiAltro.testo} →
+                    {v.vaiAltro.testo.replace(/^Vai a /, '')} →
                   </Link>
                 )}
               </div>
