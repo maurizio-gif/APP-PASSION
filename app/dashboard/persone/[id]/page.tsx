@@ -3,7 +3,7 @@ import { crm, linkPgm, type Pagamento, type Scheda } from '@/lib/crm'
 import { DatiPagamento } from '@/components/Bollini'
 import {
   CONTROLLO, ESITO_DISDETTA, ESITO_RINNOVO, FONTE, formatoData, formatoDataOra, formatoEuro, formatoGiorno, formatoOra,
-  MOTIVI_DISDETTA, oggiRoma, STATO_CONTRATTO, TIPO_SOCIO, TIPO_TASK, traduci,
+  MOTIVI_DISDETTA, oggiRoma, STATI_TICKET_CHIUSI, STATO_CONTRATTO, TIPO_SOCIO, TIPO_TASK, traduci,
 } from '@/lib/formato'
 import { Avviso, BollinoFase, BollinoFonte, Contatti, Provenienza, Riapri, Vuoto } from '@/components/Ui'
 import { BottoneInvio } from '@/components/BottoneInvio'
@@ -12,7 +12,7 @@ import { SceltaOperatore } from '@/components/SceltaOperatore'
 import { InCarico } from '@/components/InCarico'
 import { Iniziali } from '@/components/RigaProva'
 import { AvatarTask, IconaTask } from '@/components/IconaTask'
-import { Col, Fase, FaseVuota, Storico } from '@/components/FaseRighe'
+import { Accordion, Col, Fase, FaseVuota, Storico } from '@/components/FaseRighe'
 import { puoGestire, puoVedere } from '@/lib/permessi'
 import { TabellaTicket } from '@/components/Ticket'
 import {
@@ -472,26 +472,18 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
       <div className="persona-sotto">
         <div>
           {ticket && (
-            <div className="fase-righe sotto-fase sotto-tick">
-<div className="fase-titolo">Ticket
-<a className="bottone secondario piccolo fase-azione" href={`/dashboard/ticket/nuovo?persona=${p.id}`}>+ Apri un ticket</a>
-</div>
-<section className="scheda fase-corpo sotto-corpo sotto-tabella">
+            <Accordion classe="sotto-tick" titolo="Ticket" anteprima={ticket ? (ticket.length === 0 ? 'Nessun ticket' : `${ticket.length} ${ticket.length === 1 ? 'ticket' : 'ticket'} · ${ticket.filter((x) => !STATI_TICKET_CHIUSI.includes(x.stato)).length} aperti`) : null} corpoClasse="sotto-tabella">
+              <div className="sotto-azione"><a className="bottone secondario piccolo" href={`/dashboard/ticket/nuovo?persona=${p.id}`}>+ Apri un ticket</a></div>
               {ticket.length === 0
                 ? <Vuoto>Nessun ticket su questa persona.</Vuoto>
                 : <TabellaTicket ticket={ticket} socio={false} />}
-            </section>
-</div>
+            </Accordion>
           )}
         </div>
 
         <div>
           {s.socio && (
-            <div className="fase-righe sotto-fase sotto-acc">
-<div className="fase-titolo">Ultimi accessi
-<span className="fase-nota">{s.socio.ingressi_30gg} in 30 giorni</span>
-</div>
-<section className="scheda fase-corpo sotto-corpo">
+            <Accordion classe="sotto-acc" titolo="Ultimi accessi" anteprima={s.socio ? (s.socio.ingressi.length === 0 ? 'Nessun accesso' : `${s.socio.ingressi_30gg} in 30 giorni · ultimo ${formatoGiorno(s.socio.ingressi[0].entrata)}, ${formatoOra(s.socio.ingressi[0].entrata)}`) : null} corpoClasse="">
               {s.socio.ingressi.length === 0 ? (
                 <Vuoto>Nessun accesso registrato.</Vuoto>
               ) : (
@@ -504,14 +496,11 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                   ))}
                 </ul>
               )}
-            </section>
-</div>
+            </Accordion>
           )}
 
           {s.socio && (
-            <div className="fase-righe sotto-fase sotto-pren">
-<div className="fase-titolo">Prenotazioni</div>
-<section className="scheda fase-corpo sotto-corpo">
+            <Accordion classe="sotto-pren" titolo="Prenotazioni" anteprima={s.socio ? (s.socio.prenotazioni.length === 0 ? 'Nessuna prenotazione' : `${s.socio.prenotazioni.length} · ultima ${formatoGiorno(s.socio.prenotazioni[0].inizio)}, ${formatoOra(s.socio.prenotazioni[0].inizio)} · ${s.socio.prenotazioni[0].lezione ?? 'Lezione'}`) : null} corpoClasse="">
               {s.socio.prenotazioni.length === 0 ? (
                 <Vuoto>Nessuna prenotazione.</Vuoto>
               ) : (
@@ -524,8 +513,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                   ))}
                 </ul>
               )}
-            </section>
-</div>
+            </Accordion>
           )}
         </div>
       </div>
