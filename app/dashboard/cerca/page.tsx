@@ -13,9 +13,9 @@ export default async function Cerca({ searchParams }: { searchParams: { q?: stri
       <div className="testata">
         <div>
           <h1>Cerca</h1>
-          <p>Soci, lead e prove: per nome, cognome, telefono o email.</p>
+          <p>Soci, opportunità e prove: per nome, cognome, telefono o email.</p>
         </div>
-        <Link className="bottone" href="/dashboard/lead/nuovo">+ Nuovo lead</Link>
+        <Link className="bottone" href="/dashboard/lead/nuovo">+ Nuova opportunità</Link>
       </div>
 
       <form className="filtri" action="/dashboard/cerca">
@@ -27,7 +27,7 @@ export default async function Cerca({ searchParams }: { searchParams: { q?: stri
         {q.length < 2 ? (
           <Vuoto>Scrivi almeno due lettere.</Vuoto>
         ) : trovati.length === 0 ? (
-          <Vuoto>Nessuno trovato per «{q}». Se è una persona nuova, crea un lead.</Vuoto>
+          <Vuoto>Nessuno trovato per «{q}». Se è una persona nuova, crea un&apos;opportunità.</Vuoto>
         ) : (
           <ul className="elenco">
             {trovati.map((t) => (
@@ -36,7 +36,7 @@ export default async function Cerca({ searchParams }: { searchParams: { q?: stri
                   <div>
                     <Persona id={t.id} nome={t.nome} cognome={t.cognome} />{' '}
                     {t.member_id && <span className="bollino verde">socio</span>}{' '}
-                    {t.lead_aperti > 0 && <span className="bollino giallo">{t.lead_aperti} lead aperti</span>}
+                    {t.lead_aperti > 0 && <span className="bollino giallo">{t.lead_aperti} {t.lead_aperti === 1 ? 'opportunità aperta' : 'opportunità aperte'}</span>}
                     <Contatti telefono={t.telefono} email={t.email} />
                   </div>
                   <span className="piccolo attenuato">{t.ultima_attivita ? formatoFa(t.ultima_attivita) : ''}</span>

@@ -27,7 +27,7 @@ const larghezza = (parte: number, tutto: number) => (tutto ? Math.max((parte / t
 export function PercorsoLead({ t }: { t: PercorsoMarketing }) {
   const senzaProva = t.iscritti - t.iscritti_dopo_prova
   const passi = [
-    { nome: 'Lead', nota: 'arrivati nel periodo', n: t.lead, pieno: [{ n: t.lead, classe: '' }] },
+    { nome: 'Opportunità', nota: 'arrivate nel periodo', n: t.lead, pieno: [{ n: t.lead, classe: '' }] },
     { nome: 'Qualificati', nota: 'hanno risposto', n: t.qualificati, pieno: [{ n: t.qualificati, classe: '' }] },
     { nome: 'Prova attivata', nota: 'passaggio facoltativo', n: t.prove, pieno: [{ n: t.prove, classe: '' }] },
     {
@@ -57,7 +57,7 @@ export function PercorsoLead({ t }: { t: PercorsoMarketing }) {
             <strong>{formatoCifra(p.n)}</strong>
             {i > 0 && (
               <small>
-                {perc(p.n, t.lead)} dei lead
+                {perc(p.n, t.lead)} delle opportunità
                 {i > 1 && ` · ${perc(p.n, t.qualificati)} dei qualificati`}
               </small>
             )}
@@ -110,7 +110,7 @@ export function TabellaPercorsi({ righe, totale, dimensione, voce }: {
         <thead>
           <tr>
             <th>{voce}</th>
-            <th className="num">Lead</th>
+            <th className="num">Opportunità</th>
             <th className="num">Qualificati</th>
             <th className="num">Prova attivata</th>
             <th className="num">Iscritti</th>
@@ -161,12 +161,12 @@ const mediaAzioni = (t: PercorsoMarketing) => (t.lavorati ? formatoCifra(t.azion
 export function GestioneNumeri({ t }: { t: PercorsoMarketing }) {
   return (
     <div className="numeri">
-      <Numero etichetta="Nessuno li ha lavorati" valore={perc(t.mai_lavorati, t.lead)} nota={`${formatoCifra(t.mai_lavorati)} lead senza task né commenti, né prova né iscrizione`} />
-      <Numero etichetta="Provati, mai risposto" valore={perc(t.senza_risposta, t.lead)} nota={`${formatoCifra(t.senza_risposta)} lead lavorati ma mai arrivati a rispondere`} />
-      <Numero etichetta="Azioni per lead" valore={mediaAzioni(t)} nota="task fatti e commenti, in media, sui lead lavorati" />
+      <Numero etichetta="Nessuno le ha lavorate" valore={perc(t.mai_lavorati, t.lead)} nota={`${formatoCifra(t.mai_lavorati)} opportunità senza task né commenti, né prova né iscrizione`} />
+      <Numero etichetta="Provate, mai risposto" valore={perc(t.senza_risposta, t.lead)} nota={`${formatoCifra(t.senza_risposta)} opportunità lavorate ma mai arrivate a rispondere`} />
+      <Numero etichetta="Azioni per opportunità" valore={mediaAzioni(t)} nota="task fatti e commenti, in media, sulle opportunità lavorate" />
       <Numero etichetta="Primo contatto" valore={durata(t.primo_contatto_ore)} nota="tempo tipico dall’arrivo al primo task o commento" />
-      <Numero etichetta="Entro 24 ore" valore={perc(t.entro_24h, t.lead)} nota={`${formatoCifra(t.entro_24h)} lead con la prima azione entro un giorno`} />
-      <Numero etichetta="Persi" valore={perc(t.persi, t.lead)} nota={`${formatoCifra(t.persi)} persi, ${formatoCifra(t.aperti)} ancora aperti`} />
+      <Numero etichetta="Entro 24 ore" valore={perc(t.entro_24h, t.lead)} nota={`${formatoCifra(t.entro_24h)} opportunità con la prima azione entro un giorno`} />
+      <Numero etichetta="Perse" valore={perc(t.persi, t.lead)} nota={`${formatoCifra(t.persi)} perse, ${formatoCifra(t.aperti)} ancora aperte`} />
     </div>
   )
 }
@@ -183,14 +183,14 @@ export function TabellaGestione({ righe, totale, dimensione, voce }: {
         <thead>
           <tr>
             <th>{voce}</th>
-            <th className="num">Lead</th>
-            <th className="num">Nessuno li ha lavorati</th>
-            <th className="num">Azioni per lead</th>
+            <th className="num">Opportunità</th>
+            <th className="num">Nessuno le ha lavorate</th>
+            <th className="num">Azioni per opportunità</th>
             <th className="num">Primo contatto</th>
             <th className="num">Entro 24 ore</th>
-            <th className="num">Provati, mai risposto</th>
-            <th className="num">Persi</th>
-            <th className="num">Ancora aperti</th>
+            <th className="num">Provate, mai risposto</th>
+            <th className="num">Perse</th>
+            <th className="num">Ancora aperte</th>
           </tr>
         </thead>
         <tbody>

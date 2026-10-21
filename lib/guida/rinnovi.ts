@@ -4,7 +4,7 @@ export const rinnovi: Argomento = {
   chiave: 'rinnovi',
   titolo: 'Rinnovi e scadenze',
   sezione: 'rinnovi',
-  inBreve: 'Gli abbonamenti a scadenza fissa (Reformer, percorsi con trainer) che stanno per finire: si prendono in carico come i lead, la telefonata 15 giorni prima, e l’esito rinnovato o non rinnovato.',
+  inBreve: 'Gli abbonamenti a scadenza fissa (Reformer, percorsi con trainer) che stanno per finire: si prendono in carico come le opportunità, la telefonata 15 giorni prima, e l’esito rinnovato o non rinnovato.',
   testo: `
 ## Rinnovo o disdetta?
 A Passion ci sono due tipi di abbonamento, e ognuno finisce in un modo suo:
@@ -21,10 +21,10 @@ Da **PerfectGym**, da soli, ogni 5 minuti: niente si inserisce a mano.
 
 > Il rinnovo arriva **senza nessuno che lo segua**, e la sua telefonata automatica resta senza assegnatario. Chi lo **prende in carico** prende anche la telefonata.
 
-## Si prende in carico, come un lead
+## Si prende in carico, come un'opportunità
 - Un rinnovo **da gestire** lo prende chiunque, con **«Prendo in carico»** sulla sua riga.
 - Un rinnovo **in carico a te** lo passi a un collega (la tendina e **«Assegna»**) o lo **rimetti da assegnare** (**«Rimetti da assegnare»**): torna fra i **Da gestire**, senza nessuno. I task già assegnati restano a chi li aveva.
-- Un rinnovo **in carico a un collega** lo riassegna, lo rimette da assegnare o lo chiude solo lui, un admin o chi ha l'autorizzazione **«Lead degli altri»**.
+- Un rinnovo **in carico a un collega** lo riassegna, lo rimette da assegnare o lo chiude solo lui, un admin o chi ha l'autorizzazione **«Opportunità degli altri»**.
 
 Gli stessi bottoni sono anche nella scheda della persona.
 
@@ -57,6 +57,6 @@ Chi segue il rinnovo riceve i suoi task. Se salvi un rinnovo che non seguiva nes
 - **il certificato medico**: nella scheda della persona, sotto nome e contatti: attivo con la scadenza, scaduto, o non presente;
 - **il saldo negativo**: vedi [Debitori](/dashboard/guida/debitori).
 
-Dalla scheda della persona, con **«Riapri»**, si toglie l'esito: lo riapre chi lo seguiva, un admin o chi ha **«Lead degli altri»**.
+Dalla scheda della persona, con **«Riapri»**, si toglie l'esito: lo riapre chi lo seguiva, un admin o chi ha **«Opportunità degli altri»**.
 `,
 }

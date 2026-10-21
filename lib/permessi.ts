@@ -6,7 +6,7 @@ import type { Io, Ruolo } from '@/lib/crm'
 // Un admin vede tutto e puo' tutto; la home e la scheda persona le vedono tutti.
 
 export const SEZIONI = [
-  { chiave: 'lead', href: '/dashboard/lead', testo: 'Lead' },
+  { chiave: 'lead', href: '/dashboard/lead', testo: 'Opportunità' },
   { chiave: 'prove', href: '/dashboard/prove', testo: 'Prove' },
   { chiave: 'contratti', href: '/dashboard/contratti', testo: 'Nuovi contratti' },
   { chiave: 'disdette', href: '/dashboard/disdette', testo: 'Disdette' },
@@ -34,7 +34,7 @@ export const SEZIONI_ATTIVE = SEZIONI.filter((s) => !SOSPESE.includes(s.chiave))
 export const SEZIONI_PER_PERSONA: readonly Sezione[] = ['marketing']
 
 export const AUTORIZZAZIONI = [
-  { chiave: 'lead_altrui', testo: 'Lead degli altri', descrizione: 'riassegnare e chiudere anche i lead, le disdette e i rinnovi in carico a un altro' },
+  { chiave: 'lead_altrui', testo: 'Opportunità degli altri', descrizione: 'riassegnare e chiudere anche le opportunità, le disdette e i rinnovi in carico a un altro' },
   { chiave: 'gestione_utenti', testo: 'Gestione utenti', descrizione: 'aprire Utenti e cambiare sezioni e autorizzazioni' },
 ] as const
 
