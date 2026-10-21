@@ -9600,3 +9600,18 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   .tabella-prove .modulo.compatto.gestione-prova { width: 320px; min-width: 320px; }
   .tabella-uniforme:has(th:nth-child(5)) th:nth-child(4) { min-width: 130px; }
 }
+
+/* Nomi lunghi nei menu (consulente, esito): si accorciano con i puntini invece di finire sotto il pulsante. */
+.gestione-prova select,
+.azioni-riga select,
+.tabella-colonne select {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (min-width: 721px) {
+  .tabella-prove.tabella-uniforme:has(th:nth-child(5)) th:nth-child(5) { width: 332px; min-width: 332px; }
+  .tabella-prove td.gestisci { min-width: 332px; }
+  .tabella-prove .modulo.compatto.gestione-prova { width: 300px; min-width: 300px; }
+}
