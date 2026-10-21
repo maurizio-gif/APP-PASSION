@@ -9052,3 +9052,5 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   color: var(--testo);
 }
 :root[data-tema='chiaro'] .testata .crumb-indietro:hover { background: var(--rosso); border-color: var(--rosso); color: #fff; }
+/* Nel titolo: prima il tondino «indietro», poi l'icona della sezione. */
+.titolo-riga h1 > .crumb-slot { order: -1; }
