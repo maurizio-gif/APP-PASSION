@@ -9579,3 +9579,10 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   .tabella-lead.tabella-uniforme:has(th:nth-child(5)) th:nth-child(5),
   .tabella-prove.tabella-uniforme:has(th:nth-child(5)) th:nth-child(5) { width: 1%; white-space: nowrap; }
 }
+
+/* Prove: la colonna Gestione ha la larghezza del suo modulo (esito, consulente, Salva), senza che il pulsante copra il menu. */
+@media (min-width: 721px) {
+  .tabella-prove.tabella-uniforme:has(th:nth-child(5)) th:nth-child(5) { width: 372px; min-width: 372px; white-space: normal; }
+  .tabella-prove td.gestisci { white-space: normal; min-width: 372px; }
+  .tabella-prove .modulo.compatto.gestione-prova { width: 340px; max-width: none; min-width: 340px; }
+}
