@@ -9830,3 +9830,14 @@ details.task-fase > summary.fase-titolo { padding: 15px 20px; row-gap: 10px; }
 .fase-storico-lista > * + * .scheda.fase-corpo { border-top: 1px solid rgba(92, 11, 30, 0.2); }
 :root:root:root:root:root .fase-storico-lista > :last-child .scheda.fase-corpo,
 :root:root:root:root:root .fase-storico-lista > :last-child.fase-righe > .scheda.fase-corpo { border-radius: 0 0 14px 14px; }
+
+/* Storico attaccato: lo sfondo scuro e' solo sulla barra, non su tutta la fisarmonica (altrimenti dietro gli angoli tondi delle voci aperte restava un angolo scuro). */
+.fase-storico { background: none; border-radius: 0; border-top: 0; }
+.fase-storico > summary {
+  background:
+    radial-gradient(40% 400% at 0% 0%, rgba(227, 3, 45, 0.2), rgba(227, 3, 45, 0) 70%),
+    linear-gradient(100deg, #0e0f12 0%, #17090f 60%, #2a0b14 100%);
+  border-top: 1px solid rgba(227, 3, 45, 0.55);
+  border-radius: 0;
+}
+.fase-storico:not([open]) > summary { border-radius: 0 0 14px 14px; }
