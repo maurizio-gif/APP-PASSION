@@ -9601,17 +9601,21 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   .tabella-uniforme:has(th:nth-child(5)) th:nth-child(4) { min-width: 130px; }
 }
 
-/* Nomi lunghi nei menu (consulente, esito): si accorciano con i puntini invece di finire sotto il pulsante. */
-.gestione-prova select,
-.azioni-riga select,
-.tabella-colonne select {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
 @media (min-width: 721px) {
   .tabella-prove.tabella-uniforme:has(th:nth-child(5)) th:nth-child(5) { width: 332px; min-width: 332px; }
   .tabella-prove td.gestisci { min-width: 332px; }
   .tabella-prove .modulo.compatto.gestione-prova { width: 300px; min-width: 300px; }
+}
+
+/* Prove: nel modulo di gestione il consulente ha una riga tutta per se' (nomi lunghi interi, freccia e menu come prima); esito e Salva stanno sopra. */
+@media (min-width: 721px) {
+  .tabella-prove .modulo.compatto.gestione-prova {
+    grid-template-columns: minmax(0, 1fr) auto;
+    width: 300px;
+    min-width: 300px;
+  }
+  .tabella-prove .gestione-prova select:nth-of-type(1) { grid-area: 1 / 1; }
+  .tabella-prove .gestione-prova select:nth-of-type(2) { grid-area: 2 / 1 / 3 / 3; }
+  .tabella-prove .modulo.compatto.gestione-prova > .bottone { grid-area: 1 / 2; }
+  .tabella-prove .gestione-prova .gestione-extra { grid-area: 3 / 1 / 4 / 3; }
 }
