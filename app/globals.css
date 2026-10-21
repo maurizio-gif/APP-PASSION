@@ -9415,3 +9415,8 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
 :root:root .barra nav svg { stroke: url(#grad-icona); }
 :root:root .barra nav a.attivo svg,
 :root:root .barra nav a.attivo svg path { stroke: url(#grad-icona); }
+/* Dove lo sfondo e' gia' rosso (categoria aperta, voce attiva) l'icona resta bianca, altrimenti non si vede. */
+:root:root .barra nav .gruppo-menu.aperto > .gruppo-menu-titolo .gruppo-menu-icona svg,
+:root:root .barra nav .gruppo-menu.aperto > .gruppo-menu-titolo .gruppo-menu-icona svg path,
+:root:root .barra nav a.attivo svg,
+:root:root .barra nav a.attivo svg path { stroke: #fff; }
