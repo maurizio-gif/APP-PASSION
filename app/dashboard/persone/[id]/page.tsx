@@ -12,7 +12,7 @@ import { SceltaOperatore } from '@/components/SceltaOperatore'
 import { InCarico } from '@/components/InCarico'
 import { Iniziali } from '@/components/RigaProva'
 import { AvatarTask, IconaTask } from '@/components/IconaTask'
-import { Accordion, Col, Fase, FaseVuota, Storico } from '@/components/FaseRighe'
+import { Accordion, Col, Fase, FaseVuota, Storico, StoricoPiede } from '@/components/FaseRighe'
 import { puoGestire, puoVedere } from '@/lib/permessi'
 import { TabellaTicket } from '@/components/Ticket'
 import {
@@ -49,14 +49,14 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
     ...(leadAperto ? [{ valore: `lead:${leadAperto.id}`, testo: `Opportunità ${traduci(FONTE, leadAperto.fonte)}` }] : []),
   ]
 
-  const cartaLead = (l: Scheda['lead'][number]) => {
+  const cartaLead = (l: Scheda['lead'][number], piede?: React.ReactNode) => {
     const puo = puoGestire(io, l.assegnato_a)
     const daPgm = l.origine === 'app' && (l.pgm_stato === 'errore' || !l.pgm_stato)
     const aperto = l.fase === 'da_gestire' || l.fase === 'in_gestione'
     const azioni = daPgm || l.fase === 'da_gestire' || (aperto && puo) || ((l.fase === 'vinta' || l.fase === 'persa') && puo)
     return (
       <div key={l.id}>
-        <Fase numero={1} nome="Opportunità">
+        <Fase numero={1} nome="Opportunità" piede={piede}>
           <Col titolo="Opportunità">
             <dl className="dati">
               <dt>Fonte</dt><dd>{traduci(FONTE, l.fonte)}</dd>
@@ -146,9 +146,9 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
     )
   }
 
-  const cartaProva = (pr: Scheda['prove'][number]) => (
+  const cartaProva = (pr: Scheda['prove'][number], piede?: React.ReactNode) => (
     <div key={pr.id}>
-      <Fase numero={2} nome="Prova">
+      <Fase numero={2} nome="Prova" piede={piede}>
         <Col titolo="Prova">
           <dl className="dati">
             <dt>Pass</dt><dd>{pr.tipo_pass ?? 'Prova'}</dd>
@@ -220,15 +220,19 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
   )
 
   // Aperti in vista, chiusi nello storico sotto.
-  function conStorico<T>(voci: T[], aperto: (x: T) => boolean, carta: (x: T) => React.ReactNode, titolo: string, numero: number, cosa: [string, string]) {
+  function conStorico<T>(voci: T[], aperto: (x: T) => boolean, carta: (x: T, piede?: React.ReactNode) => React.ReactNode, titolo: string, numero: number, cosa: [string, string]) {
     const aperti = voci.filter(aperto)
     const chiusi = voci.filter((x) => !aperto(x))
+    // Con almeno una voce aperta lo storico sta in fondo alla sua scheda (un blocco solo); senza, ha la sua barra.
+    const piede = chiusi.length > 0 && aperti.length > 0
+      ? <StoricoPiede conta={chiusi.length} cosa={cosa}>{chiusi.map((x) => carta(x))}</StoricoPiede>
+      : undefined
     return (
       <>
-        {aperti.map(carta)}
-        {chiusi.length > 0 && (
-          <Storico numero={numero} titolo={titolo} conta={chiusi.length} cosa={cosa} aperto={aperti.length === 0 && chiusi.length === 1}>
-            {chiusi.map(carta)}
+        {aperti.map((x, i) => carta(x, i === aperti.length - 1 ? piede : undefined))}
+        {chiusi.length > 0 && aperti.length === 0 && (
+          <Storico numero={numero} titolo={titolo} conta={chiusi.length} cosa={cosa} aperto={chiusi.length === 1}>
+            {chiusi.map((x) => carta(x))}
           </Storico>
         )}
       </>
@@ -365,12 +369,16 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
           <FaseVuota numero={3} nome="Abbonamento" testo={s.socio ? 'Nessun abbonamento su PerfectGym.' : 'Non ancora iscritto.'} />
         ) : (
           <div>
-            <Contratto c={ultimo} controllo={controllo(ultimo.id)} pagamento={pagamenti[ultimo.id]} />
-            {precedenti.length > 0 && (
-              <Storico numero={3} titolo="Storico abbonamenti" conta={precedenti.length} cosa={['abbonamento', 'abbonamenti']}>
-                {precedenti.map((c) => <Contratto key={c.id} c={c} controllo={controllo(c.id)} pagamento={pagamenti[c.id]} />)}
-              </Storico>
-            )}
+            <Contratto
+              c={ultimo}
+              controllo={controllo(ultimo.id)}
+              pagamento={pagamenti[ultimo.id]}
+              piede={precedenti.length > 0 ? (
+                <StoricoPiede conta={precedenti.length} cosa={['abbonamento', 'abbonamenti']}>
+                  {precedenti.map((c) => <Contratto key={c.id} c={c} controllo={controllo(c.id)} pagamento={pagamenti[c.id]} />)}
+                </StoricoPiede>
+              ) : undefined}
+            />
           </div>
         )}
 
@@ -525,9 +533,9 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
 type Socio = NonNullable<Scheda['socio']>
 
 // Un abbonamento: il piano, la durata e il pagamento, in tre colonne.
-function Contratto({ c, controllo, pagamento }: { c: Socio['contratti'][number]; controllo?: string; pagamento?: Pagamento }) {
+function Contratto({ c, controllo, pagamento, piede }: { c: Socio['contratti'][number]; controllo?: string; pagamento?: Pagamento; piede?: React.ReactNode }) {
   return (
-    <Fase numero={3} nome="Abbonamento">
+    <Fase numero={3} nome="Abbonamento" piede={piede}>
       <Col titolo="Abbonamento">
         <dl className="dati">
           <dt>Piano</dt><dd>{c.piano ?? 'Contratto'}</dd>

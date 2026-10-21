@@ -1,13 +1,14 @@
 // Una fase della scheda cliente (Lead, Prova, Abbonamento, Rinnovo, Disdetta): titolo scuro
 // attaccato e, sotto, i dati in colonne tematiche. Solo presentazione.
-export function Fase({ numero, nome, children }: { numero?: number; nome: string; children: React.ReactNode }) {
+export function Fase({ numero, nome, piede, children }: { numero?: number; nome: string; piede?: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="fase-righe">
+    <div className={`fase-righe${piede ? ' con-piede' : ''}`}>
       <div className="fase-titolo">
         {numero != null && <span className="fase-numero">{numero}</span>}
         {nome}
       </div>
       <section className="scheda fase-corpo">{children}</section>
+      {piede}
     </div>
   )
 }
@@ -64,6 +65,20 @@ export function Storico({ numero, titolo, conta, cosa, aperto = false, children 
         <span className="task-apri" aria-hidden="true" />
       </summary>
       <div className="storico-lista">{children}</div>
+    </details>
+  )
+}
+
+// Lo storico attaccato in fondo alla fase (dentro la stessa scheda): una barra scura a fisarmonica, aperta mostra le voci chiuse.
+export function StoricoPiede({ conta, cosa, children }: { conta: number; cosa: [string, string]; children: React.ReactNode }) {
+  return (
+    <details className="fase-storico">
+      <summary>
+        <span className="fase-storico-nome">Storico</span>
+        <span className="chip">{conta} {conta === 1 ? cosa[0] : cosa[1]}</span>
+        <span className="task-apri" aria-hidden="true" />
+      </summary>
+      <div className="fase-storico-lista">{children}</div>
     </details>
   )
 }

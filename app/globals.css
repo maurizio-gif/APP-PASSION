@@ -9780,3 +9780,53 @@ details.task-fase > summary.fase-titolo { padding: 15px 20px; row-gap: 10px; }
 :root:root .task-fase .fase-titolo .chip-gruppo,
 :root:root .storico-acc .fase-titolo .chip-gruppo { margin-left: 14px; }
 :root:root .fase-titolo .chip-gruppo + .task-apri { margin-left: auto; }
+
+/* Storico attaccato in fondo alla fase: la scheda attiva e lo storico sono un blocco solo. */
+:root:root:root:root:root .contenuto .fase-righe.con-piede > .scheda.fase-corpo { border-radius: 0; }
+.fase-storico {
+  background:
+    radial-gradient(40% 400% at 0% 0%, rgba(227, 3, 45, 0.2), rgba(227, 3, 45, 0) 70%),
+    linear-gradient(100deg, #0e0f12 0%, #17090f 60%, #2a0b14 100%);
+  border-radius: 0 0 14px 14px;
+  border-top: 1px solid rgba(227, 3, 45, 0.55);
+  color: #fff;
+}
+.fase-storico[open] { border-radius: 0; }
+.fase-storico > summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 18px;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.fase-storico > summary::-webkit-details-marker { display: none; }
+.fase-storico > summary:focus-visible { outline: 2px solid var(--rosso); outline-offset: -2px; }
+.fase-storico .chip {
+  padding: 3px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.fase-storico .task-apri { margin-left: auto; }
+.fase-storico > summary:hover .task-apri { background: var(--rosso); border-color: var(--rosso); }
+.fase-storico[open] .task-apri::before { content: 'Chiudi'; }
+.fase-storico[open] .task-apri::after { transform: translateY(2px) rotate(-135deg); }
+/* aperto: le voci chiuse sotto la barra, senza titolo proprio (la barra e' il titolo), separate da un filetto */
+.fase-storico-lista { color: var(--testo); }
+:root:root:root:root:root .fase-storico-lista .fase-righe { box-shadow: none; border-radius: 0; }
+.fase-storico-lista .fase-righe > .fase-titolo { display: none; }
+:root:root:root:root:root .fase-storico-lista .fase-righe > .scheda.fase-corpo { border-radius: 0; box-shadow: none; }
+.fase-storico-lista > * + * .scheda.fase-corpo { border-top: 1px solid rgba(92, 11, 30, 0.2); }
+:root:root:root:root:root .fase-storico-lista > :last-child .scheda.fase-corpo,
+:root:root:root:root:root .fase-storico-lista > :last-child.fase-righe > .scheda.fase-corpo { border-radius: 0 0 14px 14px; }
