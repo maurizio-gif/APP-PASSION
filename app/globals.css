@@ -9670,3 +9670,9 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
 }
 :root:root #na-v-opp:checked ~ .task-tabs label[for='na-v-opp'] span,
 :root:root #na-v-prove:checked ~ .task-tabs label[for='na-v-prove'] span { background: rgba(255, 255, 255, 0.25); color: #fff; }
+
+/* Nuovo task: «Per» ha una riga tutta per se' (il testo e' lungo, es. «Pass fino al 23/10/2026»); Task, Quando, A chi e Note stanno sotto. */
+.task-corpo .task-nuovo .modulo > .campo { flex: 1 1 100%; }
+.task-corpo .task-nuovo .modulo > .campo select { width: 100%; }
+.task-corpo .task-nuovo .due-colonne .campo select,
+.task-corpo .task-nuovo .due-colonne .campo input { width: 100%; }
