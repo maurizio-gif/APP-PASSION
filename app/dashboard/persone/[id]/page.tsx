@@ -45,7 +45,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
   const per = [
     ...s.disdette.filter((d) => !d.esito).map((d) => ({ valore: `disdetta:${d.id}`, testo: `Disdetta del ${formatoData(d.data_disdetta)}` })),
     ...rinnovi.filter((r) => !r.esito).map((r) => ({ valore: `rinnovo:${r.id}`, testo: `Rinnovo, scade il ${formatoData(r.scadenza)}` })),
-    ...s.prove.filter((pr) => !pr.esito).map((pr) => ({ valore: `prova:${pr.id}`, testo: `Pass fino al ${formatoData(pr.data_fine)}` })),
+    ...s.prove.filter((pr) => !pr.esito).map((pr) => ({ valore: `prova:${pr.id}`, testo: pr.data_fine ? `Pass fino al ${formatoData(pr.data_fine)}` : 'Prova senza pass su PerfectGym' })),
     ...(leadAperto ? [{ valore: `lead:${leadAperto.id}`, testo: `Opportunità ${traduci(FONTE, leadAperto.fonte)}` }] : []),
   ]
 
