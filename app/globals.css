@@ -9573,3 +9573,9 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   .tabella-prove.tabella-uniforme:has(th:nth-child(5)) th:nth-child(2) { width: 15%; }
   .tabella-prove.tabella-uniforme:has(th:nth-child(5)) th:nth-child(3) { width: 21%; }
 }
+@media (min-width: 721px) {
+  .tabella-lead.tabella-uniforme:has(th:nth-child(5)) th:nth-child(4),
+  .tabella-prove.tabella-uniforme:has(th:nth-child(5)) th:nth-child(4) { width: auto; }
+  .tabella-lead.tabella-uniforme:has(th:nth-child(5)) th:nth-child(5),
+  .tabella-prove.tabella-uniforme:has(th:nth-child(5)) th:nth-child(5) { width: 1%; white-space: nowrap; }
+}
