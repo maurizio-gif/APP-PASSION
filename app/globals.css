@@ -9136,3 +9136,32 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   margin-right: 7px;
   vertical-align: -2px;
 }
+
+/* ---- Tabelle: senza cerchio con le iniziali; barra rossa sulla riga attiva, tag e citazioni al posto del testo piatto ---- */
+:root:root:root .cliente-cella .iniziali { display: none; }
+.cliente-cella { gap: 0; }
+:root:root:root tbody td:first-child { box-shadow: inset 3px 0 0 transparent; transition: box-shadow var(--t-rapida) var(--curva), background-color var(--t-rapida) var(--curva); }
+:root:root:root tbody tr:hover td:first-child { box-shadow: inset 3px 0 0 var(--rosso); }
+:root:root:root .cliente-cella .riga-dati > a:first-child,
+:root:root:root .cliente-cella .riga-dati > strong:first-child { font-size: 1.02rem; letter-spacing: -0.005em; }
+
+/* Lead: l'attivita' di interesse come tag, la nota del task come citazione */
+:root:root:root .tabella-lead td:nth-child(3) .riga-dati .normale {
+  display: inline-block;
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: rgba(227, 3, 45, 0.08);
+  color: #8a0c26;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+:root:root:root .tabella-lead td:nth-child(4) .riga-dati .normale {
+  padding-left: 11px;
+  border-left: 2px solid rgba(227, 3, 45, 0.4);
+  color: #3a2a30;
+  font-size: 0.88rem;
+  font-style: italic;
+}
+
+/* date: il giorno in evidenza, l'ora piu' tenue */
+:root:root:root .tabella-lead td:nth-child(2) .riga-dati a.normale { font-weight: 650; font-variant-numeric: tabular-nums; }
