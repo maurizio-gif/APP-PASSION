@@ -9637,3 +9637,36 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
 }
 #na-v-opp:focus-visible ~ .task-tabs label[for='na-v-opp'],
 #na-v-prove:focus-visible ~ .task-tabs label[for='na-v-prove'] { outline: 2px solid var(--rosso); outline-offset: 2px; }
+
+/* «Non assegnati»: l'interruttore e' una fascia scura attaccata alla tabella, nei colori del pannello delle schede. */
+:root:root .na-toggle > .task-tabs.na-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  padding: 12px 18px;
+  border-radius: 0;
+  background:
+    radial-gradient(40% 260% at 0% 0%, rgba(227, 3, 45, 0.2), rgba(227, 3, 45, 0) 70%),
+    linear-gradient(100deg, #0e0f12 0%, #17090f 60%, #2a0b14 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+:root:root .na-toggle > .na-tabs label {
+  flex: 0 0 auto;
+  padding: 7px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.72);
+  font-weight: 600;
+  transition: background-color var(--t-rapida) var(--curva), border-color var(--t-rapida) var(--curva), color var(--t-rapida) var(--curva);
+}
+:root:root .na-toggle > .na-tabs label:hover { color: #fff; border-color: rgba(255, 255, 255, 0.3); }
+:root:root .na-toggle > .na-tabs label span { background: rgba(255, 255, 255, 0.14); color: #fff; }
+:root:root #na-v-opp:checked ~ .task-tabs label[for='na-v-opp'],
+:root:root #na-v-prove:checked ~ .task-tabs label[for='na-v-prove'] {
+  background: linear-gradient(to bottom, #f0123b, var(--rosso) 55%, #cc0227);
+  border-color: var(--rosso);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(227, 3, 45, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+:root:root #na-v-opp:checked ~ .task-tabs label[for='na-v-opp'] span,
+:root:root #na-v-prove:checked ~ .task-tabs label[for='na-v-prove'] span { background: rgba(255, 255, 255, 0.25); color: #fff; }
