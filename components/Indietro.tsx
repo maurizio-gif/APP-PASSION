@@ -50,16 +50,35 @@ export function Indietro() {
 
     const home = percorso === `/${radice}` || percorso === `/${radice}/`
     if (home) return void setSlot(null)
-    // se la testata ha gia' il suo «← ...», non si ripete
-    if ([...document.querySelectorAll('.testata a, .testata-ticket a')].some((a) => (a.textContent ?? '').trim().startsWith('←'))) return void setSlot(null)
-    const dove = DOVE.map((s) => document.querySelector<HTMLElement>(s)).find(Boolean)
-    if (!dove) return void setSlot(null)
-    const nodo = document.createElement('span')
-    nodo.className = 'crumb-slot'
-    dove.prepend(nodo)
-    setSlot(nodo)
+    // La pagina puo' arrivare a pezzi (scheletro di caricamento, poi i dati): si prova a montare il tondino
+    // finche' la testata c'e', e lo si rimonta se la testata viene sostituita. Dopo qualche secondo si smette.
+    let nodo: HTMLSpanElement | null = null
+    let attesa = 0
+    const tenta = () => {
+      attesa = 0
+      if (nodo && nodo.isConnected) return
+      nodo?.remove()
+      nodo = null
+      // se la testata ha gia' il suo «← ...», non si ripete
+      if ([...document.querySelectorAll('.testata a, .testata-ticket a')].some((a) => (a.textContent ?? '').trim().startsWith('←'))) return void setSlot(null)
+      const dove = DOVE.map((s) => document.querySelector<HTMLElement>(s)).find(Boolean)
+      if (!dove) return void setSlot(null)
+      nodo = document.createElement('span')
+      nodo.className = 'crumb-slot'
+      dove.prepend(nodo)
+      setSlot(nodo)
+    }
+    tenta()
+    const osservatore = new MutationObserver(() => {
+      if (!attesa) attesa = requestAnimationFrame(tenta)
+    })
+    osservatore.observe(document.body, { childList: true, subtree: true })
+    const fine = window.setTimeout(() => osservatore.disconnect(), 10000)
     return () => {
-      nodo.remove()
+      osservatore.disconnect()
+      window.clearTimeout(fine)
+      if (attesa) cancelAnimationFrame(attesa)
+      nodo?.remove()
       setSlot(null)
     }
   }, [percorso, radice])
