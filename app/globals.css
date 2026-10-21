@@ -9220,3 +9220,16 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
 }
 /* Scheda cliente: niente cerchio con le iniziali accanto al nome. */
 :root:root:root:root .persona-testa .iniziali { display: none; }
+
+/* Allineamento: la prima riga di ogni colonna ha la stessa dimensione e la stessa altezza di riga, cosi' partono tutte alla stessa quota. */
+:root:root:root .tabella-lead tbody td .riga-dati > :first-child:not(.stato):not(.bollino):not(.etichetta-riga),
+:root:root:root .tabella-colonne tbody td .riga-dati > :first-child:not(.stato):not(.bollino):not(.etichetta-riga),
+:root:root:root .tabella-prove tbody td .riga-dati > :first-child:not(.stato):not(.bollino):not(.etichetta-riga) {
+  font-size: 1rem;
+  line-height: 1.45;
+}
+:root:root:root .tabella-lead tbody td .riga-dati > :first-child strong,
+:root:root:root .tabella-colonne tbody td .riga-dati > :first-child strong { font-size: inherit; line-height: inherit; }
+:root:root:root tbody td .riga-dati { gap: 2px; }
+:root:root:root tbody td .riga-dati > * + * { line-height: 1.5; }
+:root:root:root tbody td { vertical-align: top; }
