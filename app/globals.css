@@ -9556,3 +9556,20 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   transition: background-color var(--t-rapida) var(--curva), border-color var(--t-rapida) var(--curva);
 }
 .numero:hover .calcola-numero { background: var(--rosso); border-color: var(--rosso); }
+
+/* Tabelle a cinque colonne: l'ultima (azioni) prende solo lo spazio che serve, il resto va alle colonne di testo (Nota in particolare). */
+@media (min-width: 721px) {
+  .tabella-uniforme:has(th:nth-child(5)) { table-layout: auto; width: 100%; }
+  .tabella-uniforme:has(th:nth-child(5)) th:nth-child(1) { width: 22%; }
+  .tabella-uniforme:has(th:nth-child(5)) th:nth-child(2) { width: 16%; }
+  .tabella-uniforme:has(th:nth-child(5)) th:nth-child(3) { width: 22%; }
+  .tabella-uniforme:has(th:nth-child(5)) th:nth-child(4) { width: auto; }
+  .tabella-uniforme:has(th:nth-child(5)) th:nth-child(5) { width: 1%; white-space: nowrap; }
+  .tabella-uniforme:has(th:nth-child(5)) td:nth-child(5) { white-space: nowrap; }
+  .tabella-lead.tabella-uniforme:has(th:nth-child(5)) th:nth-child(1) { width: 22%; }
+  .tabella-lead.tabella-uniforme:has(th:nth-child(5)) th:nth-child(2) { width: 12%; }
+  .tabella-lead.tabella-uniforme:has(th:nth-child(5)) th:nth-child(3) { width: 24%; }
+  .tabella-prove.tabella-uniforme:has(th:nth-child(5)) th:nth-child(1) { width: 20%; }
+  .tabella-prove.tabella-uniforme:has(th:nth-child(5)) th:nth-child(2) { width: 15%; }
+  .tabella-prove.tabella-uniforme:has(th:nth-child(5)) th:nth-child(3) { width: 21%; }
+}
