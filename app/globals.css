@@ -9615,19 +9615,3 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   .tabella-prove td.gestisci { min-width: 332px; }
   .tabella-prove .modulo.compatto.gestione-prova { width: 300px; min-width: 300px; }
 }
-
-/* Menu dentro le tabelle e nei moduli di gestione: aspetto classico (con la freccia a destra), cosi' i nomi lunghi si accorciano con i puntini. */
-.tabella-colonne select:not([multiple]),
-.gestione-prova select:not([multiple]),
-.azioni-riga select:not([multiple]) {
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237a6a70' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 12px 12px;
-  padding-right: 30px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
