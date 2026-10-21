@@ -1,3 +1,4 @@
+import { Iniziali } from '@/components/RigaProva'
 import { linkPgm, type Io, type Operatore, type Rinnovo } from '@/lib/crm'
 import { ESITO_RINNOVO, formatoData, formatoEuro, STATO_CONTRATTO, traduci } from '@/lib/formato'
 import { Contatti, Persona } from '@/components/Ui'
@@ -24,7 +25,9 @@ export function TabellaRinnovi({ rinnovi, io, staff, torna }: { rinnovi: Rinnovo
             return (
               <tr key={r.id}>
                 <td>
-                  <div className="riga-dati">
+                  <div className="cliente-cella">
+<Iniziali nome={r.nome} cognome={r.cognome} classe="piccole" />
+<div className="riga-dati">
                   <Persona id={r.utente_id} nome={r.nome} cognome={r.cognome} />
                   <Contatti telefono={r.telefono} email={r.email} />
                   {r.esito && (
@@ -33,6 +36,7 @@ export function TabellaRinnovi({ rinnovi, io, staff, torna }: { rinnovi: Rinnovo
                   {r.gestito_il && <div className="piccolo attenuato">{r.assegnato_nome ?? '—'} · {formatoData(r.gestito_il)}</div>}
                   {pgm && <a className="piccolo" href={pgm} target="_blank" rel="noreferrer">PerfectGym ↗</a>}
                   </div>
+</div>
                 </td>
                 <td>
                   <div className="riga-dati">

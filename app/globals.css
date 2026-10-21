@@ -9054,3 +9054,70 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
 :root[data-tema='chiaro'] .testata .crumb-indietro:hover { background: var(--rosso); border-color: var(--rosso); color: #fff; }
 /* Nel titolo: prima il tondino «indietro», poi l'icona della sezione. */
 .titolo-riga h1 > .crumb-slot { order: -1; }
+
+/* ---- Tabelle e box piu' moderni: avatar, icone nei contatti, righe leggere, ombre morbide ---- */
+.cliente-cella { display: flex; align-items: flex-start; gap: 12px; min-width: 0; }
+.cliente-cella > .riga-dati { min-width: 0; }
+:root:root .cliente-cella .iniziali {
+  width: 38px;
+  height: 38px;
+  margin-top: 1px;
+  background: linear-gradient(135deg, #f0123b 0%, var(--rosso) 40%, #5c0b1e 100%);
+  box-shadow: 0 2px 6px rgba(92, 11, 30, 0.28);
+  color: #fff;
+  font-size: 0.8rem;
+}
+:root:root:root .cliente-cella .riga-dati > a:first-child,
+:root:root:root .cliente-cella .riga-dati > strong:first-child {
+  color: #1c1114;
+  font-size: 0.97rem;
+  font-weight: 650;
+}
+:root:root:root .cliente-cella .riga-dati > a:first-child:hover { color: var(--rosso); text-decoration: none; }
+:root:root:root .cliente-cella .riga-dati > a:first-child strong { font-weight: 650; }
+
+/* telefono e mail con la loro icona */
+.riga-dati .contatti a { display: inline-flex; align-items: center; gap: 7px; }
+.riga-dati .contatti > span a::before,
+.riga-dati .contatti > a[href^='mailto']::before {
+  content: '';
+  flex: none;
+  width: 13px;
+  height: 13px;
+  background: center / contain no-repeat;
+  opacity: 0.7;
+}
+.riga-dati .contatti > span a::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237a6a70' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z'/%3E%3C/svg%3E");
+}
+.riga-dati .contatti > a[href^='mailto']::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237a6a70' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6h16v12H4zM4 7l8 6 8-6'/%3E%3C/svg%3E");
+}
+
+/* righe: piu' aria, separatori leggeri, testi in toni caldi coerenti */
+:root:root:root tbody td { padding-top: 16px; padding-bottom: 16px; border-bottom: 1px solid rgba(42, 11, 20, 0.07); }
+:root:root:root tbody tr:hover td { background: rgba(227, 3, 45, 0.03); }
+:root:root:root .riga-dati .muto,
+:root:root:root .tabella-colonne td .riga-dati .muto {
+  color: #7a6a70;
+  font-size: 0.84rem;
+  font-weight: 400;
+}
+:root:root:root .riga-dati .normale { font-weight: 500; color: #1c1114; }
+:root:root:root .riga-dati .contatti a { color: #5e4a51; font-size: 0.86rem; }
+
+/* box: sfondo caldo, contorno appena accennato, ombra morbida */
+:root:root:root .contenuto .scheda {
+  border-color: rgba(92, 11, 30, 0.14);
+  box-shadow: 0 1px 2px rgba(42, 11, 20, 0.05), 0 8px 24px rgba(42, 11, 20, 0.07);
+}
+:root:root:root .scheda > .conteggio {
+  margin: 0 -22px -20px;
+  padding: 12px 22px;
+  border-top: 1px solid rgba(42, 11, 20, 0.07);
+  border-radius: 0 0 var(--raggio) var(--raggio);
+  background: rgba(42, 11, 20, 0.03);
+  color: #7a6a70;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
