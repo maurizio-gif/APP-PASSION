@@ -46,7 +46,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
     ...s.disdette.filter((d) => !d.esito).map((d) => ({ valore: `disdetta:${d.id}`, testo: `Disdetta del ${formatoData(d.data_disdetta)}` })),
     ...rinnovi.filter((r) => !r.esito).map((r) => ({ valore: `rinnovo:${r.id}`, testo: `Rinnovo, scade il ${formatoData(r.scadenza)}` })),
     ...s.prove.filter((pr) => !pr.esito).map((pr) => ({ valore: `prova:${pr.id}`, testo: `Pass fino al ${formatoData(pr.data_fine)}` })),
-    ...(leadAperto ? [{ valore: `lead:${leadAperto.id}`, testo: `Lead ${traduci(FONTE, leadAperto.fonte)}` }] : []),
+    ...(leadAperto ? [{ valore: `lead:${leadAperto.id}`, testo: `Opportunità ${traduci(FONTE, leadAperto.fonte)}` }] : []),
   ]
 
   const cartaLead = (l: Scheda['lead'][number]) => {
@@ -56,19 +56,19 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
     const azioni = daPgm || l.fase === 'da_gestire' || (aperto && puo) || ((l.fase === 'vinta' || l.fase === 'persa') && puo)
     return (
       <div key={l.id}>
-        <Fase numero={1} nome="Lead">
-          <Col titolo="Lead">
+        <Fase numero={1} nome="Opportunità">
+          <Col titolo="Opportunità">
             <dl className="dati">
               <dt>Fonte</dt><dd>{traduci(FONTE, l.fonte)}</dd>
               <dt>Stato</dt><dd><BollinoFase fase={l.fase} esito={l.esito} /></dd>
-              <dt>Arrivato</dt><dd>{formatoDataOra(l.creato_il)}</dd>
+              <dt>Arrivata</dt><dd>{formatoDataOra(l.creato_il)}</dd>
               {(l.richieste ?? 1) > 1 && (<><dt>Richieste</dt><dd>{l.richieste} volte{l.ultima_richiesta_il ? `, l'ultima il ${formatoDataOra(l.ultima_richiesta_il)}` : ''}</dd></>)}
               {l.fonte_dettaglio && (<><dt>Da</dt><dd>{l.fonte_dettaglio}</dd></>)}
               {l.presentato_da && (<><dt>Presentato da</dt><dd>{l.presentato_da}</dd></>)}
               {l.consenso_privacy != null && (<><dt>Privacy</dt><dd>{l.consenso_privacy ? 'Consenso dato' : 'Nessun consenso'}</dd></>)}
               {l.origine === 'app' && (
                 <><dt>PerfectGym</dt><dd>
-                  {l.pgm_stato === 'creato' ? <>Lead creato{l.pgm_lead_id ? ` (n. ${l.pgm_lead_id})` : ''}</>
+                  {l.pgm_stato === 'creato' ? <>Lead creato su PerfectGym{l.pgm_lead_id ? ` (n. ${l.pgm_lead_id})` : ''}</>
                     : l.pgm_stato === 'gia_su_pgm' ? 'Già presente: nessun lead nuovo'
                     : l.pgm_stato === 'errore' ? <span className="testo-rosso">Non creato: {l.pgm_errore}</span>
                     : <span className="attenuato">non mandato</span>}
@@ -81,7 +81,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
               {l.attivita_interesse && (<><dt>Interesse</dt><dd>{l.attivita_interesse}</dd></>)}
               {l.orario_ricontatto && (<><dt>Richiamare</dt><dd>{l.orario_ricontatto}</dd></>)}
               <dt>In carico a</dt><dd>{l.assegnato_nome ?? <span className="attenuato">nessuno</span>}</dd>
-              {l.chiuso_il && (<><dt>Chiuso</dt><dd>{formatoDataOra(l.chiuso_il)}</dd></>)}
+              {l.chiuso_il && (<><dt>Chiusa</dt><dd>{formatoDataOra(l.chiuso_il)}</dd></>)}
             </dl>
             {l.note && <p className="nota-socio">{l.note}</p>}
           </Col>
@@ -118,7 +118,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                         <form action={rilasciaLead}>
                           <input type="hidden" name="lead" value={l.id} />
                           <input type="hidden" name="torna" value={qui} />
-                          <button className="bottone secondario piccolo icona" title="Rimetti da assegnare: torna fra i lead da gestire, senza nessuno" aria-label="Rimetti da assegnare"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5M4 9h10a6 6 0 010 12h-3" /></svg></button>
+                          <button className="bottone secondario piccolo icona" title="Rimetti da assegnare: torna fra le opportunità da gestire, senza nessuno" aria-label="Rimetti da assegnare"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5M4 9h10a6 6 0 010 12h-3" /></svg></button>
                         </form>
                       )}
                     </div>
@@ -135,7 +135,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                   <Riapri
                     azione={riapriLead}
                     campi={{ lead: l.id, torna: qui }}
-                    avviso={`riaprendo il lead si toglie l'esito «${l.fase === 'vinta' ? `Vinta${l.esito ? ` · ${l.esito}` : ''}` : 'Persa'}» e torna ${l.assegnato_a ? 'in gestione' : 'da gestire'}. Lo storico cambia.`}
+                    avviso={`riaprendo l'opportunità si toglie l'esito «${l.fase === 'vinta' ? `Vinta${l.esito ? ` · ${l.esito}` : ''}` : 'Persa'}» e torna ${l.assegnato_a ? 'in gestione' : 'da gestire'}. Lo storico cambia.`}
                   />
                 )}
               </div>
@@ -352,8 +352,8 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
       {/* ---- Le fasi una sotto l'altra: lead, prova, abbonamento, poi rinnovo e disdetta ---- */}
       <div className="funnel funnel-righe">
         {s.lead.length === 0
-          ? <FaseVuota numero={1} nome="Lead" testo="Nessun lead." />
-          : conStorico(s.lead, (l) => l.fase === 'da_gestire' || l.fase === 'in_gestione', cartaLead, 'Storico lead')}
+          ? <FaseVuota numero={1} nome="Opportunità" testo="Nessuna opportunità." />
+          : conStorico(s.lead, (l) => l.fase === 'da_gestire' || l.fase === 'in_gestione', cartaLead, 'Storico opportunità')}
 
         {s.prove.length === 0
           ? <FaseVuota numero={2} nome="Prova" testo="Nessuna prova." />

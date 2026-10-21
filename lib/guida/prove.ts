@@ -7,9 +7,9 @@ export const prove: Argomento = {
   inBreve: 'I pass di prova attivati: come sta andando, chi li segue, la telefonata prima della fine. L’esito lo segna PerfectGym: iscritto quando compare l’abbonamento.',
   testo: `
 ## Da dove arrivano
-Ogni pass attivato su PerfectGym (un piano che si chiama pass, prova o guest) diventa una prova nel CRM da solo, entro 5 minuti. La segue chi seguiva il lead della persona.
+Ogni pass attivato su PerfectGym (un piano che si chiama pass, prova o guest) diventa una prova nel CRM da solo, entro 5 minuti. La segue chi seguiva l'opportunità della persona.
 
-Chi chiede il Pass dal sito ha subito la sua prova, agganciata al suo lead: parte dal giorno che ha chiesto e dura **7 giorni**, come il Guest Pass. Quando in reception gli attivano il pass su PerfectGym, **la prova resta una sola**:
+Chi chiede il Pass dal sito ha subito la sua prova, agganciata alla sua opportunità: parte dal giorno che ha chiesto e dura **7 giorni**, come il Guest Pass. Quando in reception gli attivano il pass su PerfectGym, **la prova resta una sola**:
 
 - prende il pass e **le sue date**, anche se su PerfectGym l'inizio è stato spostato (fino a 30 giorni dopo il giorno chiesto);
 - chi la segue, le note e i task restano;

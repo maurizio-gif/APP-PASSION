@@ -63,7 +63,7 @@ export default async function Utenti({ searchParams }: { searchParams: { errore?
           </summary>
           <div className="nuovo-utente-corpo">
             <p className="piccolo attenuato sotto-titolo">
-              Nasce con le sezioni operative (Lead, Prove, Disdette, Rinnovi, Task, Cerca, Debitori); il resto lo si abilita dalla scheda di ciascun utente.
+              Nasce con le sezioni operative (Opportunità, Prove, Disdette, Rinnovi, Task, Cerca, Debitori); il resto lo si abilita dalla scheda di ciascun utente.
               Appena creato gli arriva un’email di invito con il link per scegliere la password.
             </p>
             <form action={nuovoUtente} className="modulo nuovo-utente">

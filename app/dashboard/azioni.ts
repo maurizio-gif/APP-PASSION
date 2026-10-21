@@ -91,7 +91,7 @@ export async function nuovoLead(f: FormData) {
 
 type EsitoPerfectGym = { stato: 'creato' | 'gia_su_pgm' | 'errore'; errore?: string }
 const nonSuPgm = (motivo?: string) =>
-  `Lead creato nel CRM, ma non su PerfectGym: ${motivo ?? 'errore sconosciuto'}. Correggi i dati se serve e riprova dalla scheda del lead.`
+  `Opportunità creata nel CRM, ma non su PerfectGym: ${motivo ?? 'errore sconosciuto'}. Correggi i dati se serve e riprova dalla scheda dell'opportunità.`
 
 // Il bottone «Riprova» della scheda: di nuovo AddLead su PerfectGym.
 export async function leadSuPerfectGym(f: FormData) {

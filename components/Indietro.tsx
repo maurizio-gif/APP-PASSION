@@ -8,7 +8,7 @@ import { createPortal } from 'react-dom'
 // una riga discreta sopra il titolo, con il nome della pagina da cui si e' arrivati.
 // Nelle sezioni principali non c'e': ci si muove dal menu.
 const NOMI: Record<string, string> = {
-  lead: 'Lead', prove: 'Prove', disdette: 'Disdette', rinnovi: 'Rinnovi', task: 'Task', cerca: 'Cerca',
+  lead: 'Opportunità', prove: 'Prove', disdette: 'Disdette', rinnovi: 'Rinnovi', task: 'Task', cerca: 'Cerca',
   debitori: 'Debitori', abbonamenti: 'Abbonamenti', ticket: 'Ticket', curriculum: 'Curriculum',
   utenti: 'Utenti', riunioni: 'Report riunioni', guida: 'Guida', aggiornamenti: 'Aggiornamenti', contratti: 'Contratti',
 }

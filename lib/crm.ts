@@ -595,6 +595,27 @@ export type Pagamento = {
 // Il contratto che ha chiuso un lead: abbonamento o Pass (20261007g).
 export type ContrattoLead = { lead_id: string; contract_id: number; piano: string | null; data_firma: string | null; data_inizio: string | null; e_pass: boolean }
 
+// Il report marketing (supabase/migrations/20261020a_report_marketing.sql): per
+// ogni voce (fonte, campagna, mese...) quanti lead sono arrivati e fin dove.
+export type PercorsoMarketing = {
+  lead: number
+  qualificati: number
+  prove: number
+  iscritti: number
+  iscritti_dopo_prova: number
+  // Come vengono gestiti (20261020b)
+  lavorati: number
+  azioni: number
+  mai_lavorati: number
+  senza_risposta: number
+  entro_24h: number
+  primo_contatto_ore: number | null
+  persi: number
+  aperti: number
+}
+export type RigaMarketing = PercorsoMarketing & { fonte: string | null; etichetta: string }
+export type ReportMarketing = { dimensione: string; totale: PercorsoMarketing; righe: RigaMarketing[] }
+
 export const crm = {
   // Una volta per richiesta: la chiedono il layout e la pagina.
   io: cache(() => rpc<Io>('crm_io')),
@@ -629,6 +650,8 @@ export const crm = {
   debitori: (vista: string, chi: string, consulente: string | null = null) =>
     rpc<Debitore[]>('crm_debitori', { p_vista: vista, p_chi: chi, p_consulente: consulente }),
   abbonamenti: () => rpc<Abbonamenti>('crm_abbonamenti'),
+  reportMarketing: (dimensione: string, dal: string | null, al: string | null, fonte: string | null) =>
+    rpc<ReportMarketing>('crm_report_marketing', { p_dimensione: dimensione, p_dal: dal, p_al: al, p_fonte: fonte }),
   utenti: () => rpc<Utente[]>('crm_utenti'),
   ticketElenco: (vista: string, utente: string | null = null) =>
     rpc<TicketRiga[]>('crm_ticket_elenco', { p_vista: vista, p_utente: utente }),

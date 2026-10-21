@@ -15,6 +15,7 @@ export const ICONE: Record<string, string> = {
   '/dashboard/task': 'M5 12l4 4 10-10',
   '/dashboard/cerca': 'M11 18a7 7 0 100-14 7 7 0 000 14zM21 21l-4.5-4.5',
   '/dashboard/debitori': 'M12 3v18M16 7.5c0-1.4-1.8-2.5-4-2.5s-4 1.1-4 2.5S9.8 10 12 10s4 1.1 4 2.5-1.8 2.5-4 2.5-4-1.1-4-2.5',
+  '/dashboard/marketing': 'M3 11v2a1 1 0 001 1h2l5 4V6L6 10H4a1 1 0 00-1 1zM15 9a4 4 0 010 6M18 6.5a8 8 0 010 11',
   '/dashboard/abbonamenti': 'M4 20V10M10 20V4M16 20v-7M22 20H2',
   '/dashboard/ticket': 'M3 9a2 2 0 002-2h14a2 2 0 002 2v2a2 2 0 000 4v2a2 2 0 00-2 2H5a2 2 0 00-2-2v-2a2 2 0 000-4z',
   '/dashboard/curriculum': 'M6 3h12v18H6zM9 8h6M9 12h6M9 16h4',
@@ -38,7 +39,7 @@ const ICONE_GRUPPO: Record<string, string> = {
 const GRUPPI: { titolo?: string; voci: string[] }[] = [
   { voci: ['/dashboard'] },
   { titolo: 'Clienti', voci: ['/dashboard/lead', '/dashboard/prove', '/dashboard/contratti', '/dashboard/rinnovi', '/dashboard/disdette', '/dashboard/debitori', '/dashboard/task', '/dashboard/cerca'] },
-  { titolo: 'Analisi', voci: ['/dashboard/abbonamenti', '/dashboard/riunioni'] },
+  { titolo: 'Analisi', voci: ['/dashboard/abbonamenti', '/dashboard/marketing', '/dashboard/riunioni'] },
   { titolo: 'Team', voci: ['/dashboard/curriculum', '/dashboard/utenti'] },
   { titolo: 'Assistenza', voci: ['/dashboard/ticket', '/dashboard/guida', '/dashboard/aggiornamenti'] },
 ]

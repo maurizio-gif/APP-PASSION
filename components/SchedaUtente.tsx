@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import type { Io, Utente } from '@/lib/crm'
 import { formatoDataOra } from '@/lib/formato'
-import { AUTORIZZAZIONI, puoToccareRuolo, RUOLI, ruoloAdmin, SEZIONI_ATTIVE, SOSPESE, testoRuolo } from '@/lib/permessi'
+import { AUTORIZZAZIONI, puoToccareRuolo, RUOLI, ruoloAdmin, SEZIONI_ATTIVE, SEZIONI_PER_PERSONA, SOSPESE, testoRuolo } from '@/lib/permessi'
 import { BottoneInvio } from '@/components/BottoneInvio'
 import { aggiornaUtente, invitaUtente, rimuoviUtente } from '@/app/dashboard/azioni'
 
@@ -14,6 +14,8 @@ import { aggiornaUtente, invitaUtente, rimuoviUtente } from '@/app/dashboard/azi
 // tutte le sezioni e hanno tutte le autorizzazioni: finche' il ruolo scelto e'
 // uno di questi le spunte sono accese e ferme (e quelle salvate si tengono, per
 // quando tornasse consulente); scegliendo Consulente si possono cambiare.
+// Fanno eccezione le sezioni «per persona» (Marketing): nemmeno un admin le
+// vede d'ufficio, quindi la loro spunta si puo' cambiare anche da admin.
 // Sotto: l'invito (o il link per la password) e la rimozione, passando il suo
 // lavoro aperto a uno degli `operatori`.
 export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operatori: Utente[] }) {
@@ -25,6 +27,8 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
   // I ruoli che si possono scegliere: quello che ha, e quelli che chi guarda puo' dare.
   const ruoli = RUOLI.filter((r) => r.chiave === u.ruolo || puoToccareRuolo(io, r.chiave))
   const aperto = u.lead_aperti + u.task_aperti + u.altro_aperto
+  const perPersona = (chiave: string) => SEZIONI_PER_PERSONA.some((x) => x === chiave)
+  const nomiPerPersona = SEZIONI_ATTIVE.filter((s) => perPersona(s.chiave)).map((s) => s.testo).join(', ')
 
   return (
     <div className="scheda utente" id={`u-${u.id}`}>
@@ -75,16 +79,16 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
               <input type="checkbox" name="attivo" defaultChecked={u.attivo} disabled={ioStesso} />
               Attivo
             </label>
-            <label className="spunta" title="Compare fra chi può ricevere lead e task (serve anche l’accesso)">
+            <label className="spunta" title="Compare fra chi può ricevere opportunità e task (serve anche l’accesso)">
               <input type="checkbox" name="assegnabile" defaultChecked={u.assegnabile} />
-              Riceve lead e task
+              Riceve opportunità e task
             </label>
           </div>
           <p className="piccolo attenuato">{testoRuolo(ruolo)}: {RUOLI.find((r) => r.chiave === ruolo)?.descrizione}</p>
 
           {/* Da admin le spunte sono spente, e le spunte spente non partono col
               modulo: quelle salvate viaggiano nascoste. */}
-          {admin && u.sezioni.map((s) => <input key={s} type="hidden" name="sezioni" value={s} />)}
+          {admin && u.sezioni.filter((s) => !perPersona(s)).map((s) => <input key={s} type="hidden" name="sezioni" value={s} />)}
           {/* Le sezioni sospese non si vedono, ma chi le aveva le tiene. */}
           {!admin && u.sezioni.filter((s) => SOSPESE.some((x) => x === s)).map((s) => <input key={s} type="hidden" name="sezioni" value={s} />)}
           {admin && u.autorizzazioni.map((a) => <input key={a} type="hidden" name="autorizzazioni" value={a} />)}
@@ -92,12 +96,12 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
           <div className="utente-gruppo">
             <div className="utente-etichetta">
               Sezioni
-              {admin && <span className="attenuato"> · un admin le vede tutte: per sceglierle, ruolo Consulente</span>}
+              {admin && <span className="attenuato"> · un admin le vede tutte{nomiPerPersona && ` (tranne ${nomiPerPersona}, che si dà a una persona alla volta)`}: per sceglierle, ruolo Consulente</span>}
             </div>
             <div className="spunte">
               {SEZIONI_ATTIVE.map((s) => (
                 <label key={s.chiave} className="chip">
-                  {admin ? (
+                  {admin && !perPersona(s.chiave) ? (
                     <input type="checkbox" checked readOnly disabled />
                   ) : (
                     <input type="checkbox" name="sezioni" value={s.chiave} defaultChecked={u.sezioni.includes(s.chiave)} />
@@ -168,7 +172,7 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
             <p className="piccolo attenuato">
               {aperto > 0
                 ? `Ha in mano ${[
-                    u.lead_aperti > 0 && `${u.lead_aperti} ${u.lead_aperti === 1 ? 'lead aperto' : 'lead aperti'}`,
+                    u.lead_aperti > 0 && `${u.lead_aperti} ${u.lead_aperti === 1 ? 'opportunità aperta' : 'opportunità aperte'}`,
                     u.task_aperti > 0 && `${u.task_aperti} ${u.task_aperti === 1 ? 'task aperto' : 'task aperti'}`,
                     u.altro_aperto > 0 && `${u.altro_aperto} fra debitori e rinnovi`,
                   ].filter(Boolean).join(', ')}.`

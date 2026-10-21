@@ -137,7 +137,7 @@ function Azione({ l, io, staff, torna }: { l: Lead; io: Io; staff: Operatore[]; 
         <form action={rilasciaLead}>
           <input type="hidden" name="lead" value={l.id} />
           <input type="hidden" name="torna" value={torna} />
-          <button className="bottone secondario piccolo icona" title="Rimetti da assegnare: torna fra i lead da gestire, senza nessuno" aria-label="Rimetti da assegnare"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5M4 9h10a6 6 0 010 12h-3" /></svg></button>
+          <button className="bottone secondario piccolo icona" title="Rimetti da assegnare: torna fra le opportunità da gestire, senza nessuno" aria-label="Rimetti da assegnare"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5M4 9h10a6 6 0 010 12h-3" /></svg></button>
         </form>
       </div>
     )

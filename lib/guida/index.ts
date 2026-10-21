@@ -11,6 +11,7 @@ import { schedaPersona } from './scheda-persona'
 import { ticket } from './ticket'
 import { curriculum } from './curriculum'
 import { abbonamenti } from './abbonamenti'
+import { marketing } from './marketing'
 import { accessi } from './accessi'
 import { glossario } from './glossario'
 import { risposteRapide } from './risposte-rapide'
@@ -44,6 +45,7 @@ export const ARGOMENTI: Argomento[] = [
   ticket,
   abbonamenti,
   curriculum,
+  marketing,
   accessi,
 ]
 

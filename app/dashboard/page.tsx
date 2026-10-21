@@ -25,11 +25,11 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
   // «Non assegnati»: i lead aperti e le prove in corso senza un consulente. Si
   // carica solo la scheda aperta, come nella sua sezione.
   const schede: { chiave: string; testo: string; n?: number; nota?: string; caldo?: boolean; vai: string; vaiTesto: string; vaiAltro?: { href: string; testo: string } }[] = [
-    { chiave: 'lead', testo: 'Lead da gestire', n: h.lead_da_gestire, nota: `non ancora presi in carico · ${h.miei_lead} miei`, caldo: h.lead_da_gestire > 0, vai: '/dashboard/lead?vista=da_gestire', vaiTesto: 'Vai a Lead', vaiAltro: { href: '/dashboard/prove?vista=in_corso', testo: 'Vai a Prove' } },
+    { chiave: 'lead', testo: 'Opportunità da gestire', n: h.lead_da_gestire, nota: `non ancora prese in carico · ${h.miei_lead} mie`, caldo: h.lead_da_gestire > 0, vai: '/dashboard/lead?vista=da_gestire', vaiTesto: 'Vai a Opportunità', vaiAltro: { href: '/dashboard/prove?vista=in_corso', testo: 'Vai a Prove' } },
     { chiave: 'prove', testo: 'Prove in scadenza', n: h.prove_in_scadenza, nota: `entro 3 giorni · ${h.prove_in_corso} in corso`, caldo: h.prove_in_scadenza > 0, vai: '/dashboard/prove?vista=in_scadenza', vaiTesto: 'Vai a Prove' },
     ...(puoVedere(io, 'rinnovi') ? [{ chiave: 'rinnovi', testo: 'Rinnovi da gestire', n: h.rinnovi_da_gestire, nota: `non ancora presi in carico · ${h.miei_rinnovi} miei`, caldo: h.rinnovi_da_gestire > 0, vai: '/dashboard/rinnovi?vista=da_gestire', vaiTesto: 'Vai a Rinnovi' }] : []),
     ...(puoVedere(io, 'disdette') ? [{ chiave: 'disdette', testo: 'Disdette da gestire', n: h.disdette_da_gestire, nota: `non ancora prese in carico · ${h.mie_disdette} mie`, caldo: h.disdette_da_gestire > 0, vai: '/dashboard/disdette?vista=da_gestire', vaiTesto: 'Vai a Disdette' }] : []),
-    { chiave: 'non_assegnati', testo: 'Non assegnati', nota: 'lead e prove senza consulente', vai: '/dashboard/lead?vista=tutte&consulente=' + NESSUN_CONSULENTE, vaiTesto: 'Vai a Lead' },
+    { chiave: 'non_assegnati', testo: 'Non assegnati', nota: 'opportunità e prove senza consulente', vai: '/dashboard/lead?vista=tutte&consulente=' + NESSUN_CONSULENTE, vaiTesto: 'Vai a Opportunità' },
     { chiave: 'task', testo: 'I miei task', n: h.miei_task_oggi + h.miei_task_arretrati, nota: `${h.miei_task_oggi} oggi · ${h.miei_task_arretrati} arretrati`, caldo: h.miei_task_arretrati > 0, vai: '/dashboard/task?chi=miei&quando=arretrati', vaiTesto: 'Vai a Task' },
   ]
   const aperta = schede.find((s) => s.chiave === searchParams.vista) ?? schede[0]
@@ -61,7 +61,7 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
             <h1>Da gestire</h1>
           </div>
         </div>
-        <Link className="bottone" href="/dashboard/lead/nuovo">+ Nuovo lead</Link>
+        <Link className="bottone" href="/dashboard/lead/nuovo">+ Nuova opportunità</Link>
       </div>
 
       <Avviso errore={searchParams.errore} />
@@ -70,7 +70,7 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
         <SchedeNumeri voci={schede} attiva={scheda} base="/dashboard" />
         <div className="da-gestire-corpo">
           {nuovi && (nuovi.length === 0 ? (
-            <Vuoto>Tutti i lead sono presi in carico.</Vuoto>
+            <Vuoto>Tutte le opportunità sono prese in carico.</Vuoto>
           ) : (
             <TabellaLead lead={nuovi.slice(0, 15)} io={io} staff={staff} torna={qui} />
           ))}
@@ -99,10 +99,10 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
           ))}
           {leadLiberi && proveLibere && (
             leadLiberi.length + proveLibere.length === 0 ? (
-              <Vuoto>Tutti i lead aperti e tutte le prove in corso hanno un consulente.</Vuoto>
+              <Vuoto>Tutte le opportunità aperte e tutte le prove in corso hanno un consulente.</Vuoto>
             ) : (
               <>
-                <h3 className="da-gestire-titolo">Lead senza consulente <span className="conta-titolo">{leadLiberi.length}</span></h3>
+                <h3 className="da-gestire-titolo">Opportunità senza consulente <span className="conta-titolo">{leadLiberi.length}</span></h3>
                 {leadLiberi.length === 0 ? <Vuoto>Nessuno.</Vuoto> : <TabellaLead lead={leadLiberi.slice(0, 30)} io={io} staff={staff} torna={qui} />}
                 <h3 className="da-gestire-titolo">Prove in corso che nessuno segue <span className="conta-titolo">{proveLibere.length}</span></h3>
                 {proveLibere.length === 0 ? <Vuoto>Nessuna.</Vuoto> : <TabellaProve prove={proveLibere.slice(0, 30)} pagamenti={pagamenti} staff={staff} torna={qui} />}

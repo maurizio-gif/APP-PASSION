@@ -7,7 +7,7 @@ export const task: Argomento = {
   inBreve: 'Il lavoro di ogni giorno: telefonate, messaggi e appuntamenti, tuoi o da assegnare. Molti li crea il CRM da solo; tu li chiudi dicendo com’è andata.',
   testo: `
 ## Il lavoro sta nei task
-Ogni cosa da fare con una persona è un **task**: chiamarla, scriverle, vederla in sede. Accanto al tipo c'è da dove viene: **Lead**, **Scadenza pass**, **Rinnovo**, **Disdetta**, **Debito**; niente se riguarda solo la persona. I task sono in questa sezione, in home (**«I miei task»**) e nella scheda della persona, con tutta la sua storia.
+Ogni cosa da fare con una persona è un **task**: chiamarla, scriverle, vederla in sede. Accanto al tipo c'è da dove viene: **Opportunità**, **Scadenza pass**, **Rinnovo**, **Disdetta**, **Debito**; niente se riguarda solo la persona. I task sono in questa sezione, in home (**«I miei task»**) e nella scheda della persona, con tutta la sua storia.
 
 ## I task che crea il CRM da solo
 - **Fine prova**: due giorni prima che il pass finisca, a chi segue la prova. «La prova finisce il ...: chiamare per l'iscrizione.»
@@ -31,11 +31,11 @@ Se il task non era di nessuno, diventa tuo. Un task chiuso non si riapre: se va 
 ## Nuovo task
 Dalla scheda della persona, riquadro **Task**, due modi:
 
-- **Da programmare**: una cosa da fare più avanti. **Per** (la disdetta, il rinnovo, il pass o il lead della persona, oppure «Nessuno: solo la persona»), **Task** (Telefonata, In sede, WhatsApp, Email, Customer care), **Quando** (sempre da scegliere), **A chi**, **Note di preparazione**. Poi **«Programma task»**.
+- **Da programmare**: una cosa da fare più avanti. **Per** (la disdetta, il rinnovo, il pass o l'opportunità della persona, oppure «Nessuno: solo la persona»), **Task** (Telefonata, In sede, WhatsApp, Email, Customer care), **Quando** (sempre da scegliere), **A chi**, **Note di preparazione**. Poi **«Programma task»**.
 - **Registra (già fatto)**: una cosa appena fatta, per lasciarne traccia. **Per**, **Task**, **Esito** (Positivo o Negativo), **Chi l'ha fatto**, **Note dell'esito**; data e ora sono quelle del salvataggio. Poi **«Registra task»**.
 
 Per i debitori il task si mette dalla loro riga, con **«+ Task»**.
 
-> **A chi** propone te. Se tu non ricevi task, la tendina parte dal primo nome dell'elenco: controlla sempre chi c'è scritto prima di salvare. Fra quelli a cui assegnare compare solo chi ha la spunta **«Riceve lead e task»**.
+> **A chi** propone te. Se tu non ricevi task, la tendina parte dal primo nome dell'elenco: controlla sempre chi c'è scritto prima di salvare. Fra quelli a cui assegnare compare solo chi ha la spunta **«Riceve opportunità e task»**.
 `,
 }

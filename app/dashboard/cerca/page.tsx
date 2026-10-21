@@ -16,11 +16,11 @@ export default async function Cerca({ searchParams }: { searchParams: { q?: stri
             <h1>Cerca</h1>
             <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
               <span className="aiuto-punto" aria-hidden="true">?</span>
-              <span className="aiuto-testo">Soci, lead e prove: per nome, cognome, telefono o email.</span>
+              <span className="aiuto-testo">Soci, opportunità e prove: per nome, cognome, telefono o email.</span>
             </span>
           </div>
         </div>
-        <Link className="bottone" href="/dashboard/lead/nuovo">+ Nuovo lead</Link>
+        <Link className="bottone" href="/dashboard/lead/nuovo">+ Nuova opportunità</Link>
       </div>
 
       <form className="filtri" action="/dashboard/cerca">
@@ -32,7 +32,7 @@ export default async function Cerca({ searchParams }: { searchParams: { q?: stri
         {q.length < 2 ? (
           <Vuoto>Scrivi almeno due lettere.</Vuoto>
         ) : trovati.length === 0 ? (
-          <Vuoto>Nessuno trovato per «{q}». Se è una persona nuova, crea un lead.</Vuoto>
+          <Vuoto>Nessuno trovato per «{q}». Se è una persona nuova, crea un&apos;opportunità.</Vuoto>
         ) : (
           <div className="tabella-scorre">
             <table className="schede-mobile tabella-colonne tabella-cerca">
@@ -62,9 +62,9 @@ export default async function Cerca({ searchParams }: { searchParams: { q?: stri
                         {t.member_id && <span className="etichetta-riga"><span className="bollino verde">socio</span></span>}
                         {t.member_id && <span className="muto">Tessera n. {t.member_id}</span>}
                         {t.lead_aperti > 0 ? (
-                          <span className="etichetta-riga"><span className="bollino giallo">{t.lead_aperti} lead aperti</span></span>
+                          <span className="etichetta-riga"><span className="bollino giallo">{t.lead_aperti} {t.lead_aperti === 1 ? 'opportunità aperta' : 'opportunità aperte'}</span></span>
                         ) : (
-                          <span className="muto">Nessun lead aperto</span>
+                          <span className="muto">Nessuna opportunità aperta</span>
                         )}
                       </div>
                     </td>

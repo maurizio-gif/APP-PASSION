@@ -16,6 +16,55 @@ export type Aggiornamento = {
 
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
+    data: '2026-10-21',
+    titolo: 'I «Lead» adesso si chiamano «Opportunità»',
+    testo:
+      'La sezione Lead ora si chiama Opportunità, e così in tutto il CRM: in home («Opportunità da gestire», «Le mie opportunità»), nella scheda della persona, nei task, in Marketing e nella Guida. Il pulsante è «+ Nuova opportunità». Funziona tutto come prima. Su PerfectGym la persona resta un «Lead», come sempre.',
+    dove: 'Opportunità, Home, Scheda persona, Marketing, Utenti, Guida',
+  },
+  {
+    data: '2026-10-20',
+    titolo: 'La sezione Marketing si dà persona per persona',
+    testo:
+      'Marketing non la vede più nessuno in automatico, nemmeno gli admin: compare solo a chi la riceve. Si dà o si toglie da Utenti, con la spunta «Marketing» nella scheda di ogni persona, anche per un admin.',
+    dove: 'Utenti, Marketing',
+  },
+  {
+    data: '2026-10-20',
+    titolo: 'In Marketing si vede anche come vengono lavorati i lead',
+    testo:
+      'Accanto al percorso (hanno risposto, prova, iscritti) c’è «Come vengono gestiti»: quanti lead nessuno ha lavorato, quante azioni fanno i colleghi per ogni lead, quanto passa prima del primo contatto e quanti non hanno mai risposto. Serve a capire se un risultato basso dipende dalla campagna o da come si lavora il lead. Per i lead di prima di maggio 2026 i «nr» scritti nei commenti contano come tentativi.',
+    dove: 'Marketing',
+  },
+  {
+    data: '2026-10-20',
+    titolo: 'Nuova sezione Marketing: da dove arrivano i lead e quanti si iscrivono',
+    testo:
+      'Per ogni fonte, campagna e mese vedi quanti lead sono arrivati, quanti hanno risposto, quanti hanno attivato la prova e quanti si sono iscritti. La prova è un passaggio facoltativo: si vede anche quanti si iscrivono senza passarci. La sezione si dà a una persona alla volta da Utenti.',
+    dove: 'Marketing',
+  },
+  {
+    data: '2026-10-19',
+    titolo: 'Le schede doppie di PerfectGym non contano più',
+    testo:
+      'Su PerfectGym alcune persone avevano due o tre schede uguali, create per errore dai moduli del sito. Il CRM ora usa solo la scheda giusta: chi era collegato a una scheda doppia adesso vede quella vera, e se è socio lo vedi come socio.',
+    dove: 'Scheda persona, Cerca, Lead',
+  },
+  {
+    data: '2026-10-19',
+    titolo: 'Chi è cancellato su PerfectGym non compare più',
+    testo:
+      'Se una scheda viene cancellata su PerfectGym (per esempio un doppione), la persona sparisce da Cerca, dai Lead, dai Task e dai numeri della home. Se della stessa persona resta un’altra scheda su PerfectGym, il CRM la collega a quella e la persona resta visibile. Se la persona fa una nuova richiesta, torna visibile da sola.',
+    dove: 'Cerca, Lead, Task, Home',
+  },
+  {
+    data: '2026-10-17',
+    titolo: 'R2D vede un ticket solo quando gli viene inviato',
+    testo:
+      'Finché un ticket è in gestione al supporto, R2D non lo vede: né nell’elenco, né nei numeri della home. Quando il supporto lo manda a R2D, R2D vede subito tutto lo storico: il filo dei messaggi e gli allegati.',
+    dove: 'Ticket',
+  },
+  {
     data: '2026-10-07',
     titolo: 'Nella sezione Prove ci sono solo le prove vere',
     testo:
