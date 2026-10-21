@@ -8988,41 +8988,36 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   white-space: nowrap;
 }
 
-/* «Indietro»: torna alla pagina da cui si e' arrivati. */
-.indietro {
+/* «Torna a ...»: riga discreta sopra il titolo delle pagine di dettaglio. */
+.crumb-slot { margin: 0 0 8px; }
+.crumb-indietro {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  margin: 0 0 12px;
-  padding: 5px 14px 5px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.86);
+  gap: 5px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: rgba(255, 255, 255, 0.6);
   font: inherit;
-  font-size: 0.82rem;
-  font-weight: 600;
+  font-size: 0.8rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color var(--t-rapida) var(--curva), border-color var(--t-rapida) var(--curva), color var(--t-rapida) var(--curva);
+  transition: color var(--t-rapida) var(--curva);
 }
-.indietro svg {
-  width: 15px;
-  height: 15px;
+.crumb-indietro strong { font-weight: 700; color: rgba(255, 255, 255, 0.86); transition: color var(--t-rapida) var(--curva); }
+.crumb-indietro svg {
+  width: 14px;
+  height: 14px;
   fill: none;
   stroke: currentColor;
-  stroke-width: 2.2;
+  stroke-width: 2.4;
   stroke-linecap: round;
   stroke-linejoin: round;
+  transition: transform var(--t-rapida) var(--curva);
 }
-.indietro:hover {
-  background: var(--rosso);
-  border-color: var(--rosso);
-  color: #fff;
-}
-.indietro:focus-visible { outline: 2px solid var(--rosso); outline-offset: 2px; }
-:root[data-tema='chiaro'] .indietro {
-  border-color: #e3cbd1;
-  background: #fff;
-  color: var(--testo);
-}
-:root[data-tema='chiaro'] .indietro:hover { background: var(--rosso); border-color: var(--rosso); color: #fff; }
+.crumb-indietro:hover, .crumb-indietro:hover strong { color: #fff; }
+.crumb-indietro:hover svg { transform: translateX(-3px); }
+.crumb-indietro:focus-visible { outline: 2px solid var(--rosso); outline-offset: 3px; border-radius: 4px; }
+:root[data-tema='chiaro'] .testata .crumb-indietro { color: var(--testo-attenuato); }
+:root[data-tema='chiaro'] .testata .crumb-indietro strong { color: var(--testo); }
+:root[data-tema='chiaro'] .testata .crumb-indietro:hover, :root[data-tema='chiaro'] .testata .crumb-indietro:hover strong { color: var(--rosso); }
