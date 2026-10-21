@@ -9619,3 +9619,21 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   .tabella-prove .modulo.compatto.gestione-prova > .bottone { grid-area: 1 / 2; }
   .tabella-prove .gestione-prova .gestione-extra { grid-area: 3 / 1 / 4 / 3; }
 }
+
+/* «Non assegnati»: un interruttore Opportunità / Prove al posto dei due elenchi uno sotto l'altro. */
+.na-toggle > .na-tabs { margin: 18px 22px 14px; }
+.na-toggle > .na-pannello { display: none; }
+#na-v-opp:checked ~ .na-opp,
+#na-v-prove:checked ~ .na-prove { display: block; }
+#na-v-opp:checked ~ .task-tabs label[for='na-v-opp'],
+#na-v-prove:checked ~ .task-tabs label[for='na-v-prove'] {
+  background: #17090f;
+  color: #fff;
+}
+#na-v-opp:checked ~ .task-tabs label[for='na-v-opp'] span,
+#na-v-prove:checked ~ .task-tabs label[for='na-v-prove'] span {
+  background: var(--rosso);
+  color: #fff;
+}
+#na-v-opp:focus-visible ~ .task-tabs label[for='na-v-opp'],
+#na-v-prove:focus-visible ~ .task-tabs label[for='na-v-prove'] { outline: 2px solid var(--rosso); outline-offset: 2px; }

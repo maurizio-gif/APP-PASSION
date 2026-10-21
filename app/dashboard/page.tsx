@@ -100,12 +100,20 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
             leadLiberi.length + proveLibere.length === 0 ? (
               <Vuoto>Tutte le opportunità aperte e tutte le prove in corso hanno un consulente.</Vuoto>
             ) : (
-              <>
-                <h3 className="da-gestire-titolo">Opportunità senza consulente <span className="conta-titolo">{leadLiberi.length}</span></h3>
-                {leadLiberi.length === 0 ? <Vuoto>Nessuno.</Vuoto> : <TabellaLead lead={leadLiberi.slice(0, 30)} io={io} staff={staff} torna={qui} />}
-                <h3 className="da-gestire-titolo">Prove in corso che nessuno segue <span className="conta-titolo">{proveLibere.length}</span></h3>
-                {proveLibere.length === 0 ? <Vuoto>Nessuna.</Vuoto> : <TabellaProve prove={proveLibere.slice(0, 30)} pagamenti={pagamenti} staff={staff} torna={qui} />}
-              </>
+              <div className="na-toggle">
+                <input type="radio" name="na-vista" id="na-v-opp" className="task-radio" defaultChecked />
+                <input type="radio" name="na-vista" id="na-v-prove" className="task-radio" />
+                <div className="task-tabs na-tabs">
+                  <label htmlFor="na-v-opp">Opportunità <span>{leadLiberi.length}</span></label>
+                  <label htmlFor="na-v-prove">Prove in corso <span>{proveLibere.length}</span></label>
+                </div>
+                <div className="na-pannello na-opp">
+                  {leadLiberi.length === 0 ? <Vuoto>Nessuna opportunità senza consulente.</Vuoto> : <TabellaLead lead={leadLiberi.slice(0, 30)} io={io} staff={staff} torna={qui} />}
+                </div>
+                <div className="na-pannello na-prove">
+                  {proveLibere.length === 0 ? <Vuoto>Nessuna prova senza consulente.</Vuoto> : <TabellaProve prove={proveLibere.slice(0, 30)} pagamenti={pagamenti} staff={staff} torna={qui} />}
+                </div>
+              </div>
             )
           )}
         </div>
