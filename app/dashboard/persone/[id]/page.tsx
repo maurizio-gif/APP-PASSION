@@ -220,14 +220,14 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
   )
 
   // Aperti in vista, chiusi nello storico sotto.
-  function conStorico<T>(voci: T[], aperto: (x: T) => boolean, carta: (x: T) => React.ReactNode, titolo: string) {
+  function conStorico<T>(voci: T[], aperto: (x: T) => boolean, carta: (x: T) => React.ReactNode, titolo: string, numero: number, cosa: [string, string]) {
     const aperti = voci.filter(aperto)
     const chiusi = voci.filter((x) => !aperto(x))
     return (
       <>
         {aperti.map(carta)}
         {chiusi.length > 0 && (
-          <Storico titolo={titolo} conta={chiusi.length} aperto={aperti.length === 0 && chiusi.length === 1}>
+          <Storico numero={numero} titolo={titolo} conta={chiusi.length} cosa={cosa} aperto={aperti.length === 0 && chiusi.length === 1}>
             {chiusi.map(carta)}
           </Storico>
         )}
@@ -352,11 +352,11 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
       <div className="funnel funnel-righe">
         {s.lead.length === 0
           ? <FaseVuota numero={1} nome="Opportunità" testo="Nessuna opportunità." />
-          : conStorico(s.lead, (l) => l.fase === 'da_gestire' || l.fase === 'in_gestione', cartaLead, 'Storico opportunità')}
+          : conStorico(s.lead, (l) => l.fase === 'da_gestire' || l.fase === 'in_gestione', cartaLead, 'Storico opportunità', 1, ['opportunità', 'opportunità'])}
 
         {s.prove.length === 0
           ? <FaseVuota numero={2} nome="Prova" testo="Nessuna prova." />
-          : conStorico(s.prove, (pr) => !pr.esito, cartaProva, 'Storico prove')}
+          : conStorico(s.prove, (pr) => !pr.esito, cartaProva, 'Storico prove', 2, ['prova', 'prove'])}
 
         {/* Gli abbonamenti di PerfectGym, senza i certificati medici (che su
             PerfectGym sono contratti aggiuntivi): in vista quello in corso,
@@ -367,7 +367,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
           <div>
             <Contratto c={ultimo} controllo={controllo(ultimo.id)} pagamento={pagamenti[ultimo.id]} />
             {precedenti.length > 0 && (
-              <Storico titolo="Storico abbonamenti" conta={precedenti.length}>
+              <Storico numero={3} titolo="Storico abbonamenti" conta={precedenti.length} cosa={['abbonamento', 'abbonamenti']}>
                 {precedenti.map((c) => <Contratto key={c.id} c={c} controllo={controllo(c.id)} pagamento={pagamenti[c.id]} />)}
               </Storico>
             )}

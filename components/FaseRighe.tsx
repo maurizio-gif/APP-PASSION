@@ -53,11 +53,13 @@ export function Accordion({ titolo, aperto = false, classe = '', children }: { t
 }
 
 // «Storico ...» (opportunita', prove, abbonamenti passati): una barra scura a fisarmonica; aperta, sotto ci sono le schede di prima.
-export function Storico({ titolo, conta, aperto = false, children }: { titolo: string; conta: number; aperto?: boolean; children: React.ReactNode }) {
+export function Storico({ numero, titolo, conta, cosa, aperto = false, children }: { numero: number; titolo: string; conta: number; cosa: [string, string]; aperto?: boolean; children: React.ReactNode }) {
   return (
     <details className="storico-acc" open={aperto}>
       <summary className="fase-titolo">
-        {titolo} <span className="conta-titolo">{conta}</span>
+        <span className="fase-numero">{numero}</span>
+        {titolo}
+        <span className="chip-gruppo"><span className="chip">{conta} {conta === 1 ? cosa[0] : cosa[1]}</span></span>
         <span className="task-apri" aria-hidden="true" />
       </summary>
       <div className="storico-lista">{children}</div>

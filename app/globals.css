@@ -9737,3 +9737,14 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
 .storico-lista > * + * .scheda.fase-corpo { border-top: 1px solid rgba(92, 11, 30, 0.2); }
 :root:root:root:root:root .storico-lista > :last-child .scheda.fase-corpo,
 :root:root:root:root:root .storico-lista > :last-child.fase-righe > .scheda.fase-corpo { border-radius: 0 0 14px 14px; }
+/* Barra dello storico: il numero e' quello della fase (1 opportunita', 2 prova, 3 abbonamento); quante ce ne sono sta in una pillola a destra. */
+.storico-acc .fase-titolo .chip-gruppo { margin-left: auto; display: flex; gap: 6px; }
+.storico-acc .fase-titolo .chip-gruppo + .task-apri { margin-left: 12px; }
+.storico-acc .fase-titolo .chip {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 600;
+}
