@@ -9218,3 +9218,5 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   border-color: rgba(255, 255, 255, 0.08);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 14px 30px -12px rgba(23, 9, 15, 0.5);
 }
+/* Scheda cliente: niente cerchio con le iniziali accanto al nome. */
+:root:root:root:root .persona-testa .iniziali { display: none; }
