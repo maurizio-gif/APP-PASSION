@@ -26,9 +26,7 @@ export function RigaProva({ p, pagamento, etichette, children }: { p: Prova; pag
   return (
     <tr>
       <td>
-        <div className="cliente-cella">
-<Iniziali nome={p.nome} cognome={p.cognome} classe="piccole" />
-<div className="riga-dati">
+        <div className="riga-dati">
           <Persona id={p.utente_id} nome={p.nome} cognome={p.cognome} />
           <Contatti telefono={p.telefono} email={p.email} />
           {p.gestito_nome ? (
@@ -37,7 +35,6 @@ export function RigaProva({ p, pagamento, etichette, children }: { p: Prova; pag
             <span className="muto">nessuno la segue</span>
           )}
         </div>
-</div>
       </td>
       <td>
         <div className="riga-dati">

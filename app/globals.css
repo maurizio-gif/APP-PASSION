@@ -9420,3 +9420,15 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
 :root:root .barra nav .gruppo-menu.aperto > .gruppo-menu-titolo .gruppo-menu-icona svg path,
 :root:root .barra nav a.attivo svg,
 :root:root .barra nav a.attivo svg path { stroke: #fff; }
+
+/* Alleggerimento (le tabelle hanno centinaia di righe): niente contesti di sovrapposizione e niente transizioni su ogni riga, solo su quella sotto il mouse. */
+:root:root:root tbody tr { position: static; }
+:root:root:root tbody td:first-child { box-shadow: none; transition: none; }
+:root:root:root tbody td { transition: none; }
+:root:root:root tbody tr:hover td:first-child {
+  box-shadow: inset 3px 0 0 var(--rosso), 0 10px 22px -12px rgba(42, 11, 20, 0.28), 0 -8px 18px -14px rgba(42, 11, 20, 0.2);
+}
+@media (hover: none) {
+  :root:root:root tbody tr:hover td,
+  :root:root:root tbody tr:hover td:first-child { box-shadow: none; }
+}

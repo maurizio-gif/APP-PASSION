@@ -1,4 +1,3 @@
-import { Iniziali } from '@/components/RigaProva'
 import Link from 'next/link'
 import type { ContrattoLead, Io, Lead, Operatore } from '@/lib/crm'
 import { formatoData, formatoOra, nomeCompleto } from '@/lib/formato'
@@ -56,13 +55,10 @@ export function TabellaLead({ lead, io, staff, torna, contratti, firma }: { lead
               return (
                 <tr key={l.id}>
                   <td>
-                    <div className="cliente-cella">
-<Iniziali nome={l.nome} cognome={l.cognome} classe="piccole" />
-<div className="riga-dati">
+                    <div className="riga-dati">
                       <NomeScheda href={scheda} l={l} />
                       <Contatti telefono={l.telefono} email={l.email} />
                     </div>
-</div>
                   </td>
                   <td>
                     <div className="riga-dati">

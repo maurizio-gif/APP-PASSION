@@ -1,4 +1,3 @@
-import { Iniziali } from '@/components/RigaProva'
 import type { Disdetta, Io, Operatore } from '@/lib/crm'
 import { ESITO_DISDETTA, formatoData, formatoEuro, traduci } from '@/lib/formato'
 import { Contatti, Persona } from '@/components/Ui'
@@ -23,9 +22,7 @@ export function TabellaDisdette({ disdette, io, staff, torna }: { disdette: Disd
           {disdette.map((d) => (
             <tr key={d.id}>
               <td>
-                <div className="cliente-cella">
-<Iniziali nome={d.nome} cognome={d.cognome} classe="piccole" />
-<div className="riga-dati">
+                <div className="riga-dati">
                 <Persona id={d.utente_id} nome={d.nome} cognome={d.cognome} />
                 <Contatti telefono={d.telefono} email={d.email} />
                 {d.esito && (
@@ -35,7 +32,6 @@ export function TabellaDisdette({ disdette, io, staff, torna }: { disdette: Disd
                 )}
                 {d.gestito_il && <div className="piccolo attenuato">{d.gestito_nome ?? '—'} · {formatoData(d.gestito_il)}</div>}
                 </div>
-</div>
               </td>
               <td>
                 <div className="riga-dati">
