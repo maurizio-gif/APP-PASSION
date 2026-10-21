@@ -9165,3 +9165,47 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
 
 /* date: il giorno in evidenza, l'ora piu' tenue */
 :root:root:root .tabella-lead td:nth-child(2) .riga-dati a.normale { font-weight: 650; font-variant-numeric: tabular-nums; }
+
+/* ---- Profondita': niente tag, intestazione che getta ombra, righe che si sollevano, box a piu' strati ---- */
+:root:root:root .tabella-lead td:nth-child(3) .riga-dati .normale {
+  display: inline;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  color: #1c1114;
+  font-size: inherit;
+  font-weight: 500;
+}
+/* l'intestazione e' sopra le righe */
+:root:root:root thead th {
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 10px 16px -10px rgba(23, 9, 15, 0.5);
+}
+/* la riga sotto il mouse si solleva: sfondo bianco, ombra morbida in alto e in basso */
+:root:root:root tbody tr { position: relative; }
+:root:root:root tbody tr:hover td {
+  position: relative;
+  z-index: 1;
+  background: #fff;
+  box-shadow: 0 10px 22px -12px rgba(42, 11, 20, 0.28), 0 -8px 18px -14px rgba(42, 11, 20, 0.2);
+}
+:root:root:root tbody tr:hover td:first-child {
+  box-shadow: inset 3px 0 0 var(--rosso), 0 10px 22px -12px rgba(42, 11, 20, 0.28), 0 -8px 18px -14px rgba(42, 11, 20, 0.2);
+}
+/* i pulsanti nelle righe hanno corpo */
+:root:root:root tbody .bottone {
+  box-shadow: 0 2px 4px rgba(180, 2, 35, 0.3), 0 6px 12px -4px rgba(180, 2, 35, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+:root:root:root tbody .bottone.secondario {
+  box-shadow: 0 1px 2px rgba(42, 11, 20, 0.12), 0 4px 10px -4px rgba(42, 11, 20, 0.2);
+}
+/* i box: sfondo con un velo di sfumatura, luce sul bordo alto e ombra a due livelli */
+:root:root:root .contenuto .scheda {
+  background: linear-gradient(180deg, #ffffff 0%, #fdf9fa 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 1px 2px rgba(42, 11, 20, 0.06),
+    0 6px 14px -4px rgba(42, 11, 20, 0.1),
+    0 18px 36px -12px rgba(42, 11, 20, 0.18);
+}
