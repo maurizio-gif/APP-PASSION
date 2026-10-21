@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { crm } from '@/lib/crm'
 import { Avviso, Vuoto } from '@/components/Ui'
 import { SchedeNumeri } from '@/components/SchedeNumeri'
-import { assiste, puoVedere, smista } from '@/lib/permessi'
+import { puoVedere } from '@/lib/permessi'
 import { TabellaLead } from '@/components/TabellaLead'
 import { TabellaRinnovi } from '@/components/TabellaRinnovi'
 import { TabellaDisdette } from '@/components/TabellaDisdette'
@@ -35,13 +35,12 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
   const aperta = schede.find((s) => s.chiave === searchParams.vista) ?? schede[0]
   const scheda = aperta.chiave
   const qui = scheda === 'lead' ? '/dashboard' : `/dashboard?vista=${scheda}`
-  const [nuovi, rinnovi, disdette, prove, liberi, ticket, arretrati, oggi] = await Promise.all([
+  const [nuovi, rinnovi, disdette, prove, liberi, arretrati, oggi] = await Promise.all([
     scheda === 'lead' ? crm.lead('da_gestire', null, null) : null,
     scheda === 'rinnovi' ? crm.rinnovi('da_gestire') : null,
     scheda === 'disdette' ? crm.disdette('da_gestire') : null,
     scheda === 'prove' ? crm.prove('in_scadenza') : scheda === 'non_assegnati' ? crm.prove('in_corso') : null,
     scheda === 'non_assegnati' ? crm.lead('tutte', null, null, NESSUN_CONSULENTE) : null,
-    puoVedere(io, 'ticket') ? crm.ticketConti() : null,
     scheda === 'task' ? crm.task('miei', 'arretrati') : null,
     scheda === 'task' ? crm.task('miei', 'oggi') : null,
   ])
@@ -112,34 +111,13 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
         </div>
       </section>
 
-      {((ticket) || puoVedere(io, 'contratti')) && (
+      {puoVedere(io, 'contratti') && (
         <div className="numeri">
           {puoVedere(io, 'contratti') && (
             <Link href="/dashboard/contratti" className="numero">
               <div className="etichetta">Contratti da controllare</div>
               <div className="valore">{h.contratti_da_controllare}</div>
               <div className="nota">pagamento, codice fiscale, tessera</div>
-            </Link>
-          )}
-          {ticket && smista(io) && (
-            <Link href="/dashboard/ticket?vista=da_verificare" className={`numero${ticket.da_verificare ? ' caldo' : ''}`}>
-              <div className="etichetta">Ticket da verificare</div>
-              <div className="valore">{ticket.da_verificare}</div>
-              <div className="nota">{ticket.proposte ? `${ticket.proposte} proposte per la riunione` : 'segnalazioni del desk'}</div>
-            </Link>
-          )}
-          {ticket && assiste(io) && (
-            <Link href="/dashboard/ticket?vista=r2d" className={`numero${ticket.bloccanti ? ' caldo' : ''}`}>
-              <div className="etichetta">Ticket per R2D</div>
-              <div className="valore">{ticket.r2d}</div>
-              <div className="nota">{ticket.bloccanti ? `${ticket.bloccanti} bloccano il lavoro` : `${ticket.modifiche_da_confermare + ticket.modifiche_da_rilasciare} modifiche aperte`}</div>
-            </Link>
-          )}
-          {ticket && (
-            <Link href="/dashboard/ticket?vista=in_attesa" className={`numero${ticket.in_attesa && !assiste(io) ? ' caldo' : ''}`}>
-              <div className="etichetta">Ticket in attesa</div>
-              <div className="valore">{ticket.in_attesa}</div>
-              <div className="nota">R2D aspetta una risposta · {ticket.miei} aperti da me</div>
             </Link>
           )}
         </div>
