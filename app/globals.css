@@ -8967,3 +8967,12 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   font-weight: 500;
   letter-spacing: 0.01em;
 }
+
+/* Ticket (scheda cliente): l'intestazione della tabella sta a filo sotto la testata, senza angoli arrotondati. */
+:root:root:root:root .sotto-tabella thead th,
+:root:root:root:root .sotto-tabella thead th:first-child,
+:root:root:root:root .sotto-tabella thead th:last-child {
+  border-radius: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+.sotto-tabella .tabella-scorre { border-radius: 0; }
