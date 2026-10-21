@@ -9358,3 +9358,51 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   color: #ff9bab;
 }
 :root:root .barra-saluto { flex: none; min-height: 0; overflow: hidden; }
+
+/* Saluto: sobrio, senza decorazioni (niente scintilla, niente testo sfumato, niente pillole). */
+.barra-saluto::after { display: none; }
+:root:root .barra-saluto {
+  gap: 2px;
+  padding: 11px 14px 11px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.045);
+  box-shadow: none;
+}
+:root:root .barra-saluto::before {
+  box-shadow: none;
+  background: var(--rosso);
+}
+:root:root .barra-saluto-ciao {
+  font-size: 0.82rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: rgba(255, 255, 255, 0.66);
+}
+:root:root .barra-saluto strong {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  color: #fff;
+}
+:root:root .barra-saluto-data {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+:root:root .barra-saluto-data em {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  font-size: inherit;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: capitalize;
+  color: #ff6b84;
+}
