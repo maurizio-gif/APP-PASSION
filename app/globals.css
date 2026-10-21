@@ -9566,9 +9566,9 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   .tabella-uniforme:has(th:nth-child(5)) th:nth-child(4) { width: auto; }
   .tabella-uniforme:has(th:nth-child(5)) th:nth-child(5) { width: 1%; white-space: nowrap; }
   .tabella-uniforme:has(th:nth-child(5)) td:nth-child(5) { white-space: nowrap; }
-  .tabella-lead.tabella-uniforme:has(th:nth-child(5)) th:nth-child(1) { width: 22%; }
-  .tabella-lead.tabella-uniforme:has(th:nth-child(5)) th:nth-child(2) { width: 12%; }
-  .tabella-lead.tabella-uniforme:has(th:nth-child(5)) th:nth-child(3) { width: 24%; }
+  .tabella-lead.tabella-uniforme:has(th:nth-child(5)) th:nth-child(1) { width: 20%; }
+  .tabella-lead.tabella-uniforme:has(th:nth-child(5)) th:nth-child(2) { width: 11%; }
+  .tabella-lead.tabella-uniforme:has(th:nth-child(5)) th:nth-child(3) { width: 20%; }
   .tabella-prove.tabella-uniforme:has(th:nth-child(5)) th:nth-child(1) { width: 20%; }
   .tabella-prove.tabella-uniforme:has(th:nth-child(5)) th:nth-child(2) { width: 15%; }
   .tabella-prove.tabella-uniforme:has(th:nth-child(5)) th:nth-child(3) { width: 21%; }
