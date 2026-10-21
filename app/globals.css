@@ -9233,3 +9233,47 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
 :root:root:root tbody td .riga-dati { gap: 2px; }
 :root:root:root tbody td .riga-dati > * + * { line-height: 1.5; }
 :root:root:root tbody td { vertical-align: top; }
+
+/* ---- Sfondo di tutto il CRM: niente onde; aloni di colore, griglia sottile che sfuma e grana leggera (livelli fissi, nessuna animazione) ---- */
+:root:root .contenuto::before {
+  top: 0;
+  bottom: 0;
+  height: auto;
+  background:
+    radial-gradient(55% 48% at 92% -4%, rgba(227, 3, 45, 0.24), rgba(227, 3, 45, 0) 72%),
+    radial-gradient(50% 55% at -4% 104%, rgba(120, 10, 44, 0.34), rgba(120, 10, 44, 0) 72%),
+    radial-gradient(38% 36% at 52% 46%, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0) 72%);
+}
+:root:root[data-tema='chiaro'] .contenuto::before {
+  background:
+    radial-gradient(55% 48% at 92% -4%, rgba(227, 3, 45, 0.12), rgba(227, 3, 45, 0) 72%),
+    radial-gradient(50% 55% at -4% 104%, rgba(227, 3, 45, 0.08), rgba(227, 3, 45, 0) 72%),
+    radial-gradient(40% 40% at 50% 50%, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 72%);
+}
+.contenuto::after {
+  content: '';
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: var(--barra);
+  pointer-events: none;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E") 0 0 / 160px 160px,
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px) 0 0 / 56px 56px,
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px) 0 0 / 56px 56px;
+  opacity: 0.55;
+  -webkit-mask-image: radial-gradient(ellipse 85% 75% at 50% 0%, #000 10%, transparent 78%);
+  mask-image: radial-gradient(ellipse 85% 75% at 50% 0%, #000 10%, transparent 78%);
+}
+:root[data-tema='chiaro'] .contenuto::after {
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E") 0 0 / 160px 160px,
+    linear-gradient(rgba(92, 11, 30, 0.06) 1px, transparent 1px) 0 0 / 56px 56px,
+    linear-gradient(90deg, rgba(92, 11, 30, 0.06) 1px, transparent 1px) 0 0 / 56px 56px;
+  opacity: 0.5;
+}
+@media (max-width: 720px) {
+  .contenuto::after { left: 0; }
+}
