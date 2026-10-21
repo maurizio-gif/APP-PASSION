@@ -9775,3 +9775,8 @@ details.task-fase > summary.fase-titolo { padding: 15px 20px; row-gap: 10px; }
   line-height: 1.3;
   letter-spacing: 0.01em;
 }
+
+/* Le pillole dei conteggi (da fare, scaduti, quante opportunita') stanno accanto al titolo; il tasto Apri/Chiudi resta a destra. */
+:root:root .task-fase .fase-titolo .chip-gruppo,
+:root:root .storico-acc .fase-titolo .chip-gruppo { margin-left: 14px; }
+:root:root .fase-titolo .chip-gruppo + .task-apri { margin-left: auto; }
