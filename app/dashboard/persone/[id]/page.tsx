@@ -12,7 +12,7 @@ import { SceltaOperatore } from '@/components/SceltaOperatore'
 import { InCarico } from '@/components/InCarico'
 import { Iniziali } from '@/components/RigaProva'
 import { AvatarTask, IconaTask } from '@/components/IconaTask'
-import { Col, Fase, FaseVuota } from '@/components/FaseRighe'
+import { Col, Fase, FaseVuota, Storico } from '@/components/FaseRighe'
 import { puoGestire, puoVedere } from '@/lib/permessi'
 import { TabellaTicket } from '@/components/Ticket'
 import {
@@ -227,10 +227,9 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
       <>
         {aperti.map(carta)}
         {chiusi.length > 0 && (
-          <details className="storico-fase" open={aperti.length === 0 && chiusi.length === 1}>
-            <summary>{titolo} <span className="attenuato">· {chiusi.length}</span></summary>
+          <Storico titolo={titolo} conta={chiusi.length} aperto={aperti.length === 0 && chiusi.length === 1}>
             {chiusi.map(carta)}
-          </details>
+          </Storico>
         )}
       </>
     )
@@ -368,10 +367,9 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
           <div>
             <Contratto c={ultimo} controllo={controllo(ultimo.id)} pagamento={pagamenti[ultimo.id]} />
             {precedenti.length > 0 && (
-              <details className="storico-fase">
-                <summary>Storico abbonamenti <span className="attenuato">· {precedenti.length}</span></summary>
+              <Storico titolo="Storico abbonamenti" conta={precedenti.length}>
                 {precedenti.map((c) => <Contratto key={c.id} c={c} controllo={controllo(c.id)} pagamento={pagamenti[c.id]} />)}
-              </details>
+              </Storico>
             )}
           </div>
         )}

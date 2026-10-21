@@ -9699,3 +9699,20 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   letter-spacing: 0;
   text-transform: none;
 }
+
+/* Storico opportunita' / prove / abbonamenti: barra scura a fisarmonica come il Task, poi le schede. */
+.storico-acc { margin: 0; }
+.storico-acc > summary.fase-titolo {
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 4px 8px rgba(42, 11, 20, 0.12), 0 14px 24px -10px rgba(42, 11, 20, 0.3);
+}
+.storico-acc > summary.fase-titolo::-webkit-details-marker { display: none; }
+.storico-acc > summary.fase-titolo:hover .task-apri { background: var(--rosso); border-color: var(--rosso); }
+.storico-acc > summary.fase-titolo:focus-visible { outline: 2px solid var(--rosso); outline-offset: 2px; }
+.storico-acc[open] > summary .task-apri::before { content: 'Chiudi'; }
+.storico-acc[open] > summary .task-apri::after { transform: translateY(2px) rotate(-135deg); }
+.storico-lista { display: grid; gap: 16px; margin-top: 16px; }
