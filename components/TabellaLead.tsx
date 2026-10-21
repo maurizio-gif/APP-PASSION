@@ -132,7 +132,7 @@ function Azione({ l, io, staff, torna }: { l: Lead; io: Io; staff: Operatore[]; 
         <form action={rilasciaLead}>
           <input type="hidden" name="lead" value={l.id} />
           <input type="hidden" name="torna" value={torna} />
-          <button className="bottone secondario piccolo" title="Torna fra i lead da gestire, senza nessuno">Rimetti da assegnare</button>
+          <button className="bottone secondario piccolo" title="Torna fra le opportunità da gestire, senza nessuno">Rimetti da assegnare</button>
         </form>
       </div>
     )

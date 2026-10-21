@@ -7,7 +7,7 @@ import { TabellaLead } from '@/components/TabellaLead'
 const VISTE = [
   { chiave: 'da_gestire', testo: 'Da gestire' },
   { chiave: 'in_gestione', testo: 'In gestione' },
-  { chiave: 'mie', testo: 'I miei' },
+  { chiave: 'mie', testo: 'Le mie' },
   // In gestione, ma senza un task aperto da oggi in avanti: nessuno ha fissato il prossimo passo.
   { chiave: 'senza_task', testo: 'Senza task' },
   // Prove in corso: il Pass e' attivo. Prove scadute: il Pass e' finito senza
@@ -16,7 +16,7 @@ const VISTE = [
   { chiave: 'prove_scadute', testo: 'Prove scadute' },
   { chiave: 'vinte', testo: 'Vinte' },
   { chiave: 'perse', testo: 'Perse' },
-  { chiave: 'tutte', testo: 'Tutti' },
+  { chiave: 'tutte', testo: 'Tutte' },
 ]
 
 // «Nessun consulente»: i lead senza assegnatario (uuid a zero per crm_lead).
@@ -49,10 +49,10 @@ export default async function Lead({ searchParams }: { searchParams: Filtri }) {
     <>
       <div className="testata">
         <div>
-          <h1>Lead</h1>
+          <h1>Opportunità</h1>
           <p>Si prende in carico, si segue coi task e si chiude come persa: vinta la segna PerfectGym, quando compare il contratto o la prova.{' '}<LinkGuida argomento="lead" /></p>
         </div>
-        <Link className="bottone" href="/dashboard/lead/nuovo">+ Nuovo lead</Link>
+        <Link className="bottone" href="/dashboard/lead/nuovo">+ Nuova opportunità</Link>
       </div>
       <Avviso errore={searchParams.errore} />
 
@@ -75,11 +75,11 @@ export default async function Lead({ searchParams }: { searchParams: Filtri }) {
 
       <div className="scheda">
         {lead.length === 0 ? (
-          <Vuoto>Nessun lead qui.</Vuoto>
+          <Vuoto>Nessuna opportunità qui.</Vuoto>
         ) : (
           <TabellaLead lead={lead} io={io} staff={staff} torna={qui} contratti={contratti} firma={vista === 'vinte'} />
         )}
-        <p className="piccolo attenuato conteggio">{lead.length === 200 ? 'I 200 più recenti' : `${lead.length} lead`}</p>
+        <p className="piccolo attenuato conteggio">{lead.length === 200 ? 'Le 200 più recenti' : `${lead.length} opportunità`}</p>
       </div>
     </>
   )

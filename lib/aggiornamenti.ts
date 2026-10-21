@@ -16,6 +16,13 @@ export type Aggiornamento = {
 
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
+    data: '2026-10-21',
+    titolo: 'I «Lead» adesso si chiamano «Opportunità»',
+    testo:
+      'La sezione Lead ora si chiama Opportunità, e così in tutto il CRM: in home («Opportunità da gestire», «Le mie opportunità»), nella scheda della persona, nei task, in Marketing e nella Guida. Il pulsante è «+ Nuova opportunità». Funziona tutto come prima. Su PerfectGym la persona resta un «Lead», come sempre.',
+    dove: 'Opportunità, Home, Scheda persona, Marketing, Utenti, Guida',
+  },
+  {
     data: '2026-10-20',
     titolo: 'La sezione Marketing si dà persona per persona',
     testo:

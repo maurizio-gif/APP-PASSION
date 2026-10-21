@@ -28,19 +28,19 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
           <h1>Da gestire</h1>
           <p>Ciao {io?.nome}, {formatoGiornoLungo(oggiRoma())}.</p>
         </div>
-        <Link className="bottone" href="/dashboard/lead/nuovo">+ Nuovo lead</Link>
+        <Link className="bottone" href="/dashboard/lead/nuovo">+ Nuova opportunità</Link>
       </div>
 
       <Avviso errore={searchParams.errore} />
 
       <div className="numeri">
         <Link href="/dashboard/lead?vista=da_gestire" className={`numero${h.lead_da_gestire ? ' caldo' : ''}`}>
-          <div className="etichetta">Lead da gestire</div>
+          <div className="etichetta">Opportunità da gestire</div>
           <div className="valore">{h.lead_da_gestire}</div>
           <div className="nota">non ancora presi in carico</div>
         </Link>
         <Link href="/dashboard/lead?vista=mie" className="numero">
-          <div className="etichetta">I miei lead</div>
+          <div className="etichetta">Le mie opportunità</div>
           <div className="valore">{h.miei_lead}</div>
           <div className="nota">in gestione a me</div>
         </Link>
@@ -100,11 +100,11 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
 
       <section className="scheda">
         <div className="testata-scheda">
-          <h2>Lead da gestire</h2>
-          <Link href="/dashboard/lead?vista=da_gestire">Tutti →</Link>
+          <h2>Opportunità da gestire</h2>
+          <Link href="/dashboard/lead?vista=da_gestire">Tutte →</Link>
         </div>
         {nuovi.length === 0 ? (
-          <Vuoto>Tutti i lead sono presi in carico.</Vuoto>
+          <Vuoto>Tutte le opportunità sono prese in carico.</Vuoto>
         ) : (
           <TabellaLead lead={nuovi.slice(0, 15)} io={io} staff={staff} torna="/dashboard" />
         )}

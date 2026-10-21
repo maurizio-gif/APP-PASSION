@@ -76,9 +76,9 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
               <input type="checkbox" name="attivo" defaultChecked={u.attivo} disabled={ioStesso} />
               Attivo
             </label>
-            <label className="spunta" title="Compare fra chi può ricevere lead e task (serve anche l’accesso)">
+            <label className="spunta" title="Compare fra chi può ricevere opportunità e task (serve anche l’accesso)">
               <input type="checkbox" name="assegnabile" defaultChecked={u.assegnabile} />
-              Riceve lead e task
+              Riceve opportunità e task
             </label>
           </div>
           <p className="piccolo attenuato">{testoRuolo(ruolo)}: {RUOLI.find((r) => r.chiave === ruolo)?.descrizione}</p>
@@ -169,7 +169,7 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
             <p className="piccolo attenuato">
               {aperto > 0
                 ? `Ha in mano ${[
-                    u.lead_aperti > 0 && `${u.lead_aperti} ${u.lead_aperti === 1 ? 'lead aperto' : 'lead aperti'}`,
+                    u.lead_aperti > 0 && `${u.lead_aperti} ${u.lead_aperti === 1 ? 'opportunità aperta' : 'opportunità aperte'}`,
                     u.task_aperti > 0 && `${u.task_aperti} ${u.task_aperti === 1 ? 'task aperto' : 'task aperti'}`,
                     u.altro_aperto > 0 && `${u.altro_aperto} fra debitori e rinnovi`,
                   ].filter(Boolean).join(', ')}.`

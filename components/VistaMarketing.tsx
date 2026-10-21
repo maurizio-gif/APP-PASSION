@@ -44,7 +44,7 @@ export function VistaMarketing({ r, lente, vista, dal, al, fonte, oggi, periodi 
       <div className="testata">
         <div>
           <h1>Marketing</h1>
-          <p>Da dove arrivano i lead e fin dove arrivano: hanno risposto, hanno attivato la prova, si sono iscritti.{' '}<LinkGuida argomento="marketing" /></p>
+          <p>Da dove arrivano le opportunità e fin dove arrivano: hanno risposto, hanno attivato la prova, si sono iscritti.{' '}<LinkGuida argomento="marketing" /></p>
         </div>
       </div>
 
@@ -75,7 +75,7 @@ export function VistaMarketing({ r, lente, vista, dal, al, fonte, oggi, periodi 
       <form className="filtri filtri-marketing" action="/dashboard/marketing">
         <input type="hidden" name="lente" value={lente} />
         <input type="hidden" name="vista" value={vista.chiave} />
-        <label className="piccolo attenuato" htmlFor="mk-dal">Arrivati dal</label>
+        <label className="piccolo attenuato" htmlFor="mk-dal">Arrivate dal</label>
         <input id="mk-dal" type="date" name="dal" defaultValue={dal ?? ''} max={oggi} />
         <label className="piccolo attenuato" htmlFor="mk-al">al</label>
         <input id="mk-al" type="date" name="al" defaultValue={al ?? ''} max={oggi} />
@@ -87,9 +87,9 @@ export function VistaMarketing({ r, lente, vista, dal, al, fonte, oggi, periodi 
       </form>
 
       <section className="scheda">
-        <h2>{gestione ? 'Come vengono gestiti i lead' : 'Il percorso dei lead'}</h2>
+        <h2>{gestione ? 'Come vengono gestite le opportunità' : 'Il percorso delle opportunità'}</h2>
         {r.totale.lead === 0 ? (
-          <Vuoto>Nessun lead arrivato in questo periodo.</Vuoto>
+          <Vuoto>Nessuna opportunità arrivata in questo periodo.</Vuoto>
         ) : gestione ? (
           <GestioneNumeri t={r.totale} />
         ) : (
@@ -100,17 +100,17 @@ export function VistaMarketing({ r, lente, vista, dal, al, fonte, oggi, periodi 
       <Schede voci={VISTE_MARKETING} attiva={vista.chiave} base={`/dashboard/marketing?${filtri}`} />
 
       <div className="scheda">
-        {soloMeta && <p className="piccolo attenuato">Gruppi di inserzioni e moduli esistono solo per i lead di Meta: qui vedi solo quelli.</p>}
+        {soloMeta && <p className="piccolo attenuato">Gruppi di inserzioni e moduli esistono solo per le opportunità di Meta: qui vedi solo quelle.</p>}
         {r.righe.length === 0 ? (
-          <Vuoto>{soloMeta && fonte && fonte !== 'meta' ? 'Questa scheda riguarda solo Meta: togli il filtro sulla fonte.' : 'Nessun lead in questo periodo.'}</Vuoto>
+          <Vuoto>{soloMeta && fonte && fonte !== 'meta' ? 'Questa scheda riguarda solo Meta: togli il filtro sulla fonte.' : 'Nessuna opportunità in questo periodo.'}</Vuoto>
         ) : gestione ? (
           <TabellaGestione righe={r.righe} totale={r.totale} dimensione={vista.chiave} voce={vista.voce} />
         ) : (
           <TabellaPercorsi righe={r.righe} totale={r.totale} dimensione={vista.chiave} voce={vista.voce} />
         )}
         <p className="piccolo attenuato conteggio">
-          Le percentuali sono sui lead arrivati. I lead più recenti hanno avuto meno tempo per arrivare in fondo.
-          {gestione && ' «Lavorato» vuol dire che c’è almeno un task fatto o un commento. «Ha risposto» vuol dire un task fatto che non sia Negativo: fino ad aprile 2026 il task si creava solo quando la persona rispondeva, e le chiamate senza risposta erano commenti («nr»).'}
+          Le percentuali sono sulle opportunità arrivate. Le opportunità più recenti hanno avuto meno tempo per arrivare in fondo.
+          {gestione && ' «Lavorata» vuol dire che c’è almeno un task fatto o un commento. «Ha risposto» vuol dire un task fatto che non sia Negativo: fino ad aprile 2026 il task si creava solo quando la persona rispondeva, e le chiamate senza risposta erano commenti («nr»).'}
         </p>
       </div>
     </>
