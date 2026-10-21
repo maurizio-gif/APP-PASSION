@@ -9357,3 +9357,4 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   text-transform: uppercase;
   color: #ff9bab;
 }
+:root:root .barra-saluto { flex: none; min-height: 0; overflow: hidden; }
