@@ -7,8 +7,8 @@ const PERCORSI = {
   cura: 'M12 20s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.6-7 10-7 10z',
 }
 
-export function IconaTask({ tipo }: { tipo: string }) {
-  const t = tipo.toLowerCase()
+export function IconaTask({ tipo }: { tipo: string | null | undefined }) {
+  const t = (tipo ?? '').toLowerCase()
   const d = t.includes('whats') ? PERCORSI.chat
     : t.includes('mail') ? PERCORSI.mail
     : t.includes('sede') || t.includes('appunt') ? PERCORSI.sede
@@ -21,7 +21,7 @@ export function IconaTask({ tipo }: { tipo: string }) {
   )
 }
 
-export function AvatarTask({ nome }: { nome: string }) {
-  const sigla = nome.split(/\s+/).filter(Boolean).map((x) => x[0]).join('').slice(0, 2).toUpperCase()
+export function AvatarTask({ nome }: { nome: string | null | undefined }) {
+  const sigla = (nome ?? '').split(/\s+/).filter(Boolean).map((x) => x[0]).join('').slice(0, 2).toUpperCase()
   return <span className="task-avatar" aria-hidden="true">{sigla}</span>
 }
