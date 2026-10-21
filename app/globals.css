@@ -9406,3 +9406,12 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   text-transform: capitalize;
   color: #ff6b84;
 }
+
+/* Icone e freccette del menu: sfumatura dal rosso (preminente) al bordeaux scuro. */
+:root:root .barra nav svg path,
+:root:root .barra nav svg.gruppo-menu-freccia path {
+  stroke: url(#grad-icona);
+}
+:root:root .barra nav svg { stroke: url(#grad-icona); }
+:root:root .barra nav a.attivo svg,
+:root:root .barra nav a.attivo svg path { stroke: url(#grad-icona); }

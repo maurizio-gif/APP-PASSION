@@ -65,6 +65,16 @@ export function Navigazione({ voci }: { voci: { href: string; testo: string; ico
 
   return (
     <nav>
+      {/* sfumatura rosso-nero delle icone del menu (solo disegno) */}
+      <svg width="0" height="0" aria-hidden="true" style={{ position: 'absolute' }}>
+        <defs>
+          <linearGradient id="grad-icona" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#ff3a58" />
+            <stop offset="0.5" stopColor="#e3032d" />
+            <stop offset="1" stopColor="#6a0818" />
+          </linearGradient>
+        </defs>
+      </svg>
       {gruppi.map((g) => {
         const titolo = g.titolo
         const eAperta = !titolo || titolo === aperta
