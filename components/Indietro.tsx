@@ -27,7 +27,7 @@ const eDettaglio = (percorso: string, radice: string) => {
 }
 
 // Dove va inserita la riga, secondo com'e' fatta la testata della pagina.
-const DOVE = ['.testata:not(:has(.testata-saluto)) > div:first-child', '.testata-ticket', '.persona-testa .persona-nome']
+const DOVE = ['.testata:not(:has(.testata-saluto)) .titolo-riga h1', '.testata-ticket', '.persona-testa .persona-chi']
 
 export function Indietro() {
   const percorso = usePathname() ?? ''
@@ -35,6 +35,22 @@ export function Indietro() {
   const [slot, setSlot] = useState<HTMLElement | null>(null)
   const [da, setDa] = useState<string | null>(null)
   const radice = percorso.startsWith('/anteprima') ? 'anteprima' : 'dashboard'
+
+  // Come si e' arrivati: dal menu laterale, col browser o col nostro «Torna a» non e' un percorso da riproporre.
+  useEffect(() => {
+    const segna = (v: string) => { try { sessionStorage.setItem('crm-arrivo', v) } catch {} }
+    const clic = (e: MouseEvent) => { if ((e.target as HTMLElement | null)?.closest('.barra a, .barra button.barra-cerca')) segna('menu') }
+    const indietro = () => segna('browser')
+    const invio = (e: Event) => { if ((e.target as HTMLElement | null)?.closest('.barra')) segna('menu') }
+    document.addEventListener('click', clic, true)
+    document.addEventListener('submit', invio, true)
+    window.addEventListener('popstate', indietro)
+    return () => {
+      document.removeEventListener('click', clic, true)
+      document.removeEventListener('submit', invio, true)
+      window.removeEventListener('popstate', indietro)
+    }
+  }, [])
 
   useEffect(() => {
     // pagina precedente: la ricordo per tutta la sessione (anche dopo un ricarico)
@@ -48,12 +64,28 @@ export function Indietro() {
     } catch {}
     setDa(prec || null)
 
-    if (!eDettaglio(percorso, radice)) return void setSlot(null)
+    let arrivo: string | null = null
+    // (l'effetto puo' girare due volte sulla stessa pagina: l'esito resta legato al percorso)
+    try {
+      const segnato = sessionStorage.getItem('crm-arrivo')
+      if (segnato) {
+        arrivo = segnato
+        sessionStorage.setItem('crm-esito', JSON.stringify({ p: percorso, a: segnato }))
+        sessionStorage.removeItem('crm-arrivo')
+      } else {
+        const esito = JSON.parse(sessionStorage.getItem('crm-esito') ?? 'null')
+        if (esito && esito.p === percorso) arrivo = esito.a
+      }
+    } catch {}
+    const home = percorso === `/${radice}` || percorso === `/${radice}/`
+    // Nelle sezioni principali solo se ci si arriva da un'altra pagina con un collegamento (non dal menu).
+    const daAltraPagina = !!prec && !arrivo && prec !== percorso
+    if (home || !(eDettaglio(percorso, radice) || daAltraPagina)) return void setSlot(null)
     // se la testata ha gia' il suo «← ...», non si ripete
     if ([...document.querySelectorAll('.testata a, .testata-ticket a')].some((a) => (a.textContent ?? '').trim().startsWith('←'))) return void setSlot(null)
     const dove = DOVE.map((s) => document.querySelector<HTMLElement>(s)).find(Boolean)
     if (!dove) return void setSlot(null)
-    const nodo = document.createElement('div')
+    const nodo = document.createElement('span')
     nodo.className = 'crumb-slot'
     dove.prepend(nodo)
     setSlot(nodo)
@@ -71,13 +103,15 @@ export function Indietro() {
     <button
       type="button"
       className="crumb-indietro"
+      aria-label={`Torna a ${etichetta}`}
+      data-label={`Torna a ${etichetta}`}
       onClick={() => {
+        try { sessionStorage.setItem('crm-arrivo', 'browser') } catch {}
         if (da && window.history.length > 1) router.back()
         else router.push(verso)
       }}
     >
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
-      Torna a <strong>{etichetta}</strong>
     </button>,
     slot,
   )
