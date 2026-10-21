@@ -9209,3 +9209,12 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
     0 6px 14px -4px rgba(42, 11, 20, 0.1),
     0 18px 36px -12px rgba(42, 11, 20, 0.18);
 }
+
+/* La testata della scheda cliente resta scura (lo sfondo chiaro dei box non deve coprirla). */
+:root:root:root:root .contenuto .scheda.persona-testa {
+  background:
+    radial-gradient(45% 170% at 0% 0%, rgba(227, 3, 45, 0.22), rgba(227, 3, 45, 0) 70%),
+    linear-gradient(100deg, #0e0f12 0%, #17090f 60%, #2a0b14 100%);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 14px 30px -12px rgba(23, 9, 15, 0.5);
+}
