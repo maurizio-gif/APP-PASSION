@@ -18,15 +18,14 @@ export type VoceNumero = {
   vaiTesto?: string
   // un secondo collegamento, per le schede che riguardano due sezioni
   vaiAltro?: { href: string; testo: string }
-  // se il numero non c'e', un pulsante «Calcola» lo chiede (lettura a richiesta)
-  calcola?: () => Promise<number>
+  // se il numero non c'e', un pulsante «Calcola» apre la scheda: e' l'apertura a calcolarlo
+  calcola?: boolean
 }
 
 export function SchedeNumeri({ voci, attiva, base }: { voci: VoceNumero[]; attiva: string; base: string }) {
   const router = useRouter()
   const [scelta, setScelta] = useState(attiva)
   const [inCorso, avvia] = useTransition()
-  const [calcolati, setCalcolati] = useState<Record<string, number | 'attendi' | 'errore'>>({})
   const contenitore = useRef<HTMLDivElement>(null)
 
   // quando la pagina nuova e' arrivata, vale quella del server
@@ -36,16 +35,6 @@ export function SchedeNumeri({ voci, attiva, base }: { voci: VoceNumero[]; attiv
     contenitore.current?.closest('section')?.toggleAttribute('data-carica', inCorso)
   }, [inCorso])
 
-  const calcola = async (v: VoceNumero) => {
-    if (!v.calcola) return
-    setCalcolati((c) => ({ ...c, [v.chiave]: 'attendi' }))
-    try {
-      const n = await v.calcola()
-      setCalcolati((c) => ({ ...c, [v.chiave]: n }))
-    } catch {
-      setCalcolati((c) => ({ ...c, [v.chiave]: 'errore' }))
-    }
-  }
   const href = (chiave: string) => `${base}${base.includes('?') ? '&' : '?'}vista=${chiave}`
   const apri = (chiave: string) => {
     if (chiave === scelta) return
@@ -74,20 +63,10 @@ export function SchedeNumeri({ voci, attiva, base }: { voci: VoceNumero[]; attiv
           >
             <div className="etichetta">{v.testo}</div>
             {v.n != null && <div className="valore">{v.n}</div>}
-            {v.n == null && v.calcola && typeof calcolati[v.chiave] === 'number' && <div className="valore">{calcolati[v.chiave] as number}</div>}
-            {v.n == null && v.calcola && typeof calcolati[v.chiave] !== 'number' && (
-              <button
-                type="button"
-                className="calcola-numero"
-                disabled={calcolati[v.chiave] === 'attendi'}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  calcola(v)
-                }}
-                onKeyDown={(e) => e.stopPropagation()}
-              >
-                {calcolati[v.chiave] === 'attendi' ? 'Calcolo…' : calcolati[v.chiave] === 'errore' ? 'Riprova' : 'Calcola'}
-              </button>
+            {v.n == null && v.calcola && (
+              <span className="calcola-numero" aria-hidden="true">
+                {inCorso && scelta === v.chiave ? 'Calcolo…' : 'Calcola'}
+              </span>
             )}
             {v.nota && (
               <div className="nota">
