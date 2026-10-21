@@ -9262,3 +9262,30 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
     0 14px 24px -10px rgba(42, 11, 20, 0.16),
     0 30px 48px -24px rgba(42, 11, 20, 0.22);
 }
+
+/* ---- Fasi e riquadri con testata: un solo oggetto in rilievo (testata + corpo), non due pezzi con ombre separate ---- */
+:root:root:root:root .contenuto .fase-righe {
+  border-radius: 14px;
+  box-shadow:
+    0 1px 1px rgba(42, 11, 20, 0.1),
+    0 4px 8px rgba(42, 11, 20, 0.1),
+    0 16px 28px -8px rgba(42, 11, 20, 0.28),
+    0 36px 60px -24px rgba(42, 11, 20, 0.42);
+}
+:root:root:root:root .contenuto .fase-righe > .scheda.fase-corpo {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -2px 0 rgba(92, 11, 30, 0.07);
+  border-left-color: rgba(255, 255, 255, 0.5);
+  border-right-color: rgba(255, 255, 255, 0.5);
+  border-bottom-color: rgba(92, 11, 30, 0.12);
+}
+/* la testata ha una luce in alto e un filo rosso in basso: e' un pezzo in rilievo sopra il corpo */
+:root:root:root:root .contenuto .fase-righe > .fase-titolo {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), inset 0 -1px 0 rgba(227, 3, 45, 0.55), 0 6px 10px -6px rgba(23, 9, 15, 0.55);
+  position: relative;
+  z-index: 1;
+}
+/* colonne: separatori sfumati, etichette e valori piu' leggibili */
+:root:root:root .fase-col { border-left-color: transparent; background: linear-gradient(to bottom, rgba(92, 11, 30, 0.14), rgba(92, 11, 30, 0.03)) left top / 1px 100% no-repeat; }
+:root:root:root .fase-col:first-child { background: none; }
+:root:root:root .fase-col .dati dd { font-weight: 500; color: #1c1114; }
+:root:root:root .fase-col .dati dt { color: #7a6a70; }
