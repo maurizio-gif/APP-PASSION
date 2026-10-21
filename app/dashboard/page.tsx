@@ -8,7 +8,7 @@ import { TabellaRinnovi } from '@/components/TabellaRinnovi'
 import { TabellaDisdette } from '@/components/TabellaDisdette'
 import { TabellaProve } from '@/components/TabellaProve'
 import { TabellaTask } from '@/components/TabellaTask'
-import { completaTask } from './azioni'
+import { completaTask, contaNonAssegnati } from './azioni'
 
 // «Nessun consulente»: i lead senza assegnatario (uuid a zero per crm_lead).
 const NESSUN_CONSULENTE = '00000000-0000-0000-0000-000000000000'
@@ -24,12 +24,12 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
   // «Da gestire» di Lead, Rinnovi, Disdette e Prove in scadenza in schede, piu'
   // «Non assegnati»: i lead aperti e le prove in corso senza un consulente. Si
   // carica solo la scheda aperta, come nella sua sezione.
-  const schede: { chiave: string; testo: string; n?: number; nota?: string; caldo?: boolean; vai: string; vaiTesto: string; vaiAltro?: { href: string; testo: string } }[] = [
+  const schede: { chiave: string; testo: string; n?: number; nota?: string; caldo?: boolean; vai: string; vaiTesto: string; vaiAltro?: { href: string; testo: string }; calcola?: () => Promise<number> }[] = [
     { chiave: 'lead', testo: 'Opportunità da gestire', n: h.lead_da_gestire, nota: `non ancora prese in carico · ${h.miei_lead} mie`, caldo: h.lead_da_gestire > 0, vai: '/dashboard/lead?vista=da_gestire', vaiTesto: 'Vai a Opportunità', vaiAltro: { href: '/dashboard/prove?vista=in_corso', testo: 'Vai a Prove' } },
     { chiave: 'prove', testo: 'Prove in scadenza', n: h.prove_in_scadenza, nota: `entro 3 giorni · ${h.prove_in_corso} in corso`, caldo: h.prove_in_scadenza > 0, vai: '/dashboard/prove?vista=in_scadenza', vaiTesto: 'Vai a Prove' },
     ...(puoVedere(io, 'rinnovi') ? [{ chiave: 'rinnovi', testo: 'Rinnovi da gestire', n: h.rinnovi_da_gestire, nota: `non ancora presi in carico · ${h.miei_rinnovi} miei`, caldo: h.rinnovi_da_gestire > 0, vai: '/dashboard/rinnovi?vista=da_gestire', vaiTesto: 'Vai a Rinnovi' }] : []),
     ...(puoVedere(io, 'disdette') ? [{ chiave: 'disdette', testo: 'Disdette da gestire', n: h.disdette_da_gestire, nota: `non ancora prese in carico · ${h.mie_disdette} mie`, caldo: h.disdette_da_gestire > 0, vai: '/dashboard/disdette?vista=da_gestire', vaiTesto: 'Vai a Disdette' }] : []),
-    { chiave: 'non_assegnati', testo: 'Non assegnati', nota: 'opportunità e prove senza consulente', vai: '/dashboard/lead?vista=tutte&consulente=' + NESSUN_CONSULENTE, vaiTesto: 'Vai a Opportunità' },
+    { chiave: 'non_assegnati', testo: 'Non assegnati', nota: 'opportunità e prove senza consulente', calcola: contaNonAssegnati, vai: '/dashboard/lead?vista=tutte&consulente=' + NESSUN_CONSULENTE, vaiTesto: 'Vai a Opportunità' },
     { chiave: 'task', testo: 'I miei task', n: h.miei_task_oggi + h.miei_task_arretrati, nota: `${h.miei_task_oggi} oggi · ${h.miei_task_arretrati} arretrati`, caldo: h.miei_task_arretrati > 0, vai: '/dashboard/task?chi=miei&quando=arretrati', vaiTesto: 'Vai a Task' },
   ]
   const aperta = schede.find((s) => s.chiave === searchParams.vista) ?? schede[0]

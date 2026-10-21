@@ -9540,3 +9540,22 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
   :root:root:root tbody tr:hover td,
   :root:root:root tbody tr:hover td:first-child { box-shadow: none; }
 }
+
+/* Pulsante «Calcola» nel box «Non assegnati»: il numero si chiede quando serve. */
+.calcola-numero {
+  align-self: flex-start;
+  margin: 6px 0 2px;
+  padding: 6px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color var(--t-rapida) var(--curva), border-color var(--t-rapida) var(--curva);
+}
+.calcola-numero:hover:not(:disabled) { background: var(--rosso); border-color: var(--rosso); }
+.calcola-numero:disabled { opacity: 0.7; cursor: progress; }
+.calcola-numero:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }

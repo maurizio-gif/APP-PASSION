@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { edge, rpc } from '@/lib/crm'
+import { crm, edge, rpc } from '@/lib/crm'
 import { avvisaTicketAR2D } from '@/lib/email'
 import { daInputDataOra } from '@/lib/formato'
 
@@ -408,4 +408,17 @@ export async function rimuoviUtente(f: FormData) {
       esito = await rpc<string>('crm_utente_rimuovi', { p_id: testo(f, 'utente'), p_passa_a: testo(f, 'passa_a') })
     },
   )
+}
+
+// «Calcola» nel box «Non assegnati» della home: quante opportunita' aperte e quante prove in corso
+// non hanno un consulente. Solo lettura (le stesse due letture della scheda), a richiesta.
+export async function contaNonAssegnati(): Promise<number> {
+  const NESSUN_CONSULENTE = '00000000-0000-0000-0000-000000000000'
+  const [lead, prove] = await Promise.all([
+    crm.lead('tutte', null, null, NESSUN_CONSULENTE),
+    crm.prove('in_corso'),
+  ])
+  const liberi = lead.filter((l) => l.fase === 'da_gestire' || l.fase === 'in_gestione').length
+  const libere = prove.filter((p) => !p.gestito_da && !p.esito).length
+  return liberi + libere
 }
