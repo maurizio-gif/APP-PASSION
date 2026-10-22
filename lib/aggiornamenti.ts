@@ -16,6 +16,111 @@ export type Aggiornamento = {
 
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
+    data: '2026-10-22',
+    titolo: 'Nuova grafica in tutto il CRM',
+    testo:
+      'Il CRM ha un aspetto nuovo: schede, tabelle e pulsanti rifatti, in nero e rosso. È scuro di partenza. Con il pulsante col sole, in basso a sinistra, passi al tema chiaro. Funziona tutto come prima.',
+    dove: 'Tutto il CRM',
+  },
+  {
+    data: '2026-10-22',
+    titolo: 'Il menu a sinistra è in categorie',
+    testo:
+      'Le voci sono raggruppate in Clienti, Analisi, Team e Assistenza, e ogni gruppo si apre e si chiude. In alto, sotto il logo, ci sono il tuo nome e la data.',
+    dove: 'Menu a sinistra',
+  },
+  {
+    data: '2026-10-22',
+    titolo: 'Il pulsante per tornare indietro',
+    testo:
+      'In alto a sinistra, accanto al titolo, c’è un pulsante tondo per tornare alla pagina di prima.',
+    dove: 'Tutte le pagine',
+  },
+  {
+    data: '2026-10-22',
+    titolo: 'Le spiegazioni sono nel «?»',
+    testo:
+      'Le frasi che spiegano una sezione o un riquadro ora si leggono passando sul «?» accanto al titolo. Così le pagine sono più libere.',
+    dove: 'Abbonamenti, Marketing, Da gestire e le altre sezioni',
+  },
+  {
+    data: '2026-10-22',
+    titolo: 'La home è a schede',
+    testo:
+      'In «Da gestire» i numeri sono schede in alto: Opportunità, Prove in scadenza, Rinnovi, Disdette, Non assegnati, I miei task. Ne apri una alla volta e sotto compare il suo elenco.',
+    dove: 'Da gestire',
+  },
+  {
+    data: '2026-10-22',
+    titolo: 'Nuova scheda «Non assegnati»',
+    testo:
+      'Mostra le opportunità e le prove che nessun consulente segue. Il numero non c’è subito: premi «Calcola», la scheda si apre e lo calcola.',
+    dove: 'Da gestire',
+  },
+  {
+    data: '2026-10-22',
+    titolo: 'I ticket non sono più in home',
+    testo:
+      'I riquadri sui ticket sono spariti dalla home. Li trovi tutti in Ticket, nelle viste «Per R2D» e «Per Passion».',
+    dove: 'Da gestire, Ticket',
+  },
+  {
+    data: '2026-10-22',
+    titolo: 'Prove: nuova scheda «Perse»',
+    testo:
+      'Fra le prove chiuse, «Perse» mostra solo quelle finite senza iscrizione.',
+    dove: 'Prove',
+  },
+  {
+    data: '2026-10-22',
+    titolo: 'Un campo «Cerca» negli elenchi',
+    testo:
+      'In Prove, Rinnovi, Disdette, Task, Debitori e Ticket puoi scrivere un nome per trovare subito la riga. Cerca solo nella scheda che hai aperto.',
+    dove: 'Prove, Rinnovi, Disdette, Task, Debitori, Ticket',
+  },
+  {
+    data: '2026-10-22',
+    titolo: 'Ticket: nomi nuovi e thread chiuso',
+    testo:
+      'Il «filo» ora si chiama «Thread» e si apre solo quando serve. La colonna «Socio» è diventata «Cliente», «Aperto» è diventato «Aperto da».',
+    dove: 'Ticket',
+  },
+  {
+    data: '2026-10-22',
+    titolo: 'La fonte è un bollino sotto il nome',
+    testo:
+      'In Opportunità e in Prove, da dove arriva la persona (Meta, Sito, Tour…) si vede con un bollino sotto il nome del cliente. In Opportunità non c’è più la colonna «Tipologia».',
+    dove: 'Opportunità, Prove',
+  },
+  {
+    data: '2026-10-22',
+    titolo: 'La scheda della persona è rifatta',
+    testo:
+      'Opportunità, Prova, Abbonamento, Rinnovo e Disdetta sono riquadri a righe, con lo storico in fondo. I task si dividono fra da fare e fatti. Prenotazioni, Accessi e Ticket stanno su una riga e si aprono con un tocco.',
+    dove: 'Scheda della persona',
+  },
+  {
+    data: '2026-10-22',
+    titolo: 'Abbonamenti ridisegnato',
+    testo:
+      'I grafici hanno i colori del marchio. «Quanto durano» è in tre schede, una per tipo di abbonamento, con il confronto fra gli ultimi 12 mesi e i 12 prima. La tabella mese per mese ha i nomi delle colonne in alto.',
+    dove: 'Abbonamenti',
+  },
+  {
+    data: '2026-10-22',
+    titolo: 'Marketing ridisegnato',
+    testo:
+      'Periodo, date e fonte stanno in un solo pannello. Il percorso delle opportunità è un grafico a barre, con i numeri e le percentuali di ogni passo.',
+    dove: 'Marketing',
+  },
+  {
+    data: '2026-10-22',
+    titolo: 'Curriculum, Utenti e Guida con la nuova grafica',
+    testo:
+      'In Curriculum il file è un pulsante con il tipo e il peso. In Utenti ogni persona si apre e si chiude e «Aggiungi nuovo utente» è un pulsante scuro. La Guida ha schede per argomento e un indice numerato, e due argomenti nuovi: «Le parole del CRM» e «Risposte rapide».',
+    dove: 'Curriculum, Utenti, Guida',
+  },
+  {
     data: '2026-10-21',
     titolo: 'Chi deve rinnovare non compare più anche fra le disdette',
     testo:
