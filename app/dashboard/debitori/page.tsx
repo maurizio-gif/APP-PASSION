@@ -62,10 +62,10 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
           {rientrati ? (
             <span className="debitori-label"><strong>{debitori.length}</strong> rientrati negli ultimi 90 giorni</span>
           ) : (
-            <>
+            <span className="debitori-valori">
               <strong className="negativo debitori-cifra">{formatoEuro(totale)}</strong>
               <span className="debitori-label">da {debitori.length} {debitori.length === 1 ? 'socio' : 'soci'}</span>
-            </>
+            </span>
           )}
           {controllato && <span className="debitori-controllo">Saldi controllati su PerfectGym {formatoFa(controllato)}</span>}
         </div>

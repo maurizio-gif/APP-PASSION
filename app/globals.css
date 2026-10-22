@@ -9920,3 +9920,7 @@ details.task-fase > summary .fase-azione + .task-apri { margin-left: 10px; }
 /* il pallino rosso resta, sulla fascia scura */
 .scheda > .conteggio::before { display: block; }
 :root:root:root:root .scheda > .conteggio { gap: 10px; }
+
+/* Debitori: la cifra e «da N soci» stanno sulla stessa linea di base. */
+.debitori-valori { display: flex; align-items: baseline; gap: 12px; }
+:root:root:root:root .debitori-totale .debitori-label { line-height: 1; }
