@@ -251,41 +251,30 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
         />
       </div>
 
-      <Riquadro titolo={<>Abbonamenti attivi a fine mese</>}>
-        <p className="piccolo attenuato sotto-titolo">Ultimi 24 mesi. Il mese in corso (tratteggiato) è contato a oggi.</p>
+      <Riquadro titolo={<>Abbonamenti attivi a fine mese</>} aiuto={<>Ultimi 24 mesi. Il mese in corso (tratteggiato) è contato a oggi.</>}>
         <Colonne punti={attivi} unita="attivi" />
       </Riquadro>
 
-      <Riquadro titolo={<>Nuovi abbonamenti</>}>
-        <p className="piccolo attenuato sotto-titolo">
-          Per mese di inizio, esclusi i rinnovi: chi aveva già un abbonamento in corso, o finito da meno di 30 giorni, non è
-          nuovo. Chi torna dopo più di 30 giorni sì.
-        </p>
+      <Riquadro titolo={<>Nuovi abbonamenti</>} aiuto={<>Per mese di inizio, esclusi i rinnovi: chi aveva già un abbonamento in corso, o finito da meno di 30 giorni, non è
+          nuovo. Chi torna dopo più di 30 giorni sì.</>}>
         <Colonne punti={nuovi} unita="nuovi" />
       </Riquadro>
 
-      <Riquadro titolo={<>Scaduti e non rinnovati</>}>
-        <p className="piccolo attenuato sotto-titolo">
-          Per mese di fine: abbonamenti finiti dopo i quali, entro 30 giorni, non ne è partito un altro. Tratteggiati i mesi con
-          abbonamenti finiti da meno di 30 giorni, il numero può ancora scendere.
-        </p>
+      <Riquadro titolo={<>Scaduti e non rinnovati</>} aiuto={<>Per mese di fine: abbonamenti finiti dopo i quali, entro 30 giorni, non ne è partito un altro. Tratteggiati i mesi con
+          abbonamenti finiti da meno di 30 giorni, il numero può ancora scendere.</>}>
         <Colonne punti={scaduti} unita="scaduti" />
       </Riquadro>
 
-      <Riquadro titolo={<>Saldo del mese</>}>
-        <p className="piccolo attenuato sotto-titolo">Nuovi abbonamenti meno scaduti non rinnovati. Sotto lo zero, se ne perdono più di quanti ne entrano.</p>
+      <Riquadro titolo={<>Saldo del mese</>} aiuto={<>Nuovi abbonamenti meno scaduti non rinnovati. Sotto lo zero, se ne perdono più di quanti ne entrano.</>}>
         <Colonne punti={saldo} formato="segno" unita="di saldo" />
       </Riquadro>
 
       {retention.length > 0 && (
-        <Riquadro titolo={<>Retention</>}>
-          <p className="piccolo attenuato sotto-titolo">
-            Su base annuale: degli iscritti di ogni mese, quanti erano iscritti anche lo stesso giorno dell&apos;anno prima,{' '}
+        <Riquadro titolo={<>Retention</>} aiuto={<>Su base annuale: degli iscritti di ogni mese, quanti erano iscritti anche lo stesso giorno dell&apos;anno prima,{' '}
             <strong>senza interruzioni</strong> (settembre 2026 contro settembre 2025, agosto 2026 contro agosto 2025…). Iscritto è chi ha
             un abbonamento principale: non aggiuntivo, a pagamento o dei piani OLD del vecchio gestionale. Un cambio di abbonamento o una
             pausa breve non interrompono: basta ripartire entro 30 giorni dalla fine del precedente, come per i rinnovi. L&apos;ultimo
-            giorno del mese; il mese in corso (tratteggiato) è contato a oggi.
-          </p>
+            giorno del mese; il mese in corso (tratteggiato) è contato a oggi.</>}>
           <Colonne punti={retention} formato="percento" massimo={100} altezza={160} unita="di retention" />
           <p className="piccolo attenuato">
             Quando i soci crescono, la retention scende anche se nessuno se ne va: un anno prima c&apos;erano meno persone da trattenere.
@@ -294,13 +283,10 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
         </Riquadro>
       )}
 
-      <Riquadro titolo={<>Pass di prova: quanti diventano abbonamento</>}>
-        <p className="piccolo attenuato sotto-titolo">
-          Guest Pass e Pass giornalieri (Reformer, Sala Pesi, Corsi Fitness, Crossfit…), contati per <strong>persona</strong>: chi
+      <Riquadro titolo={<>Pass di prova: quanti diventano abbonamento</>} aiuto={<>Guest Pass e Pass giornalieri (Reformer, Sala Pesi, Corsi Fitness, Crossfit…), contati per <strong>persona</strong>: chi
           attiva più pass conta una volta, e i suoi pass a meno di 30 giorni l’uno dall’altro sono una prova sola. Per mese di
           fine della prova: quante persone l’hanno finita e quante si sono abbonate, durante la prova o entro 30 giorni. Non
-          contano i pass di chi era già abbonato.
-        </p>
+          contano i pass di chi era già abbonato.</>}>
         <div className="numeri-guest">
           <ConfrontoProve titolo="Tutte le prove" ora={proveUltimi.tutti} prima={provePrima.tutti} />
           <ConfrontoProve titolo="Con un Guest Pass" ora={proveUltimi.guest} prima={provePrima.guest} />
@@ -324,14 +310,11 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
         <Colonne punti={conversione} formato="percento" massimo={100} altezza={160} unita="di conversione" />
       </Riquadro>
 
-      <Riquadro titolo={<>Quanto durano</>}>
-        <p className="piccolo attenuato sotto-titolo">
-          Quanto resta chi entra con un abbonamento senza scadenza (Mensile, Flex, Open, Formula 8), e quanti mesi rimane{' '}
+      <Riquadro titolo={<>Quanto durano</>} aiuto={<>Quanto resta chi entra con un abbonamento senza scadenza (Mensile, Flex, Open, Formula 8), e quanti mesi rimane{' '}
           <strong>dopo il vincolo minimo</strong> prima di andarsene. I cambi contano: un mensile che passa al quadrimestrale, un
           quadrimestrale che passa all’annuale, un annuale che cambia piano restano la stessa permanenza, dal primo giorno del
           primo abbonamento all’ultimo dell’ultimo (con al massimo 30 giorni di vuoto). Il tipo è quello con cui la persona è
-          entrata.
-        </p>
+          entrata.</>}>
 
         <div className="tabella-scorre">
           <table>

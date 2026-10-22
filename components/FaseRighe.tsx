@@ -31,10 +31,18 @@ export function FaseVuota({ numero, nome, testo }: { numero?: number; nome: stri
 }
 
 // Riquadro con la testata scura attaccata (Ticket e altre pagine di dettaglio).
-export function Riquadro({ titolo, classe = '', children }: { titolo: React.ReactNode; classe?: string; children: React.ReactNode }) {
+export function Riquadro({ titolo, aiuto, classe = '', children }: { titolo: React.ReactNode; aiuto?: React.ReactNode; classe?: string; children: React.ReactNode }) {
   return (
     <div className={`fase-righe sotto-fase ${classe}`}>
-      <div className="fase-titolo">{titolo}</div>
+      <div className="fase-titolo">
+        {titolo}
+        {aiuto && (
+          <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questo riquadro">
+            <span className="aiuto-punto" aria-hidden="true">?</span>
+            <span className="aiuto-testo">{aiuto}</span>
+          </span>
+        )}
+      </div>
       <section className="scheda fase-corpo sotto-corpo">{children}</section>
     </div>
   )

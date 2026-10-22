@@ -10065,3 +10065,22 @@ details.task-fase > summary .fase-azione + .task-apri { margin-left: 10px; }
 .sotto-corpo .numeri-guest .numero .etichetta { color: #5e4a51; }
 .sotto-corpo .numeri-guest .numero .valore { color: #1c1114; }
 .sotto-corpo .numeri-guest .numero .nota { color: #7a6a70; }
+
+/* Descrizione del report: nell'icona «?» accanto al titolo (come nelle pagine), non piu' scritta sotto. */
+.fase-titolo .aiuto-titolo { position: relative; margin-left: 10px; }
+.fase-righe:has(.aiuto-titolo:hover),
+.fase-righe:has(.aiuto-titolo:focus-within) { position: relative; z-index: 40; }
+:root:root .fase-titolo .aiuto-punto {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+.fase-titolo .aiuto-testo { color: #fff; }
+
+/* Riquadri dei numeri (Abbonamenti attivi, Pass attivi): date, note e confronti in tonalita' chiare sul fondo scuro */
+:root:root .numeri-grandi .numero .etichetta { color: #fff; opacity: 0.92; }
+:root:root .numeri-grandi .numero .nota { color: rgba(255, 255, 255, 0.78); font-size: 0.9rem; }
+:root:root .numeri-grandi .confronti li { color: rgba(255, 255, 255, 0.82); font-size: 0.92rem; }
+:root:root .numeri-grandi .confronti .attenuato { color: rgba(255, 255, 255, 0.62); font-weight: 500; }
+:root:root .numeri-grandi .confronti .piccolo.attenuato { display: block; margin-top: 6px; color: rgba(255, 255, 255, 0.78); font-size: 0.86rem; line-height: 1.45; }
+:root:root .numeri-grandi .confronti strong { color: #fff; }
