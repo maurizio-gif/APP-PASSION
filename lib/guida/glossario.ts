@@ -16,7 +16,7 @@ export const glossario: Argomento = {
 
 ## Il lavoro
 - **Lead**: chi ci contatta e non è ancora iscritto.
-- **Fonte** (nell'elenco «Tipologia»): da dove arriva un lead: **Sito**, **Referral**, **Meta**, **Tour / walk-in**, **Altro**.
+- **Fonte** (il bollino accanto al nome del cliente nell'elenco): da dove arriva un lead: **Sito**, **Referral**, **Meta**, **Tour / walk-in**, **Altro**.
 - **Prova**: un pass attivato su PerfectGym (un piano che si chiama pass, prova o guest). Entra nel CRM da sola, entro 5 minuti.
 - **Pass**: il piano di prova. Quello richiesto dal sito dura 7 giorni.
 - **Rinnovo**: un abbonamento **a scadenza fissa** (Reformer 12 mesi, Percorsi «I ❤️ My Trainer», PT Elite) che sta per finire.

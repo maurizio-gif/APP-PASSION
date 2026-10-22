@@ -10932,3 +10932,10 @@ a.cv-file .cv-file-testo small { color: var(--rosso-scuro); font-weight: 600; }
 :root:root:root .gd-voce .gd-voce-capitoli span + span::before { content: ""; margin: 0; }
 :root:root:root .gd-voce .gd-voce-capitoli span::before { content: ''; flex: none; width: 5px; height: 5px; border-radius: 50%; background: var(--rosso); }
 :root:root:root .gd-voce, :root:root:root .gd-voce .gd-voce-breve { white-space: normal; }
+
+/* Telefono: il testo del «?» nelle barre dei riquadri si apre a tutta larghezza sotto il titolo (prima, ancorato al «?», usciva dallo schermo e allargava la pagina) */
+@media (max-width: 720px) {
+  .fase-titolo { position: relative; }
+  :root:root .fase-titolo .aiuto-titolo { position: static; }
+  :root:root .fase-titolo .aiuto-testo { left: 12px; right: 12px; width: auto; max-width: none; }
+}

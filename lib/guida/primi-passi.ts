@@ -17,15 +17,15 @@ Molte cose il CRM le fa da solo: da fuori arrivano solo le opportunità dei modu
 > Airtable non si usa più: dal 30 settembre 2026 tutto il lavoro si fa qui. Da fuori arrivano solo le opportunità dei moduli; il resto nasce da PerfectGym.
 
 ## La home: Da gestire
-Appena entri, i numeri di oggi. Ogni riquadro porta al suo elenco:
+Appena entri, i numeri di oggi, in alto a schede. Ne è aperta una alla volta: premi su una scheda e sotto compare il suo elenco.
 
-- **Opportunità da gestire**: non ancora prese in carico; **Le mie opportunità**: in gestione a te;
+- **Opportunità da gestire**: non ancora prese in carico, con quante sono tue;
 - **Prove in scadenza**: finiscono entro 3 giorni;
-- **Disdette da gestire** e **Rinnovi da gestire**: non ancora presi in carico, con quanti sono tuoi;
-- **I miei task**: di oggi e arretrati;
-- **Ticket in attesa**: R2D aspetta una risposta dal desk. Il supporto vede anche **Ticket da verificare**.
+- **Rinnovi da gestire** e **Disdette da gestire**: non ancora presi in carico, con quanti sono tuoi;
+- **Non assegnati**: opportunità e prove che nessun consulente segue. Il numero non c'è subito: premi **«Calcola»** e la scheda si apre e lo calcola;
+- **I miei task**: di oggi e arretrati.
 
-Sotto, le opportunità da gestire, i tuoi task di oggi (con **«Fatto ✓»** e **«Non risponde»**) e le prove in scadenza. Il riquadro è evidenziato quando c'è qualcosa da fare.
+Sotto la scheda aperta trovi l'elenco, con le azioni per ogni riga (per esempio **«Prendo in carico»**, oppure **«Fatto ✓»** e **«Non risponde»** per i task). La scheda è evidenziata quando c'è qualcosa da fare. I ticket non stanno più in home: li trovi nella sezione [Ticket](/dashboard/ticket).
 
 ## Le regole che valgono ovunque
 - **Il lavoro sta nei task.** Ogni contatto con una persona si segna come task, fatto o da fare: è la sua storia. Vedi [Task](/dashboard/guida/task).

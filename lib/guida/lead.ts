@@ -7,7 +7,7 @@ export const lead: Argomento = {
   inBreve: 'Chi ci contatta e non è ancora iscritto: da dove arriva, chi la prende in carico, e quando si chiude. Vinta la segna PerfectGym, persa la segni tu.',
   testo: `
 ## Da dove arrivano
-Ogni opportunità ha una **fonte** (la «Tipologia» nell'elenco):
+Ogni opportunità ha una **fonte** (il bollino che compare con il nome del cliente nell'elenco):
 
 - **Sito**: i moduli del sito arrivano da soli. Chi chiede il **Pass** dal sito non è un'opportunità da lavorare: arriva già **Vinta · prova**, con la sua prova in [Prove](/dashboard/prove).
 - **Referral**: il modulo referral del sito arriva da solo, un'opportunità per ogni amico presentato; nella scheda c'è **Presentato da**.

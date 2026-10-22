@@ -19,9 +19,10 @@ Chi chiede il Pass dal sito ha subito la sua prova, agganciata alla sua opportun
 
 ## Le viste
 - **In corso**: il pass non è ancora finito; prima quelle che finiscono prima;
-- **In scadenza**: finiscono entro 3 giorni. Sono anche in home, nel riquadro **«Prove in scadenza»**;
+- **In scadenza**: finiscono entro 3 giorni. Sono anche in home, nella scheda **«Prove in scadenza»**;
 - **Finite senza esito**: il pass è finito e non c'è ancora un abbonamento. **Sono quelle da richiamare**;
-- **Chiuse**: con l'esito, iscritto o non iscritto.
+- **Chiuse**: con l'esito, iscritto o non iscritto;
+- **Perse**: tra le chiuse, solo quelle con esito non iscritto.
 
 Con **Tutti i consulenti** vedi solo le prove che segue un collega.
 

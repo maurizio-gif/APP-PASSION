@@ -21,7 +21,7 @@ Se sulla persona c'è già un ticket aperto per lo stesso problema, non aprirne 
 > Se qualcosa blocca il lavoro di tutti (tornello, app giù, pagamenti), apri il ticket spuntando «Blocca il lavoro di tutti» e **chiama anche R2D**: il ticket da solo non avvisa nessuno.
 
 ## Aprire un ticket
-Se riguarda un socio, aprilo dalla sua scheda con **«+ Apri un ticket»**: il ticket si porta dietro la sua situazione di quel momento (abbonamento, saldo, certificato, ultimi ingressi, prenotazioni) e R2D non te la deve chiedere. Altrimenti da [Ticket](/dashboard/ticket), **«+ Nuovo ticket»**.
+Se riguarda un socio, aprilo dalla sua scheda con **«+ Apri un ticket»**: il ticket è collegato a lui e, mentre lo scrivi, vedi la sua situazione (abbonamento, saldo, certificato). Altrimenti da [Ticket](/dashboard/ticket), **«+ Nuovo ticket»**.
 
 1. Scegli **che cosa serve**:
   - **Qualcosa non funziona**: un socio non entra, non prenota, un pagamento o un'automazione che non va;
@@ -44,7 +44,7 @@ Se riguarda un socio, aprilo dalla sua scheda con **«+ Apri un ticket»**: il t
 ## Seguire la risposta
 Tutto passa dal **thread** del ticket: i messaggi di Passion e di R2D, e ogni passaggio (inviato, preso in carico, risolto). Per aggiungere qualcosa scrivi in «Scrivi» e **«Aggiungi al thread»**.
 
-- Quando R2D ha bisogno di un'informazione, il ticket va in **Aspetta Passion**. Lo trovi nella vista **«Per Passion»** e in home, nel riquadro **«Ticket in attesa»**. Rispondi nel thread: alla prima risposta torna in lavorazione.
+- Quando R2D ha bisogno di un'informazione, il ticket va in **Aspetta Passion**. Lo trovi nella vista **«Per Passion»** della sezione Ticket. Rispondi nel thread: alla prima risposta torna in lavorazione.
 - R2D chiude il ticket con **di che cosa si trattava, la causa e la soluzione**: le trovi in cima alla pagina del ticket.
 - Se il problema si ripresenta, il supporto (o R2D) lo **riapre** con il motivo. Non aprirne uno nuovo.
 

@@ -36,7 +36,7 @@ Ogni cosa aperta sulla persona ha il suo riquadro, e si gestisce sul posto:
 - **Rinnovo**: **«Prendo in carico»**, **«Assegna»** e **«Rimetti da assegnare»** come per le opportunità; poi esito e note, **«Salva il rinnovo»** (vedi [Rinnovi](/dashboard/guida/rinnovi));
 - **Disdetta**: **«Prendo in carico»**, **«Assegna»** e **«Rimetti da assegnare»** come per le opportunità; poi contatto, esito, motivo e note, **«Salva la disdetta»** (vedi [Disdette](/dashboard/guida/disdette));
 - **Task**: prima la storia, poi il nuovo task, da programmare o già fatto (vedi [Task](/dashboard/guida/task));
-- **Ticket**: **«+ Apri un ticket»**, che si porta dietro la situazione del socio (vedi [Ticket](/dashboard/guida/ticket)).
+- **Ticket**: **«+ Apri un ticket»**, già collegato al socio (vedi [Ticket](/dashboard/guida/ticket)).
 
 Rinnovo e disdetta si modificano qui solo se hai anche la loro sezione, e se sono tuoi o di nessuno (o sei admin, o hai **«Opportunità degli altri»**); altrimenti si leggono.
 
