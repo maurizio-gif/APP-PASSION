@@ -26,7 +26,7 @@ Se la stessa persona manda due volte lo stesso modulo nella mezz'ora, l'opportun
 > Perché il CRM riconosca l'iscrizione, su PerfectGym la persona deve avere **la stessa email o lo stesso telefono** dell'opportunità. Se li scrivi diversi, l'opportunità resta aperta anche se si è iscritta.
 
 ## Il lavoro di ogni giorno
-1. Apri **Da gestire** (anche dalla home, **«Opportunità da gestire»**): i più recenti sono in cima.
+1. Apri **Da gestire** (anche dalla home, scheda **«Non assegnati»**, elenco **Opportunità**): i più recenti sono in cima.
 2. Prendi l'opportunità con **«Prendo in carico»**, o assegnala a chi la deve seguire.
 3. Chiama, scrivi su WhatsApp o per email. Ogni contatto segnalo come **task registrato** nella scheda della persona (Task: Telefonata, WhatsApp, Email o In sede; l'esito; le note dell'esito): è la storia dell'opportunità, e le note compaiono nell'elenco in **«Nota task»**.
 4. Se va richiamato, **programma un task** con la data: te lo ritrovi in home il giorno giusto.

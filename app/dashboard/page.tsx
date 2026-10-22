@@ -25,18 +25,16 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
   // «Non assegnati»: i lead aperti e le prove in corso senza un consulente. Si
   // carica solo la scheda aperta, come nella sua sezione.
   const schede: { chiave: string; testo: string; n?: number; nota?: string; caldo?: boolean; vai: string; vaiTesto: string; vaiAltro?: { href: string; testo: string }; calcola?: boolean }[] = [
-    { chiave: 'lead', testo: 'Opportunità da gestire', n: h.lead_da_gestire, nota: `non ancora prese in carico · ${h.miei_lead} mie`, caldo: h.lead_da_gestire > 0, vai: '/dashboard/lead?vista=da_gestire', vaiTesto: 'Vai a Opportunità', vaiAltro: { href: '/dashboard/prove?vista=in_corso', testo: 'Vai a Prove' } },
+    { chiave: 'non_assegnati', testo: 'Non assegnati', nota: 'opportunità e prove senza consulente', calcola: true, vai: '/dashboard/lead?vista=tutte&consulente=' + NESSUN_CONSULENTE, vaiTesto: 'Vai a Opportunità' },
     { chiave: 'prove', testo: 'Prove in scadenza', n: h.prove_in_scadenza, nota: `entro 3 giorni · ${h.prove_in_corso} in corso`, caldo: h.prove_in_scadenza > 0, vai: '/dashboard/prove?vista=in_scadenza', vaiTesto: 'Vai a Prove' },
     ...(puoVedere(io, 'rinnovi') ? [{ chiave: 'rinnovi', testo: 'Rinnovi da gestire', n: h.rinnovi_da_gestire, nota: `non ancora presi in carico · ${h.miei_rinnovi} miei`, caldo: h.rinnovi_da_gestire > 0, vai: '/dashboard/rinnovi?vista=da_gestire', vaiTesto: 'Vai a Rinnovi' }] : []),
     ...(puoVedere(io, 'disdette') ? [{ chiave: 'disdette', testo: 'Disdette da gestire', n: h.disdette_da_gestire, nota: `non ancora prese in carico · ${h.mie_disdette} mie`, caldo: h.disdette_da_gestire > 0, vai: '/dashboard/disdette?vista=da_gestire', vaiTesto: 'Vai a Disdette' }] : []),
-    { chiave: 'non_assegnati', testo: 'Non assegnati', nota: 'opportunità e prove senza consulente', calcola: true, vai: '/dashboard/lead?vista=tutte&consulente=' + NESSUN_CONSULENTE, vaiTesto: 'Vai a Opportunità' },
     { chiave: 'task', testo: 'I miei task', n: h.miei_task_oggi + h.miei_task_arretrati, nota: `${h.miei_task_oggi} oggi · ${h.miei_task_arretrati} arretrati`, caldo: h.miei_task_arretrati > 0, vai: '/dashboard/task?chi=miei&quando=arretrati', vaiTesto: 'Vai a Task' },
   ]
   const aperta = schede.find((s) => s.chiave === searchParams.vista) ?? schede[0]
   const scheda = aperta.chiave
-  const qui = scheda === 'lead' ? '/dashboard' : `/dashboard?vista=${scheda}`
-  const [nuovi, rinnovi, disdette, prove, liberi, arretrati, oggi] = await Promise.all([
-    scheda === 'lead' ? crm.lead('da_gestire', null, null) : null,
+  const qui = scheda === schede[0].chiave ? '/dashboard' : `/dashboard?vista=${scheda}`
+  const [rinnovi, disdette, prove, liberi, arretrati, oggi] = await Promise.all([
     scheda === 'rinnovi' ? crm.rinnovi('da_gestire') : null,
     scheda === 'disdette' ? crm.disdette('da_gestire') : null,
     scheda === 'prove' ? crm.prove('in_scadenza') : scheda === 'non_assegnati' ? crm.prove('in_corso') : null,
@@ -68,11 +66,6 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
       <section className="scheda" id="da-gestire">
         <SchedeNumeri voci={schede} attiva={scheda} base="/dashboard" />
         <div className="da-gestire-corpo">
-          {nuovi && (nuovi.length === 0 ? (
-            <Vuoto>Tutte le opportunità sono prese in carico.</Vuoto>
-          ) : (
-            <TabellaLead lead={nuovi.slice(0, 15)} io={io} staff={staff} torna={qui} />
-          ))}
           {rinnovi && (rinnovi.length === 0 ? (
             <Vuoto>Tutti i rinnovi sono presi in carico.</Vuoto>
           ) : (

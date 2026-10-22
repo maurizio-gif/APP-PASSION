@@ -61,14 +61,14 @@ export const AGGIORNAMENTI: Aggiornamento[] = [
     data: '2026-10-22',
     titolo: 'La home è a schede',
     testo:
-      'In «Da gestire» i numeri sono schede in alto: Opportunità, Prove in scadenza, Rinnovi, Disdette, Non assegnati, I miei task. Ne apri una alla volta e sotto compare il suo elenco.',
+      'In «Da gestire» i numeri sono schede in alto: Non assegnati, Prove in scadenza, Rinnovi, Disdette, I miei task. Ne apri una alla volta e sotto compare il suo elenco.',
     dove: 'Da gestire',
   },
   {
     data: '2026-10-22',
     titolo: 'Nuova scheda «Non assegnati»',
     testo:
-      'Mostra le opportunità e le prove che nessun consulente segue. Il numero non c’è subito: premi «Calcola», la scheda si apre e lo calcola.',
+      'Mostra le opportunità e le prove che nessun consulente segue, in due elenchi. È la prima scheda e si apre da sola. Le opportunità da prendere in carico stanno qui: la scheda «Opportunità da gestire» non c’è più, perché erano le stesse. Se è aperta un’altra scheda, il numero non c’è subito: premi «Calcola».',
     dove: 'Da gestire',
   },
   {
