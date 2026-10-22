@@ -9870,3 +9870,34 @@ details.task-fase > summary .fase-azione + .task-apri { margin-left: 10px; }
 @media (min-width: 1280px) {
   .persona-sotto .sotto-tick { flex: 0 0 calc((100% - 36px) * 0.4595); max-width: calc((100% - 36px) * 0.4595); }
 }
+
+/* Quante righe ci sono: una fascia in cima alla tabella (non in fondo), con il numero in evidenza. */
+.scheda:has(> .conteggio) { display: flex; flex-direction: column; }
+:root:root:root:root .scheda > .conteggio {
+  order: -1;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: -20px -22px 0;
+  padding: 11px 22px;
+  border-top: 0;
+  border-bottom: 1px solid rgba(92, 11, 30, 0.14);
+  border-radius: var(--raggio) var(--raggio) 0 0;
+  background: linear-gradient(100deg, rgba(227, 3, 45, 0.09), rgba(227, 3, 45, 0.02) 70%);
+  color: #1c1114;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.scheda > .conteggio::before {
+  content: '';
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--rosso);
+  box-shadow: 0 0 0 3px rgba(227, 3, 45, 0.18);
+}
+:root:root:root .scheda:has(> .conteggio) > .tabella-scorre,
+:root:root:root .scheda:has(> .conteggio) > .tabella-scorre:first-child { margin-top: 0; }
+:root:root:root .scheda:has(> .conteggio) > .tabella-scorre thead th:first-child { border-top-left-radius: 0; }
+:root:root:root .scheda:has(> .conteggio) > .tabella-scorre thead th:last-child { border-top-right-radius: 0; }
