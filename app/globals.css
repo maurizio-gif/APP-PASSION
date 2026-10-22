@@ -10004,3 +10004,11 @@ details.task-fase > summary .fase-azione + .task-apri { margin-left: 10px; }
   :root:root:root select:not([multiple]) option::checkmark { color: #fff; }
   :root:root:root select:not([multiple]) option:disabled { color: rgba(255, 255, 255, 0.35); }
 }
+/* le voci del menu hanno sempre il testo chiaro (una regola dei filtri le rendeva scure sul fondo scuro) */
+@supports (appearance: base-select) {
+  :root:root:root:root:root .contenuto select:not([multiple]) option { color: rgba(255, 255, 255, 0.88); }
+  :root:root:root:root:root .contenuto select:not([multiple]) option:hover,
+  :root:root:root:root:root .contenuto select:not([multiple]) option:focus-visible,
+  :root:root:root:root:root .contenuto select:not([multiple]) option:checked { color: #fff; }
+  :root:root:root:root:root .contenuto select:not([multiple]) option:disabled { color: rgba(255, 255, 255, 0.38); }
+}
