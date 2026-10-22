@@ -9841,3 +9841,10 @@ details.task-fase > summary.fase-titolo { padding: 15px 20px; row-gap: 10px; }
   border-radius: 0;
 }
 .fase-storico:not([open]) > summary { border-radius: 0 0 14px 14px; }
+
+/* Ticket: «+ Apri un ticket» sta nella barra, accanto a Apri/Chiudi; il testo di elenco vuoto ha il suo margine. */
+details.task-fase > summary .fase-azione { margin-left: auto; order: 1; }
+details.task-fase > summary .fase-azione + .task-apri { margin-left: 10px; }
+.fase-titolo .task-apri { order: 2; }
+.sotto-tabella > .vuoto,
+.sotto-tabella > p { margin: 0; padding: 18px 20px; }

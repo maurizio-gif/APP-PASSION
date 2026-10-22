@@ -41,11 +41,12 @@ export function Riquadro({ titolo, classe = '', children }: { titolo: React.Reac
 }
 
 // Lo stesso riquadro a fisarmonica: la testata e' il tasto Apri / Chiudi.
-export function Accordion({ titolo, anteprima, aperto = false, classe = '', corpoClasse = '', children }: { titolo: React.ReactNode; anteprima?: React.ReactNode; aperto?: boolean; classe?: string; corpoClasse?: string; children: React.ReactNode }) {
+export function Accordion({ titolo, anteprima, azione, aperto = false, classe = '', corpoClasse = '', children }: { titolo: React.ReactNode; anteprima?: React.ReactNode; azione?: React.ReactNode; aperto?: boolean; classe?: string; corpoClasse?: string; children: React.ReactNode }) {
   return (
     <details className={`fase-righe sotto-fase task-fase ${classe}`} open={aperto}>
       <summary className="fase-titolo">
         {titolo}
+        {azione}
         <span className="task-apri" aria-hidden="true" />
         {anteprima && <span className="acc-anteprima">{anteprima}</span>}
       </summary>

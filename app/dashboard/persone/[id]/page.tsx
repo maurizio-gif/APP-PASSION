@@ -480,8 +480,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
       <div className="persona-sotto">
         <div>
           {ticket && (
-            <Accordion classe="sotto-tick" titolo="Ticket" anteprima={ticket ? (ticket.length === 0 ? 'Nessun ticket' : `${ticket.length} ${ticket.length === 1 ? 'ticket' : 'ticket'} · ${ticket.filter((x) => !STATI_TICKET_CHIUSI.includes(x.stato)).length} aperti`) : null} corpoClasse="sotto-tabella">
-              <div className="sotto-azione"><a className="bottone secondario piccolo" href={`/dashboard/ticket/nuovo?persona=${p.id}`}>+ Apri un ticket</a></div>
+            <Accordion classe="sotto-tick" titolo="Ticket" azione={<a className="bottone secondario piccolo fase-azione" href={`/dashboard/ticket/nuovo?persona=${p.id}`}>+ Apri un ticket</a>} anteprima={ticket ? (ticket.length === 0 ? 'Nessun ticket' : `${ticket.length} ${ticket.length === 1 ? 'ticket' : 'ticket'} · ${ticket.filter((x) => !STATI_TICKET_CHIUSI.includes(x.stato)).length} aperti`) : null} corpoClasse="sotto-tabella">
               {ticket.length === 0
                 ? <Vuoto>Nessun ticket su questa persona.</Vuoto>
                 : <TabellaTicket ticket={ticket} socio={false} />}
