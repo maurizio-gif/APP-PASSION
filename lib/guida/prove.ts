@@ -26,6 +26,8 @@ Chi chiede il Pass dal sito ha subito la sua prova, agganciata alla sua opportun
 
 Con **Tutti i consulenti** vedi solo le prove che segue un collega.
 
+> **Perché il numero di «In corso» non è quello di «Prove in corso» in Opportunità?** Qui si contano le **prove**: ogni pass attivato e non ancora finito. In [Opportunità](/dashboard/guida/lead) si contano le **opportunità** che hanno una prova in corso. Qui ce ne sono di più perché ci sono anche le prove di chi ha preso il pass in reception senza essere mai passato da un modulo (non ha un'opportunità) e di chi aveva l'opportunità chiusa come persa e ha attivato lo stesso il pass. Per sapere quante prove stanno girando, vale il numero di questa pagina.
+
 ## Cosa vedi per ogni prova
 - il **pass**, le date e quanti giorni mancano (in rosso gli ultimi 3, quelle in scadenza);
 - **come va**: gli ingressi e l'ultimo, le lezioni prenotate e quelle fatte;

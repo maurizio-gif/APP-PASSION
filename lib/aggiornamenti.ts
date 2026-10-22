@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-22',
+    titolo: 'La Guida spiega perché le prove in corso sono due numeri',
+    testo:
+      'Il numero di «In corso» in Prove è più alto di «Prove in corso» in Opportunità: in Prove si contano tutti i pass attivi, in Opportunità solo quelli di chi ha un’opportunità. Ora la Guida lo spiega, e descrive anche le schede «Prove in corso» e «Prove scadute» di Opportunità.',
+    dove: 'Guida (Prove e Opportunità)',
+  },
+  {
+    data: '2026-10-22',
     titolo: 'Il numero di righe in cima agli elenchi',
     testo:
       'In Prove, Rinnovi, Disdette e Debitori, sopra la tabella c’è una fascia con quante righe stai guardando, per esempio «8 prove». Prima c’era solo in Opportunità.',

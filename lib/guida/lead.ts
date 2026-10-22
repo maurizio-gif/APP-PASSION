@@ -47,9 +47,10 @@ Da **«+ Nuova opportunità»** (in home, in Opportunità e in Cerca):
 > Prima di creare un'opportunità, **cerca la persona**: la nuova opportunità si crea sempre, anche se la persona ne ha già una aperta. La ricerca è in cima al menu.
 
 ## Le viste e i filtri
-- **Da gestire**, **In gestione**, **Le mie** (quelle in gestione a te), **Senza task**, **Vinte**, **Perse**, **Tutte**;
+- **Da gestire**, **In gestione**, **Le mie** (quelle in gestione a te), **Senza task**, **Prove in corso**, **Prove scadute**, **Vinte**, **Perse**, **Tutte**;
 - **Senza task**: le opportunità in gestione su persone che non hanno nessun task aperto da oggi in avanti. Nessuno ha fissato il prossimo passo: o si programma un task, o l'opportunità si chiude. Ci sono anche quelle con solo task arretrati non fatti;
 - in cima: la ricerca per nome, telefono o email, **Tutte le fonti** e **Tutti i consulenti** (il lavoro di un collega), poi **«Filtra»**;
+- **Prove in corso** e **Prove scadute**: le opportunità che si sono chiuse come **Vinta · prova**. In corso, il pass è ancora attivo; scadute, il pass è finito e non c'è ancora un abbonamento. Il numero è quello delle **opportunità**: in [Prove](/dashboard/guida/prove) ce ne sono di più, perché lì si contano tutti i pass, anche di chi non ha un'opportunità;
 - l'elenco mostra al massimo 200 opportunità, le più recenti.
 
 ## Chi può fare cosa
