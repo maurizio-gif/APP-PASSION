@@ -10012,3 +10012,9 @@ details.task-fase > summary .fase-azione + .task-apri { margin-left: 10px; }
   :root:root:root:root:root .contenuto select:not([multiple]) option:checked { color: #fff; }
   :root:root:root:root:root .contenuto select:not([multiple]) option:disabled { color: rgba(255, 255, 255, 0.38); }
 }
+
+/* Task: i pulsanti «Fatto ✓» e «Negativo» non vanno mai a capo; se non c'e' posto, scendono sotto il campo. */
+:root:root .task-voce .task-chiudi { flex-wrap: wrap; row-gap: 8px; }
+:root:root .task-chiudi input[type='text'] { flex: 1 1 150px; min-width: 0; }
+:root:root .task-chiudi .bottone { flex: 0 0 auto; white-space: nowrap; }
+:root:root .task-azioni .bottone, .azioni-riga .bottone.piccolo { white-space: nowrap; }
