@@ -9968,3 +9968,39 @@ details.task-fase > summary .fase-azione + .task-apri { margin-left: 10px; }
   font-weight: 700;
   box-shadow: 0 2px 6px rgba(180, 2, 35, 0.4), 0 8px 16px -6px rgba(227, 3, 45, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
+
+/* ---- Menu a tendina: l'elenco che si apre e' un pannello scuro (come il resto), con la voce scelta in rosso ---- */
+@supports (appearance: base-select) {
+  :root:root:root select:not([multiple])::picker(select) {
+    margin-top: 8px;
+    padding: 6px;
+    max-height: 340px;
+    background: linear-gradient(160deg, #211a22, #130f14);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 14px;
+    box-shadow: 0 22px 44px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(227, 3, 45, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(227, 3, 45, 0.7) transparent;
+  }
+  :root:root:root select:not([multiple]) option {
+    padding: 9px 12px 9px 14px;
+    border-radius: 9px;
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color var(--t-rapida) var(--curva), color var(--t-rapida) var(--curva);
+  }
+  :root:root:root select:not([multiple]) option:hover,
+  :root:root:root select:not([multiple]) option:focus-visible {
+    background: rgba(227, 3, 45, 0.2);
+    color: #fff;
+  }
+  :root:root:root select:not([multiple]) option:checked {
+    background: linear-gradient(135deg, #f0123b, var(--rosso) 60%, #b80223);
+    color: #fff;
+    font-weight: 650;
+    box-shadow: 0 2px 8px rgba(227, 3, 45, 0.35);
+  }
+  :root:root:root select:not([multiple]) option::checkmark { color: #fff; }
+  :root:root:root select:not([multiple]) option:disabled { color: rgba(255, 255, 255, 0.35); }
+}
