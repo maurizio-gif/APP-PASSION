@@ -10170,3 +10170,193 @@ details.task-fase > summary .fase-azione + .task-apri { margin-left: 10px; }
 .tabella-mesi .saldo { display: inline-block; min-width: 56px; padding: 3px 10px; border-radius: 999px; font-weight: 700; text-align: center; background: rgba(42, 11, 20, 0.06); color: #3a2a30; }
 .tabella-mesi .saldo.positivo { background: rgba(31, 157, 85, 0.14); color: #17794a; }
 .tabella-mesi .saldo.negativo { background: rgba(227, 3, 45, 0.1); color: #b50224; }
+
+/* ---- Marketing: comandi in un pannello, riquadri con barra scura, percorso ridisegnato ---- */
+.mk-comandi {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 18px;
+  padding: 16px 20px;
+  border: 1px solid rgba(227, 3, 45, 0.28);
+  border-radius: 16px;
+  background:
+    radial-gradient(45% 160% at 0% 0%, rgba(227, 3, 45, 0.16), rgba(227, 3, 45, 0) 70%),
+    linear-gradient(100deg, #0e0f12 0%, #17090f 60%, #2a0b14 100%);
+  box-shadow: 0 14px 30px -18px rgba(0, 0, 0, 0.6);
+}
+.mk-comando { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; }
+:root:root:root .mk-comandi .mk-etichetta {
+  min-width: 96px;
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+:root:root:root .mk-comandi .schede-vista { margin: 0; }
+:root:root:root .mk-comandi .filtri-marketing {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  margin: 0;
+  padding: 12px 0 0;
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+:root:root:root .mk-comandi .filtri-marketing label.mk-etichetta[for='mk-al'] { min-width: 0; }
+:root:root:root .mk-comandi .filtri-marketing .bottone { margin-left: auto; }
+
+.mk-riquadro { margin-bottom: 18px; }
+
+/* Il percorso: una riga per passo, la barra larga quanto la sua parte delle opportunita'. */
+.mk-percorso { display: grid; gap: 0; padding: 6px 4px 2px; }
+.mk-passo {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr) 200px;
+  gap: 22px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(92, 11, 30, 0.08);
+}
+.mk-passo.ultimo { border-bottom: 0; }
+.mk-passo-nome { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.mk-passo-numero {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(140deg, #2a0b14, #0e0f12);
+  border: 1px solid rgba(227, 3, 45, 0.55);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.mk-passo-nome strong { display: block; font-size: 0.98rem; font-weight: 700; color: #1c1114; }
+.mk-passo-nome small { display: block; margin-top: 2px; font-size: 0.78rem; color: #8a7a80; }
+.mk-barra {
+  display: flex;
+  height: 34px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(92, 11, 30, 0.07);
+  box-shadow: inset 0 1px 2px rgba(42, 11, 20, 0.08);
+}
+.mk-pieno {
+  display: block;
+  height: 100%;
+  background: linear-gradient(180deg, #ff2d55 0%, #e3032d 55%, #b80224 100%);
+}
+.mk-pieno.dopo-prova { background: linear-gradient(180deg, #7a1026 0%, #4a0a17 100%); }
+.mk-pieno + .mk-pieno { border-left: 2px solid #fff; }
+.mk-cifre { text-align: right; }
+.mk-cifre strong {
+  display: block;
+  font-size: 1.65rem;
+  font-weight: 750;
+  line-height: 1.1;
+  color: #1c1114;
+  font-variant-numeric: tabular-nums;
+}
+.mk-cifre small { display: block; margin-top: 4px; font-size: 0.76rem; line-height: 1.45; color: #8a7a80; }
+.mk-cifre small b { font-weight: 700; color: var(--rosso-scuro); }
+.mk-legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 26px;
+  margin: 4px 0 0;
+  padding: 12px 0 0;
+  border-top: 1px solid rgba(92, 11, 30, 0.08);
+  font-size: 0.82rem;
+  color: #4a3a40;
+}
+.mk-legenda span { display: inline-flex; align-items: center; gap: 8px; }
+.mk-legenda strong { color: #1c1114; font-variant-numeric: tabular-nums; }
+.mk-chiave { display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: linear-gradient(180deg, #ff2d55, #b80224); }
+.mk-chiave.dopo-prova { background: linear-gradient(180deg, #7a1026, #4a0a17); }
+
+/* Come vengono gestite: sei riquadri su tre colonne. */
+:root:root:root .mk-riquadro .numeri { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 0; }
+
+/* Il dettaglio: schede in alto, poi la tabella. */
+.mk-schede { margin: 0 0 6px; }
+:root:root:root .mk-schede .schede-vista { margin: 0; }
+.mk-nota { margin: 10px 0 0; font-size: 0.82rem; color: #8a7a80; }
+:root:root:root .mk-dettaglio .tabella-scorre { margin: 0; padding: 0; overflow-x: auto; }
+:root:root:root .mk-dettaglio .tabella-marketing { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+:root:root:root .mk-dettaglio .tabella-marketing thead,
+:root:root:root .mk-dettaglio .tabella-marketing thead tr,
+:root:root:root .mk-dettaglio .tabella-marketing tbody tr,
+:root:root:root .mk-dettaglio .tabella-marketing tfoot tr { background: none; box-shadow: none; }
+:root:root:root .mk-dettaglio .tabella-marketing th,
+:root:root:root .mk-dettaglio .tabella-marketing td { position: static; background: none; border: 0; box-shadow: none; }
+:root:root:root .mk-dettaglio .tabella-marketing thead th {
+  padding: 18px 14px 12px;
+  vertical-align: bottom;
+  white-space: normal;
+  line-height: 1.3;
+  color: #8a7a80;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-bottom: 2px solid rgba(227, 3, 45, 0.4);
+}
+:root:root:root .mk-dettaglio .tabella-marketing th.num,
+:root:root:root .mk-dettaglio .tabella-marketing td.num { text-align: right; }
+:root:root:root .mk-dettaglio .tabella-marketing td {
+  padding: 12px 14px;
+  vertical-align: middle;
+  font-size: 0.92rem;
+  color: #2a1d22;
+  border-bottom: 1px solid rgba(42, 11, 20, 0.07);
+}
+:root:root:root .mk-dettaglio .tabella-marketing th:first-child,
+:root:root:root .mk-dettaglio .tabella-marketing td:first-child { padding-left: 4px; }
+:root:root:root .mk-dettaglio .tabella-marketing th:last-child,
+:root:root:root .mk-dettaglio .tabella-marketing td:last-child { padding-right: 4px; }
+:root:root:root .mk-dettaglio .tabella-marketing tbody tr:hover { background: rgba(227, 3, 45, 0.04); }
+:root:root:root .mk-dettaglio .tabella-marketing td.voce { min-width: 200px; font-weight: 600; color: #1c1114; overflow-wrap: anywhere; }
+:root:root:root .mk-dettaglio .tabella-marketing .perc {
+  display: inline-block;
+  min-width: 44px;
+  margin-left: 8px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(92, 11, 30, 0.06);
+  color: #7a6a70;
+  font-size: 0.74rem;
+  font-weight: 600;
+  text-align: center;
+}
+:root:root:root .mk-dettaglio .tabella-marketing tfoot td {
+  padding-top: 14px;
+  padding-bottom: 14px;
+  font-weight: 750;
+  color: #1c1114;
+  background: rgba(227, 3, 45, 0.05);
+  border-top: 2px solid rgba(92, 11, 30, 0.16);
+  border-bottom: 0;
+}
+:root:root:root .mk-dettaglio .tabella-marketing tfoot .perc { background: rgba(227, 3, 45, 0.12); color: var(--rosso-scuro); }
+
+@media (max-width: 900px) {
+  .mk-passo { grid-template-columns: minmax(0, 1fr) auto; gap: 8px 14px; }
+  .mk-barra { grid-column: 1 / -1; grid-row: 2; height: 22px; }
+  :root:root:root .mk-riquadro .numeri { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  :root:root:root .mk-comandi .filtri-marketing .bottone { margin-left: 0; }
+}
+:root:root:root .mk-comandi .schede-vista a.attivo {
+  background: linear-gradient(180deg, #ff2d55 0%, #e3032d 60%, #b80224 100%);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  box-shadow: 0 6px 14px -6px rgba(227, 3, 45, 0.7);
+}
+:root:root:root .mk-dettaglio .tabella-marketing td.num { white-space: nowrap; }
+:root:root:root .mk-dettaglio .tabella-marketing .perc { min-width: 0; margin-left: 6px; }
