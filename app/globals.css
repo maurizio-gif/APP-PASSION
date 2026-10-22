@@ -10433,3 +10433,161 @@ details.task-fase > summary .fase-azione + .task-apri { margin-left: 10px; }
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff7a92' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   opacity: 1;
 }
+
+/* ---- Curriculum: schede a interruttore, elenco a griglia con intestazione, file come pulsante ---- */
+.cv-schede { margin: 0 0 16px; }
+:root:root:root .cv-schede .schede-vista {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin: 0;
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid rgba(227, 3, 45, 0.28);
+  background:
+    radial-gradient(45% 160% at 0% 0%, rgba(227, 3, 45, 0.16), rgba(227, 3, 45, 0) 70%),
+    linear-gradient(100deg, #0e0f12 0%, #17090f 60%, #2a0b14 100%);
+  box-shadow: 0 10px 24px -16px rgba(0, 0, 0, 0.6);
+}
+:root:root:root .cv-schede .schede-vista a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px 7px 16px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.86rem;
+  font-weight: 600;
+  transition: color 0.15s, background 0.15s;
+}
+:root:root:root .cv-schede .schede-vista a:hover { background: rgba(255, 255, 255, 0.09); color: #fff; }
+:root:root:root .cv-schede .schede-vista a.attivo {
+  background: linear-gradient(180deg, #ff2d55 0%, #e3032d 60%, #b80224 100%);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #fff;
+  box-shadow: 0 6px 16px -6px rgba(227, 3, 45, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+:root:root:root .cv-schede .schede-vista a .conta {
+  min-width: 24px;
+  margin: 0;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: center;
+}
+:root:root:root .cv-schede .schede-vista a.attivo .conta { background: rgba(0, 0, 0, 0.22); color: #fff; }
+
+.cv-riquadro { margin-bottom: 18px; }
+:root:root:root .cv-riquadro > .sotto-corpo { padding: 4px 26px 10px; }
+
+.cv-testa,
+.cv-riga {
+  display: grid;
+  grid-template-columns: minmax(170px, 1.1fr) minmax(190px, 1.05fr) 160px 110px minmax(250px, 1.6fr);
+  gap: 18px;
+  align-items: center;
+}
+.cv-testa {
+  padding: 16px 0 11px;
+  border-bottom: 2px solid rgba(227, 3, 45, 0.4);
+  color: #8a7a80;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.cv-riga { padding: 14px 0; border-bottom: 1px solid rgba(42, 11, 20, 0.07); }
+.cv-riga:last-child { border-bottom: 0; }
+.cv-riga > div { min-width: 0; }
+
+.cv-candidato strong { display: block; font-size: 0.98rem; font-weight: 700; color: #1c1114; }
+.cv-candidato span { display: block; margin-top: 3px; font-size: 0.78rem; color: #8a7a80; }
+:root:root:root .cv-contatti .contatti { display: grid; gap: 4px; margin: 0; }
+:root:root:root .cv-contatti .contatti a { color: #2a1d22; font-size: 0.86rem; }
+:root:root:root .cv-contatti .contatti a:hover { color: var(--rosso); }
+
+.cv-posizione {
+  display: inline-block;
+  padding: 4px 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(92, 11, 30, 0.14);
+  background: rgba(92, 11, 30, 0.05);
+  color: #2a1d22;
+  font-size: 0.8rem;
+  font-weight: 650;
+  white-space: nowrap;
+}
+.cv-posizione.pos-istruttore_fitness { border-color: rgba(227, 3, 45, 0.3); background: rgba(227, 3, 45, 0.08); color: #b50224; }
+.cv-posizione.pos-istruttore_sala_pesi { border-color: rgba(74, 10, 23, 0.32); background: rgba(74, 10, 23, 0.08); color: #4a0a17; }
+.cv-posizione.pos-receptionist { border-color: rgba(42, 11, 20, 0.16); background: #fff; color: #3a2a30; }
+
+.cv-nascita strong { display: block; font-size: 0.92rem; font-weight: 650; color: #1c1114; font-variant-numeric: tabular-nums; }
+.cv-nascita span { display: block; margin-top: 2px; font-size: 0.78rem; color: #8a7a80; }
+
+.cv-file {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  max-width: 100%;
+  padding: 8px 12px 8px 8px;
+  border: 1px solid rgba(92, 11, 30, 0.14);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(42, 11, 20, 0.05);
+  text-decoration: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+a.cv-file:hover { border-color: rgba(227, 3, 45, 0.5); box-shadow: 0 6px 16px -8px rgba(227, 3, 45, 0.45); }
+.cv-file-tipo {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  background: linear-gradient(180deg, #ff2d55 0%, #e3032d 60%, #b80224 100%);
+  color: #fff;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+.cv-file-tipo:not([data-tipo='PDF']) { background: linear-gradient(140deg, #2a0b14, #0e0f12); }
+.cv-file-testo { display: block; min-width: 0; }
+.cv-file-testo strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.86rem;
+  font-weight: 650;
+  color: #1c1114;
+}
+.cv-file-testo small { display: block; margin-top: 2px; font-size: 0.74rem; color: #8a7a80; }
+a.cv-file .cv-file-testo small { color: var(--rosso-scuro); font-weight: 600; }
+.cv-file.spento { background: rgba(92, 11, 30, 0.03); border-style: dashed; }
+.cv-file.spento .cv-file-tipo { background: rgba(92, 11, 30, 0.12); color: #7a6a70; }
+.cv-file.spento .cv-file-testo strong { color: #7a6a70; }
+.cv-file.spento .cv-file-testo small { color: #b50224; }
+
+@media (max-width: 1100px) {
+  .cv-testa { display: none; }
+  .cv-riga { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px 16px; padding: 16px 0; }
+  .cv-riga > div:last-child { grid-column: 1 / -1; }
+}
+@media (max-width: 560px) {
+  :root:root:root .cv-riquadro > .sotto-corpo { padding: 2px 16px 8px; }
+  .cv-riga { grid-template-columns: minmax(0, 1fr); }
+}
+:root:root:root .cv-riquadro > .sotto-corpo { background-color: #fffafb; }
+@media (max-width: 560px) {
+  .cv-riga { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+  .cv-riga > div:nth-child(1),
+  .cv-riga > div:nth-child(2),
+  .cv-riga > div:nth-child(5) { grid-column: 1 / -1; }
+}

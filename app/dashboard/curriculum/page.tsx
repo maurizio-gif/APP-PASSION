@@ -1,7 +1,7 @@
 import { crm, richiediSezione, type Candidatura } from '@/lib/crm'
 import { createSupabaseServerClient } from '@/lib/supabase/server'
-import { eta, formatoData, formatoDataOra, formatoPeso, POSIZIONE, traduci } from '@/lib/formato'
-import { Contatti, LinkGuida, Schede, Vuoto } from '@/components/Ui'
+import { POSIZIONE } from '@/lib/formato'
+import { VistaCurriculum } from '@/components/VistaCurriculum'
 
 // I curriculum arrivati da «Inviaci il tuo CV» sul sito (passionfitness.it/lavora-con-noi):
 // le risposte del modulo e il file allegato, uno per riga. Il file sta nel bucket
@@ -17,75 +17,7 @@ export default async function Curriculum({ searchParams }: { searchParams: { vis
   const candidature = await crm.candidature(vista === 'tutte' ? null : vista)
   const link = await linkFile(candidature)
 
-  return (
-    <>
-      <div className="testata">
-        <div>
-          <div className="titolo-riga">
-            <h1>Curriculum</h1>
-            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
-              <span className="aiuto-punto" aria-hidden="true">?</span>
-              <span className="aiuto-testo">Le candidature arrivate dal sito, con le risposte del modulo e il curriculum allegato. I più recenti in alto.{' '}<LinkGuida argomento="curriculum" /></span>
-            </span>
-          </div>
-        </div>
-      </div>
-      <Schede voci={viste} attiva={vista} base="/dashboard/curriculum" />
-
-      <div className="scheda">
-        {candidature.length === 0 ? (
-          <Vuoto>Nessuna candidatura qui.</Vuoto>
-        ) : (
-          <div className="tabella-scorre">
-            <table className="schede-mobile tabella-colonne">
-              <thead>
-                <tr>
-                  <th>Candidato</th>
-                  <th>Posizione</th>
-                  <th>Nato il</th>
-                  <th>Curriculum</th>
-                </tr>
-              </thead>
-              <tbody>
-                {candidature.map((c) => {
-                  const url = link.get(c.file_percorso)
-                  const anni = eta(c.data_nascita)
-                  return (
-                    <tr key={c.id}>
-                      <td>
-                        <div className="riga-dati">
-                          <strong>{c.nome} {c.cognome}</strong>
-                          <Contatti telefono={c.telefono} email={c.email} />
-                          <span className="muto">Arrivato il {formatoDataOra(c.creato_il)}</span>
-                        </div>
-                      </td>
-                      <td><div className="riga-dati"><strong>{traduci(POSIZIONE, c.posizione)}</strong></div></td>
-                      <td>
-                        <div className="riga-dati">
-                          <span className="normale">{formatoData(c.data_nascita)}</span>
-                          {anni != null && <span className="muto">{anni} anni</span>}
-                        </div>
-                      </td>
-                      <td>
-                        <div className="riga-dati">
-                          {url ? (
-                            <a href={url} target="_blank" rel="noreferrer">{c.file_nome}</a>
-                          ) : (
-                            <span className="muto">{c.file_nome} (non raggiungibile)</span>
-                          )}
-                          <span className="muto">{formatoPeso(c.file_dimensione)}</span>
-                        </div>
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-    </>
-  )
+  return <VistaCurriculum viste={viste} vista={vista} candidature={candidature} link={Object.fromEntries(link)} />
 }
 
 // I link firmati (un'ora): il bucket e' privato, e la policy di Storage li
