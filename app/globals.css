@@ -9865,3 +9865,8 @@ details.task-fase > summary .fase-azione + .task-apri { margin-left: 10px; }
 :root:root .fase-azioni .azioni-riga .bottone { flex: 0 0 auto; }
 :root:root .fase-azioni .azioni-gruppo > form.azioni-riga { flex-wrap: nowrap; }
 :root:root .fase-azioni .azioni-gruppo > form.azioni-riga select { flex: 1 1 0; }
+
+/* Ticket: sempre la stessa larghezza (circa il 46% della riga), anche quando Prenotazioni e Accessi non ci sono. */
+@media (min-width: 1280px) {
+  .persona-sotto .sotto-tick { flex: 0 0 calc((100% - 36px) * 0.4595); max-width: calc((100% - 36px) * 0.4595); }
+}
