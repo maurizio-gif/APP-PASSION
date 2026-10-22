@@ -19,7 +19,7 @@ Molte cose il CRM le fa da solo: da fuori arrivano solo le opportunità dei modu
 ## La home: Da gestire
 Appena entri, i numeri di oggi, in alto a schede. Ne è aperta una alla volta: premi su una scheda e sotto compare il suo elenco.
 
-- **Non assegnati**: è la prima e si apre da sola. Sono le opportunità e le prove in corso che nessun consulente segue, in due elenchi separati. Le opportunità da prendere in carico sono qui: non c'è più una scheda a parte. Se è aperta un'altra scheda, il numero non c'è subito: premi **«Calcola»** e la scheda si apre e lo calcola;
+- **Senza consulente**: è la prima e si apre da sola. Sono le opportunità e le prove in corso che nessun consulente segue, in due elenchi separati. Le opportunità da prendere in carico sono qui: non c'è più una scheda a parte. Se è aperta un'altra scheda, il numero non c'è subito: premi **«Calcola»** e la scheda si apre e lo calcola;
 - **Prove in scadenza**: finiscono entro 3 giorni;
 - **Rinnovi da gestire** e **Disdette da gestire**: non ancora presi in carico, con quanti sono tuoi;
 - **I miei task**: di oggi e arretrati.

@@ -10944,3 +10944,9 @@ a.cv-file .cv-file-testo small { color: var(--rosso-scuro); font-weight: 600; }
 @media (max-width: 720px) {
   :root:root:root:root:root .scheda > .conteggio { margin: -14px -14px 0; padding: 12px 14px; }
 }
+
+/* Telefono: i due interruttori «... senza consulente» (nomi lunghi) stanno uno sotto l'altro, a tutta larghezza, e non escono dallo schermo */
+@media (max-width: 720px) {
+  :root:root .na-toggle > .task-tabs.na-tabs { flex-direction: column; align-items: stretch; }
+  :root:root .na-toggle > .na-tabs label { flex: 0 0 auto; justify-content: space-between; }
+}
