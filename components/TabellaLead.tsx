@@ -58,6 +58,7 @@ export function TabellaLead({ lead, io, staff, torna, contratti, firma }: { lead
                     <div className="riga-dati">
                       <NomeScheda href={scheda} l={l} />
                       <Contatti telefono={l.telefono} email={l.email} />
+                      {l.fonte && <span className="etichetta-riga"><BollinoFonte fonte={l.fonte} dettaglio={l.fonte_dettaglio} /></span>}
                     </div>
                   </td>
                   <td>

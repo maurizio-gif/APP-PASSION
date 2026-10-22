@@ -29,7 +29,7 @@ type CercabileTicket = { id: number; titolo: string; nome?: string | null; cogno
 
 export function filtraTicket<T extends CercabileTicket>(righe: T[], q: string | null): T[] {
   if (!q) return righe
-  const parole = norma(q).replace(/#/g, '').split(/s+/).filter(Boolean)
+  const parole = norma(q).replace(/#/g, '').split(/\s+/).filter(Boolean)
   return righe.filter((r) => {
     const testo = norma([String(r.id), r.titolo, r.nome, r.cognome, r.aperto_da_nome, r.preso_nome].filter(Boolean).join(' '))
     return parole.every((w) => testo.includes(w))

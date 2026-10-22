@@ -1,6 +1,6 @@
 import type { Pagamento, Prova } from '@/lib/crm'
 import { formatoData, formatoFa } from '@/lib/formato'
-import { Contatti, Persona } from '@/components/Ui'
+import { BollinoFonte, Contatti, Persona } from '@/components/Ui'
 import { BollinoPagamento } from '@/components/Bollini'
 
 // Le iniziali in un cerchio (solo nell'intestazione della scheda persona).
@@ -29,6 +29,7 @@ export function RigaProva({ p, pagamento, etichette, children }: { p: Prova; pag
         <div className="riga-dati">
           <Persona id={p.utente_id} nome={p.nome} cognome={p.cognome} />
           <Contatti telefono={p.telefono} email={p.email} />
+          {p.fonte && <span className="etichetta-riga"><BollinoFonte fonte={p.fonte} dettaglio={p.fonte_dettaglio} /></span>}
           {p.gestito_nome ? (
             <span className="muto">segue {p.gestito_nome}</span>
           ) : (
