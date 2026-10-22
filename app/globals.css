@@ -10018,3 +10018,50 @@ details.task-fase > summary .fase-azione + .task-apri { margin-left: 10px; }
 :root:root .task-chiudi input[type='text'] { flex: 1 1 150px; min-width: 0; }
 :root:root .task-chiudi .bottone { flex: 0 0 auto; white-space: nowrap; }
 :root:root .task-azioni .bottone, .azioni-riga .bottone.piccolo { white-space: nowrap; }
+
+/* ---- Abbonamenti: grafici nei colori del marchio (rosso, bordeaux, rosa) e caratteri piu' leggibili ---- */
+:root {
+  --serie: #e3032d;
+  --serie-negativa: #4a0a17;
+  --griglia: rgba(92, 11, 30, 0.1);
+  --asse: rgba(92, 11, 30, 0.28);
+}
+.grafico-barra:not(.negativa):not(.tenue):not(.tratteggio) { background: linear-gradient(to top, #b80223, #f0123b); }
+.grafico-barra.negativa:not(.tratteggio) { background: linear-gradient(to top, #2a0b14, #5c0b1e); }
+.grafico-barra.tratteggio { background: repeating-linear-gradient(45deg, var(--serie) 0 3px, #f9b4c0 3px 6px); }
+.grafico-barra.negativa.tratteggio { background: repeating-linear-gradient(45deg, var(--serie-negativa) 0 3px, #c79aa5 3px 6px); }
+.grafico-barra.pezzo.tenue { background: #f5a9b7; }
+.grafico-barra.pezzo.tenue.tratteggio { background: repeating-linear-gradient(45deg, #f5a9b7 0 3px, #fcdde3 3px 6px); }
+.grafico-colonna.scelta { background: rgba(227, 3, 45, 0.07); }
+.legenda .quadratino { border-radius: 3px; }
+
+/* testi dentro i riquadri della dashboard */
+.sotto-corpo .sotto-titolo { margin: 0 0 16px; max-width: 78ch; color: #5e4a51; font-size: 0.92rem; line-height: 1.5; }
+.sotto-corpo .titoletto {
+  margin: 26px 0 12px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--rosso-scuro);
+}
+.sotto-corpo .legenda { color: #5e4a51; font-size: 0.86rem; font-weight: 500; }
+.sotto-corpo .grafico-y span,
+.sotto-corpo .grafico-x span { color: #7a6a70; font-size: 0.76rem; font-weight: 500; }
+.sotto-corpo .grafico-cifra { color: #1c1114; font-size: 0.78rem; font-weight: 700; }
+.sotto-corpo .multiplo h3 { font-size: 1rem; font-weight: 700; color: #1c1114; }
+.sotto-corpo .multiplo p { color: #5e4a51; }
+
+/* numeri grandi in alto e riquadri piccoli: etichetta chiara, cifra bianca, confronti leggibili */
+.numeri-grandi .numero .etichetta { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.numeri-grandi .numero.totale .valore { font-size: 3.2rem; font-weight: 800; letter-spacing: -0.03em; }
+.numeri-grandi .confronti { font-size: 0.92rem; border-top-color: rgba(255, 255, 255, 0.14); }
+.numeri-grandi .confronti li { color: rgba(255, 255, 255, 0.78); }
+.numeri-grandi .confronti strong { color: #fff; font-weight: 700; }
+.sotto-corpo .numeri-guest .numero {
+  background: linear-gradient(135deg, rgba(227, 3, 45, 0.06), rgba(227, 3, 45, 0.015));
+  border: 1px solid rgba(92, 11, 30, 0.14);
+}
+.sotto-corpo .numeri-guest .numero .etichetta { color: #5e4a51; }
+.sotto-corpo .numeri-guest .numero .valore { color: #1c1114; }
+.sotto-corpo .numeri-guest .numero .nota { color: #7a6a70; }

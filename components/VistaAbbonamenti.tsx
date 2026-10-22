@@ -2,6 +2,7 @@ import type { Abbonamenti, DurataPeriodo, Vincolo } from '@/lib/crm'
 import { formatoCifra, formatoData, formatoFa } from '@/lib/formato'
 import { Colonne, type Punto } from './Colonne'
 import { LinkGuida } from './Ui'
+import { Accordion, Riquadro } from './FaseRighe'
 
 // La dashboard abbonamenti, disegnata: riceve i numeri di crm_abbonamenti() e
 // non ne calcola nessuno (le regole stanno nel database, in
@@ -250,39 +251,34 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
         />
       </div>
 
-      <section className="scheda">
-        <h2>Abbonamenti attivi a fine mese</h2>
+      <Riquadro titolo={<>Abbonamenti attivi a fine mese</>}>
         <p className="piccolo attenuato sotto-titolo">Ultimi 24 mesi. Il mese in corso (tratteggiato) è contato a oggi.</p>
         <Colonne punti={attivi} unita="attivi" />
-      </section>
+      </Riquadro>
 
-      <section className="scheda">
-        <h2>Nuovi abbonamenti</h2>
+      <Riquadro titolo={<>Nuovi abbonamenti</>}>
         <p className="piccolo attenuato sotto-titolo">
           Per mese di inizio, esclusi i rinnovi: chi aveva già un abbonamento in corso, o finito da meno di 30 giorni, non è
           nuovo. Chi torna dopo più di 30 giorni sì.
         </p>
         <Colonne punti={nuovi} unita="nuovi" />
-      </section>
+      </Riquadro>
 
-      <section className="scheda">
-        <h2>Scaduti e non rinnovati</h2>
+      <Riquadro titolo={<>Scaduti e non rinnovati</>}>
         <p className="piccolo attenuato sotto-titolo">
           Per mese di fine: abbonamenti finiti dopo i quali, entro 30 giorni, non ne è partito un altro. Tratteggiati i mesi con
           abbonamenti finiti da meno di 30 giorni, il numero può ancora scendere.
         </p>
         <Colonne punti={scaduti} unita="scaduti" />
-      </section>
+      </Riquadro>
 
-      <section className="scheda">
-        <h2>Saldo del mese</h2>
+      <Riquadro titolo={<>Saldo del mese</>}>
         <p className="piccolo attenuato sotto-titolo">Nuovi abbonamenti meno scaduti non rinnovati. Sotto lo zero, se ne perdono più di quanti ne entrano.</p>
         <Colonne punti={saldo} formato="segno" unita="di saldo" />
-      </section>
+      </Riquadro>
 
       {retention.length > 0 && (
-        <section className="scheda">
-          <h2>Retention</h2>
+        <Riquadro titolo={<>Retention</>}>
           <p className="piccolo attenuato sotto-titolo">
             Su base annuale: degli iscritti di ogni mese, quanti erano iscritti anche lo stesso giorno dell&apos;anno prima,{' '}
             <strong>senza interruzioni</strong> (settembre 2026 contro settembre 2025, agosto 2026 contro agosto 2025…). Iscritto è chi ha
@@ -295,11 +291,10 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
             Quando i soci crescono, la retention scende anche se nessuno se ne va: un anno prima c&apos;erano meno persone da trattenere.
             Nel riquadro di ogni mese c&apos;è anche l&apos;altra lettura: di chi c&apos;era un anno prima, quanti ci sono ancora.
           </p>
-        </section>
+        </Riquadro>
       )}
 
-      <section className="scheda">
-        <h2>Pass di prova: quanti diventano abbonamento</h2>
+      <Riquadro titolo={<>Pass di prova: quanti diventano abbonamento</>}>
         <p className="piccolo attenuato sotto-titolo">
           Guest Pass e Pass giornalieri (Reformer, Sala Pesi, Corsi Fitness, Crossfit…), contati per <strong>persona</strong>: chi
           attiva più pass conta una volta, e i suoi pass a meno di 30 giorni l’uno dall’altro sono una prova sola. Per mese di
@@ -327,10 +322,9 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
         </div>
         <h3 className="titoletto">Quante si abbonano, in percentuale</h3>
         <Colonne punti={conversione} formato="percento" massimo={100} altezza={160} unita="di conversione" />
-      </section>
+      </Riquadro>
 
-      <section className="scheda">
-        <h2>Quanto durano</h2>
+      <Riquadro titolo={<>Quanto durano</>}>
         <p className="piccolo attenuato sotto-titolo">
           Quanto resta chi entra con un abbonamento senza scadenza (Mensile, Flex, Open, Formula 8), e quanti mesi rimane{' '}
           <strong>dopo il vincolo minimo</strong> prima di andarsene. I cambi contano: un mensile che passa al quadrimestrale, un
@@ -411,12 +405,9 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
           dell’estate 2025, e le durate più lunghe di due anni ancora non si vedono. Senza colonna i trimestri con meno di{' '}
           {MINIMO} disdetti arrivati al vincolo.
         </p>
-      </section>
+      </Riquadro>
 
-      <details className="scheda">
-        <summary>
-          <strong>I numeri mese per mese</strong>
-        </summary>
+      <Accordion titolo="I numeri mese per mese" corpoClasse="sotto-tabella">
         <div className="tabella-scorre">
           <table>
             <thead>
@@ -449,7 +440,7 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
             </tbody>
           </table>
         </div>
-      </details>
+      </Accordion>
     </>
   )
 }
