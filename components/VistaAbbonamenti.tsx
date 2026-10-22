@@ -444,47 +444,42 @@ function Totale({ titolo, ora, confronti }: { titolo: string; ora: number; confr
 
 function SchedaDurata({ vincolo, ultimi, precedenti }: { vincolo: Vincolo; ultimi: DurataPeriodo; precedenti: DurataPeriodo }) {
   const quota = (parte: number, tutto: number) => (tutto > 0 ? `${Math.round((parte / tutto) * 100)}%` : null)
-  const periodo = (p: DurataPeriodo, nome: string, prima: boolean) => (
-    <div key={nome} className={`durata-periodo${prima ? ' prima' : ''}`}>
-      <div className="durata-nome">{nome}</div>
-      <dl className="durata-metriche">
-        <div>
-          <dt>Disdetti</dt>
-          <dd>{formatoCifra(p.disdetti)}</dd>
-        </div>
-        <div>
-          <dt>Durata media</dt>
-          <dd>{p.durata_media == null ? '—' : <>{mesi1(p.durata_media)} <small>mesi</small></>}</dd>
-        </div>
-        <div className="evidenza">
-          <dt>Mesi oltre il vincolo</dt>
-          <dd>
-            <strong>{p.oltre_medio == null ? '—' : `${p.oltre_medio > 0 ? '+' : ''}${mesi1(p.oltre_medio)}`}</strong> <small>su {formatoCifra(p.arrivati)}</small>
-          </dd>
-        </div>
-        <div>
-          <dt>Usciti prima del vincolo</dt>
-          <dd>
-            {formatoCifra(p.anticipati)} {quota(p.anticipati, p.disdetti) && <small>{quota(p.anticipati, p.disdetti)}</small>}
-          </dd>
-        </div>
-        <div>
-          <dt>Con cambio piano</dt>
-          <dd>
-            {formatoCifra(p.con_cambio)} {quota(p.con_cambio, p.disdetti) && <small>{quota(p.con_cambio, p.disdetti)}</small>}
-          </dd>
-        </div>
-      </dl>
-    </div>
-  )
+  // Una riga per dato, le due colonne affiancate: si legge il confronto tra i due periodi a colpo d'occhio.
+  const righe: { nome: string; classe?: string; valore: (p: DurataPeriodo) => React.ReactNode }[] = [
+    { nome: 'Disdetti', valore: (p) => formatoCifra(p.disdetti) },
+    { nome: 'Durata media', valore: (p) => (p.durata_media == null ? '—' : <>{mesi1(p.durata_media)} <small>mesi</small></>) },
+    {
+      nome: 'Mesi oltre il vincolo',
+      classe: 'evidenza',
+      valore: (p) => (p.oltre_medio == null ? '—' : <>{`${p.oltre_medio > 0 ? '+' : ''}${mesi1(p.oltre_medio)}`} <small>su {formatoCifra(p.arrivati)}</small></>),
+    },
+    { nome: 'Usciti prima del vincolo', valore: (p) => <>{formatoCifra(p.anticipati)} {quota(p.anticipati, p.disdetti) && <small>{quota(p.anticipati, p.disdetti)}</small>}</> },
+    { nome: 'Con cambio piano', valore: (p) => <>{formatoCifra(p.con_cambio)} {quota(p.con_cambio, p.disdetti) && <small>{quota(p.con_cambio, p.disdetti)}</small>}</> },
+  ]
   return (
     <div className="durata-scheda">
       <div className="durata-testa">
         <strong>{NOME_VINCOLO[vincolo]}</strong>
         <span>{DETTAGLIO_VINCOLO[vincolo]}</span>
       </div>
-      {periodo(ultimi, 'Ultimi 12 mesi', false)}
-      {periodo(precedenti, '12 mesi prima', true)}
+      <table className="durata-confronto">
+        <thead>
+          <tr>
+            <th />
+            <th className="ora">Ultimi 12 mesi</th>
+            <th className="prima">12 mesi prima</th>
+          </tr>
+        </thead>
+        <tbody>
+          {righe.map((r) => (
+            <tr key={r.nome} className={r.classe}>
+              <th scope="row">{r.nome}</th>
+              <td className="ora">{r.valore(ultimi)}</td>
+              <td className="prima">{r.valore(precedenti)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   )
 }

@@ -10114,31 +10114,35 @@ details.task-fase > summary .fase-azione + .task-apri { margin-left: 10px; }
 }
 .durata-testa strong { font-size: 1.05rem; font-weight: 700; }
 .durata-testa span { font-size: 0.82rem; font-weight: 500; color: rgba(255, 255, 255, 0.75); }
-.durata-periodo { padding: 15px 18px 17px; }
-.durata-periodo.prima { border-top: 1px solid rgba(92, 11, 30, 0.12); background: rgba(92, 11, 30, 0.035); }
-.durata-nome {
-  margin: 0 0 12px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: var(--rosso-scuro);
+:root:root:root .durata-scheda .durata-confronto { width: 100%; border-collapse: collapse; table-layout: fixed; font-variant-numeric: tabular-nums; margin: 0; }
+:root:root:root .durata-scheda .durata-confronto thead, :root:root:root .durata-scheda .durata-confronto thead tr, :root:root:root .durata-scheda .durata-confronto tbody tr { background: none; box-shadow: none; }
+:root:root:root .durata-scheda .durata-confronto th, :root:root:root .durata-scheda .durata-confronto td { position: static; background: none; border: 0; box-shadow: none; }
+:root:root:root .durata-scheda .durata-confronto thead th {
+  padding: 14px 18px 10px 0;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.25;
+  text-align: right; vertical-align: bottom; white-space: normal;
+  color: #8a7a80; border-bottom: 2px solid rgba(92, 11, 30, 0.14);
 }
-.durata-periodo.prima .durata-nome { color: #7a6a70; }
-.durata-metriche { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 16px; margin: 0; }
-.durata-metriche > div { min-width: 0; }
-.durata-metriche dt {
-  margin: 0 0 4px;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: #7a6a70;
-  line-height: 1.25;
+:root:root:root .durata-scheda .durata-confronto thead th:first-child { width: 44%; padding-left: 18px; }
+:root:root:root .durata-scheda .durata-confronto thead th.ora { color: var(--rosso-scuro); border-bottom-color: var(--rosso); }
+:root:root:root .durata-scheda .durata-confronto tbody th {
+  padding: 12px 10px 12px 18px; text-align: left; vertical-align: middle;
+  font-size: 0.86rem; font-weight: 600; letter-spacing: 0; text-transform: none; line-height: 1.3;
+  color: #4a3a40; white-space: normal;
 }
-.durata-metriche dd { margin: 0; font-size: 1.2rem; font-weight: 700; color: #1c1114; font-variant-numeric: tabular-nums; line-height: 1.2; }
-.durata-metriche dd small { font-size: 0.78rem; font-weight: 500; color: #7a6a70; }
-.durata-metriche .evidenza dd strong { color: var(--rosso); font-weight: 800; }
+:root:root:root .durata-scheda .durata-confronto tbody td {
+  padding: 12px 18px 12px 0; text-align: right; vertical-align: middle; white-space: nowrap;
+  font-size: 1.08rem; line-height: 1.2;
+}
+:root:root:root .durata-scheda .durata-confronto tbody td.ora { font-weight: 750; color: #1c1114; }
+:root:root:root .durata-scheda .durata-confronto tbody td.prima { font-weight: 550; color: #7a6a70; }
+:root:root:root .durata-scheda .durata-confronto tbody td small { font-size: 0.74rem; font-weight: 500; color: #8a7a80; }
+:root:root:root .durata-scheda .durata-confronto tbody tr + tr > * { border-top: 1px solid rgba(92, 11, 30, 0.08); }
+:root:root:root .durata-scheda .durata-confronto tbody tr.evidenza > * { background: rgba(227, 3, 45, 0.06); }
+:root:root:root .durata-scheda .durata-confronto tbody tr.evidenza th { color: var(--rosso-scuro); font-weight: 700; }
+:root:root:root .durata-scheda .durata-confronto tbody tr.evidenza td.ora { color: var(--rosso); font-weight: 800; }
+:root:root:root .durata-scheda .durata-confronto tbody tr.evidenza td.prima { color: #b0525f; }
+:root:root:root .durata-scheda .durata-confronto tbody tr:last-child > * { padding-bottom: 16px; }
 
 /* tabella mese per mese */
 :root:root:root .sotto-dati .tabella-scorre { padding: 4px 26px 12px; margin: 0; overflow-x: auto; }
@@ -10166,6 +10170,3 @@ details.task-fase > summary .fase-azione + .task-apri { margin-left: 10px; }
 .tabella-mesi .saldo { display: inline-block; min-width: 56px; padding: 3px 10px; border-radius: 999px; font-weight: 700; text-align: center; background: rgba(42, 11, 20, 0.06); color: #3a2a30; }
 .tabella-mesi .saldo.positivo { background: rgba(31, 157, 85, 0.14); color: #17794a; }
 .tabella-mesi .saldo.negativo { background: rgba(227, 3, 45, 0.1); color: #b50224; }
-@media (max-width: 720px) {
-  .durata-metriche { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
