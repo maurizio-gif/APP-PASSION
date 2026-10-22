@@ -151,11 +151,11 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
       <Fase numero={2} nome="Prova" piede={piede}>
         <Col titolo="Prova">
           <dl className="dati">
-            <dt>Pass</dt><dd>{pr.tipo_pass ?? 'Prova'}</dd>
+            <dt>Pass</dt><dd>{pr.tipo_pass ?? '—'}</dd>
             <dt>Stato</dt>
             <dd>
               <span className={`bollino ${pr.esito === 'iscritto' ? 'verde' : pr.esito ? 'grigio' : 'giallo'}`}>
-                {pr.esito === 'iscritto' ? 'Iscritto' : pr.esito === 'non_iscritto' ? 'Non iscritto' : 'In corso'}
+                {pr.esito === 'iscritto' ? 'Iscritto' : pr.esito === 'non_iscritto' ? 'Non iscritto' : 'In corso / senza esito'}
               </span>
             </dd>
             <dt>Dal</dt><dd>{pr.data_fine ? `${formatoData(pr.data_inizio)} al ${formatoData(pr.data_fine)}` : `richiesta del ${formatoData(pr.data_inizio)}, senza pass su PerfectGym`}</dd>
