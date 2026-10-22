@@ -10591,3 +10591,47 @@ a.cv-file .cv-file-testo small { color: var(--rosso-scuro); font-weight: 600; }
   .cv-riga > div:nth-child(2),
   .cv-riga > div:nth-child(5) { grid-column: 1 / -1; }
 }
+
+/* ---- Utenti: «Aggiungi nuovo utente» come pulsante scuro (lo sfondo generico delle schede lo copriva: testo bianco su bianco) ---- */
+:root:root:root .contenuto .scheda.nuovo-utente-acc {
+  align-self: start;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid rgba(227, 3, 45, 0.55);
+  border-radius: 16px;
+  background:
+    radial-gradient(40% 300% at 0% 0%, rgba(227, 3, 45, 0.28), rgba(227, 3, 45, 0) 70%),
+    linear-gradient(100deg, #0e0f12 0%, #17090f 60%, #2a0b14 100%);
+  box-shadow: 0 14px 30px -16px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+:root:root:root .contenuto .scheda.nuovo-utente-acc:hover { border-color: var(--rosso); box-shadow: 0 16px 32px -14px rgba(227, 3, 45, 0.45); }
+:root:root:root .nuovo-utente-acc > summary {
+  gap: 14px;
+  padding: 14px 20px;
+  color: #fff;
+  background: none;
+}
+:root:root:root .nuovo-utente-acc .nuovo-icona {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(180deg, #ff2d55 0%, #e3032d 60%, #b80224 100%);
+  box-shadow: 0 6px 14px -4px rgba(227, 3, 45, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-size: 1.35rem;
+}
+:root:root:root .nuovo-utente-acc .nuovo-titolo { color: #fff; font-size: 0.86rem; font-weight: 700; letter-spacing: 0.08em; }
+:root:root:root .nuovo-utente-acc > summary::after {
+  width: 26px;
+  height: 26px;
+  padding: 5px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  background-origin: content-box;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+:root:root:root .nuovo-utente-acc[open] > summary { border-bottom: 1px solid rgba(227, 3, 45, 0.55); }
+:root:root:root .nuovo-utente-acc .nuovo-utente-corpo { padding: 18px 20px 20px; background: #fffafb; color: #2a1d22; }
+:root:root:root .nuovo-utente-acc .nuovo-utente-corpo > p { color: #5e4a51; font-size: 0.86rem; line-height: 1.5; }
