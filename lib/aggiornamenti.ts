@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-21',
+    titolo: 'Chi deve rinnovare non compare più anche fra le disdette',
+    testo:
+      'Alcuni Percorsi «I ❤️ My Trainer» e Reformer 12 mesi, arrivati da Airtable, comparivano sia in Disdette sia in Rinnovi. Ora stanno solo in Rinnovi, dove devono stare perché sono abbonamenti a scadenza fissa. Sono spariti anche alcuni doppioni di disdette della stessa persona e la loro telefonata «chiamare per capire il motivo»: per il rinnovo c’è già la sua.',
+    dove: 'Disdette, Rinnovi, Task',
+  },
+  {
+    data: '2026-10-21',
     titolo: 'I «Lead» adesso si chiamano «Opportunità»',
     testo:
       'La sezione Lead ora si chiama Opportunità, e così in tutto il CRM: in home («Opportunità da gestire», «Le mie opportunità»), nella scheda della persona, nei task, in Marketing e nella Guida. Il pulsante è «+ Nuova opportunità». Funziona tutto come prima. Su PerfectGym la persona resta un «Lead», come sempre.',
