@@ -9924,3 +9924,47 @@ details.task-fase > summary .fase-azione + .task-apri { margin-left: 10px; }
 /* Debitori: la cifra e «da N soci» stanno sulla stessa linea di base. */
 .debitori-valori { display: flex; align-items: baseline; gap: 12px; }
 :root:root:root:root .debitori-totale .debitori-label { line-height: 1; }
+
+/* ---- Barre dei filtri: campi in vetro scuro (come il pannello), icona chiara, bagliore rosso quando sono attivi ---- */
+:root:root:root .contenuto .filtri input[type='search'],
+:root:root:root .contenuto .filtri select:not([multiple]) {
+  min-height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 11px;
+  background-color: rgba(255, 255, 255, 0.07);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 1px 2px rgba(0, 0, 0, 0.25);
+  transition: border-color var(--t-rapida) var(--curva), background-color var(--t-rapida) var(--curva), box-shadow var(--t-rapida) var(--curva);
+}
+:root:root:root .contenuto .filtri input[type='search'] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff7a92' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M21 21l-4.5-4.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 13px 50%;
+  background-size: 16px;
+  padding-left: 38px;
+}
+:root:root:root .contenuto .filtri input[type='search']::placeholder { color: rgba(255, 255, 255, 0.5); font-weight: 400; }
+:root:root:root .contenuto .filtri input[type='search']:hover,
+:root:root:root .contenuto .filtri select:not([multiple]):hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+:root:root:root .contenuto .filtri input[type='search']:focus,
+:root:root:root .contenuto .filtri select:not([multiple]):focus,
+:root:root:root .contenuto .filtri select:not([multiple]):open {
+  border-color: var(--rosso);
+  background-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 0 3px rgba(227, 3, 45, 0.28), 0 0 18px rgba(227, 3, 45, 0.25);
+  outline: 0;
+}
+:root:root:root .contenuto .filtri select:not([multiple])::picker-icon { color: #ff7a92; }
+:root:root:root .contenuto .filtri select:not([multiple]) option { color: var(--testo); }
+:root:root:root .contenuto .filtri .bottone {
+  min-height: 40px;
+  padding: 7px 20px;
+  border-radius: 11px;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(180, 2, 35, 0.4), 0 8px 16px -6px rgba(227, 3, 45, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
