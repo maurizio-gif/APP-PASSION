@@ -10141,10 +10141,25 @@ details.task-fase > summary .fase-azione + .task-apri { margin-left: 10px; }
 .durata-metriche .evidenza dd strong { color: var(--rosso); font-weight: 800; }
 
 /* tabella mese per mese */
-.tabella-mesi { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
-.tabella-mesi th.num, .tabella-mesi td.num { text-align: right; }
-.tabella-mesi th { padding: 12px 20px; white-space: nowrap; }
-.tabella-mesi td { padding: 14px 20px; font-size: 0.95rem; color: #1c1114; }
+:root:root:root .sotto-dati .tabella-scorre { padding: 4px 26px 12px; margin: 0; overflow-x: auto; }
+:root:root:root .sotto-dati .tabella-mesi { width: 100%; min-width: 760px; table-layout: fixed; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+:root:root:root .sotto-dati .tabella-mesi th:nth-child(1) { width: 24%; }
+:root:root:root .sotto-dati .tabella-mesi th:nth-child(5) { width: 22%; }
+:root:root:root .sotto-dati .tabella-mesi th.num, :root:root:root .sotto-dati .tabella-mesi td.num { text-align: right; }
+:root:root:root .sotto-dati .tabella-mesi thead, :root:root:root .sotto-dati .tabella-mesi thead tr { background: none; box-shadow: none; }
+:root:root:root .sotto-dati .tabella-mesi thead th {
+  position: static; background: none; box-shadow: none;
+  padding: 18px 14px 12px; vertical-align: bottom; white-space: normal; line-height: 1.3;
+  color: #8a7a80; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  border: 0; border-bottom: 2px solid rgba(227, 3, 45, 0.4);
+}
+:root:root:root .sotto-dati .tabella-mesi thead th:first-child, :root:root:root .sotto-dati .tabella-mesi td:first-child { padding-left: 4px; }
+:root:root:root .sotto-dati .tabella-mesi thead th:last-child, :root:root:root .sotto-dati .tabella-mesi td:last-child { padding-right: 4px; }
+:root:root:root .sotto-dati .tabella-mesi tbody tr { background: none; transition: none; }
+:root:root:root .sotto-dati .tabella-mesi tbody tr:hover { background: rgba(227, 3, 45, 0.04); }
+:root:root:root .sotto-dati .tabella-mesi td { padding: 13px 14px; background: none; font-size: 0.92rem; color: #2a1d22; border: 0; border-bottom: 1px solid rgba(42, 11, 20, 0.07); }
+:root:root:root .sotto-dati .tabella-mesi tbody tr:last-child td { border-bottom: 0; }
+:root:root:root .sotto-dati .tabella-mesi td:nth-child(2) { font-weight: 700; color: #1c1114; }
 .tabella-mesi td:first-child strong { font-weight: 650; text-transform: capitalize; }
 .tabella-mesi .mese-in-corso { margin-left: 10px; vertical-align: 1px; }
 .tabella-mesi .provvisori { margin-left: 8px; padding: 2px 8px; border-radius: 999px; background: rgba(217, 164, 0, 0.16); color: #8a6500; font-size: 0.76rem; font-weight: 600; }
