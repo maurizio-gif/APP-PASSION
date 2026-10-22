@@ -10084,3 +10084,73 @@ details.task-fase > summary .fase-azione + .task-apri { margin-left: 10px; }
 :root:root .numeri-grandi .confronti .attenuato { color: rgba(255, 255, 255, 0.62); font-weight: 500; }
 :root:root .numeri-grandi .confronti .piccolo.attenuato { display: block; margin-top: 6px; color: rgba(255, 255, 255, 0.78); font-size: 0.86rem; line-height: 1.45; }
 :root:root .numeri-grandi .confronti strong { color: #fff; }
+
+/* ---- Abbonamenti: «Quanto durano» in tre schede (una per tipo) e tabella mese per mese ridisegnata ---- */
+.sotto-dati { padding: 0 !important; overflow: hidden; }
+.durate-schede {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 16px;
+  margin: 0 0 16px;
+}
+.durata-scheda {
+  overflow: hidden;
+  border: 1px solid rgba(92, 11, 30, 0.14);
+  border-radius: 14px;
+  background: linear-gradient(160deg, #ffffff, #fdf5f6);
+  box-shadow: 0 1px 2px rgba(42, 11, 20, 0.06), 0 10px 22px -10px rgba(42, 11, 20, 0.2);
+}
+.durata-testa {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  padding: 13px 18px;
+  background:
+    radial-gradient(40% 300% at 0% 0%, rgba(227, 3, 45, 0.22), rgba(227, 3, 45, 0) 70%),
+    linear-gradient(100deg, #0e0f12 0%, #17090f 60%, #2a0b14 100%);
+  border-bottom: 1px solid rgba(227, 3, 45, 0.55);
+  color: #fff;
+}
+.durata-testa strong { font-size: 1.05rem; font-weight: 700; }
+.durata-testa span { font-size: 0.82rem; font-weight: 500; color: rgba(255, 255, 255, 0.75); }
+.durata-periodo { padding: 15px 18px 17px; }
+.durata-periodo.prima { border-top: 1px solid rgba(92, 11, 30, 0.12); background: rgba(92, 11, 30, 0.035); }
+.durata-nome {
+  margin: 0 0 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--rosso-scuro);
+}
+.durata-periodo.prima .durata-nome { color: #7a6a70; }
+.durata-metriche { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 16px; margin: 0; }
+.durata-metriche > div { min-width: 0; }
+.durata-metriche dt {
+  margin: 0 0 4px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #7a6a70;
+  line-height: 1.25;
+}
+.durata-metriche dd { margin: 0; font-size: 1.2rem; font-weight: 700; color: #1c1114; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.durata-metriche dd small { font-size: 0.78rem; font-weight: 500; color: #7a6a70; }
+.durata-metriche .evidenza dd strong { color: var(--rosso); font-weight: 800; }
+
+/* tabella mese per mese */
+.tabella-mesi { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.tabella-mesi th.num, .tabella-mesi td.num { text-align: right; }
+.tabella-mesi th { padding: 12px 20px; white-space: nowrap; }
+.tabella-mesi td { padding: 14px 20px; font-size: 0.95rem; color: #1c1114; }
+.tabella-mesi td:first-child strong { font-weight: 650; text-transform: capitalize; }
+.tabella-mesi .mese-in-corso { margin-left: 10px; vertical-align: 1px; }
+.tabella-mesi .provvisori { margin-left: 8px; padding: 2px 8px; border-radius: 999px; background: rgba(217, 164, 0, 0.16); color: #8a6500; font-size: 0.76rem; font-weight: 600; }
+.tabella-mesi .saldo { display: inline-block; min-width: 56px; padding: 3px 10px; border-radius: 999px; font-weight: 700; text-align: center; background: rgba(42, 11, 20, 0.06); color: #3a2a30; }
+.tabella-mesi .saldo.positivo { background: rgba(31, 157, 85, 0.14); color: #17794a; }
+.tabella-mesi .saldo.negativo { background: rgba(227, 3, 45, 0.1); color: #b50224; }
+@media (max-width: 720px) {
+  .durata-metriche { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

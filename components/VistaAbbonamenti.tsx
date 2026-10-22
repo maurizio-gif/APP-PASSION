@@ -316,25 +316,10 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
           primo abbonamento all’ultimo dell’ultimo (con al massimo 30 giorni di vuoto). Il tipo è quello con cui la persona è
           entrata.</>}>
 
-        <div className="tabella-scorre">
-          <table>
-            <thead>
-              <tr>
-                <th>Tipo</th>
-                <th>Periodo di disdetta</th>
-                <th className="num">Disdetti</th>
-                <th className="num">Durata media</th>
-                <th className="num">Mesi oltre il vincolo</th>
-                <th className="num">Usciti prima del vincolo</th>
-                <th className="num">Con cambio piano</th>
-              </tr>
-            </thead>
-            <tbody>
-              {d.durata.riepilogo.map((r) => (
-                <RigheDurata key={r.vincolo} vincolo={r.vincolo} ultimi={r.periodi.ultimi_12} precedenti={r.periodi.precedenti_12} />
-              ))}
-            </tbody>
-          </table>
+        <div className="durate-schede">
+          {d.durata.riepilogo.map((r) => (
+            <SchedaDurata key={r.vincolo} vincolo={r.vincolo} ultimi={r.periodi.ultimi_12} precedenti={r.periodi.precedenti_12} />
+          ))}
         </div>
         <p className="piccolo attenuato">
           «Mesi oltre il vincolo» è la media su chi il vincolo l’ha finito; chi se n’è andato prima (recesso) è contato a parte. Ancora dentro, oggi:{' '}
@@ -390,9 +375,9 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
         </p>
       </Riquadro>
 
-      <Accordion titolo="I numeri mese per mese" corpoClasse="sotto-tabella">
+      <Accordion titolo="I numeri mese per mese" corpoClasse="sotto-dati">
         <div className="tabella-scorre">
-          <table>
+          <table className="tabella-mesi">
             <thead>
               <tr>
                 <th>Mese</th>
@@ -407,17 +392,17 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
               {[...d.mesi].reverse().map((m) => (
                 <tr key={m.mese}>
                   <td className="nowrap">
-                    {meseLungo.format(data(m.mese))}
-                    {m.in_corso && <span className="attenuato"> · in corso</span>}
+                    <strong>{meseLungo.format(data(m.mese))}</strong>
+                    {m.in_corso && <span className="bollino giallo mese-in-corso">in corso</span>}
                   </td>
                   <td className="num">{formatoCifra(m.attivi)}</td>
                   <td className="num">{formatoCifra(m.nuovi)}</td>
                   <td className="num">{formatoCifra(m.rinnovi)}</td>
                   <td className="num">
                     {formatoCifra(m.scaduti)}
-                    {m.scaduti_provvisori > 0 && <span className="attenuato"> ({formatoCifra(m.scaduti_provvisori)} provvisori)</span>}
+                    {m.scaduti_provvisori > 0 && <span className="provvisori"> {formatoCifra(m.scaduti_provvisori)} provvisori</span>}
                   </td>
-                  <td className="num">{segnato(m.nuovi - m.scaduti)}</td>
+                  <td className="num"><span className={`saldo ${m.nuovi - m.scaduti > 0 ? 'positivo' : m.nuovi - m.scaduti < 0 ? 'negativo' : ''}`}>{segnato(m.nuovi - m.scaduti)}</span></td>
                 </tr>
               ))}
             </tbody>
@@ -457,37 +442,50 @@ function Totale({ titolo, ora, confronti }: { titolo: string; ora: number; confr
   )
 }
 
-function RigheDurata({ vincolo, ultimi, precedenti }: { vincolo: Vincolo; ultimi: DurataPeriodo; precedenti: DurataPeriodo }) {
-  const riga = (p: DurataPeriodo, periodo: string, prima: boolean) => (
-    <tr key={periodo}>
-      {prima && (
-        <td rowSpan={2}>
-          <strong>{NOME_VINCOLO[vincolo]}</strong>
-          <div className="piccolo attenuato">{DETTAGLIO_VINCOLO[vincolo]}</div>
-        </td>
-      )}
-      <td className="nowrap">{periodo}</td>
-      <td className="num">{formatoCifra(p.disdetti)}</td>
-      <td className="num">{p.durata_media == null ? '—' : `${mesi1(p.durata_media)} mesi`}</td>
-      <td className="num">
-        <strong>{p.oltre_medio == null ? '—' : `${p.oltre_medio > 0 ? '+' : ''}${mesi1(p.oltre_medio)}`}</strong>
-        <span className="attenuato"> su {formatoCifra(p.arrivati)}</span>
-      </td>
-      <td className="num">
-        {formatoCifra(p.anticipati)}
-        {p.disdetti > 0 && <span className="attenuato"> · {Math.round((p.anticipati / p.disdetti) * 100)}%</span>}
-      </td>
-      <td className="num">
-        {formatoCifra(p.con_cambio)}
-        {p.disdetti > 0 && <span className="attenuato"> · {Math.round((p.con_cambio / p.disdetti) * 100)}%</span>}
-      </td>
-    </tr>
+function SchedaDurata({ vincolo, ultimi, precedenti }: { vincolo: Vincolo; ultimi: DurataPeriodo; precedenti: DurataPeriodo }) {
+  const quota = (parte: number, tutto: number) => (tutto > 0 ? `${Math.round((parte / tutto) * 100)}%` : null)
+  const periodo = (p: DurataPeriodo, nome: string, prima: boolean) => (
+    <div key={nome} className={`durata-periodo${prima ? ' prima' : ''}`}>
+      <div className="durata-nome">{nome}</div>
+      <dl className="durata-metriche">
+        <div>
+          <dt>Disdetti</dt>
+          <dd>{formatoCifra(p.disdetti)}</dd>
+        </div>
+        <div>
+          <dt>Durata media</dt>
+          <dd>{p.durata_media == null ? '—' : <>{mesi1(p.durata_media)} <small>mesi</small></>}</dd>
+        </div>
+        <div className="evidenza">
+          <dt>Mesi oltre il vincolo</dt>
+          <dd>
+            <strong>{p.oltre_medio == null ? '—' : `${p.oltre_medio > 0 ? '+' : ''}${mesi1(p.oltre_medio)}`}</strong> <small>su {formatoCifra(p.arrivati)}</small>
+          </dd>
+        </div>
+        <div>
+          <dt>Usciti prima del vincolo</dt>
+          <dd>
+            {formatoCifra(p.anticipati)} {quota(p.anticipati, p.disdetti) && <small>{quota(p.anticipati, p.disdetti)}</small>}
+          </dd>
+        </div>
+        <div>
+          <dt>Con cambio piano</dt>
+          <dd>
+            {formatoCifra(p.con_cambio)} {quota(p.con_cambio, p.disdetti) && <small>{quota(p.con_cambio, p.disdetti)}</small>}
+          </dd>
+        </div>
+      </dl>
+    </div>
   )
   return (
-    <>
-      {riga(ultimi, 'ultimi 12 mesi', true)}
-      {riga(precedenti, '12 mesi prima', false)}
-    </>
+    <div className="durata-scheda">
+      <div className="durata-testa">
+        <strong>{NOME_VINCOLO[vincolo]}</strong>
+        <span>{DETTAGLIO_VINCOLO[vincolo]}</span>
+      </div>
+      {periodo(ultimi, 'Ultimi 12 mesi', false)}
+      {periodo(precedenti, '12 mesi prima', true)}
+    </div>
   )
 }
 
