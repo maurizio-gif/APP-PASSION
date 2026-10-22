@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-22',
+    titolo: 'Il numero di righe in cima agli elenchi',
+    testo:
+      'In Prove, Rinnovi, Disdette e Debitori, sopra la tabella c’è una fascia con quante righe stai guardando, per esempio «8 prove». Prima c’era solo in Opportunità.',
+    dove: 'Prove, Rinnovi, Disdette, Debitori',
+  },
+  {
+    data: '2026-10-22',
     titolo: 'Nuova grafica in tutto il CRM',
     testo:
       'Il CRM ha un aspetto nuovo: schede, tabelle e pulsanti rifatti, in nero e rosso. È scuro di partenza. Con il pulsante col sole, in basso a sinistra, passi al tema chiaro. Funziona tutto come prima.',

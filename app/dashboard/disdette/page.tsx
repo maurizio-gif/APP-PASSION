@@ -53,6 +53,7 @@ export default async function Disdette({ searchParams }: { searchParams: { vista
         ) : (
           <TabellaDisdette disdette={disdette} io={io} staff={staff} torna={qui} />
         )}
+        <p className="piccolo attenuato conteggio">{disdette.length} {disdette.length === 1 ? 'disdetta' : 'disdette'}</p>
       </div>
     </>
   )

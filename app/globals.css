@@ -10939,3 +10939,8 @@ a.cv-file .cv-file-testo small { color: var(--rosso-scuro); font-weight: 600; }
   :root:root .fase-titolo .aiuto-titolo { position: static; }
   :root:root .fase-titolo .aiuto-testo { left: 12px; right: 12px; width: auto; max-width: none; }
 }
+
+/* Telefono: la scheda ha 14px di margine interno (non 20/22), la fascia del numero lo segue e non sporge piu' dai bordi */
+@media (max-width: 720px) {
+  :root:root:root:root:root .scheda > .conteggio { margin: -14px -14px 0; padding: 12px 14px; }
+}

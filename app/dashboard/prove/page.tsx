@@ -91,6 +91,7 @@ export default async function Prove({ searchParams }: { searchParams: { vista?: 
         ) : (
           <TabellaProve prove={prove} pagamenti={pagamenti} staff={staff} torna={qui} />
         )}
+        <p className="piccolo attenuato conteggio">{prove.length === 300 ? 'Le 300 più recenti' : `${prove.length} ${prove.length === 1 ? 'prova' : 'prove'}`}</p>
       </div>
     </>
   )

@@ -182,6 +182,7 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
             </table>
           </div>
         )}
+        <p className="piccolo attenuato conteggio">{debitori.length} {rientrati ? (debitori.length === 1 ? 'rientrato' : 'rientrati') : (debitori.length === 1 ? 'debitore' : 'debitori')}</p>
       </div>
     </>
   )

@@ -54,6 +54,7 @@ export default async function Rinnovi({ searchParams }: { searchParams: { vista?
         ) : (
           <TabellaRinnovi rinnovi={rinnovi} io={io} staff={staff} torna={qui} />
         )}
+        <p className="piccolo attenuato conteggio">{rinnovi.length} {rinnovi.length === 1 ? 'rinnovo' : 'rinnovi'}</p>
       </div>
     </>
   )
