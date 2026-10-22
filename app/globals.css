@@ -9848,3 +9848,20 @@ details.task-fase > summary .fase-azione + .task-apri { margin-left: 10px; }
 .fase-titolo .task-apri { order: 2; }
 .sotto-tabella > .vuoto,
 .sotto-tabella > p { margin: 0; padding: 18px 20px; }
+
+/* ---- Colonna «Azioni» delle fasi: righe con lo stesso stacco, niente pulsanti fuori dal bordo ---- */
+:root:root .fase-azioni { display: grid; gap: 10px; min-width: 0; }
+:root:root .fase-azioni .azioni-scheda,
+:root:root .fase-azioni .azioni-blocco,
+:root:root .fase-azioni form { margin: 0; }
+:root:root .fase-azioni .azioni-blocco { display: grid; gap: 10px; min-width: 0; }
+:root:root .fase-azioni .azioni-gruppo { display: flex; align-items: center; gap: 8px; margin: 0; min-width: 0; }
+:root:root .fase-azioni .azioni-gruppo > form.azioni-riga { flex: 1 1 0; min-width: 0; }
+:root:root .fase-azioni .azioni-gruppo select { min-width: 0; }
+/* le righe vanno a capo invece di uscire: menu e campi si adattano, il pulsante scende se non c'e' posto */
+:root:root .fase-azioni .azioni-riga { flex-wrap: wrap; gap: 8px; min-width: 0; }
+:root:root .fase-azioni .azioni-riga select,
+:root:root .fase-azioni .azioni-riga input[type='text'] { flex: 1 1 130px; min-width: 0; width: auto; }
+:root:root .fase-azioni .azioni-riga .bottone { flex: 0 0 auto; }
+:root:root .fase-azioni .azioni-gruppo > form.azioni-riga { flex-wrap: nowrap; }
+:root:root .fase-azioni .azioni-gruppo > form.azioni-riga select { flex: 1 1 0; }
