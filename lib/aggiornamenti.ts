@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-23',
+    titolo: 'Nelle Prove c’è la scheda «Perse»',
+    testo:
+      'Mostra le prove chiuse come «Non iscritto», quelle che non sono diventate un abbonamento. Prima erano mescolate con le altre prove chiuse.',
+    dove: 'Prove → Perse',
+  },
+  {
+    data: '2026-10-23',
     titolo: 'Nelle Opportunità con il contratto si vede se è pagato',
     testo:
       'Nelle schede Prove in corso, Prove scadute e Vinte c’è la colonna Pagamento: dice se il Pass o l’abbonamento è pagato (verde) o da pagare (rosso, con l’importo). Prima per saperlo bisognava aprire la scheda della persona.',
