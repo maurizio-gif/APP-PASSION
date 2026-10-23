@@ -36,6 +36,8 @@ export default async function Lead({ searchParams }: { searchParams: Filtri }) {
   // Prove in corso, Prove scadute e Vinte: al posto di attivita' e note, il contratto.
   const conContratto = ['in_prova', 'prove_scadute', 'vinte'].includes(vista)
   const contratti = conContratto ? await crm.leadContratti(lead.map((l) => l.id)) : null
+  // Pagato o da pagare: la stessa lettura della scheda persona, sul contratto di ogni riga.
+  const pagamenti = contratti ? await crm.pagamenti(Object.values(contratti).map((c) => c.contract_id)) : null
   // Nelle Vinte: per data di firma del contratto, dal piu' recente (senza firma in fondo).
   if (vista === 'vinte' && contratti) {
     const firma = (id: string) => { const d = contratti[id]?.data_firma; return d ? new Date(d).getTime() : -Infinity }
@@ -77,7 +79,7 @@ export default async function Lead({ searchParams }: { searchParams: Filtri }) {
         {lead.length === 0 ? (
           <Vuoto>Nessuna opportunità qui.</Vuoto>
         ) : (
-          <TabellaLead lead={lead} io={io} staff={staff} torna={qui} contratti={contratti} firma={vista === 'vinte'} />
+          <TabellaLead lead={lead} io={io} staff={staff} torna={qui} contratti={contratti} pagamenti={pagamenti} firma={vista === 'vinte'} />
         )}
         <p className="piccolo attenuato conteggio">{lead.length === 200 ? 'Le 200 più recenti' : `${lead.length} opportunità`}</p>
       </div>
