@@ -53,7 +53,7 @@ export default async function Disdette({ searchParams }: {
       <div className="testata">
         <div>
           <h1>Disdette</h1>
-          <p>Chi ha disdetto su PerfectGym: si prende in carico, poi una telefonata o un appuntamento per capire il motivo e recuperarlo. L&apos;esito si scrive nella scheda.{' '}<LinkGuida argomento="disdette" /></p>
+          <p>Chi ha disdetto su PerfectGym: si prende in carico, poi una telefonata o un appuntamento per capire il motivo e recuperarlo. L&apos;esito si scrive nella scheda. Una disdetta è definitiva: se c&apos;è un nuovo abbonamento che dà continuità (parte entro il giorno dopo la fine del vecchio) è un cambio abbonamento e non compare qui.{' '}<LinkGuida argomento="disdette" /></p>
         </div>
       </div>
       <Avviso errore={searchParams.errore} />

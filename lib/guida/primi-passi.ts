@@ -16,7 +16,7 @@ Molte cose il CRM le fa da solo: da fuori arrivano solo le opportunità dei modu
 
 > Airtable non si usa più: dal 30 settembre 2026 tutto il lavoro si fa qui. Da fuori arrivano solo le opportunità dei moduli; il resto nasce da PerfectGym.
 
-## La home: Da gestire
+## La home: Dashboard consulente
 Appena entri, i numeri di oggi. Ogni riquadro porta al suo elenco:
 
 - **Opportunità da gestire**: non ancora prese in carico; **Le mie opportunità**: in gestione a te;
@@ -25,7 +25,11 @@ Appena entri, i numeri di oggi. Ogni riquadro porta al suo elenco:
 - **I miei task**: di oggi e arretrati;
 - **Ticket in attesa**: R2D aspetta una risposta dal desk. Il supporto vede anche **Ticket da verificare**.
 
-Sotto, le opportunità da gestire, i tuoi task di oggi (con **«Fatto ✓»** e **«Non risponde»**) e le prove in scadenza. Il riquadro è evidenziato quando c'è qualcosa da fare.
+Il riquadro è evidenziato quando c'è qualcosa da fare. Niente elenchi qui: cliccando il riquadro apri la sezione con l'elenco completo.
+
+Nella colonna **Primo ricontatto** di ogni opportunità, in **Opportunità**, vedi in quanto tempo è stata ricontattata, anche con un tentativo, o da quanto aspetta. Il tempo conta solo nell'orario di lavoro (8–22 dal lunedì al venerdì, 8–20 sabato e domenica): verde fino a 30 minuti, giallo fino a 2 ore, rosso oltre.
+
+Sotto i riquadri, **La mia performance**: le tue percentuali settimana per settimana (opportunità chiuse, diventate Guest Pass, Guest Pass diventati abbonamenti), gli abbonamenti venduti, il tempo di primo ricontatto, disdette e rinnovi, con il confronto con la settimana scorsa e con la media delle quattro prima.
 
 ## Le regole che valgono ovunque
 - **Il lavoro sta nei task.** Ogni contatto con una persona si segna come task, fatto o da fare: è la sua storia. Vedi [Task](/dashboard/guida/task).

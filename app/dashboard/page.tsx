@@ -1,31 +1,28 @@
 import Link from 'next/link'
 import { crm } from '@/lib/crm'
-import { formatoGiornoLungo, formatoOra, oggiRoma, traduci, TIPO_TASK } from '@/lib/formato'
-import { Avviso, Persona, Provenienza, Vuoto } from '@/components/Ui'
-import { assiste, puoVedere, smista } from '@/lib/permessi'
-import { TabellaLead } from '@/components/TabellaLead'
-import { completaTask } from './azioni'
+import { formatoGiornoLungo, oggiRoma } from '@/lib/formato'
+import { Avviso } from '@/components/Ui'
+import { assiste, eAdmin, puoVedere, smista } from '@/lib/permessi'
+import { consulenteScelto } from '@/components/FiltroConsulente'
+import { PerformanceConsulente } from '@/components/PerformanceConsulente'
 
 // «Quando aprono c'avranno lead da gestire, prove da gestire, abbonamenti in
-// scadenza» (riunione del 28/09/2026): la home e' il lavoro di oggi.
-export default async function DaGestire({ searchParams }: { searchParams: { errore?: string } }) {
-  const [h, io, arretrati, oggi, nuovi, scadenza, staff] = await Promise.all([
-    crm.home(),
-    crm.io(),
-    crm.task('miei', 'arretrati'),
-    crm.task('miei', 'oggi'),
-    crm.lead('da_gestire', null, null),
-    crm.prove('in_scadenza'),
-    crm.staff(),
-  ])
-  const task = [...arretrati, ...oggi]
+// scadenza» (riunione del 28/09/2026): la home e' il lavoro di oggi. Si chiama
+// Dashboard consulente: in cima i numeri di oggi, ognuno porta alla sua
+// sezione (niente tabelle di anteprima: l'elenco sta li'), sotto la performance
+// settimanale del consulente. Un admin puo' guardare quella di un altro
+// (`?consulente=`).
+export default async function DaGestire({ searchParams }: { searchParams: { errore?: string; consulente?: string } }) {
+  const [h, io, staff] = await Promise.all([crm.home(), crm.io(), crm.staff()])
+  const altro = eAdmin(io) ? consulenteScelto(staff, searchParams.consulente) : null
+  const performance = await crm.performance(altro && altro !== io?.id ? altro : null)
   const ticket = puoVedere(io, 'ticket') ? await crm.ticketConti() : null
 
   return (
     <>
       <div className="testata">
         <div>
-          <h1>Da gestire</h1>
+          <h1>Dashboard consulente</h1>
           <p>Ciao {io?.nome}, {formatoGiornoLungo(oggiRoma())}.</p>
         </div>
         <Link className="bottone" href="/dashboard/lead/nuovo">+ Nuova opportunità</Link>
@@ -98,71 +95,7 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
         )}
       </div>
 
-      <section className="scheda">
-        <div className="testata-scheda">
-          <h2>Opportunità da gestire</h2>
-          <Link href="/dashboard/lead?vista=da_gestire">Tutte →</Link>
-        </div>
-        {nuovi.length === 0 ? (
-          <Vuoto>Tutte le opportunità sono prese in carico.</Vuoto>
-        ) : (
-          <TabellaLead lead={nuovi.slice(0, 15)} io={io} staff={staff} torna="/dashboard" />
-        )}
-      </section>
-
-      <div className="griglia">
-        <section className="scheda">
-          <h2>I miei task</h2>
-          {task.length === 0 ? (
-            <Vuoto>Niente in agenda per oggi.</Vuoto>
-          ) : (
-            <ul className="elenco">
-              {task.slice(0, 15).map((t) => (
-                <li key={t.id}>
-                  <div className="elenco-riga">
-                    <div>
-                      <span className={`bollino${t.data && new Date(t.data) < new Date() ? ' rosso' : ''}`}>
-                        {traduci(TIPO_TASK, t.tipo)} {formatoOra(t.data)}
-                      </span>{' '}
-                      <Provenienza origine={t.origine} />{' '}
-                      <Persona id={t.utente_id} nome={t.nome} cognome={t.cognome} nuovaScheda />
-                      {t.nota && <div className="piccolo">{t.nota}</div>}
-                    </div>
-                    <form action={completaTask} className="azioni-riga pila">
-                      <input type="hidden" name="task" value={t.id} />
-                      <input type="hidden" name="torna" value="/dashboard" />
-                      <button className="bottone piccolo" name="esito" value="positivo">Fatto ✓</button>
-                      <button className="bottone secondario piccolo" name="esito" value="negativo">Non risponde</button>
-                    </form>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-          {task.length > 15 && <Link href="/dashboard/task">Tutti i task →</Link>}
-        </section>
-
-        <section className="scheda">
-          <h2>Prove in scadenza</h2>
-          {scadenza.length === 0 ? (
-            <Vuoto>Nessuna prova finisce nei prossimi tre giorni.</Vuoto>
-          ) : (
-            <ul className="elenco">
-              {scadenza.map((p) => (
-                <li key={p.id}>
-                  <Persona id={p.utente_id} nome={p.nome} cognome={p.cognome} />{' '}
-                  <span className="bollino giallo">{p.giorni_rimasti === 0 ? 'oggi' : p.giorni_rimasti === 1 ? 'domani' : `tra ${p.giorni_rimasti} gg`}</span>
-                  <div className="piccolo attenuato">
-                    {p.tipo_pass} · {p.ingressi} ingressi · {p.prenotazioni} lezioni prenotate
-                    {p.gestito_nome ? ` · segue ${p.gestito_nome}` : ' · nessuno la segue'}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-      </div>
-
+      <PerformanceConsulente p={performance} staff={staff} consulente={altro} admin={eAdmin(io)} propria={performance.consulente_id === io?.id} />
     </>
   )
 }

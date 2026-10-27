@@ -11,6 +11,8 @@ Da **PerfectGym**, da soli: niente si inserisce a mano. Le disdette sono solo de
 
 Gli abbonamenti **a scadenza fissa** (Reformer 12 mesi, Percorsi «I ❤️ My Trainer», PT Elite) non sono disdette: quando finiscono sono un [rinnovo](/dashboard/guida/rinnovi).
 
+**Una disdetta è definitiva.** Se la persona ha un altro abbonamento che dà **continuità** (il nuovo è già in corso o parte al più tardi il giorno dopo la fine del vecchio: il vecchio finisce il 26, il nuovo comincia il 27) è un **cambio abbonamento**, e non compare fra le disdette: non è da gestire, non ha il task e non conta nei numeri. Vale anche per le disdette passate, e se il nuovo abbonamento compare dopo la disdetta questa sparisce da sola. Se invece il nuovo parte dopo una pausa, anche di un solo giorno in più, è una disdetta vera: resta qui da gestire.
+
 > Una disdetta appena arrivata non la segue ancora nessuno, e il suo task resta senza assegnatario. Chi la **prende in carico** prende anche il task.
 
 ## Si prende in carico, come un'opportunità

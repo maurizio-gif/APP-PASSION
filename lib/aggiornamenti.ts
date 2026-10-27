@@ -17,6 +17,54 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-27',
+    titolo: 'Fra le disdette restano solo quelle vere: i cambi abbonamento non ci sono più',
+    testo:
+      'Se la persona ha un altro abbonamento che dà continuità (il vecchio finisce il 26 e il nuovo comincia il 27) non è una disdetta ma un cambio abbonamento, e non compare più. Vale anche per il passato: delle 2.248 disdette, 903 erano cambi e sono state tolte dall’elenco, dalla home, dalla scheda persona, dal Report giornaliero e dalla tua performance. I task «chiamare per capire il motivo» ancora aperti per i cambi sono stati archiviati. Una disdetta resta da gestire solo se la persona non ha dato continuità.',
+    dove: 'Disdette (e home, scheda persona, Report giornaliero, performance)',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Nella tua performance: vinte e perse, e l’importo degli abbonamenti venduti',
+    testo:
+      'Sotto «Opportunità chiuse» ora vedi quante sono vinte e quante perse (e hanno una riga ciascuna nella tabella settimana per settimana). C’è poi il riquadro «Importo abbonamenti venduti»: la somma dei canoni mensili degli abbonamenti venduti nella settimana, con sotto il valore del vincolo minimo (canone per i mesi minimi del piano), confrontati con le settimane prima.',
+    dove: 'Dashboard consulente → La mia performance',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Nella Dashboard consulente non ci sono più gli elenchi di anteprima',
+    testo:
+      'Sono spariti gli elenchi delle opportunità da gestire, dei task e delle prove in scadenza: restano i riquadri con i numeri e, cliccandoli, si apre la sezione con l’elenco completo. La pagina è più corta e la tua performance si vede subito.',
+    dove: 'Dashboard consulente',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Nella Dashboard consulente c’è la tua performance, settimana per settimana',
+    testo:
+      'In fondo alla pagina trovi le tue percentuali: opportunità chiuse, opportunità che diventano Guest Pass, Guest Pass che diventano abbonamento, abbonamenti venduti, tempo di primo ricontatto, disdette recuperate e rinnovi riusciti. Ogni numero è confrontato con la settimana scorsa e con la media delle quattro settimane prima, con i grafici dell’andamento. Un admin può guardare quella di un collega.',
+    dove: 'Dashboard consulente → La mia performance',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Ogni opportunità mostra quanto ci è voluto per il primo ricontatto',
+    testo:
+      'Nella colonna «Primo ricontatto» vedi in quanto tempo l’opportunità è stata ricontattata (anche con un tentativo o «Non risponde») o da quanto aspetta: verde fino a 30 minuti, giallo fino a 2 ore, rosso oltre. Il tempo conta solo nell’orario di lavoro, 8–22 dal lunedì al venerdì e 8–20 sabato e domenica: un’opportunità arrivata a mezzanotte comincia a contare alle 8.',
+    dove: 'Opportunità',
+  },
+  {
+    data: '2026-10-27',
+    titolo: '«Da gestire» si chiama ora «Dashboard consulente»',
+    testo: 'È la prima voce del menu, la pagina che si apre appena entri. Cambia solo il nome: ci trovi gli stessi numeri e gli stessi elenchi di prima.',
+    dove: 'Dashboard consulente (la prima voce del menu)',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Nuovo Report giornaliero, per gli admin',
+    testo:
+      'Mostra tutto quello che è successo in un giorno: opportunità arrivate e prese in carico, commenti, task fatti e creati, pass attivati, abbonamenti venduti, opportunità chiuse, disdette e rinnovi. In cima i numeri del giorno, poi una tabella con quello che ha fatto ogni consulente e, sotto, l’elenco di ogni cosa con la persona (si apre in un’altra scheda). Si cambia giorno con le frecce e si filtra per consulente e per tipologia.',
+    dove: 'Report giornaliero (solo admin)',
+  },
+  {
+    data: '2026-10-27',
     titolo: 'Nelle Disdette si cerca, si ordina e si filtra per data',
     testo:
       'Sopra l’elenco c’è la ricerca per nome e cognome, cellulare o email. Si può ordinare per data di scadenza o di disdetta e scegliere un periodo, di scadenza e/o di disdetta. Nell’elenco ora si legge la data di scadenza del contratto e il nome della persona apre la sua scheda in un’altra scheda del browser, così non si perde l’elenco.',
