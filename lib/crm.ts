@@ -385,6 +385,9 @@ export type Abbonamenti = {
     prove_guest_abbonati: number
     prove_piu_pass: number
     prove_pass: number
+    // Le prove per durata del Guest Pass (null = solo pass giornalieri), con
+    // chi ha prenotato Reformer o Formula 8 (20261027a).
+    prove_per_pass?: ProvaPerPass[]
   }[]
   durata: {
     trimestri: (DurataPeriodo & { trimestre: string; vincolo: Vincolo; in_corso: boolean })[]
@@ -396,6 +399,15 @@ export type Abbonamenti = {
       periodi: Record<'ultimi_12' | 'precedenti_12', DurataPeriodo>
     }[]
   }
+}
+export type ProvaPerPass = {
+  giorni_guest: number | null
+  persone: number
+  abbonati: number
+  reformer: number
+  reformer_abbonati: number
+  formula8: number
+  formula8_abbonati: number
 }
 export type Vincolo = 1 | 4 | 12
 export type DurataPeriodo = {

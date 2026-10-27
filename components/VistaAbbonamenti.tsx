@@ -1,4 +1,4 @@
-import type { Abbonamenti, DurataPeriodo, Vincolo } from '@/lib/crm'
+import type { Abbonamenti, DurataPeriodo, ProvaPerPass, Vincolo } from '@/lib/crm'
 import { formatoCifra, formatoData, formatoFa } from '@/lib/formato'
 import { Colonne, type Punto } from './Colonne'
 import { LinkGuida } from './Ui'
@@ -206,6 +206,20 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
   const provePrima = somma(d.mesi.slice(0, 12))
   const proveProvvisori = d.mesi.reduce((a, m) => a + m.prove_provvisori, 0)
 
+  // Gli ultimi 12 mesi per durata del Guest Pass, con chi ha prenotato.
+  const perDurata = (() => {
+    const mappa = new Map<number | null, ProvaPerPass>()
+    for (const m of d.mesi.slice(12)) {
+      for (const r of m.prove_per_pass ?? []) {
+        const a = mappa.get(r.giorni_guest) ?? { giorni_guest: r.giorni_guest, persone: 0, abbonati: 0, reformer: 0, reformer_abbonati: 0, formula8: 0, formula8_abbonati: 0 }
+        for (const k of ['persone', 'abbonati', 'reformer', 'reformer_abbonati', 'formula8', 'formula8_abbonati'] as const) a[k] += r[k]
+        mappa.set(r.giorni_guest, a)
+      }
+    }
+    // Guest Pass dal più corto al più lungo, poi chi ha solo pass giornalieri.
+    return [...mappa.values()].sort((x, y) => (x.giorni_guest ?? 9999) - (y.giorni_guest ?? 9999))
+  })()
+
   const vincoli: Vincolo[] = [1, 4, 12]
   const oltreMassimo = Math.max(1, ...d.durata.trimestri.filter((t) => t.arrivati >= MINIMO).map((t) => t.oltre_medio ?? 0))
 
@@ -312,6 +326,20 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
           Ultimi 12 mesi, contro i 12 mesi prima.
           {proveProvvisori > 0 ? ` ${formatoCifra(proveProvvisori)} persone hanno finito da meno di 30 giorni e possono ancora abbonarsi.` : ''}
         </p>
+        {perDurata.length > 0 && (
+          <>
+            <h3 className="titoletto">Per durata del Guest Pass, e chi ha prenotato una lezione</h3>
+            <p className="piccolo attenuato">
+              Ultimi 12 mesi. «Ha prenotato» vuol dire almeno una lezione prenotata (non annullata, non in lista d’attesa) tra il primo e
+              l’ultimo giorno della prova. Se una persona ha più Guest Pass conta quello più lungo.
+            </p>
+            <TabellaPerDurata titolo="Reformer" righe={perDurata} lezione="reformer" />
+            <TabellaPerDurata titolo="Formula 8" righe={perDurata} lezione="formula8" />
+            <p className="piccolo attenuato">
+              Le lezioni Formula 8 esistono da settembre 2026: per le prove finite prima il conto è zero, e per ora i numeri sono piccoli.
+            </p>
+          </>
+        )}
         <h3 className="titoletto">Persone che hanno finito la prova</h3>
         <Colonne punti={prove} unita="persone in prova" />
         <div className="legenda" aria-hidden>
@@ -511,6 +539,59 @@ function RigheDurata({ vincolo, ultimi, precedenti }: { vincolo: Vincolo; ultimi
       {riga(ultimi, 'ultimi 12 mesi', true)}
       {riga(precedenti, '12 mesi prima', false)}
     </>
+  )
+}
+
+function TabellaPerDurata({ titolo, righe, lezione }: { titolo: string; righe: ProvaPerPass[]; lezione: 'reformer' | 'formula8' }) {
+  const perc = (parte: number, tutto: number) => (tutto ? `${Math.round((parte / tutto) * 100)}%` : '—')
+  const dati = (r: ProvaPerPass) => ({ con: r[lezione], conAbbonati: r[`${lezione}_abbonati`] })
+  const nome = (g: number | null) => (g == null ? 'Solo pass giornalieri' : `Guest Pass ${g} giorni`)
+  const totale = righe.reduce(
+    (a, r) => ({ persone: a.persone + r.persone, abbonati: a.abbonati + r.abbonati, con: a.con + dati(r).con, conAbbonati: a.conAbbonati + dati(r).conAbbonati }),
+    { persone: 0, abbonati: 0, con: 0, conAbbonati: 0 },
+  )
+  const riga = (chiave: string, etichetta: string, r: { persone: number; abbonati: number; con: number; conAbbonati: number }, forte = false) => {
+    const senza = r.persone - r.con
+    const senzaAbbonati = r.abbonati - r.conAbbonati
+    return (
+      <tr key={chiave}>
+        <td>{forte ? <strong>{etichetta}</strong> : etichetta}</td>
+        <td className="num">{formatoCifra(r.persone)}</td>
+        <td className="num">{perc(r.abbonati, r.persone)}</td>
+        <td className="num">
+          {formatoCifra(r.con)}
+          <span className="attenuato"> · {perc(r.con, r.persone)}</span>
+        </td>
+        <td className="num">
+          <strong>{perc(r.conAbbonati, r.con)}</strong>
+          <span className="attenuato"> ({formatoCifra(r.conAbbonati)} su {formatoCifra(r.con)})</span>
+        </td>
+        <td className="num">
+          {perc(senzaAbbonati, senza)}
+          <span className="attenuato"> ({formatoCifra(senzaAbbonati)} su {formatoCifra(senza)})</span>
+        </td>
+      </tr>
+    )
+  }
+  return (
+    <div className="tabella-scorre">
+      <table>
+        <thead>
+          <tr>
+            <th>{titolo}</th>
+            <th className="num">Persone in prova</th>
+            <th className="num">Si abbonano</th>
+            <th className="num">Hanno prenotato</th>
+            <th className="num">Di loro, si abbonano</th>
+            <th className="num">Chi non ha prenotato, si abbona</th>
+          </tr>
+        </thead>
+        <tbody>
+          {righe.map((r) => riga(String(r.giorni_guest), nome(r.giorni_guest), { persone: r.persone, abbonati: r.abbonati, ...dati(r) }))}
+          {riga('tutte', 'Tutte le prove', totale, true)}
+        </tbody>
+      </table>
+    </div>
   )
 }
 
