@@ -10,7 +10,8 @@ export const appello: Argomento = {
 Ogni istruttore vede **solo le sue lezioni** e chi le ha prenotate, di **oggi e dei prossimi giorni**. Chi è l'istruttore lo dice l'**email**: il tuo utente del CRM deve avere la stessa email che hai su PerfectGym (se su PerfectGym non c'è l'email, vale lo stesso nome e cognome). Non c'è niente da collegare a mano.
 
 - **Quando si segna la presenza**: da **59 minuti prima** dell'inizio fino a **59 minuti dopo** la fine della lezione. Prima e dopo si legge soltanto: il bollino sopra la lezione dice «Si apre alle ...», «Appello aperto fino alle ...» o «Appello chiuso».
-- **Come si segna**: spunti il nome di chi è presente (la spunta diventa verde); **«Tutti presenti»** segna tutti insieme. Se ti sbagli, togli la spunta: vale finché l'appello è aperto.
+- **Come si segna**: tocchi la riga di chi è presente («Segna presente»): diventa verde con **«✓ Presente»**. Se ti sbagli, tocchi di nuovo e confermi **«Sì, togli»**: vale finché l'appello è aperto.
+- **Cosa vedi sotto il nome**: la data di nascita e l'età, chi ha segnato la presenza e a che ora (**«tornello/PG»** se arriva da PerfectGym) e tre pastiglie: **Prova** (ha un Guest Pass da 7 o 10 giorni in corso), **Nuovo iscritto** (nelle prime due settimane del suo primo abbonamento) e **First Timer** (è la sua prima volta a quel tipo di lezione). Sono le persone da seguire meglio.
 - Vedono i prenotati: **non annullati e non in lista d'attesa**.
 - Per guardare un giorno passato, scegli la data.
 

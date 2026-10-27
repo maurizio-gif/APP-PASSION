@@ -2,6 +2,8 @@ import Link from 'next/link'
 import { crm, richiediSezione } from '@/lib/crm'
 import { eGiornoValido, formatoGiornoLungo, oggiRoma, spostaGiorno } from '@/lib/formato'
 import { AppelloLezione } from '@/components/AppelloLezione'
+import { LegendaSegnali } from '@/components/SegnaliAppello'
+import { ScorriAdesso } from '@/components/ScorriAdesso'
 import { Vuoto } from '@/components/Ui'
 
 const giornoRoma = (iso: string) => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Rome' }).format(new Date(iso))
@@ -36,6 +38,7 @@ export default async function Appello({ searchParams }: { searchParams: { giorno
             <strong>59 minuti dopo</strong> la fine della lezione: prima e dopo si legge soltanto.
             {a.istruttori.length > 0 && <> Sei collegato come {a.istruttori.join(', ')}.</>}
           </p>
+          <LegendaSegnali />
         </div>
       </div>
 
@@ -70,14 +73,24 @@ export default async function Appello({ searchParams }: { searchParams: { giorno
           <Vuoto>{singolo ? 'Nessuna tua lezione in questo giorno.' : 'Nessuna tua lezione nei prossimi giorni.'}</Vuoto>
         </div>
       ) : (
-        [...perGiorno.entries()].map(([giorno, lezioni]) => (
-          <div key={giorno}>
-            <h2 className="appello-giorno">{etichetta(giorno)}</h2>
-            {lezioni.map((l) => (
-              <AppelloLezione key={l.class_id} l={l} />
-            ))}
-          </div>
-        ))
+        <>
+          {!singolo && <ScorriAdesso />}
+          {[...perGiorno.entries()].map(([giorno, lezioni]) => {
+            // Oggi: «Adesso» sta davanti alla prima lezione non ancora finita; le gia' fatte restano sopra.
+            const adesso = giorno === oggi ? lezioni.find((l) => Date.parse(l.fine ?? l.inizio) > Date.now()) : null
+            return (
+              <div key={giorno}>
+                <h2 className="appello-giorno">{etichetta(giorno)}</h2>
+                {lezioni.map((l) => (
+                  <div key={l.class_id}>
+                    {adesso?.class_id === l.class_id && !singolo && <div id="adesso" className="appello-adesso">Adesso</div>}
+                    <AppelloLezione l={l} />
+                  </div>
+                ))}
+              </div>
+            )
+          })}
+        </>
       )}
     </>
   )
