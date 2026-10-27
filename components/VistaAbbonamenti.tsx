@@ -354,6 +354,68 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
         <Colonne punti={conversione} formato="percento" massimo={100} altezza={160} unita="di conversione" />
       </section>
 
+      <details className="scheda">
+        <summary>
+          <strong>Pass di prova mese per mese: durata del Guest Pass, Reformer e Formula 8</strong>
+        </summary>
+        <p className="piccolo attenuato">
+          Per mese di fine della prova. Ogni cella dice quante persone si sono abbonate su quante hanno finito la prova. «Hanno
+          prenotato» sono le persone con almeno una lezione prenotata durante la prova. Dove non c’è nessuno compare un trattino.
+        </p>
+        <div className="tabella-scorre">
+          <table>
+            <thead>
+              <tr>
+                <th>Mese</th>
+                <th className="num">Tutte le prove</th>
+                <th className="num">Guest Pass 7 giorni</th>
+                <th className="num">Guest Pass 10 giorni</th>
+                <th className="num">Solo pass giornalieri</th>
+                <th className="num">Hanno prenotato Reformer</th>
+                <th className="num">Hanno prenotato Formula 8</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[...d.mesi].reverse().map((m) => {
+                const righe = m.prove_per_pass ?? []
+                const durata = (g: number | null) => righe.find((r) => r.giorni_guest === g)
+                const somma = (k: 'reformer' | 'reformer_abbonati' | 'formula8' | 'formula8_abbonati') => righe.reduce((a, r) => a + r[k], 0)
+                const cella = (abbonati: number, persone: number) =>
+                  persone ? (
+                    <>
+                      <strong>{Math.round((abbonati / persone) * 100)}%</strong>
+                      <span className="attenuato">
+                        {' '}
+                        ({formatoCifra(abbonati)} su {formatoCifra(persone)})
+                      </span>
+                    </>
+                  ) : (
+                    <span className="attenuato">—</span>
+                  )
+                return (
+                  <tr key={m.mese}>
+                    <td className="nowrap">
+                      {meseLungo.format(data(m.mese))}
+                      {m.prove_provvisori > 0 && <span className="attenuato"> · {formatoCifra(m.prove_provvisori)} ancora in tempo</span>}
+                    </td>
+                    <td className="num">{cella(m.prove_abbonati, m.prove)}</td>
+                    <td className="num">{cella(durata(7)?.abbonati ?? 0, durata(7)?.persone ?? 0)}</td>
+                    <td className="num">{cella(durata(10)?.abbonati ?? 0, durata(10)?.persone ?? 0)}</td>
+                    <td className="num">{cella(durata(null)?.abbonati ?? 0, durata(null)?.persone ?? 0)}</td>
+                    <td className="num">{cella(somma('reformer_abbonati'), somma('reformer'))}</td>
+                    <td className="num">{cella(somma('formula8_abbonati'), somma('formula8'))}</td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+        <p className="piccolo attenuato">
+          Le lezioni Formula 8 esistono da settembre 2026. Chi ha finito la prova da meno di 30 giorni può ancora abbonarsi, quindi
+          i mesi più recenti possono ancora salire.
+        </p>
+      </details>
+
       <section className="scheda">
         <h2>Quanto durano</h2>
         <p className="piccolo attenuato sotto-titolo">
