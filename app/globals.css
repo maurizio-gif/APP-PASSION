@@ -11909,3 +11909,55 @@ a.pf-tessera.pf-link:focus-visible { outline: 2px solid var(--rosso); outline-of
   :root:root:root .testata:has(.aiuto-titolo:hover),
   :root:root:root .testata:has(.aiuto-titolo:focus-within) { position: relative; }
 }
+
+/* ---- Telefono: Rinnovi, Disdette, Debitori, Task e Contratti in schede compatte (come Prove) ---- */
+@media (max-width: 720px) {
+  :root:root:root table.schede-mobile.tabella-colonne:not(.tabella-prove) tbody tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px 10px;
+    margin: 0 0 12px;
+    padding: 14px 16px;
+    border: 1px solid rgba(92, 11, 30, 0.14);
+    border-radius: 14px;
+    background: #fffafb;
+    box-shadow: 0 8px 20px -16px rgba(0, 0, 0, 0.55);
+  }
+  :root:root:root table.schede-mobile.tabella-colonne:not(.tabella-prove) tbody tr:last-child { margin-bottom: 0; }
+  :root:root:root table.schede-mobile.tabella-colonne:not(.tabella-prove) tbody td {
+    display: block;
+    grid-column: 1 / -1;
+    padding: 0;
+    border: 0;
+    background: none;
+    min-width: 0;
+  }
+  :root:root:root table.schede-mobile.tabella-colonne:not(.tabella-prove) tbody td:first-child { grid-column: 1; grid-row: 1; }
+  /* chi ha un solo pulsante di azione (Prendo in carico, Gestisci) lo tiene in alto a destra */
+  :root:root:root table.schede-mobile.tabella-uniforme:not(.tabella-prove) tbody td:last-child { grid-column: 2; grid-row: 1; align-self: start; }
+  :root:root:root table.schede-mobile.tabella-colonne:not(.tabella-uniforme) tbody td:last-child { padding-top: 4px; }
+  :root:root:root table.schede-mobile.tabella-colonne:not(.tabella-prove) tbody td:nth-child(2) { padding-top: 10px; border-top: 1px solid rgba(92, 11, 30, 0.1); }
+  :root:root:root table.schede-mobile.tabella-colonne:not(.tabella-prove) tbody td.cella-vuota { display: none; }
+  :root:root:root table.schede-mobile.tabella-colonne:not(.tabella-prove) .riga-dati { gap: 3px; }
+  :root:root:root table.schede-mobile.tabella-colonne:not(.tabella-prove) tbody td:not(:first-child):not(:last-child) .riga-dati { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 3px 10px; }
+  :root:root:root table.schede-mobile.tabella-colonne:not(.tabella-prove) tbody td:not(:first-child):not(:last-child) .riga-dati > strong { flex: 1 1 100%; }
+  :root:root:root table.schede-mobile.tabella-colonne:not(.tabella-prove) tbody td:not(:first-child):not(:last-child) .riga-dati > .muto:only-of-type { flex: 1 1 100%; }
+
+  /* Senza consulente: le linguette in una riga che scorre, le righe con il loro margine */
+  :root:root:root #senza-consulente .na-toggle > .task-tabs.na-tabs { flex-direction: row; flex-wrap: nowrap; align-items: center; overflow-x: auto; padding: 12px 14px; gap: 8px; scrollbar-width: none; }
+  :root:root:root #senza-consulente .na-toggle > .task-tabs.na-tabs::-webkit-scrollbar { display: none; }
+  :root:root:root #senza-consulente .na-toggle > .na-tabs label { flex: 0 0 auto; white-space: nowrap; }
+  :root:root:root #senza-consulente .na-pannello { padding: 12px; }
+  :root:root:root #senza-consulente .na-pannello > .tabella-scorre:has(.tabella-lead) { display: none; }
+  :root:root:root #senza-consulente .lead-telefono { padding: 0 6px; }
+  :root:root:root #senza-consulente .na-pannello > p { padding: 10px 6px 0; }
+}
+@media (max-width: 720px) {
+  :root:root:root:root #senza-consulente table td:first-child,
+  :root:root:root:root #senza-consulente table td:last-child { padding-left: 0; padding-right: 0; }
+}
+@media (max-width: 720px) {
+  :root:root:root .tabella-task .task-azioni { display: flex; flex-wrap: wrap; gap: 8px; width: 100%; }
+  :root:root:root .tabella-task .task-azioni input[type='text'] { flex: 1 1 100%; min-width: 0; width: 100%; }
+  :root:root:root .tabella-task .task-azioni .bottone { flex: 1 1 0; justify-content: center; min-height: 40px; }
+}

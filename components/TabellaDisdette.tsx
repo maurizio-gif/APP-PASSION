@@ -45,7 +45,7 @@ export function TabellaDisdette({ disdette, io, staff, torna }: { disdette: Disd
                   <span className="normale"><span className="prefisso-mobile">Disdetto il </span>{formatoData(d.data_disdetta)}</span>
                 </div>
               </td>
-              <td>
+              <td className={!d.motivo && !d.contatto && !d.note ? 'cella-vuota' : undefined}>
                 <div className="riga-dati">
                   {d.motivo ? <span className="normale">{d.motivo}</span> : <span className="muto">–</span>}
                   {d.contatto && <span className="muto">{d.contatto === 'telefonata' ? 'Telefonata' : 'Appuntamento'}</span>}
