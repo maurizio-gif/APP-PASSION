@@ -17,6 +17,20 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-27',
+    titolo: 'Nuovo Appello complessivo: tutte le lezioni del giorno, con i filtri',
+    testo:
+      'Mostra tutte le lezioni di un giorno, di tutti gli istruttori, con chi ha prenotato e chi è presente. Si filtra per istruttore, lezione, categoria e sala; in cima ci sono lezioni, prenotati, presenti e percentuale di presenza. Lo vedono gli admin e i consulenti. Si legge soltanto: la presenza la segna l’istruttore.',
+    dove: 'Appello complessivo',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Nuovo Appello istruttore: ognuno vede solo le sue lezioni e segna le presenze',
+    testo:
+      'L’istruttore vede chi ha prenotato le sue lezioni di oggi e dei prossimi giorni. Le presenze si segnano da 59 minuti prima dell’inizio fino a 59 minuti dopo la fine della lezione: prima e dopo si legge soltanto. L’istruttore è riconosciuto dall’email, la stessa che ha su PerfectGym. Per ora le presenze restano nel CRM: l’invio a PerfectGym non è ancora acceso.',
+    dove: 'Appello istruttore',
+  },
+  {
+    data: '2026-10-27',
     titolo: 'Nei contratti senza consulente c’è il consulente suggerito',
     testo:
       'Se una persona ha già lavorato con un consulente (task fatti, anche un tentativo, o una prova che seguiva), sotto «Da prendere in carico» compare «Suggerito: nome» con il motivo, già scelto nella tendina. È solo un suggerimento: confermi o scegli un altro, e la nota resta obbligatoria.',
