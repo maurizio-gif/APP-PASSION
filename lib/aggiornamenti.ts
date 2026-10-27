@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-27',
+    titolo: 'Per R2D non c’è più la scheda «Da verificare» nei Ticket',
+    testo:
+      'R2D vede un ticket solo da quando il supporto glielo invia: finché è «Da verificare» non lo vede. Ora anche la scheda vuota «Da verificare» non compare più a R2D; il supporto la vede come prima.',
+    dove: 'Ticket',
+  },
+  {
+    data: '2026-10-27',
     titolo: 'Sul telefono c’è una barra in basso e le schede sono più compatte',
     testo:
       'Dal telefono, in fondo allo schermo, c’è una barra con Home, Lead, Prove, Task e Cerca: la sezione in cui sei è evidenziata. Il pulsante del menu resta in alto, con tutte le sezioni. Anche gli elenchi (Prove, Rinnovi, Disdette, Debitori, Task, Contratti, Ticket e Senza consulente) sono schede più basse, le tendine dei filtri non escono più dal riquadro e i «?» si leggono per intero.',

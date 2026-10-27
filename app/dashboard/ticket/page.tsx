@@ -22,7 +22,8 @@ export default async function Ticket({ searchParams }: { searchParams: { vista?:
   const io = await richiediSezione('ticket')
   const conti = await crm.ticketConti()
   const viste = [
-    { chiave: 'da_verificare', testo: 'Da verificare', n: conti.da_verificare, gruppo: 'lavoro' },
+    // R2D (superadmin) non vede i ticket finche' il supporto non glieli invia: la scheda «Da verificare» non c'e'.
+    ...(assiste(io) ? [] : [{ chiave: 'da_verificare', testo: 'Da verificare', n: conti.da_verificare, gruppo: 'lavoro' }]),
     { chiave: 'r2d', testo: 'Per R2D', n: conti.r2d, gruppo: 'lavoro' },
     { chiave: 'in_attesa', testo: 'Per Passion', n: conti.in_attesa, gruppo: 'lavoro' },
     { chiave: 'modifiche', testo: 'Modifiche', n: conti.modifiche_da_confermare + conti.modifiche_da_rilasciare, gruppo: 'modifiche' },
