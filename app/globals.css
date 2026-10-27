@@ -3185,3 +3185,13 @@ button.appello-riga:not(.si):not(:disabled):hover .appello-check::before {
   content: '·';
   margin-right: 5px;
 }
+
+/* Il video-tutorial dell'appello (components/VideoTutorial.tsx). */
+.video-tutorial video {
+  display: block;
+  width: 100%;
+  max-width: 960px;
+  margin: 12px auto 0;
+  border-radius: 16px;
+  background: #111;
+}

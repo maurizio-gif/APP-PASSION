@@ -10,6 +10,8 @@ export const appello: Argomento = {
   sezione: null,
   inBreve: 'Come fare l’appello delle tue lezioni: quando si segna, cosa fa il tornello, e cosa vogliono dire First Timer, Prova e Nuovo iscritto.',
   testo: `
+> **Prima di cominciare, guarda il video-tutorial** (46 secondi): è in cima alla pagina **Appello istruttore**, nella scheda «Guarda il tutorial».
+
 ## A cosa serve
 In **Appello istruttore** vedi **solo le tue lezioni** e chi le ha prenotate, di oggi e dei prossimi giorni. Ti serve per sapere **chi arriva** (e chi è nuovo, per seguirlo meglio) e per **confermare chi c'è davvero**.
 
