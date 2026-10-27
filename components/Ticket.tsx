@@ -52,7 +52,7 @@ export function TabellaTicket({ ticket, socio = true }: { ticket: TicketRiga[]; 
                 </div>
               </td>
               {socio && (
-                <td>
+                <td className={t.utente_id ? undefined : 'cella-vuota'}>
                   <div className="riga-dati">
                     {t.utente_id ? <Persona id={t.utente_id} nome={t.nome} cognome={t.cognome} /> : <span className="muto">—</span>}
                   </div>

@@ -11961,3 +11961,24 @@ a.pf-tessera.pf-link:focus-visible { outline: 2px solid var(--rosso); outline-of
   :root:root:root .tabella-task .task-azioni input[type='text'] { flex: 1 1 100%; min-width: 0; width: 100%; }
   :root:root:root .tabella-task .task-azioni .bottone { flex: 1 1 0; justify-content: center; min-height: 40px; }
 }
+
+/* ---- Telefono: linguette a pillola (Marketing, Curriculum) in una riga che scorre; schede «Quanto durano» dentro il riquadro ---- */
+@media (max-width: 720px) {
+  :root:root:root .mk-schede .schede-vista,
+  :root:root:root .cv-schede .schede-vista {
+    display: flex;
+    flex-wrap: nowrap;
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+  :root:root:root .mk-schede .schede-vista::-webkit-scrollbar,
+  :root:root:root .cv-schede .schede-vista::-webkit-scrollbar { display: none; }
+  :root:root:root .mk-schede .schede-vista a,
+  :root:root:root .cv-schede .schede-vista a { flex: 0 0 auto; white-space: nowrap; }
+  :root:root:root .durate-schede { grid-template-columns: minmax(0, 1fr); }
+  :root:root:root .durata-scheda { min-width: 0; max-width: 100%; }
+  :root:root:root .durata-scheda .durata-confronto { min-width: 0; width: 100%; table-layout: fixed; }
+  :root:root:root .sotto-dati .durate-schede { padding: 0 12px; }
+}
