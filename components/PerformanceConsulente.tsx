@@ -12,7 +12,7 @@ import { Colonne, type Punto } from './Colonne'
 // quella settimana»: una settimana vecchia è completa, quella in corso cresce
 // man mano che le opportunità si chiudono, per questo è tratteggiata.
 
-type Formato = 'percento' | 'intero' | 'minuti'
+type Formato = 'percento' | 'intero' | 'minuti' | 'euro'
 
 type Metrica = {
   chiave: string
@@ -45,7 +45,23 @@ const METRICHE: Metrica[] = [
     meglio: 'alto',
     num: (w) => w.chiuse,
     den: (w) => w.prese,
-    sotto: (w) => `${formatoCifra(w.vinte)} vinte`,
+    sotto: (w) => `${formatoCifra(w.vinte)} vinte · ${formatoCifra(w.chiuse - w.vinte)} perse`,
+  },
+  {
+    chiave: 'vinte',
+    titolo: 'Opportunità vinte',
+    spiega: 'tra quelle prese in carico nella settimana, le chiuse come vinte',
+    formato: 'intero',
+    meglio: 'alto',
+    valore: (w) => w.vinte,
+  },
+  {
+    chiave: 'perse',
+    titolo: 'Opportunità perse',
+    spiega: 'tra quelle prese in carico nella settimana, le chiuse come perse',
+    formato: 'intero',
+    meglio: 'basso',
+    valore: (w) => w.chiuse - w.vinte,
   },
   {
     chiave: 'pass',
@@ -82,6 +98,15 @@ const METRICHE: Metrica[] = [
     meglio: 'alto',
     valore: (w) => w.abbonamenti,
     sotto: (w) => `${formatoCifra(w.abbonamenti_nuovi)} nuovi`,
+  },
+  {
+    chiave: 'importo',
+    titolo: 'Importo abbonamenti venduti',
+    spiega: 'somma dei canoni mensili degli abbonamenti venduti nella settimana; sotto, il valore del vincolo minimo (canone per i mesi minimi del piano), senza la quota amministrativa',
+    formato: 'euro',
+    meglio: 'alto',
+    valore: (w) => w.importo_mensile,
+    sotto: (w) => `${scriviEuro(w.importo_vincolo)} sul vincolo`,
   },
   {
     chiave: 'ricontatto',
@@ -129,6 +154,8 @@ const METRICHE: Metrica[] = [
   },
 ]
 
+const scriviEuro = (v: number) => `€ ${formatoCifra(v, Number.isInteger(v) ? 0 : 2)}`
+
 const percentuale = (num: number, den: number) => (den > 0 ? Math.round((num / den) * 100) : null)
 
 // Il valore della settimana: una percentuale intera, un numero, o i minuti.
@@ -149,6 +176,7 @@ function scrivi(m: Metrica, v: number | null) {
   if (v == null) return '—'
   if (m.formato === 'percento') return `${formatoCifra(v)}%`
   if (m.formato === 'minuti') return tempoLavoro(v)
+  if (m.formato === 'euro') return scriviEuro(v)
   return formatoCifra(v, Number.isInteger(v) ? 0 : 1)
 }
 
@@ -161,7 +189,13 @@ function differenza(m: Metrica, ora: number | null, prima: number | null) {
   const segno = d > 0 ? '+' : '−'
   const assoluto = Math.abs(Math.round(d * 10) / 10)
   const testo =
-    m.formato === 'percento' ? `${segno}${assoluto} ${assoluto === 1 ? 'punto' : 'punti'}` : m.formato === 'minuti' ? `${segno}${tempoLavoro(assoluto)}` : `${segno}${formatoCifra(assoluto, Number.isInteger(assoluto) ? 0 : 1)}`
+    m.formato === 'percento'
+      ? `${segno}${assoluto} ${assoluto === 1 ? 'punto' : 'punti'}`
+      : m.formato === 'minuti'
+        ? `${segno}${tempoLavoro(assoluto)}`
+        : m.formato === 'euro'
+          ? `${segno}${scriviEuro(assoluto)}`
+          : `${segno}${formatoCifra(assoluto, Number.isInteger(assoluto) ? 0 : 1)}`
   return { testo: `${d > 0 ? '▲' : '▼'} ${testo}`, tono: meglio ? 'verde' : 'rosso' }
 }
 
@@ -210,8 +244,8 @@ export function PerformanceConsulente({
       ],
     }))
 
-  const tessere = METRICHE.filter((m) => ['chiuse', 'pass', 'prove', 'venduti', 'ricontatto', 'disdette'].includes(m.chiave))
-  const grafici = METRICHE.filter((m) => ['pass', 'prove', 'venduti', 'ricontatto-30'].includes(m.chiave))
+  const tessere = METRICHE.filter((m) => ['chiuse', 'pass', 'prove', 'venduti', 'importo', 'ricontatto', 'disdette'].includes(m.chiave))
+  const grafici = METRICHE.filter((m) => ['pass', 'prove', 'venduti', 'importo', 'ricontatto-30'].includes(m.chiave))
   const nome = propria ? 'La mia performance' : `Performance di ${p.consulente ?? 'un consulente'}`
 
   return (
@@ -249,7 +283,8 @@ export function PerformanceConsulente({
             <div key={m.chiave} className="numero totale" title={m.spiega}>
               <div className="etichetta">{m.titolo}</div>
               <div className="valore">{scrivi(m, v)}</div>
-              <div className="nota">{m.num && m.den ? `${formatoCifra(m.num(ora))} su ${formatoCifra(m.den(ora))} questa settimana` : m.sotto ? `${m.sotto(ora)} · questa settimana` : 'questa settimana'}</div>
+              <div className="nota">{m.num && m.den ? `${formatoCifra(m.num(ora))} su ${formatoCifra(m.den(ora))} questa settimana` : 'questa settimana'}
+                {m.sotto && <div>{m.sotto(ora)}</div>}</div>
               <ul className="confronti">
                 {[
                   { chi: 'settimana scorsa', v: prima },
@@ -280,7 +315,7 @@ export function PerformanceConsulente({
               altezza={150}
               formato={m.formato === 'percento' ? 'percento' : 'intero'}
               massimo={m.formato === 'percento' ? 100 : undefined}
-              unita={m.formato === 'minuti' ? 'minuti' : m.formato === 'percento' ? 'di conversione' : undefined}
+              unita={m.formato === 'minuti' ? 'minuti' : m.formato === 'percento' ? 'di conversione' : m.formato === 'euro' ? 'euro al mese' : undefined}
             />
           </div>
         ))}

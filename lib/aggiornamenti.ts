@@ -17,6 +17,20 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-27',
+    titolo: 'Fra le disdette restano solo quelle vere: i cambi abbonamento non ci sono più',
+    testo:
+      'Se la persona ha un altro abbonamento che dà continuità (il vecchio finisce il 26 e il nuovo comincia il 27) non è una disdetta ma un cambio abbonamento, e non compare più. Vale anche per il passato: delle 2.248 disdette, 903 erano cambi e sono state tolte dall’elenco, dalla home, dalla scheda persona, dal Report giornaliero e dalla tua performance. I task «chiamare per capire il motivo» ancora aperti per i cambi sono stati archiviati. Una disdetta resta da gestire solo se la persona non ha dato continuità.',
+    dove: 'Disdette (e home, scheda persona, Report giornaliero, performance)',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Nella tua performance: vinte e perse, e l’importo degli abbonamenti venduti',
+    testo:
+      'Sotto «Opportunità chiuse» ora vedi quante sono vinte e quante perse (e hanno una riga ciascuna nella tabella settimana per settimana). C’è poi il riquadro «Importo abbonamenti venduti»: la somma dei canoni mensili degli abbonamenti venduti nella settimana, con sotto il valore del vincolo minimo (canone per i mesi minimi del piano), confrontati con le settimane prima.',
+    dove: 'Dashboard consulente → La mia performance',
+  },
+  {
+    data: '2026-10-27',
     titolo: 'Nella Dashboard consulente non ci sono più gli elenchi di anteprima',
     testo:
       'Sono spariti gli elenchi delle opportunità da gestire, dei task e delle prove in scadenza: restano i riquadri con i numeri e, cliccandoli, si apre la sezione con l’elenco completo. La pagina è più corta e la tua performance si vede subito.',

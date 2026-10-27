@@ -38,6 +38,11 @@
 --                       abbonamenti a pagamento firmati nella settimana e
 --                       attribuiti al consulente (come nel Report giornaliero) e,
 --                       di questi, i nuovi (non rinnovi o cambi);
+--      importo_mensile, importo_vincolo
+--                       di quegli abbonamenti, la somma dei canoni mensili e la
+--                       somma del valore del vincolo minimo (canone per i mesi
+--                       minimi del piano: 1, 4 o 12). Sono i prezzi di listino
+--                       del piano, senza la quota amministrativa;
 --      disdette_gestite, disdette_recuperate    gestite nella settimana, e con esito «vinto»;
 --      rinnovi_gestiti, rinnovi_rinnovati       chiusi nella settimana, e con esito «rinnovato»;
 --      task_fatti, task_positivi                chiusi dal personale nella settimana.
@@ -138,7 +143,8 @@ begin
   ),
   rinnovo as materialized (select a.id, a.rinnovo from crm.abbonamenti(oggi) a),
   vendite as materialized (
-    select date_trunc('week', coalesce(c.data_firma, c.data_inizio)::timestamp)::date as sett, coalesce(r.rinnovo, false) as rinnovo
+    select date_trunc('week', coalesce(c.data_firma, c.data_inizio)::timestamp)::date as sett, coalesce(r.rinnovo, false) as rinnovo,
+           p.canone as canone, greatest(coalesce((p.dati -> 'commitmentPeriod' ->> 'months')::int, 1), 1) as mesi
       from perfectgym.contracts c
       join perfectgym.payment_plans p on p.id = c.payment_plan_id
       left join rinnovo r on r.id = c.id
@@ -175,6 +181,8 @@ begin
                                    and date_trunc('week', (p.data_fine at time zone 'Europe/Rome'))::date = s.lun),
              'abbonamenti', (select count(*) from vendite v where v.sett = s.lun),
              'abbonamenti_nuovi', (select count(*) from vendite v where v.sett = s.lun and not v.rinnovo),
+             'importo_mensile', (select coalesce(sum(v.canone), 0) from vendite v where v.sett = s.lun),
+             'importo_vincolo', (select coalesce(sum(v.canone * v.mesi), 0) from vendite v where v.sett = s.lun),
              'disdette_gestite', (select count(*) from public.disdette d
                                    where d.gestito_da = chi and date_trunc('week', (d.gestito_il at time zone 'Europe/Rome'))::date = s.lun),
              'disdette_recuperate', (select count(*) from public.disdette d

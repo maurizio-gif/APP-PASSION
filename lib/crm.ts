@@ -196,6 +196,8 @@ export type PerformanceSettimana = {
   prove_iscritte: number
   abbonamenti: number
   abbonamenti_nuovi: number
+  importo_mensile: number
+  importo_vincolo: number
   disdette_gestite: number
   disdette_recuperate: number
   rinnovi_gestiti: number
