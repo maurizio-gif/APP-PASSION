@@ -17,6 +17,25 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-27',
+    titolo: 'Il menu laterale scorre sul computer: ora si raggiungono tutte le voci',
+    testo: 'Con tante voci, sullo schermo del computer le ultime restavano nascoste. Ora l’elenco delle sezioni scorre da solo, mentre logo, ricerca e il tuo nome con «Esci» restano fermi.',
+    dove: 'Menu laterale',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Dall’appello non si apre più l’anagrafica del cliente',
+    testo: 'Nell’Appello complessivo il nome di chi ha prenotato non è più un collegamento: si legge soltanto. Nell’Appello istruttore non lo era già.',
+    dove: 'Appello complessivo',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Il tutorial dell’appello è più facile da trovare',
+    testo:
+      'In cima ad Appello istruttore (e ad Appello complessivo) il video-tutorial è ora un riquadro con bordo rosso e il pulsante play, «Guarda il tutorial · 46 secondi»: si apre con un tocco.',
+    dove: 'Appello istruttore, Appello complessivo',
+  },
+  {
+    data: '2026-10-27',
     titolo: 'Il link per una nuova password si apre da qualsiasi dispositivo',
     testo:
       'Chi chiedeva «Password dimenticata?» da un dispositivo e apriva l’email da un altro (o dall’app della posta) vedeva un errore sul codice. Ora il link funziona ovunque lo apri. Se hai ancora un vecchio link che dà errore, chiedine uno nuovo.',
