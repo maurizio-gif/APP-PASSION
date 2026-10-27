@@ -11246,3 +11246,61 @@ a.cv-file .cv-file-testo small { color: var(--rosso-scuro); font-weight: 600; }
   :root:root .na-toggle > .task-tabs.na-tabs { flex-direction: column; align-items: stretch; }
   :root:root .na-toggle > .na-tabs label { flex: 0 0 auto; justify-content: space-between; }
 }
+
+/* ---- Appello (istruttore e complessivo): testi leggibili sullo sfondo scuro e lezioni nello stile del CRM ---- */
+:root:root .appello-legenda { margin-top: 12px; gap: 8px 20px; color: rgba(255, 255, 255, 0.78); }
+:root:root[data-tema='chiaro'] .appello-legenda { color: #5c4a50; }
+:root:root .appello-giorno { margin: 28px 0 12px; font-size: 0.95rem; letter-spacing: 0.04em; text-transform: uppercase; color: rgba(255, 255, 255, 0.9); }
+:root:root .appello-giorno::after { height: 1px; background: linear-gradient(90deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0)); }
+:root:root[data-tema='chiaro'] .appello-giorno { color: #2a0b14; }
+:root:root[data-tema='chiaro'] .appello-giorno::after { background: linear-gradient(90deg, rgba(92, 11, 30, 0.35), rgba(92, 11, 30, 0)); }
+:root:root .appello-lezione { padding-bottom: 18px; }
+:root:root .appello-lezione .appello-testa { padding-bottom: 12px; margin-bottom: 14px; border-bottom: 1px solid rgba(92, 11, 30, 0.1); }
+:root:root .appello-lezione .appello-ora { font-weight: 700; letter-spacing: -0.01em; color: #17090f; }
+:root:root .appello-lezione .appello-titolo { font-size: 1.1rem; color: #17090f; }
+:root:root .appello-lezione .appello-conto strong { color: #17090f; }
+:root:root .appello-lezione .appello-testa .bollino { margin-top: 8px; }
+:root:root .appello-riga { border-color: rgba(92, 11, 30, 0.14); box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset; }
+:root:root .appello-riga.si { box-shadow: none; }
+
+/* ---- Contratti senza consulente: il modulo di ogni riga sta chiuso dietro il bottone anche sul computer ---- */
+@media (min-width: 721px) {
+  :root:root .tabella-contratti .gestione { display: block; }
+  :root:root .tabella-contratti .gestione-apri { display: block; position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+  :root:root .tabella-contratti .gestione-bottone { display: inline-flex; cursor: pointer; }
+  :root:root .tabella-contratti .gestione-apri:checked + .gestione-bottone { background: #17090f; border-color: #17090f; color: #fff; }
+  :root:root .tabella-contratti .gestione-apri:focus-visible + .gestione-bottone { outline: 2px solid var(--rosso); outline-offset: 1px; }
+  :root:root .tabella-contratti .gestione-corpo { display: none; margin-top: 8px; }
+  :root:root .tabella-contratti .gestione-apri:checked ~ .gestione-corpo { display: block; }
+  :root:root .tabella-contratti .modulo-riga { min-width: 0; width: 240px; }
+}
+
+/* ---- Report giornaliero: nove numeri, tre per riga; le sezioni sono fisarmoniche come altrove ---- */
+@media (min-width: 721px) {
+  :root:root .numeri.numeri-report { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+:root:root .numeri.numeri-report > .numero:last-child:nth-child(odd) { grid-column: 1 / -1; }
+@media (min-width: 721px) {
+  :root:root .numeri.numeri-report > .numero:last-child:nth-child(odd) { grid-column: auto; }
+}
+.report-sezione { scroll-margin-top: 76px; }
+
+/* ---- Tabelle larghe nelle fisarmoniche (Performance, Pass di prova mese per mese): colonne al contenuto, scorrono di lato ---- */
+:root:root:root .sotto-dati .tabella-mesi.tabella-larga { table-layout: auto; min-width: 880px; }
+:root:root:root .sotto-dati .tabella-mesi.tabella-larga th:nth-child(n) { width: auto; }
+:root:root:root .sotto-dati .tabella-mesi.tabella-larga th:first-child, :root:root:root .sotto-dati .tabella-mesi.tabella-larga td:first-child { padding-left: 16px; min-width: 190px; }
+:root:root:root .sotto-dati .tabella-mesi.tabella-larga td, :root:root:root .sotto-dati .tabella-mesi.tabella-larga th { padding-top: 11px; padding-bottom: 11px; }
+:root:root .sotto-dati .nota-sotto { margin: 0; padding: 14px 18px 18px; }
+
+/* ---- Barre dei filtri con tanti campi (Disdette, Appello, Report giornaliero): etichette leggibili, sul telefono un campo per riga ---- */
+:root:root .filtri.filtri-largo label { display: inline-flex; align-items: center; gap: 8px; margin: 0; color: rgba(255, 255, 255, 0.78); font-size: 0.8rem; font-weight: 600; white-space: nowrap; }
+@media (max-width: 720px) {
+  :root:root .filtri.filtri-largo select,
+  :root:root .filtri.filtri-largo input[type='search'] { flex: 1 1 100%; width: 100%; min-width: 0; max-width: 100%; }
+  :root:root .filtri.filtri-largo label { flex: 1 1 100%; justify-content: space-between; }
+  :root:root .filtri.filtri-largo input[type='date'] { flex: 1 1 60%; min-width: 0; }
+  :root:root .filtri.filtri-largo > a.bottone { flex: 0 0 auto; }
+}
+@media (max-width: 720px) {
+  :root:root .filtri.filtri-largo label { display: grid; grid-template-columns: 104px minmax(0, 1fr); }
+}

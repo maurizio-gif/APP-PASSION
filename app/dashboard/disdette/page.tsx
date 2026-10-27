@@ -65,7 +65,7 @@ export default async function Disdette({ searchParams }: {
       </div>
       <Avviso errore={searchParams.errore} />
       <Schede voci={VISTE} attiva={vista} base={`/dashboard/disdette${perFiltri ? `?${perFiltri}` : ''}`} gruppi={GRUPPI} />
-      <FiltroConsulente azione="/dashboard/disdette" staff={staff} consulente={consulente} tieni={{ vista }} q={testo}>
+      <FiltroConsulente azione="/dashboard/disdette" staff={staff} consulente={consulente} tieni={{ vista }} q={testo} classe="filtri-largo">
         <select name="ordine" defaultValue={ordine ?? ''} aria-label="Ordina">
           <option value="">Ordine: ultime arrivate</option>
           {ORDINI.map((o) => <option key={o.chiave} value={o.chiave}>{o.testo}</option>)}

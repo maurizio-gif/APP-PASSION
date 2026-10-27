@@ -4,17 +4,19 @@ import type { Operatore } from '@/lib/crm'
 // operatori che ricevono lead e task (`crm.staff()`), che rimanda alla stessa
 // pagina con `consulente=<id>` e gli altri parametri della vista (`tieni`).
 // `children`: altre tendine della sezione, inviate con lo stesso Filtra.
-export function FiltroConsulente({ azione, staff, consulente, tieni = {}, q, children }: {
+export function FiltroConsulente({ azione, staff, consulente, tieni = {}, q, classe = '', children }: {
   azione: string
   staff: Operatore[]
   consulente: string | null
   tieni?: Record<string, string>
   // Il testo cercato (null: nessuno). Se manca del tutto, la ricerca non c'e'.
   q?: string | null
+  // Classe in piu' sul modulo (filtri-largo: sul telefono ogni campo sta su una riga).
+  classe?: string
   children?: React.ReactNode
 }) {
   return (
-    <form className="filtri" action={azione}>
+    <form className={`filtri ${classe}`.trim()} action={azione}>
       {Object.entries(tieni).map(([k, v]) => <input key={k} type="hidden" name={k} value={v} />)}
       {q !== undefined && (
         <input type="search" name="q" defaultValue={q ?? ''} placeholder="Nome, cognome, telefono, email" aria-label="Cerca" />

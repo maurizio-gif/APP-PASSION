@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-27',
+    titolo: 'Appello, Report giornaliero e Contratti senza consulente hanno lo stesso aspetto del resto del CRM',
+    testo:
+      'Le pagine nuove di questi giorni ora hanno il titolo con il punto «?» per leggere la spiegazione, le schede e le tabelle come le altre sezioni, e i filtri leggibili anche sul telefono. Nei Contratti senza consulente il modulo per prendere in carico si apre con il pulsante, così la tabella non si allarga.',
+    dove: 'Appello, Appello complessivo, Report giornaliero, Contratti senza consulente',
+  },
+  {
+    data: '2026-10-27',
     titolo: 'Il link per una nuova password si apre da qualsiasi dispositivo',
     testo:
       'Chi chiedeva «Password dimenticata?» da un dispositivo e apriva l’email da un altro (o dall’app della posta) vedeva un errore sul codice. Ora il link funziona ovunque lo apri. Se hai ancora un vecchio link che dà errore, chiedine uno nuovo.',

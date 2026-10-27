@@ -339,12 +339,12 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
       </Riquadro>
 
       <Accordion titolo="Pass di prova mese per mese: durata del Guest Pass, Reformer e Formula 8" corpoClasse="sotto-dati">
-        <p className="piccolo attenuato">
+        <p className="piccolo attenuato nota-sotto">
           Per mese di fine della prova. Ogni cella dice quante persone si sono abbonate su quante hanno finito la prova. «Hanno
           prenotato» sono le persone con almeno una lezione prenotata durante la prova. Dove non c’è nessuno compare un trattino.
         </p>
         <div className="tabella-scorre">
-          <table className="tabella-mesi">
+          <table className="tabella-mesi tabella-larga">
             <thead>
               <tr>
                 <th>Mese</th>
@@ -391,7 +391,7 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
             </tbody>
           </table>
         </div>
-        <p className="piccolo attenuato">
+        <p className="piccolo attenuato nota-sotto">
           Le lezioni Formula 8 esistono da settembre 2026. Chi ha finito la prova da meno di 30 giorni può ancora abbonarsi, quindi
           i mesi più recenti possono ancora salire.
         </p>

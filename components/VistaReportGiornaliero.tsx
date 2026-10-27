@@ -2,6 +2,7 @@ import Link from 'next/link'
 import type { EventoGiorno, Operatore, ReportGiornaliero, TipoEvento } from '@/lib/crm'
 import { ESITO_DISDETTA, ESITO_RINNOVO, FONTE, TIPO_TASK, formatoCifra, formatoGiornoLungo, formatoOra, spostaGiorno, traduci } from '@/lib/formato'
 import { BollinoFase, BollinoFonte, Contatti, Persona, Vuoto } from './Ui'
+import { Accordion } from './FaseRighe'
 
 // Il report giornaliero, disegnato: riceve le righe di crm_report_giornaliero()
 // e le conta e le raggruppa; le regole (cosa vuol dire «del giorno» per ogni
@@ -49,12 +50,14 @@ export function VistaReportGiornaliero({
   staff,
   consulente,
   gruppo,
+  base = '/dashboard/report-giornaliero',
 }: {
   report: ReportGiornaliero
   oggi: string
   staff: Operatore[]
   consulente: string | null
   gruppo: Gruppo | null
+  base?: string
 }) {
   const { giorno, eventi } = report
 
@@ -63,7 +66,7 @@ export function VistaReportGiornaliero({
     const q = new URLSearchParams({ giorno: g })
     if (consulente) q.set('consulente', consulente)
     if (gruppo) q.set('tipo', gruppo)
-    return `/dashboard/report-giornaliero?${q.toString()}`
+    return `${base}?${q.toString()}`
   }
 
   const fontiArrivate = Object.entries(
@@ -168,15 +171,20 @@ export function VistaReportGiornaliero({
     <>
       <div className="testata">
         <div>
-          <h1>Report giornaliero</h1>
-          <p>
-            {giorno === oggi ? 'Oggi, ' : ''}
-            {formatoGiornoLungo(giorno)}. Tutto quello che è successo in un giorno, dall’opportunità che arriva all’abbonamento: come è stata gestita, le azioni e l’esito. Il giorno va da mezzanotte a mezzanotte, ora di Roma.
-          </p>
+          <div className="titolo-riga">
+            <h1>Report giornaliero</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">
+                {giorno === oggi ? 'Oggi, ' : ''}
+                {formatoGiornoLungo(giorno)}. Tutto quello che è successo in un giorno, dall’opportunità che arriva all’abbonamento: come è stata gestita, le azioni e l’esito. Il giorno va da mezzanotte a mezzanotte, ora di Roma.
+              </span>
+            </span>
+          </div>
         </div>
       </div>
 
-      <form className="filtri" action="/dashboard/report-giornaliero">
+      <form className="filtri filtri-largo" action={base}>
         <Link className="bottone secondario" href={perLink(spostaGiorno(giorno, -1))} aria-label="Giorno prima">
           ←
         </Link>
@@ -212,7 +220,7 @@ export function VistaReportGiornaliero({
         </button>
       </form>
 
-      <div className="numeri">
+      <div className="numeri numeri-report">
         {tessere.map((t) => (
           <a key={t.titolo} href={`#${t.ancora}`} className="numero">
             <div className="etichetta">{t.titolo}</div>
@@ -250,7 +258,7 @@ export function VistaReportGiornaliero({
                       {id === 'nessuno' ? (
                         <span className="attenuato">{r.nome}</span>
                       ) : (
-                        <Link href={`/dashboard/report-giornaliero?giorno=${giorno}&consulente=${id}${gruppo ? `&tipo=${gruppo}` : ''}`}>
+                        <Link href={`${base}?giorno=${giorno}&consulente=${id}${gruppo ? `&tipo=${gruppo}` : ''}`}>
                           <strong>{r.nome}</strong>
                         </Link>
                       )}
@@ -275,10 +283,18 @@ export function VistaReportGiornaliero({
       )}
 
       {sezioni.map((s) => (
-        <details key={s.chiave} id={s.chiave} className="scheda" open={s.righe.length <= 40 || Boolean(gruppo)}>
-          <summary>
-            <strong>{s.titolo}</strong> · {formatoCifra(s.righe.length)} <span className="piccolo attenuato">— {s.spiega}</span>
-          </summary>
+        <div key={s.chiave} id={s.chiave} className="report-sezione">
+        <Accordion
+          titolo={
+            <>
+              {s.titolo}
+              <span className="chip-gruppo"><span className="chip">{formatoCifra(s.righe.length)}</span></span>
+            </>
+          }
+          anteprima={s.spiega}
+          aperto={s.righe.length <= 40 || Boolean(gruppo)}
+          corpoClasse="sotto-dati"
+        >
           <div className="tabella-scorre">
             <table className="schede-mobile">
               <thead>
@@ -306,7 +322,8 @@ export function VistaReportGiornaliero({
               </tbody>
             </table>
           </div>
-        </details>
+        </Accordion>
+        </div>
       ))}
     </>
   )

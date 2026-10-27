@@ -3,6 +3,7 @@ import { formatoCifra } from '@/lib/formato'
 import { ORARIO_LAVORO, SOGLIA_VERDE, tempoLavoro } from '@/lib/velocita'
 import { Colonne, type Punto } from './Colonne'
 import { Info } from './Info'
+import { Accordion, Riquadro } from './FaseRighe'
 
 // La performance del consulente, settimana per settimana (da lunedì a domenica,
 // ora di Roma), col confronto con le settimane passate. I numeri li calcola il
@@ -297,11 +298,19 @@ export function PerformanceConsulente({
   const nome = propria ? 'La mia performance' : `Performance di ${p.consulente ?? 'un consulente'}`
 
   return (
-    <section className="scheda" id="performance">
-      <div className="testata-scheda">
-        <h2>{nome}</h2>
+    <div id="performance">
+      <Riquadro
+        titolo={nome}
+        aiuto={
+          <>
+        Settimana per settimana, da lunedì a domenica. Le percentuali sono sulle opportunità che hai preso in carico in quella settimana:
+        quelle vecchie sono complete, quella in corso (tratteggiata) cresce man mano che le opportunità si chiudono. Il confronto è con la
+        settimana scorsa e con la media delle quattro settimane prima.
+          </>
+        }
+      >
         {admin && (
-          <form className="filtri" action="/dashboard" style={{ margin: 0 }}>
+          <form className="filtri" action="/dashboard">
             <select name="consulente" defaultValue={consulente ?? ''} aria-label="Consulente">
               <option value="">Io</option>
               {staff.map((o) => (
@@ -315,14 +324,8 @@ export function PerformanceConsulente({
             </button>
           </form>
         )}
-      </div>
-      <p className="piccolo attenuato sotto-titolo">
-        Settimana per settimana, da lunedì a domenica. Le percentuali sono sulle opportunità che hai preso in carico in quella settimana:
-        quelle vecchie sono complete, quella in corso (tratteggiata) cresce man mano che le opportunità si chiudono. Il confronto è con la
-        settimana scorsa e con la media delle quattro settimane prima.
-      </p>
 
-      <div className="numeri">
+      <div className="numeri-grandi">
         {tessere.map((m) => {
           const v = valoreDi(m, ora)
           const prima = scorsa ? valoreDi(m, scorsa) : null
@@ -376,12 +379,11 @@ export function PerformanceConsulente({
         ))}
       </div>
 
-      <details>
-        <summary>
-          <strong>Tutti i numeri, settimana per settimana</strong>
-        </summary>
-        <div className="tabella-scorre">
-          <table>
+      </Riquadro>
+
+      <Accordion titolo="Tutti i numeri, settimana per settimana" corpoClasse="sotto-dati">
+      <div className="tabella-scorre">
+        <table className="tabella-mesi tabella-larga">
             <thead>
               <tr>
                 <th>Indice</th>
@@ -416,13 +418,13 @@ export function PerformanceConsulente({
                 </tr>
               ))}
             </tbody>
-          </table>
-        </div>
-        <p className="piccolo attenuato">
+        </table>
+      </div>
+      <p className="piccolo attenuato nota-sotto">
           Le opportunità chiuse da PerfectGym quando compare il contratto contano come chiuse e vinte anche se nessuno le ha ricontattate:
           per questo le «ricontattate» possono essere meno delle prese in carico. Le feste contano come giorni normali nell’orario di lavoro.
         </p>
-      </details>
-    </section>
+      </Accordion>
+    </div>
   )
 }
