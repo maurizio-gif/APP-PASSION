@@ -19,6 +19,8 @@ const MESSAGGI_OK: Record<string, string> = {
   utente_rimosso: 'Utente rimosso: non entra più e non compare fra gli operatori. Il suo lavoro aperto è passato di mano; nella storia resta il suo nome.',
   utente_creato: 'Utente creato e invitato: gli arriva un’email con il link per scegliere la password.',
   utente_invitato: 'Invito mandato: gli arriva un’email con il link per scegliere la password.',
+  istruttori_invitati: 'Inviti mandati agli istruttori: a ognuno arriva un’email con il link per scegliere la password.',
+  istruttori_nessuno: 'Nessun istruttore da invitare: hanno tutti già l’accesso o l’invito.',
   utente_link_password: 'Link mandato: gli arriva un’email per scegliere una nuova password.',
   ticket_aperto: 'Ticket aperto. Se hai foto, video o PDF, aggiungili qui sotto.',
   modifica_scritta: 'Modifica scritta. Quando il titolare la conferma, registra qui chi, come e quando.',
