@@ -196,6 +196,20 @@ export async function aggiornaRinnovo(f: FormData) {
     }))
 }
 
+// --- Appello (20261027i) -----------------------------------------------------
+// Segna (o toglie) la presenza di alcuni prenotati. Non torna a una pagina: risponde alla schermata
+// dell'appello, che cambia la spunta e mostra l'errore del database (appello non ancora aperto,
+// chiuso, non e' una sua lezione...).
+export async function segnaPresenze(prenotazioni: number[], presente: boolean): Promise<{ ok: true; cambiate: number } | { ok: false; errore: string }> {
+  try {
+    const cambiate = await rpc<number>('crm_appello_segna', { p_prenotazioni: prenotazioni, p_presente: presente })
+    revalidatePath('/dashboard/appello')
+    return { ok: true, cambiate: Number(cambiate) || 0 }
+  } catch (e) {
+    return { ok: false, errore: e instanceof Error ? e.message : 'Presenza non salvata' }
+  }
+}
+
 // --- Contratti senza consulente (20261027g) -----------------------------------
 // Prendere in carico un abbonamento nuovo richiede una nota; «Online» e' di nessuno e la nota e' facoltativa.
 

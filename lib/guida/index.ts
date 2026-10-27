@@ -13,6 +13,7 @@ import { curriculum } from './curriculum'
 import { abbonamenti } from './abbonamenti'
 import { marketing } from './marketing'
 import { accessi } from './accessi'
+import { appello } from './appello'
 
 // La guida del CRM: come si usa, sezione per sezione, e cosa fa il CRM da
 // solo. Un argomento per file; il testo e' il Markdown ridotto di
@@ -41,6 +42,7 @@ export const ARGOMENTI: Argomento[] = [
   curriculum,
   abbonamenti,
   marketing,
+  appello,
   accessi,
 ]
 

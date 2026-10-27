@@ -44,6 +44,8 @@ export type Io = {
   ruolo: Ruolo
   sezioni: string[]
   autorizzazioni: string[]
+  // Riceve le opportunita' (un consulente): vede anche l'Appello complessivo.
+  assegnabile?: boolean
 } | null
 
 export type Utente = {
@@ -174,6 +176,46 @@ export type NuovoContratto = {
   gestito_il: string | null
   creato_il: string
   gestito_da: string | null
+}
+
+// L'appello (20261027i): le lezioni con i loro prenotati.
+export type PrenotatoAppello = {
+  booking_id: number
+  member_id: number | null
+  nome: string | null
+  cognome: string | null
+  presente: boolean
+  segnato_da: string | null
+  // Segnata nel CRM e non ancora mandata a PerfectGym.
+  da_inviare: boolean
+  utente_id?: string | null
+}
+export type LezioneAppello = {
+  class_id: number
+  inizio: string
+  fine: string | null
+  lezione: string | null
+  lezione_id: number | null
+  categoria: string | null
+  categoria_id: number | null
+  sala: string | null
+  sala_id: number | null
+  istruttore: string | null
+  istruttore_id: number | null
+  posti: number | null
+  finestra: 'presto' | 'aperto' | 'chiuso'
+  // Da 59 minuti prima dell'inizio a 59 minuti dopo la fine: quando si segna.
+  apre_il: string
+  chiude_il: string
+  prenotati: PrenotatoAppello[]
+}
+export type Appello = { giorno: string; oggi: string; giorni: number; collegato: boolean; istruttori: string[]; lezioni: LezioneAppello[] }
+type Scelta = { id: number; nome: string }
+export type AppelloTutte = {
+  giorno: string
+  oggi: string
+  filtri: { istruttori: Scelta[]; lezioni: Scelta[]; categorie: Scelta[]; sale: Scelta[] }
+  lezioni: LezioneAppello[]
 }
 
 // Un abbonamento nuovo e chi lo vende (20261027g): da_assegnare, assegnata o online.
@@ -750,6 +792,12 @@ export const crm = {
     for (const r of await rpc<Velocita[]>('crm_lead_velocita', { p_lead: lead })) per[r.lead_id] = r
     return per
   },
+  // L'Appello istruttore (le mie lezioni) e quello complessivo, con i filtri (20261027i).
+  appello: (giorno: string | null, giorni = 7) => rpc<Appello>('crm_appello', { p_giorno: giorno, p_giorni: giorni }),
+  appelloTutte: (giorno: string | null, f: { istruttore?: number | null; lezione?: number | null; categoria?: number | null; sala?: number | null } = {}) =>
+    rpc<AppelloTutte>('crm_appello_tutte', {
+      p_giorno: giorno, p_istruttore: f.istruttore ?? null, p_lezione: f.lezione ?? null, p_categoria: f.categoria ?? null, p_sala: f.sala ?? null,
+    }),
   // Gli abbonamenti nuovi e chi li vende: da assegnare, assegnate, online, tutte.
   iscrizioni: (vista: string) => rpc<Iscrizione[]>('crm_iscrizioni', { p_vista: vista, p_limite: 500 }),
   performance: (consulente: string | null = null) => rpc<Performance>('crm_performance', { p_consulente: consulente, p_settimane: 8 }),
