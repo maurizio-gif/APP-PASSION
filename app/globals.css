@@ -3187,6 +3187,48 @@ button.appello-riga:not(.si):not(:disabled):hover .appello-check::before {
 }
 
 /* Il video-tutorial dell'appello (components/VideoTutorial.tsx). */
+.video-tutorial {
+  padding: 0;
+  overflow: hidden;
+  border-color: var(--rosso);
+}
+.video-tutorial > summary {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  cursor: pointer;
+  list-style: none;
+  background: #fff4f5;
+}
+.video-tutorial > summary::-webkit-details-marker {
+  display: none;
+}
+.video-tutorial > summary::before {
+  content: '▶';
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--rosso);
+  color: #fff;
+  font-size: 1.05rem;
+  padding-left: 3px;
+}
+.video-tutorial[open] > summary::before {
+  content: '✕';
+  padding-left: 0;
+  font-size: 1rem;
+}
+.video-tutorial > summary strong {
+  font-size: 1.1rem;
+}
+.video-tutorial video {
+  margin: 14px auto;
+  width: calc(100% - 28px);
+}
 .video-tutorial video {
   display: block;
   width: 100%;
