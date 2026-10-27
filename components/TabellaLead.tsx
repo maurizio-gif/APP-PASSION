@@ -1,7 +1,9 @@
 import Link from 'next/link'
-import type { ContrattoLead, Io, Lead, Operatore } from '@/lib/crm'
+import type { ContrattoLead, Io, Lead, Operatore, Pagamento, Velocita } from '@/lib/crm'
 import { formatoData, formatoOra, nomeCompleto } from '@/lib/formato'
 import { BollinoFase, BollinoFonte, Contatti } from '@/components/Ui'
+import { BollinoPagamento } from '@/components/Bollini'
+import { BollinoVelocita } from '@/components/BollinoVelocita'
 import { assegnaLead, prendiLead, rilasciaLead } from '@/app/dashboard/azioni'
 import { puoGestire } from '@/lib/permessi'
 
@@ -24,7 +26,12 @@ function NomeScheda({ href, l }: { href: string; l: Lead }) {
   )
 }
 
-export function TabellaLead({ lead, io, staff, torna, contratti, firma }: { lead: Lead[]; io: Io; staff: Operatore[]; torna: string; contratti?: Record<string, ContrattoLead> | null; firma?: boolean }) {
+export function TabellaLead({ lead, io, staff, torna, contratti, pagamenti, firma, velocita }: { lead: Lead[]; io: Io; staff: Operatore[]; torna: string; contratti?: Record<string, ContrattoLead> | null; pagamenti?: Record<number, Pagamento> | null; firma?: boolean; velocita?: Record<string, Velocita> | null }) {
+  // Pagato / da pagare del contratto di una riga (lo stesso bollino della scheda persona).
+  const pagamento = (id: string) => {
+    const c = contratti?.[id]
+    return c ? pagamenti?.[c.contract_id] : undefined
+  }
   return (
     <>
       <div className="tabella-scorre solo-computer">
@@ -37,10 +44,12 @@ export function TabellaLead({ lead, io, staff, torna, contratti, firma }: { lead
                 <>
                   <th>Abbonamento</th>
                   <th>Inizio</th>
+                  <th>Pagamento</th>
                   <th>Consulente</th>
                 </>
               ) : (
                 <>
+                  {velocita && <th title="Tempo di lavoro dall'arrivo al primo ricontatto, anche un tentativo">Primo ricontatto</th>}
                   <th>Attività di interesse</th>
                   <th>Nota</th>
                 </>
@@ -71,10 +80,12 @@ export function TabellaLead({ lead, io, staff, torna, contratti, firma }: { lead
                     <>
                       <td><div className="riga-dati"><strong>{c?.piano || '–'}</strong></div></td>
                       <td><div className="riga-dati"><span className="normale">{c?.data_inizio ? formatoData(c.data_inizio) : '–'}</span></div></td>
+                      <td><div className="riga-dati"><BollinoPagamento p={pagamento(l.id)} /></div></td>
                       <td><div className="riga-dati">{l.assegnato_nome ? <span className="normale">{l.assegnato_nome}</span> : <span className="muto">nessuno</span>}</div></td>
                     </>
                   ) : (
                     <>
+                      {velocita && <td><div className="riga-dati"><BollinoVelocita v={velocita[l.id]} chiusa={l.fase === 'vinta' || l.fase === 'persa'} /></div></td>}
                       <td><div className="riga-dati"><span className="normale">{l.attivita_interesse || '–'}</span></div></td>
                       <td><div className="riga-dati">{l.note_task ? <span className="normale">{l.note_task}</span> : <span className="muto">–</span>}</div></td>
                     </>
@@ -98,7 +109,9 @@ export function TabellaLead({ lead, io, staff, torna, contratti, firma }: { lead
             <li key={l.id} className={assegna(l, io) ? 'con-modulo' : undefined}>
               <div className="lead-telefono-testa">
                 <NomeScheda href={`/dashboard/persone/${l.utente_id}`} l={l} />{' '}
-                <BollinoFonte fonte={l.fonte} dettaglio={l.fonte_dettaglio} />
+                <BollinoFonte fonte={l.fonte} dettaglio={l.fonte_dettaglio} />{' '}
+                {velocita && !contratti && <><BollinoVelocita v={velocita[l.id]} chiusa={l.fase === 'vinta' || l.fase === 'persa'} />{' '}</>}
+                <BollinoPagamento p={pagamento(l.id)} />
               </div>
               <div className="lead-telefono-dettaglio">{dettaglio}</div>
               <div className="lead-telefono-azione"><Azione l={l} io={io} staff={staff} torna={torna} /></div>

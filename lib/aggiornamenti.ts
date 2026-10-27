@@ -16,6 +16,173 @@ export type Aggiornamento = {
 
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
+    data: '2026-10-27',
+    titolo: 'Il link per una nuova password si apre da qualsiasi dispositivo',
+    testo:
+      'Chi chiedeva «Password dimenticata?» da un dispositivo e apriva l’email da un altro (o dall’app della posta) vedeva un errore sul codice. Ora il link funziona ovunque lo apri. Se hai ancora un vecchio link che dà errore, chiedine uno nuovo.',
+    dove: 'Accesso → Password dimenticata?',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'In Utenti c’è la ricerca per nome e cognome o email',
+    testo:
+      'Sopra l’elenco degli utenti c’è un campo di ricerca: scrivi nome e cognome (anche al contrario, anche senza accenti) o un pezzo dell’email e restano solo gli utenti che corrispondono, anche fra quelli non più attivi. «Azzera» toglie la ricerca.',
+    dove: 'Utenti',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Un video-tutorial di 46 secondi spiega l’appello',
+    testo:
+      'In cima alle pagine Appello istruttore e Appello complessivo c’è «Guarda il tutorial»: un video breve, con le scritte, che mostra come si fa l’appello (quando si segna, il tornello, un tocco per la presenza) e cosa vogliono dire First Timer, Prova e Nuovo iscritto.',
+    dove: 'Appello istruttore, Appello complessivo',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'La Guida spiega l’appello agli istruttori',
+    testo:
+      'Nella Guida c’è l’argomento «Appello», scritto per l’istruttore: come si fa l’appello, quando si può segnare (da 59 minuti prima a 59 minuti dopo la lezione), che chi passa dal tornello risulta già presente, e cosa vogliono dire First Timer, Prova e Nuovo iscritto.',
+    dove: 'Guida → Appello',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'L’appello ha una nuova impaginazione, con i segnali First Timer, Prova e Nuovo iscritto',
+    testo:
+      'Appello istruttore e Appello complessivo ora hanno le righe grandi da toccare: un tocco segna la presenza («Segna presente» diventa «✓ Presente»), togliere chiede conferma. Sotto il nome ci sono la data di nascita e l’età, chi ha segnato la presenza e quando (o «tornello/PG»), e tre pastiglie: Prova (ha un Guest Pass da 7 o 10 giorni in corso), Nuovo iscritto (nelle prime due settimane del primo abbonamento) e First Timer (prima volta a quel tipo di lezione). Sopra c’è la legenda; oggi si apre sulla riga «Adesso».',
+    dove: 'Appello istruttore, Appello complessivo',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Creati gli utenti degli istruttori, con la sola sezione Appello',
+    testo:
+      'Sono stati creati gli utenti di 25 istruttori, con nome ed email presi da PerfectGym, e hanno accesso solo a «Appello istruttore». In Utenti, «Istruttori da invitare» manda l’email di registrazione con un clic a chi ha lezioni in calendario su PerfectGym; gli altri si invitano a mano dalla loro scheda. Gli istruttori che su PerfectGym non hanno l’email vanno creati a mano.',
+    dove: 'Utenti',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Nuovo Appello complessivo: tutte le lezioni del giorno, con i filtri',
+    testo:
+      'Mostra tutte le lezioni di un giorno, di tutti gli istruttori, con chi ha prenotato e chi è presente. Si filtra per istruttore, lezione, categoria e sala; in cima ci sono lezioni, prenotati, presenti e percentuale di presenza. Lo vedono gli admin e i consulenti. Si legge soltanto: la presenza la segna l’istruttore.',
+    dove: 'Appello complessivo',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Nuovo Appello istruttore: ognuno vede solo le sue lezioni e segna le presenze',
+    testo:
+      'L’istruttore vede chi ha prenotato le sue lezioni di oggi e dei prossimi giorni. Le presenze si segnano da 59 minuti prima dell’inizio fino a 59 minuti dopo la fine della lezione: prima e dopo si legge soltanto. L’istruttore è riconosciuto dall’email, la stessa che ha su PerfectGym. Per ora le presenze restano nel CRM: l’invio a PerfectGym non è ancora acceso.',
+    dove: 'Appello istruttore',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Nei contratti senza consulente c’è il consulente suggerito',
+    testo:
+      'Se una persona ha già lavorato con un consulente (task fatti, anche un tentativo, o una prova che seguiva), sotto «Da prendere in carico» compare «Suggerito: nome» con il motivo, già scelto nella tendina. È solo un suggerimento: confermi o scegli un altro, e la nota resta obbligatoria.',
+    dove: 'Dashboard consulente → Contratti senza consulente',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Gli abbonamenti in prima battuta contano nella tua performance',
+    testo:
+      'Nella performance c’è il nuovo indice «Abbonamenti in prima battuta», con il numero e la somma dei canoni: sono gli abbonamenti che hai preso in carico da «Contratti senza consulente». Sono contati anche in «Abbonamenti venduti», e nel Report giornaliero vanno a chi li ha presi in carico.',
+    dove: 'Dashboard consulente → La mia performance',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Nuovi abbonamenti senza consulente: si prendono in carico dalla Dashboard',
+    testo:
+      'Nella Dashboard consulente c’è il riquadro «Contratti senza consulente»: sono gli abbonamenti nuovi che nessuna opportunità ha portato (la persona si è iscritta senza chiedere informazioni). Chi li ha seguiti li prende in carico con «Prendo in carico» e scrive una nota obbligatoria su come è nato il contratto; la nota compare anche nella scheda della persona. Se la persona si è iscritta da sola online, si segna «Online» e non va a nessuno. Il consulente di PerfectGym non si usa.',
+    dove: 'Dashboard consulente → Contratti senza consulente',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Ogni indice della performance spiega come è calcolato',
+    testo:
+      'Accanto al nome di ogni indice (nei riquadri, nei grafici e nella tabella) c’è una «i»: passandoci sopra, o toccandola sul telefono, si apre la formula con una spiegazione chiara e, dove serve, un esempio. La «i» accanto a «settimana scorsa» e «media delle 4 prima» spiega come si fanno i confronti.',
+    dove: 'Dashboard consulente → La mia performance',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Fra le disdette restano solo quelle vere: i cambi abbonamento non ci sono più',
+    testo:
+      'Se la persona ha un altro abbonamento che dà continuità (il vecchio finisce il 26 e il nuovo comincia il 27) non è una disdetta ma un cambio abbonamento, e non compare più. Vale anche per il passato: delle 2.248 disdette, 903 erano cambi e sono state tolte dall’elenco, dalla home, dalla scheda persona, dal Report giornaliero e dalla tua performance. I task «chiamare per capire il motivo» ancora aperti per i cambi sono stati archiviati. Una disdetta resta da gestire solo se la persona non ha dato continuità.',
+    dove: 'Disdette (e home, scheda persona, Report giornaliero, performance)',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Nella tua performance: vinte e perse, e l’importo degli abbonamenti venduti',
+    testo:
+      'Sotto «Opportunità chiuse» ora vedi quante sono vinte e quante perse (e hanno una riga ciascuna nella tabella settimana per settimana). C’è poi il riquadro «Importo abbonamenti venduti»: la somma dei canoni mensili degli abbonamenti venduti nella settimana, con sotto il valore del vincolo minimo (canone per i mesi minimi del piano), confrontati con le settimane prima.',
+    dove: 'Dashboard consulente → La mia performance',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Nella Dashboard consulente non ci sono più gli elenchi di anteprima',
+    testo:
+      'Sono spariti gli elenchi delle opportunità da gestire, dei task e delle prove in scadenza: restano i riquadri con i numeri e, cliccandoli, si apre la sezione con l’elenco completo. La pagina è più corta e la tua performance si vede subito.',
+    dove: 'Dashboard consulente',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Nella Dashboard consulente c’è la tua performance, settimana per settimana',
+    testo:
+      'In fondo alla pagina trovi le tue percentuali: opportunità chiuse, opportunità che diventano Guest Pass, Guest Pass che diventano abbonamento, abbonamenti venduti, tempo di primo ricontatto, disdette recuperate e rinnovi riusciti. Ogni numero è confrontato con la settimana scorsa e con la media delle quattro settimane prima, con i grafici dell’andamento. Un admin può guardare quella di un collega.',
+    dove: 'Dashboard consulente → La mia performance',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Ogni opportunità mostra quanto ci è voluto per il primo ricontatto',
+    testo:
+      'Nella colonna «Primo ricontatto» vedi in quanto tempo l’opportunità è stata ricontattata (anche con un tentativo o «Non risponde») o da quanto aspetta: verde fino a 30 minuti, giallo fino a 2 ore, rosso oltre. Il tempo conta solo nell’orario di lavoro, 9–21 dal lunedì al venerdì e 10–19:30 sabato e domenica: un’opportunità arrivata a mezzanotte comincia a contare alle 9 (alle 10 nel weekend).',
+    dove: 'Opportunità',
+  },
+  {
+    data: '2026-10-27',
+    titolo: '«Da gestire» si chiama ora «Dashboard consulente»',
+    testo: 'È la prima voce del menu, la pagina che si apre appena entri. Cambia solo il nome: ci trovi gli stessi numeri e gli stessi elenchi di prima.',
+    dove: 'Dashboard consulente (la prima voce del menu)',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Nuovo Report giornaliero, per gli admin',
+    testo:
+      'Mostra tutto quello che è successo in un giorno: opportunità arrivate e prese in carico, commenti, task fatti e creati, pass attivati, abbonamenti venduti, opportunità chiuse, disdette e rinnovi. In cima i numeri del giorno, poi una tabella con quello che ha fatto ogni consulente e, sotto, l’elenco di ogni cosa con la persona (si apre in un’altra scheda). Si cambia giorno con le frecce e si filtra per consulente e per tipologia.',
+    dove: 'Report giornaliero (solo admin)',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Nelle Disdette si cerca, si ordina e si filtra per data',
+    testo:
+      'Sopra l’elenco c’è la ricerca per nome e cognome, cellulare o email. Si può ordinare per data di scadenza o di disdetta e scegliere un periodo, di scadenza e/o di disdetta. Nell’elenco ora si legge la data di scadenza del contratto e il nome della persona apre la sua scheda in un’altra scheda del browser, così non si perde l’elenco.',
+    dove: 'Disdette',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Pass di prova: tabella mese per mese con durata, Reformer e Formula 8',
+    testo:
+      'Sotto i pass di prova c’è una scheda da aprire e chiudere con un mese per riga. Per ogni mese dice quante persone si abbonano in tutto, per Guest Pass da 7 giorni, da 10 giorni, con i soli pass giornalieri, e tra chi ha prenotato una lezione di Reformer o di Formula 8.',
+    dove: 'Abbonamenti → Pass di prova mese per mese',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Pass di prova: si vede la durata del Guest Pass e chi prenota Reformer o Formula 8',
+    testo:
+      'Sotto i pass di prova ci sono due tabelle, una per Reformer e una per Formula 8. Dividono le persone per durata del Guest Pass (7 giorni, 10 giorni, solo pass giornalieri) e dicono quante hanno prenotato almeno una lezione durante la prova e quante di loro si sono abbonate, a confronto con chi non ha prenotato. Le lezioni Formula 8 esistono da settembre 2026, quindi per ora i numeri sono piccoli.',
+    dove: 'Abbonamenti → Pass di prova',
+  },
+  {
+    data: '2026-10-23',
+    titolo: 'Nelle Prove c’è la scheda «Perse»',
+    testo:
+      'Mostra le prove chiuse come «Non iscritto», quelle che non sono diventate un abbonamento. Prima erano mescolate con le altre prove chiuse.',
+    dove: 'Prove → Perse',
+  },
+  {
+    data: '2026-10-23',
+    titolo: 'Nelle Opportunità con il contratto si vede se è pagato',
+    testo:
+      'Nelle schede Prove in corso, Prove scadute e Vinte c’è la colonna Pagamento: dice se il Pass o l’abbonamento è pagato (verde) o da pagare (rosso, con l’importo). Prima per saperlo bisognava aprire la scheda della persona.',
+    dove: 'Opportunità → Prove in corso, Prove scadute, Vinte',
+  },
+  {
     data: '2026-10-22',
     titolo: 'La Guida spiega perché le prove in corso sono due numeri',
     testo:

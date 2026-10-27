@@ -26,6 +26,8 @@ Appena entri, i numeri di oggi, in alto a schede. Ne è aperta una alla volta: p
 
 Sotto la scheda aperta trovi l'elenco, con le azioni per ogni riga (per esempio **«Prendo in carico»**, oppure **«Fatto ✓»** e **«Non risponde»** per i task). La scheda è evidenziata quando c'è qualcosa da fare. I ticket non stanno più in home: li trovi nella sezione [Ticket](/dashboard/ticket).
 
+Nella colonna **Primo ricontatto** di ogni opportunità, in **Opportunità**, vedi in quanto tempo è stata ricontattata, anche con un tentativo, o da quanto aspetta. Il tempo conta solo nell'orario di lavoro (9–21 dal lunedì al venerdì, 10–19:30 sabato e domenica): verde fino a 30 minuti, giallo fino a 2 ore, rosso oltre.
+
 ## Le regole che valgono ovunque
 - **Il lavoro sta nei task.** Ogni contatto con una persona si segna come task, fatto o da fare: è la sua storia. Vedi [Task](/dashboard/guida/task).
 - **Chi segue cosa.** Opportunità, prove, rinnovi, disdette e debitori hanno chi li segue, e i task automatici vanno a lui. Con **Tutti i consulenti**, in ogni sezione, vedi il lavoro di un collega.

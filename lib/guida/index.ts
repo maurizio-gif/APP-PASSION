@@ -15,6 +15,7 @@ import { marketing } from './marketing'
 import { accessi } from './accessi'
 import { glossario } from './glossario'
 import { risposteRapide } from './risposte-rapide'
+import { appello } from './appello'
 
 // La guida del CRM: come si usa, sezione per sezione, e cosa fa il CRM da
 // solo. Un argomento per file; il testo e' il Markdown ridotto di
@@ -46,6 +47,7 @@ export const ARGOMENTI: Argomento[] = [
   abbonamenti,
   curriculum,
   marketing,
+  appello,
   accessi,
 ]
 
@@ -54,7 +56,7 @@ export const ARGOMENTI: Argomento[] = [
 const GRUPPI: { titolo: string; chiavi: string[] }[] = [
   { titolo: 'Per cominciare', chiavi: ['primi-passi', 'glossario', 'risposte-rapide'] },
   { titolo: 'Clienti e vendite', chiavi: ['lead', 'prove', 'rinnovi', 'disdette', 'debitori', 'scheda-persona'] },
-  { titolo: 'Il lavoro di ogni giorno', chiavi: ['task', 'ticket'] },
+  { titolo: 'Il lavoro di ogni giorno', chiavi: ['task', 'ticket', 'appello'] },
   { titolo: 'Numeri, candidature e accessi', chiavi: ['abbonamenti', 'curriculum', 'accessi'] },
 ]
 
