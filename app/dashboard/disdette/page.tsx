@@ -70,10 +70,19 @@ export default async function Disdette({ searchParams }: {
           <option value="">Ordine: ultime arrivate</option>
           {ORDINI.map((o) => <option key={o.chiave} value={o.chiave}>{o.testo}</option>)}
         </select>
-        <label className="piccolo attenuato">Scadenza dal <input type="date" name="scad_da" defaultValue={scadDa ?? ''} /></label>
-        <label className="piccolo attenuato">al <input type="date" name="scad_a" defaultValue={scadA ?? ''} /></label>
-        <label className="piccolo attenuato">Disdetta dal <input type="date" name="disd_da" defaultValue={disdDa ?? ''} /></label>
-        <label className="piccolo attenuato">al <input type="date" name="disd_a" defaultValue={disdA ?? ''} /></label>
+        <span className="a-capo" aria-hidden="true" />
+        <div className="intervallo" role="group" aria-label="Scadenza">
+          <span>Scadenza dal</span>
+          <input type="date" name="scad_da" defaultValue={scadDa ?? ''} aria-label="Scadenza dal" />
+          <span>al</span>
+          <input type="date" name="scad_a" defaultValue={scadA ?? ''} aria-label="Scadenza al" />
+        </div>
+        <div className="intervallo" role="group" aria-label="Disdetta">
+          <span>Disdetta dal</span>
+          <input type="date" name="disd_da" defaultValue={disdDa ?? ''} aria-label="Disdetta dal" />
+          <span>al</span>
+          <input type="date" name="disd_a" defaultValue={disdA ?? ''} aria-label="Disdetta al" />
+        </div>
         {(conFiltri || consulente) && <Link href={`/dashboard/disdette?vista=${vista}`}>Azzera</Link>}
       </FiltroConsulente>
 

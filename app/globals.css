@@ -11304,3 +11304,28 @@ a.cv-file .cv-file-testo small { color: var(--rosso-scuro); font-weight: 600; }
 @media (max-width: 720px) {
   :root:root .filtri.filtri-largo label { display: grid; grid-template-columns: 104px minmax(0, 1fr); }
 }
+
+/* ---- Filtri di Disdette: due intervalli di date in ordine, campi scuri come negli altri filtri ---- */
+:root:root .filtri.filtri-largo .intervallo { display: inline-flex; align-items: center; gap: 8px; color: rgba(255, 255, 255, 0.78); font-size: 0.8rem; font-weight: 600; white-space: nowrap; }
+:root:root:root .filtri.filtri-largo input[type='date'] {
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  color-scheme: dark;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+:root:root:root .filtri.filtri-largo input[type='date']:focus { outline: 0; border-color: var(--rosso); box-shadow: 0 0 0 3px rgba(227, 3, 45, 0.28); }
+:root:root:root .filtri.filtri-largo input[type='date']::-webkit-calendar-picker-indicator { filter: none; opacity: 1; cursor: pointer; }
+@media (min-width: 721px) {
+  :root:root .filtri.filtri-largo .intervallo + .intervallo { margin-right: 6px; }
+}
+@media (max-width: 720px) {
+  :root:root .filtri.filtri-largo .intervallo { flex: 1 1 100%; display: grid; grid-template-columns: 96px minmax(0, 1fr) 16px minmax(0, 1fr); }
+  :root:root .filtri.filtri-largo .intervallo > span:nth-child(3) { text-align: center; }
+}
+:root:root .filtri.filtri-largo .a-capo { flex: 1 1 100%; height: 0; margin: -4px 0 0; }
