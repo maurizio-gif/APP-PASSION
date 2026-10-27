@@ -16,6 +16,13 @@ export type Aggiornamento = {
 
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
+    data: '2026-10-27',
+    titolo: 'Pass di prova: si vede la durata del Guest Pass e chi prenota Reformer o Formula 8',
+    testo:
+      'Sotto i pass di prova ci sono due tabelle, una per Reformer e una per Formula 8. Dividono le persone per durata del Guest Pass (7 giorni, 10 giorni, solo pass giornalieri) e dicono quante hanno prenotato almeno una lezione durante la prova e quante di loro si sono abbonate, a confronto con chi non ha prenotato. Le lezioni Formula 8 esistono da settembre 2026, quindi per ora i numeri sono piccoli.',
+    dove: 'Abbonamenti → Pass di prova',
+  },
+  {
     data: '2026-10-23',
     titolo: 'Nelle Prove c’è la scheda «Perse»',
     testo:
