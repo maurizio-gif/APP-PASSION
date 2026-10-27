@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import type { Operatore, Performance, PerformanceSettimana as Sett } from '@/lib/crm'
 import { formatoCifra } from '@/lib/formato'
 import { ORARIO_LAVORO, SOGLIA_VERDE, tempoLavoro } from '@/lib/velocita'
@@ -202,6 +203,15 @@ const CALCOLO: Record<string, string> = {
   task:
     'Task assegnati a te e chiusi nella settimana, anche con esito «Non risponde». «Positivi» sono quelli con esito positivo.\n\nNon contano i task archiviati dal sistema.',
 }
+// Come la tabella settimana per settimana raggruppa gli indici (solo presentazione).
+const GRUPPI_TABELLA = [
+  { titolo: 'Opportunità', chiavi: ['prese', 'chiuse', 'vinte', 'perse', 'pass', 'opp-abbonamento'] },
+  { titolo: 'Prove', chiavi: ['prove'] },
+  { titolo: 'Vendite', chiavi: ['venduti', 'diretti', 'importo'] },
+  { titolo: 'Ricontatto', chiavi: ['ricontatto', 'ricontatto-30'] },
+  { titolo: 'Disdette, rinnovi e task', chiavi: ['disdette', 'rinnovi', 'task'] },
+]
+
 const CALCOLO_CONFRONTI =
   'Settimana scorsa: lo stesso indice nella settimana completa prima di questa.\n\nMedia delle 4 prima: le quattro settimane complete prima di questa. Per le percentuali si sommano i numeri e poi si divide (non è la media delle percentuali); per i numeri e i tempi è la media.'
 
@@ -259,12 +269,15 @@ export function PerformanceConsulente({
   consulente,
   admin,
   propria,
+  inScheda = false,
 }: {
   p: Performance
   staff: Operatore[]
   consulente: string | null
   admin: boolean
   propria: boolean
+  // Dentro la scheda «La mia performance» della home: il modulo del consulente torna sulla stessa scheda.
+  inScheda?: boolean
 }) {
   const sett = p.settimane
   const ora = sett[sett.length - 1]
@@ -275,7 +288,7 @@ export function PerformanceConsulente({
   const punti = (m: Metrica): Punto[] =>
     sett.map((w, i) => ({
       chiave: w.settimana,
-      etichetta: giornoMese.format(data(w.settimana)).replace('.', ''),
+      etichetta: `${data(w.settimana).getUTCDate()}/${data(w.settimana).getUTCMonth() + 1}`,
       titolo: `Settimana dal ${giornoMeseLungo.format(data(w.settimana))} al ${giornoMeseLungo.format(dopo(w.settimana, 6))}${w.in_corso ? ' · in corso' : ''}`,
       valore: valoreDi(m, w),
       tratteggio: w.in_corso,
@@ -297,19 +310,18 @@ export function PerformanceConsulente({
   const grafici = METRICHE.filter((m) => ['pass', 'prove', 'venduti', 'importo', 'ricontatto-30'].includes(m.chiave))
   const nome = propria ? 'La mia performance' : `Performance di ${p.consulente ?? 'un consulente'}`
 
-  return (
-    <div id="performance">
+  const principale = (
       <Riquadro
         titolo={nome}
         aiuto={
           <>
         Settimana per settimana, da lunedì a domenica. Le percentuali sono sulle opportunità che hai preso in carico in quella settimana:
         quelle vecchie sono complete, quella in corso (tratteggiata) cresce man mano che le opportunità si chiudono. Il confronto è con la
-        settimana scorsa e con la media delle quattro settimane prima.
+        settimana scorsa e con la media delle quattro settimane prima. {CALCOLO_CONFRONTI}
           </>
         }
       >
-        {admin && (
+        {admin && !inScheda && (
           <form className="filtri" action="/dashboard">
             <select name="consulente" defaultValue={consulente ?? ''} aria-label="Consulente">
               <option value="">Io</option>
@@ -325,49 +337,50 @@ export function PerformanceConsulente({
           </form>
         )}
 
-      <div className="numeri-grandi">
+      <div className="pf-tessere">
         {tessere.map((m) => {
           const v = valoreDi(m, ora)
           const prima = scorsa ? valoreDi(m, scorsa) : null
           const media = valoreMedio(m, quattro)
           return (
-            <div key={m.chiave} className="numero totale">
-              <div className="etichetta">
-                {m.titolo}
+            <div key={m.chiave} className={`pf-tessera${v == null ? ' senza-dati' : ''}`}>
+              <div className="pf-testa">
+                <span className="pf-titolo">{m.titolo}</span>
                 <Info titolo={m.titolo} testo={CALCOLO[m.chiave]} />
               </div>
-              <div className="valore">{scrivi(m, v)}</div>
-              <div className="nota">{m.num && m.den ? `${formatoCifra(m.num(ora))} su ${formatoCifra(m.den(ora))} questa settimana` : 'questa settimana'}
-                {m.sotto && <div>{m.sotto(ora)}</div>}</div>
-              <ul className="confronti">
+              <div className="pf-valore">{scrivi(m, v)}</div>
+              <div className="pf-nota">{m.num && m.den ? `${formatoCifra(m.num(ora))} su ${formatoCifra(m.den(ora))} questa settimana` : 'questa settimana'}</div>
+              {m.sotto && <div className="pf-sotto">{m.sotto(ora)}</div>}
+              <dl className="pf-confronti">
                 {[
-                  { chi: 'settimana scorsa', v: prima },
-                  { chi: 'media delle 4 prima', v: media },
+                  { chi: 'Settimana scorsa', v: prima },
+                  { chi: 'Media delle 4 prima', v: media },
                 ].map((c) => {
                   const d = differenza(m, v, c.v)
                   return (
-                    <li key={c.chi}>
-                      <span className="attenuato">{c.chi}</span>
-                      <Info titolo={c.chi} testo={CALCOLO_CONFRONTI} /> <strong>{scrivi(m, c.v)}</strong>
-                      {d && <span className={`bollino ${d.tono}`}> {d.testo}</span>}
-                    </li>
+                    <div key={c.chi} className="pf-confronto">
+                      <dt>{c.chi}</dt>
+                      <dd>
+                        <strong>{scrivi(m, c.v)}</strong>
+                        {d && <span className={`pf-diff ${d.tono}`}>{d.testo === '=' ? 'uguale' : d.testo}</span>}
+                      </dd>
+                    </div>
                   )
                 })}
-              </ul>
+              </dl>
             </div>
           )
         })}
       </div>
 
       <h3 className="titoletto">Trend settimanale</h3>
-      <div className="multipli">
+      <div className="multipli pf-trend">
         {grafici.map((m) => (
           <div key={m.chiave} className="multiplo">
             <h3>
               {m.titolo}
-              <Info titolo={m.titolo} testo={CALCOLO[m.chiave]} />
+              <Info titolo={m.titolo} testo={`${m.spiega.charAt(0).toUpperCase()}${m.spiega.slice(1)}. ${CALCOLO[m.chiave]}`} />
             </h3>
-            <p className="piccolo attenuato">{m.spiega}</p>
             <Colonne
               punti={punti(m)}
               altezza={150}
@@ -380,50 +393,115 @@ export function PerformanceConsulente({
       </div>
 
       </Riquadro>
-
-      <Accordion titolo="Tutti i numeri, settimana per settimana" corpoClasse="sotto-dati">
+  )
+  // La tabella settimana per settimana: la settimana in corso per prima, gli indici divisi per argomento.
+  const settimaneRecenti = [...sett].reverse()
+  const gruppiTabella = GRUPPI_TABELLA.map((g) => ({ titolo: g.titolo, metriche: METRICHE.filter((m) => g.chiavi.includes(m.chiave)) }))
+  const sciolte = METRICHE.filter((m) => !GRUPPI_TABELLA.some((g) => g.chiavi.includes(m.chiave)))
+  if (sciolte.length) gruppiTabella.push({ titolo: 'Altro', metriche: sciolte })
+  const tabella = (
+    <>
       <div className="tabella-scorre">
-        <table className="tabella-mesi tabella-larga">
-            <thead>
-              <tr>
-                <th>Indice</th>
-                {[...sett].reverse().map((w) => (
-                  <th key={w.settimana} className="num nowrap">
-                    {giornoMese.format(data(w.settimana)).replace('.', '')}
-                    {w.in_corso && <span className="attenuato"> · in corso</span>}
-                  </th>
-                ))}
-                <th className="num nowrap">Media delle 4 prima</th>
-              </tr>
-            </thead>
-            <tbody>
-              {METRICHE.map((m) => (
-                <tr key={m.chiave}>
-                  <td>
-                    {m.titolo}
-                    <Info titolo={m.titolo} testo={CALCOLO[m.chiave]} />
-                  </td>
-                  {[...sett].reverse().map((w) => (
-                    <td key={w.settimana} className="num">
-                      <strong>{scrivi(m, valoreDi(m, w))}</strong>
-                      {m.num && m.den && m.den(w) > 0 && (
-                        <span className="attenuato">
-                          {' '}
-                          ({formatoCifra(m.num(w))}/{formatoCifra(m.den(w))})
-                        </span>
-                      )}
-                    </td>
-                  ))}
-                  <td className="num attenuato">{scrivi(m, valoreMedio(m, quattro))}</td>
-                </tr>
+        <table className="pf-tabella">
+          <thead>
+            <tr>
+              <th scope="col">Indice</th>
+              {settimaneRecenti.map((w) => (
+                <th key={w.settimana} scope="col" className={w.in_corso ? 'pf-ora' : undefined}>
+                  <span className="pf-data">{giornoMese.format(data(w.settimana)).replace('.', '')}</span>
+                  {w.in_corso && <span className="pf-chip">in corso</span>}
+                </th>
               ))}
-            </tbody>
+              <th scope="col" className="pf-media">Media delle 4 prima</th>
+            </tr>
+          </thead>
+          <tbody>
+            {gruppiTabella.map((g) => (
+              <Fragment key={g.titolo}>
+                <tr className="pf-gruppo">
+                  <th scope="colgroup" colSpan={settimaneRecenti.length + 2}>
+                    {g.titolo}
+                  </th>
+                </tr>
+                {g.metriche.map((m) => (
+                  <tr key={m.chiave}>
+                    <th scope="row">
+                      <span className="pf-indice">
+                        <span>{m.titolo}</span>
+                        <Info titolo={m.titolo} testo={CALCOLO[m.chiave]} />
+                      </span>
+                    </th>
+                    {settimaneRecenti.map((w) => {
+                      const v = valoreDi(m, w)
+                      return (
+                        <td key={w.settimana} className={w.in_corso ? 'pf-ora' : undefined}>
+                          <span className={`pf-cifra${v == null ? ' pf-vuoto' : ''}`}>{scrivi(m, v)}</span>
+                          {m.num && m.den && m.den(w) > 0 && (
+                            <span className="pf-rapporto">
+                              {formatoCifra(m.num(w))} su {formatoCifra(m.den(w))}
+                            </span>
+                          )}
+                        </td>
+                      )
+                    })}
+                    <td className="pf-media">
+                      <span className="pf-cifra">{scrivi(m, valoreMedio(m, quattro))}</span>
+                    </td>
+                  </tr>
+                ))}
+              </Fragment>
+            ))}
+          </tbody>
         </table>
       </div>
       <p className="piccolo attenuato nota-sotto">
           Le opportunità chiuse da PerfectGym quando compare il contratto contano come chiuse e vinte anche se nessuno le ha ricontattate:
           per questo le «ricontattate» possono essere meno delle prese in carico. Le feste contano come giorni normali nell’orario di lavoro.
         </p>
+    </>
+  )
+
+  if (inScheda) {
+    return (
+      <div id="performance" className="performance-in-scheda">
+        <div className="na-toggle pf-toggle">
+          <input type="radio" name="pf-vista" id="pf-v-sint" className="task-radio" defaultChecked />
+          <input type="radio" name="pf-vista" id="pf-v-sett" className="task-radio" />
+          <div className="task-tabs na-tabs">
+            <label htmlFor="pf-v-sint">{nome}</label>
+            <label htmlFor="pf-v-sett">Settimana per settimana</label>
+            {admin && (
+              <form className="pf-consulente" action="/dashboard">
+                <input type="hidden" name="vista" value="performance" />
+                <select name="consulente" defaultValue={consulente ?? ''} aria-label="Consulente">
+                  <option value="">Io</option>
+                  {staff.map((o) => (
+                    <option key={o.id} value={o.id}>
+                      {o.nome} {o.cognome ?? ''}
+                    </option>
+                  ))}
+                </select>
+                <button className="bottone" type="submit">
+                  Vedi
+                </button>
+              </form>
+            )}
+          </div>
+          <div className="na-pannello pf-sint">{principale}</div>
+          <div className="na-pannello pf-sett">
+            <Riquadro titolo="Settimana per settimana" corpoClasse="sotto-dati">{tabella}</Riquadro>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div id="performance">
+      {principale}
+
+      <Accordion titolo="Tutti i numeri, settimana per settimana" corpoClasse="sotto-dati">
+        {tabella}
       </Accordion>
     </div>
   )

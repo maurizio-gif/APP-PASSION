@@ -20,6 +20,9 @@ export const ICONE: Record<string, string> = {
   '/dashboard/ticket': 'M3 9a2 2 0 002-2h14a2 2 0 002 2v2a2 2 0 000 4v2a2 2 0 00-2 2H5a2 2 0 00-2-2v-2a2 2 0 000-4z',
   '/dashboard/curriculum': 'M6 3h12v18H6zM9 8h6M9 12h6M9 16h4',
   '/dashboard/utenti': 'M9 11a3.5 3.5 0 100-7 3.5 3.5 0 000 7zM2 20c0-3 3-5 7-5s7 2 7 5M17 4.5a3.5 3.5 0 010 6.5M19 15c2 .6 3 2.2 3 4',
+  '/dashboard/report-giornaliero': 'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4M9 15l2 2 4-4',
+  '/dashboard/appello': 'M9 4h6M9 4a2 2 0 00-2 2v14h10V6a2 2 0 00-2-2M9.5 11l1.5 1.5 3-3M9.5 16h5',
+  '/dashboard/appello-tutte': 'M4 6h3M4 12h3M4 18h3M10 6h10M10 12h10M10 18h10',
   '/dashboard/riunioni': 'M4 5h16v11H9l-5 4zM8 9h8M8 12h5',
   '/dashboard/guida': 'M4 5.5C6 4 9 4 12 6c3-2 6-2 8-.5V19c-2-1.5-5-1.5-8 .5-3-2-6-2-8-.5zM12 6v13.5',
   '/dashboard/aggiornamenti': 'M12 3l2.4 5.6L20 11l-5.6 2.4L12 19l-2.4-5.6L4 11l5.6-2.4z',
@@ -29,6 +32,7 @@ export const ICONE: Record<string, string> = {
 const ICONE_GRUPPO: Record<string, string> = {
   Clienti: 'M16 11a4 4 0 10-8 0 4 4 0 008 0zM4 20c0-3.3 3.6-6 8-6s8 2.7 8 6',
   Analisi: 'M4 20V10M10 20V4M16 20v-7M22 20H2',
+  Istruttori: 'M9 4h6M9 4a2 2 0 00-2 2v14h10V6a2 2 0 00-2-2M9 11h6M9 15h4',
   Team: 'M9 11a3.5 3.5 0 100-7 3.5 3.5 0 000 7zM2 20c0-3 3-5 7-5s7 2 7 5M17 4.5a3.5 3.5 0 010 6.5M19 15c2 .6 3 2.2 3 4',
   Assistenza: 'M12 21a9 9 0 100-18 9 9 0 000 18zM12 15a3 3 0 100-6 3 3 0 000 6zM5.6 5.6l3.5 3.5M14.9 14.9l3.5 3.5M18.4 5.6l-3.5 3.5M9.1 14.9l-3.5 3.5',
   Altro: 'M5 12h14',
@@ -39,7 +43,8 @@ const ICONE_GRUPPO: Record<string, string> = {
 const GRUPPI: { titolo?: string; voci: string[] }[] = [
   { voci: ['/dashboard'] },
   { titolo: 'Clienti', voci: ['/dashboard/lead', '/dashboard/prove', '/dashboard/contratti', '/dashboard/rinnovi', '/dashboard/disdette', '/dashboard/debitori', '/dashboard/task', '/dashboard/cerca'] },
-  { titolo: 'Analisi', voci: ['/dashboard/abbonamenti', '/dashboard/marketing', '/dashboard/riunioni'] },
+  { titolo: 'Analisi', voci: ['/dashboard/abbonamenti', '/dashboard/marketing', '/dashboard/report-giornaliero', '/dashboard/riunioni'] },
+  { titolo: 'Istruttori', voci: ['/dashboard/appello', '/dashboard/appello-tutte'] },
   { titolo: 'Team', voci: ['/dashboard/curriculum', '/dashboard/utenti'] },
   { titolo: 'Assistenza', voci: ['/dashboard/ticket', '/dashboard/guida', '/dashboard/aggiornamenti'] },
 ]

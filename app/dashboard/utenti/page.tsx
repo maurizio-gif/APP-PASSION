@@ -55,100 +55,99 @@ export default async function Utenti({ searchParams }: { searchParams: { errore?
       </div>
       <Avviso errore={searchParams.errore} ok={searchParams.ok} />
 
-      <div className="utenti-pagina">
-        <div className="utenti-colonna">
-          <form className="filtri" action="/dashboard/utenti">
-            <input type="search" name="q" defaultValue={q} placeholder="Cerca per nome e cognome o email" aria-label="Cerca un utente" />
-            <button className="bottone secondario" type="submit">
-              Cerca
-            </button>
-            {q && <Link href="/dashboard/utenti">Azzera</Link>}
+      <input type="checkbox" id="nu-apri" className="nu-apri" aria-label="Mostra il modulo per aggiungere un utente" />
+      <div className="utenti-barra">
+        <form className="filtri" action="/dashboard/utenti">
+          <input type="search" name="q" defaultValue={q} placeholder="Cerca per nome e cognome o email" aria-label="Cerca un utente" />
+          <button className="bottone secondario" type="submit">
+            Cerca
+          </button>
+          {q && <Link href="/dashboard/utenti">Azzera</Link>}
+        </form>
+        <label htmlFor="nu-apri" className="bottone nu-bottone">
+          <span aria-hidden="true">+</span> Nuovo utente
+        </label>
+      </div>
+      <section className="scheda nuovo-utente-pannello">
+        <div className="nuovo-utente-corpo">
+          <p className="piccolo attenuato sotto-titolo">
+            Nasce con le sezioni operative (Opportunità, Prove, Disdette, Rinnovi, Task, Cerca, Debitori); il resto lo si abilita dalla scheda di ciascun utente.
+            Appena creato gli arriva un’email di invito con il link per scegliere la password.
+          </p>
+          <form action={nuovoUtente} className="modulo nuovo-utente">
+            <div className="campo">
+              <label htmlFor="nu-nome">Nome</label>
+              <input id="nu-nome" type="text" name="nome" required />
+            </div>
+            <div className="campo">
+              <label htmlFor="nu-cognome">Cognome</label>
+              <input id="nu-cognome" type="text" name="cognome" />
+            </div>
+            <div className="campo">
+              <label htmlFor="nu-email">Email</label>
+              <input id="nu-email" type="email" name="email" required />
+            </div>
+            <div className="campo">
+              <label htmlFor="nu-ruolo">Ruolo</label>
+              <select id="nu-ruolo" name="ruolo" defaultValue="consulente">
+                {RUOLI.filter((r) => puoToccareRuolo(io, r.chiave)).map((r) => <option key={r.chiave} value={r.chiave}>{r.testo}</option>)}
+              </select>
+            </div>
+            <div className="campo invio">
+              <BottoneInvio testo="Crea utente" inCorso="Creo…" />
+            </div>
           </form>
-          {q && (
-            <p className="piccolo attenuato">
-              {attiviVisti.length + spenti.length} {attiviVisti.length + spenti.length === 1 ? 'utente trovato' : 'utenti trovati'} per «{q}»
-              {spenti.length > 0 ? ` (${spenti.length} non più attivi)` : ''}.
-            </p>
-          )}
+        </div>
+      </section>
+
+      {q && (
+        <p className="piccolo attenuato">
+          {attiviVisti.length + spenti.length} {attiviVisti.length + spenti.length === 1 ? 'utente trovato' : 'utenti trovati'} per «{q}»
+          {spenti.length > 0 ? ` (${spenti.length} non più attivi)` : ''}.
+        </p>
+      )}
+      <div className="utenti">
+        {attiviVisti.length === 0 && q && spenti.length === 0 && <p className="vuoto">Nessun utente trovato.</p>}
+        {attiviVisti.map((u) => (
+          <SchedaUtente key={u.id} u={u} io={io} operatori={attivi} />
+        ))}
+      </div>
+
+      {spenti.length > 0 && (
+        <details className="scheda" open={Boolean(q)}>
+          <summary>
+            <strong>Non più attivi</strong> <span className="attenuato">· {spenti.length}</span>
+          </summary>
           <div className="utenti">
-            {attiviVisti.length === 0 && q && spenti.length === 0 && <p className="vuoto">Nessun utente trovato.</p>}
-            {attiviVisti.map((u) => (
+            {spenti.map((u) => (
               <SchedaUtente key={u.id} u={u} io={io} operatori={attivi} />
             ))}
           </div>
-
-          {spenti.length > 0 && (
-            <details className="scheda" open={Boolean(q)}>
-              <summary>
-                <strong>Non più attivi</strong> <span className="attenuato">· {spenti.length}</span>
-              </summary>
-              <div className="utenti">
-                {spenti.map((u) => (
-                  <SchedaUtente key={u.id} u={u} io={io} operatori={attivi} />
-                ))}
-              </div>
-            </details>
-          )}
-
-          {daInvitare.length > 0 && (
-            <section className="scheda">
-              <h2>Istruttori da invitare</h2>
-              <p className="piccolo attenuato sotto-titolo">
-                {daInvitare.length} {daInvitare.length === 1 ? 'istruttore ha' : 'istruttori hanno'} solo la sezione «Appello istruttore» e non {daInvitare.length === 1 ? 'ha' : 'hanno'} ancora
-                l’accesso e lezioni in calendario: {daInvitare.map((u) => `${u.nome} ${u.cognome ?? ''}`.trim()).join(', ')}. Con un clic arriva a tutti l’email con il link per scegliere la password.
-                Chi ha già l’accesso o l’invito non viene toccato.
-              </p>
-              {senzaLezioni.length > 0 && (
-                <p className="piccolo attenuato">
-                  Non compresi, perché non hanno lezioni in calendario su PerfectGym: {senzaLezioni.map((u) => `${u.nome} ${u.cognome ?? ''}`.trim()).join(', ')}. Se serve, li inviti
-                  a mano dalla loro scheda.
-                </p>
-              )}
-              <form action={invitaIstruttori} className="modulo">
-                <label className="spunta">
-                  <input type="checkbox" required /> Confermo: mando l’email a {daInvitare.length} {daInvitare.length === 1 ? 'persona' : 'persone'}
-                </label>
-                <BottoneInvio testo={`Invita ${daInvitare.length === 1 ? 'l’istruttore' : `i ${daInvitare.length} istruttori`}`} inCorso="Invio…" />
-              </form>
-            </section>
-          )}
-        </div>
-        <details className="scheda nuovo-utente-acc">
-          <summary>
-            <span className="nuovo-icona" aria-hidden="true">+</span>
-            <span className="nuovo-titolo">Aggiungi nuovo utente</span>
-          </summary>
-          <div className="nuovo-utente-corpo">
-            <p className="piccolo attenuato sotto-titolo">
-              Nasce con le sezioni operative (Opportunità, Prove, Disdette, Rinnovi, Task, Cerca, Debitori); il resto lo si abilita dalla scheda di ciascun utente.
-              Appena creato gli arriva un’email di invito con il link per scegliere la password.
-            </p>
-            <form action={nuovoUtente} className="modulo nuovo-utente">
-              <div className="campo">
-                <label htmlFor="nu-nome">Nome</label>
-                <input id="nu-nome" type="text" name="nome" required />
-              </div>
-              <div className="campo">
-                <label htmlFor="nu-cognome">Cognome</label>
-                <input id="nu-cognome" type="text" name="cognome" />
-              </div>
-              <div className="campo">
-                <label htmlFor="nu-email">Email</label>
-                <input id="nu-email" type="email" name="email" required />
-              </div>
-              <div className="campo">
-                <label htmlFor="nu-ruolo">Ruolo</label>
-                <select id="nu-ruolo" name="ruolo" defaultValue="consulente">
-                  {RUOLI.filter((r) => puoToccareRuolo(io, r.chiave)).map((r) => <option key={r.chiave} value={r.chiave}>{r.testo}</option>)}
-                </select>
-              </div>
-              <div className="campo invio">
-                <BottoneInvio testo="Crea utente" inCorso="Creo…" />
-              </div>
-            </form>
-          </div>
         </details>
-      </div>
+      )}
+
+      {daInvitare.length > 0 && (
+        <section className="scheda">
+          <h2>Istruttori da invitare</h2>
+          <p className="piccolo attenuato sotto-titolo">
+            {daInvitare.length} {daInvitare.length === 1 ? 'istruttore ha' : 'istruttori hanno'} solo la sezione «Appello istruttore» e non {daInvitare.length === 1 ? 'ha' : 'hanno'} ancora
+            l’accesso e lezioni in calendario: {daInvitare.map((u) => `${u.nome} ${u.cognome ?? ''}`.trim()).join(', ')}. Con un clic arriva a tutti l’email con il link per scegliere la password.
+            Chi ha già l’accesso o l’invito non viene toccato.
+          </p>
+          {senzaLezioni.length > 0 && (
+            <p className="piccolo attenuato">
+              Non compresi, perché non hanno lezioni in calendario su PerfectGym: {senzaLezioni.map((u) => `${u.nome} ${u.cognome ?? ''}`.trim()).join(', ')}. Se serve, li inviti
+              a mano dalla loro scheda.
+            </p>
+          )}
+          <form action={invitaIstruttori} className="modulo">
+            <label className="spunta">
+              <input type="checkbox" required /> Confermo: mando l’email a {daInvitare.length} {daInvitare.length === 1 ? 'persona' : 'persone'}
+            </label>
+            <BottoneInvio testo={`Invita ${daInvitare.length === 1 ? 'l’istruttore' : `i ${daInvitare.length} istruttori`}`} inCorso="Invio…" />
+          </form>
+        </section>
+      )}
     </>
   )
 }

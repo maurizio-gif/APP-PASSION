@@ -41,121 +41,128 @@ export function VistaContratti({ righe, io, staff, vista, base, errore }: { righ
         {righe.length === 0 ? (
           <Vuoto>{vista === 'da_assegnare' ? 'Tutti i contratti hanno un consulente.' : 'Nessun contratto qui.'}</Vuoto>
         ) : (
-          <div className="tabella-scorre">
-            <table className="schede-mobile tabella-colonne tabella-uniforme tabella-contratti">
-              <thead>
-                <tr>
-                  <th>Cliente</th>
-                  <th>Firma</th>
-                  <th>Abbonamento</th>
-                  <th>Consulente</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {righe.map((r) => {
-                  const mio = puoGestire(io, r.consulente_id)
-                  return (
-                    <tr key={r.contract_id}>
-                      <td>
-                        <div className="riga-dati">
-                          <Persona id={r.utente_id} nome={r.nome} cognome={r.cognome} nuovaScheda />
-                          <Contatti telefono={r.telefono} email={r.email} />
-                        </div>
-                      </td>
-                      <td>
-                        <div className="riga-dati">
-                          <span className="normale"><span className="prefisso-mobile">Firmato il </span>{formatoData(r.data_firma)}</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="riga-dati">
-                          <strong>{(r.piano ?? '—').replace(/^[#^* ]+/, '')}</strong>
-                          <span className="muto">
-                            {formatoEuro(r.canone)} al mese · vincolo {r.mesi} {r.mesi === 1 ? 'mese' : 'mesi'}
-                          </span>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="riga-dati">
-                          {r.stato === 'online' ? (
-                            <span className="bollino grigio">Online · nessun consulente</span>
-                          ) : r.consulente ? (
-                            <>
-                              <strong>{r.consulente}</strong>
-                              <span className="muto">{r.da_opportunita && !r.assegnato_il ? 'dall’opportunità' : `preso in carico il ${formatoData(r.assegnato_il)}`}</span>
-                            </>
-                          ) : (
-                            <span className="bollino rosso">Da prendere in carico</span>
-                          )}
-                          {r.stato === 'da_assegnare' && r.suggerito && (
-                            <span className="muto" title="Un suggerimento, non un'assegnazione: chi prende in carico conferma o sceglie un altro">
-                              Suggerito: <strong>{r.suggerito}</strong>
-                              {r.motivo_suggerimento && <> · {r.motivo_suggerimento}</>}
-                            </span>
-                          )}
-                          {r.note && <span className="normale" style={{ whiteSpace: 'pre-wrap' }}>{r.note}</span>}
-                        </div>
-                      </td>
-                      <td>
-                        {r.stato === 'da_assegnare' ? (
-                          <Gestione id={String(r.contract_id)} testo="Prendo in carico">
-                            <form action={assegnaIscrizione} className="modulo-riga">
-                              <input type="hidden" name="contratto" value={r.contract_id} />
-                              <input type="hidden" name="torna" value={qui} />
-                              <textarea name="note" required rows={2} placeholder="Nota (obbligatoria): come è nato il contratto, cosa vi siete detti" aria-label="Nota" />
-                              <select name="staff" defaultValue={r.suggerito_id ?? ''} aria-label="Chi lo prende in carico">
-                                <option value="">Io</option>
-                                {staff.map((o) => (
-                                  <option key={o.id} value={o.id}>
-                                    {o.nome} {o.cognome ?? ''}
-                                  </option>
-                                ))}
-                              </select>
-                              <button className="bottone piccolo">Prendo in carico</button>
-                            </form>
-                            <form action={iscrizioneOnline} className="modulo-riga">
-                              <input type="hidden" name="contratto" value={r.contract_id} />
-                              <input type="hidden" name="torna" value={qui} />
-                              <button className="bottone secondario piccolo" title="Iscrizione fatta dalla persona da sola: non va a nessun consulente">
-                                Online, nessun consulente
-                              </button>
-                            </form>
-                          </Gestione>
-                        ) : mio ? (
-                          <Gestione id={String(r.contract_id)} testo="Cambia">
-                            <form action={assegnaIscrizione} className="modulo-riga">
-                              <input type="hidden" name="contratto" value={r.contract_id} />
-                              <input type="hidden" name="torna" value={qui} />
-                              <textarea name="note" required rows={2} placeholder="Nota (obbligatoria)" defaultValue={r.note ?? ''} aria-label="Nota" />
-                              <select name="staff" defaultValue={r.consulente_id ?? ''} aria-label="Chi lo ha in carico">
-                                <option value="">Io</option>
-                                {staff.map((o) => (
-                                  <option key={o.id} value={o.id}>
-                                    {o.nome} {o.cognome ?? ''}
-                                  </option>
-                                ))}
-                              </select>
-                              <button className="bottone piccolo">Assegna</button>
-                            </form>
-                            {r.assegnato_il && (
-                              <form action={rilasciaIscrizione} className="modulo-riga">
-                                <input type="hidden" name="contratto" value={r.contract_id} />
-                                <input type="hidden" name="torna" value={qui} />
-                                <button className="bottone secondario piccolo">Rimetti da assegnare</button>
-                              </form>
-                            )}
-                          </Gestione>
-                        ) : null}
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
+          <TabellaContratti righe={righe} io={io} staff={staff} qui={qui} />
         )}
       </div>
     </>
+  )
+}
+
+// Solo la tabella: la usano la pagina, la scheda «Senza consulente» della home e l'anteprima.
+export function TabellaContratti({ righe, io, staff, qui }: { righe: Iscrizione[]; io: Io; staff: Operatore[]; qui: string }) {
+  return (
+    <div className="tabella-scorre">
+      <table className="schede-mobile tabella-colonne tabella-uniforme tabella-contratti">
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Firma</th>
+            <th>Abbonamento</th>
+            <th>Consulente</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {righe.map((r) => {
+            const mio = puoGestire(io, r.consulente_id)
+            return (
+              <tr key={r.contract_id}>
+                <td>
+                  <div className="riga-dati">
+                    <Persona id={r.utente_id} nome={r.nome} cognome={r.cognome} nuovaScheda />
+                    <Contatti telefono={r.telefono} email={r.email} />
+                  </div>
+                </td>
+                <td>
+                  <div className="riga-dati">
+                    <span className="normale"><span className="prefisso-mobile">Firmato il </span>{formatoData(r.data_firma)}</span>
+                  </div>
+                </td>
+                <td>
+                  <div className="riga-dati">
+                    <strong>{(r.piano ?? '—').replace(/^[#^* ]+/, '')}</strong>
+                    <span className="muto">
+                      {formatoEuro(r.canone)} al mese · vincolo {r.mesi} {r.mesi === 1 ? 'mese' : 'mesi'}
+                    </span>
+                  </div>
+                </td>
+                <td>
+                  <div className="riga-dati">
+                    {r.stato === 'online' ? (
+                      <span className="bollino grigio">Online · nessun consulente</span>
+                    ) : r.consulente ? (
+                      <>
+                        <strong>{r.consulente}</strong>
+                        <span className="muto">{r.da_opportunita && !r.assegnato_il ? 'dall’opportunità' : `preso in carico il ${formatoData(r.assegnato_il)}`}</span>
+                      </>
+                    ) : (
+                      <span className="bollino rosso">Da prendere in carico</span>
+                    )}
+                    {r.stato === 'da_assegnare' && r.suggerito && (
+                      <span className="muto" title="Un suggerimento, non un'assegnazione: chi prende in carico conferma o sceglie un altro">
+                        Suggerito: <strong>{r.suggerito}</strong>
+                        {r.motivo_suggerimento && <> · {r.motivo_suggerimento}</>}
+                      </span>
+                    )}
+                    {r.note && <span className="normale" style={{ whiteSpace: 'pre-wrap' }}>{r.note}</span>}
+                  </div>
+                </td>
+                <td>
+                  {r.stato === 'da_assegnare' ? (
+                    <Gestione id={String(r.contract_id)} testo="Prendo in carico">
+                      <form action={assegnaIscrizione} className="modulo-riga">
+                        <input type="hidden" name="contratto" value={r.contract_id} />
+                        <input type="hidden" name="torna" value={qui} />
+                        <textarea name="note" required rows={2} placeholder="Nota (obbligatoria): come è nato il contratto, cosa vi siete detti" aria-label="Nota" />
+                        <select name="staff" defaultValue={r.suggerito_id ?? ''} aria-label="Chi lo prende in carico">
+                          <option value="">Io</option>
+                          {staff.map((o) => (
+                            <option key={o.id} value={o.id}>
+                              {o.nome} {o.cognome ?? ''}
+                            </option>
+                          ))}
+                        </select>
+                        <button className="bottone piccolo">Prendo in carico</button>
+                      </form>
+                      <form action={iscrizioneOnline} className="modulo-riga">
+                        <input type="hidden" name="contratto" value={r.contract_id} />
+                        <input type="hidden" name="torna" value={qui} />
+                        <button className="bottone secondario piccolo" title="Iscrizione fatta dalla persona da sola: non va a nessun consulente">
+                          Online, nessun consulente
+                        </button>
+                      </form>
+                    </Gestione>
+                  ) : mio ? (
+                    <Gestione id={String(r.contract_id)} testo="Cambia">
+                      <form action={assegnaIscrizione} className="modulo-riga">
+                        <input type="hidden" name="contratto" value={r.contract_id} />
+                        <input type="hidden" name="torna" value={qui} />
+                        <textarea name="note" required rows={2} placeholder="Nota (obbligatoria)" defaultValue={r.note ?? ''} aria-label="Nota" />
+                        <select name="staff" defaultValue={r.consulente_id ?? ''} aria-label="Chi lo ha in carico">
+                          <option value="">Io</option>
+                          {staff.map((o) => (
+                            <option key={o.id} value={o.id}>
+                              {o.nome} {o.cognome ?? ''}
+                            </option>
+                          ))}
+                        </select>
+                        <button className="bottone piccolo">Assegna</button>
+                      </form>
+                      {r.assegnato_il && (
+                        <form action={rilasciaIscrizione} className="modulo-riga">
+                          <input type="hidden" name="contratto" value={r.contract_id} />
+                          <input type="hidden" name="torna" value={qui} />
+                          <button className="bottone secondario piccolo">Rimetti da assegnare</button>
+                        </form>
+                      )}
+                    </Gestione>
+                  ) : null}
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    </div>
   )
 }

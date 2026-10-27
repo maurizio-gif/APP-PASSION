@@ -1,8 +1,9 @@
 import Link from 'next/link'
-import type { Appello, AppelloTutte } from '@/lib/crm'
-import { formatoCifra, formatoGiornoLungo, spostaGiorno } from '@/lib/formato'
+import type { Appello, AppelloTutte, LezioneAppello } from '@/lib/crm'
+import { eta, formatoCifra, formatoData, formatoGiornoLungo, formatoOra, spostaGiorno } from '@/lib/formato'
 import { AppelloLezione } from './AppelloLezione'
-import { LegendaSegnali } from './SegnaliAppello'
+import { LegendaSegnali, Segnali } from './SegnaliAppello'
+import { Accordion } from './FaseRighe'
 import { VideoTutorial } from './VideoTutorial'
 import { ScorriAdesso } from './ScorriAdesso'
 import { Vuoto } from './Ui'
@@ -174,26 +175,34 @@ export function VistaAppelloTutte({ r, giorno, oggi, filtri: scelti, base }: { r
         {conFiltri && <Link href={`${base}?giorno=${giorno}`}>Azzera i filtri</Link>}
       </form>
 
-      <div className="numeri">
-        <div className="numero">
-          <div className="etichetta">Lezioni</div>
-          <div className="valore">{formatoCifra(r.lezioni.length)}</div>
-          <div className="nota">{senzaPrenotati > 0 ? `${formatoCifra(senzaPrenotati)} senza prenotati` : 'tutte con prenotati'}</div>
+      <div className="pf-tessere pf-tessere-quattro">
+        <div className="pf-tessera">
+          <div className="pf-testa">
+            <span className="pf-titolo">Lezioni</span>
+          </div>
+          <div className="pf-valore">{formatoCifra(r.lezioni.length)}</div>
+          <div className="pf-nota">{senzaPrenotati > 0 ? `${formatoCifra(senzaPrenotati)} senza prenotati` : 'tutte con prenotati'}</div>
         </div>
-        <div className="numero">
-          <div className="etichetta">Prenotati</div>
-          <div className="valore">{formatoCifra(prenotati)}</div>
-          <div className="nota">nelle lezioni del giorno</div>
+        <div className="pf-tessera">
+          <div className="pf-testa">
+            <span className="pf-titolo">Prenotati</span>
+          </div>
+          <div className="pf-valore">{formatoCifra(prenotati)}</div>
+          <div className="pf-nota">nelle lezioni del giorno</div>
         </div>
-        <div className="numero">
-          <div className="etichetta">Presenti</div>
-          <div className="valore">{formatoCifra(presenti)}</div>
-          <div className="nota">segnati finora</div>
+        <div className="pf-tessera">
+          <div className="pf-testa">
+            <span className="pf-titolo">Presenti</span>
+          </div>
+          <div className="pf-valore">{formatoCifra(presenti)}</div>
+          <div className="pf-nota">segnati finora</div>
         </div>
-        <div className="numero">
-          <div className="etichetta">Presenza</div>
-          <div className="valore">{prenotatiIniziate ? `${Math.round((presentiIniziate / prenotatiIniziate) * 100)}%` : '—'}</div>
-          <div className="nota">
+        <div className="pf-tessera">
+          <div className="pf-testa">
+            <span className="pf-titolo">Presenza</span>
+          </div>
+          <div className="pf-valore">{prenotatiIniziate ? `${Math.round((presentiIniziate / prenotatiIniziate) * 100)}%` : '—'}</div>
+          <div className="pf-nota">
             {prenotatiIniziate ? `${formatoCifra(presentiIniziate)} su ${formatoCifra(prenotatiIniziate)} nelle lezioni iniziate` : 'nessuna lezione ancora iniziata'}
           </div>
         </div>
@@ -209,11 +218,85 @@ export function VistaAppelloTutte({ r, giorno, oggi, filtri: scelti, base }: { r
           {r.lezioni.map((l) => (
             <div key={l.class_id}>
               {adessoId === l.class_id && <div id="adesso" className="appello-adesso">Adesso</div>}
-              <AppelloLezione l={l} soloLettura />
+              <LezioneTabella l={l} aperta={prenotati <= 120 || r.lezioni.length <= 3} />
             </div>
           ))}
         </>
       )}
     </>
+  )
+}
+
+const breve = (completo: string | null) => {
+  if (!completo) return '—'
+  const [primo, ...resto] = completo.split(' ').filter(Boolean)
+  return !primo || resto.length === 0 || completo.includes('@') ? completo : `${primo} ${resto[resto.length - 1][0]}.`
+}
+
+// Una lezione dell'Appello complessivo, solo da leggere: la testata scura (ora, lezione, sala,
+// istruttore, presenti) e sotto la tabella dei prenotati, con i segnali e chi ha segnato la presenza.
+function LezioneTabella({ l, aperta }: { l: LezioneAppello; aperta: boolean }) {
+  const presenti = l.prenotati.filter((p) => p.presente).length
+  return (
+    <div id={`lezione-${l.class_id}`} className="appello-sezione">
+      <Accordion
+        aperto={aperta}
+        corpoClasse="sotto-dati"
+        titolo={
+          <>
+            {formatoOra(l.inizio)}
+            {l.fine ? `–${formatoOra(l.fine)}` : ''} · {l.lezione ?? 'Lezione'}
+            <span className="chip-gruppo">
+              {l.sala && <span className="chip">{l.sala}</span>}
+              <span className="chip">{l.istruttore ?? 'nessun istruttore'}</span>
+              {l.posti ? <span className="chip">{l.posti} posti</span> : null}
+              <span className={`chip${presenti ? '' : ' rosso'}`}>
+                {presenti}/{l.prenotati.length} presenti
+              </span>
+            </span>
+          </>
+        }
+      >
+        {l.prenotati.length === 0 ? (
+          <p className="vuoto nota-sotto">Nessun prenotato.</p>
+        ) : (
+          <ul className="appello-elenco appello-compatto">
+            {l.prenotati.map((p) => {
+              const nome = `${p.nome ?? ''} ${p.cognome ?? ''}`.trim() || 'Senza nome'
+              const chi = p.presente ? (p.segnato_il ? `${breve(p.segnato_da)} ${formatoOra(p.segnato_il)}` : 'tornello/PG') : null
+              return (
+                <li key={p.booking_id}>
+                  <div className={`appello-riga${p.presente ? ' si' : ''}`}>
+                    <span className="appello-check" aria-hidden="true">
+                      {p.presente ? '✓' : ''}
+                    </span>
+                    <span className="appello-persona">
+                      <span className="appello-nome">
+                        {p.utente_id ? (
+                          <Link href={`/dashboard/persone/${p.utente_id}`} target="_blank" rel="noopener noreferrer">
+                            {nome}
+                          </Link>
+                        ) : (
+                          nome
+                        )}
+                      </span>
+                      <span className="appello-dettagli">
+                        {p.data_nascita && (
+                          <span title={`Nato il ${formatoData(p.data_nascita)}`}>
+                            {formatoData(p.data_nascita)} · {eta(p.data_nascita) ?? '—'} anni
+                          </span>
+                        )}
+                        <Segnali p={p} />
+                        {chi && <span>{chi}</span>}
+                      </span>
+                    </span>
+                  </div>
+                </li>
+              )
+            })}
+          </ul>
+        )}
+      </Accordion>
+    </div>
   )
 }

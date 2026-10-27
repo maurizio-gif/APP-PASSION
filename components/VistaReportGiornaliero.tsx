@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { EventoGiorno, Operatore, ReportGiornaliero, TipoEvento } from '@/lib/crm'
 import { ESITO_DISDETTA, ESITO_RINNOVO, FONTE, TIPO_TASK, formatoCifra, formatoGiornoLungo, formatoOra, spostaGiorno, traduci } from '@/lib/formato'
 import { BollinoFase, BollinoFonte, Contatti, Persona, Vuoto } from './Ui'
-import { Accordion } from './FaseRighe'
+import { Accordion, Riquadro } from './FaseRighe'
 
 // Il report giornaliero, disegnato: riceve le righe di crm_report_giornaliero()
 // e le conta e le raggruppa; le regole (cosa vuol dire «del giorno» per ogni
@@ -157,7 +157,7 @@ export function VistaReportGiornaliero({
     ['vinte', 'Opportunità vinte'],
     ['disdette', 'Disdette gestite'],
     ['rinnovi', 'Rinnovi'],
-    ['attesa', 'Arrivate, in attesa'],
+    ['attesa', 'In attesa'],
   ] as const
   const righeConsulenti = [...perConsulente.entries()].sort(
     ([a, x], [b, y]) => (a === 'nessuno' ? 1 : 0) - (b === 'nessuno' ? 1 : 0) || Object.values(y.conta).reduce((s, n) => s + n, 0) - Object.values(x.conta).reduce((s, n) => s + n, 0),
@@ -220,32 +220,39 @@ export function VistaReportGiornaliero({
         </button>
       </form>
 
-      <div className="numeri numeri-report">
+      <div className="pf-tessere pf-tessere-tre">
         {tessere.map((t) => (
-          <a key={t.titolo} href={`#${t.ancora}`} className="numero">
-            <div className="etichetta">{t.titolo}</div>
-            <div className="valore">{formatoCifra(t.valore)}</div>
-            <div className="nota">{t.nota}</div>
+          <a key={t.titolo} href={`#${t.ancora}`} className="pf-tessera pf-link">
+            <div className="pf-testa">
+              <span className="pf-titolo">{t.titolo}</span>
+              <span className="pf-vai" aria-hidden="true">↓</span>
+            </div>
+            <div className="pf-valore">{formatoCifra(t.valore)}</div>
+            <div className="pf-nota">{t.nota}</div>
           </a>
         ))}
       </div>
 
       {!consulente && righeConsulenti.length > 0 && (
-        <section className="scheda">
-          <h2>Per consulente</h2>
-          <p className="piccolo attenuato sotto-titolo">
-            Quello che ognuno ha fatto in questo giorno. Pass e abbonamenti vanno al consulente dell’opportunità che li ha chiusi o, se non
-            c’è, dell’ultima opportunità assegnata alla persona; gli abbonamenti senza opportunità, a chi li ha preso in carico da «Contratti
-            senza consulente» (finché nessuno lo fa, sono «Senza consulente»). «Arrivate, in attesa» sono le opportunità nate oggi che non hanno ancora un
-            consulente.
-          </p>
+        <Riquadro
+          titolo="Per consulente"
+          corpoClasse="sotto-dati"
+          aiuto={
+            <>
+              Quello che ognuno ha fatto in questo giorno. Pass e abbonamenti vanno al consulente dell’opportunità che li ha chiusi o, se non
+              c’è, dell’ultima opportunità assegnata alla persona; gli abbonamenti senza opportunità, a chi li ha preso in carico da «Contratti
+              senza consulente» (finché nessuno lo fa, sono «Senza consulente»). «In attesa» sono le opportunità arrivate oggi che non hanno ancora un
+              consulente.
+            </>
+          }
+        >
           <div className="tabella-scorre">
-            <table>
+            <table className="pf-tabella pf-tabella-consulenti">
               <thead>
                 <tr>
-                  <th>Consulente</th>
+                  <th scope="col">Consulente</th>
                   {COLONNE.map(([k, t]) => (
-                    <th key={k} className="num">
+                    <th key={k} scope="col">
                       {t}
                     </th>
                   ))}
@@ -254,18 +261,18 @@ export function VistaReportGiornaliero({
               <tbody>
                 {righeConsulenti.map(([id, r]) => (
                   <tr key={id}>
-                    <td>
+                    <th scope="row">
                       {id === 'nessuno' ? (
-                        <span className="attenuato">{r.nome}</span>
+                        <span className="pf-senza">{r.nome}</span>
                       ) : (
                         <Link href={`${base}?giorno=${giorno}&consulente=${id}${gruppo ? `&tipo=${gruppo}` : ''}`}>
                           <strong>{r.nome}</strong>
                         </Link>
                       )}
-                    </td>
+                    </th>
                     {COLONNE.map(([k]) => (
-                      <td key={k} className="num">
-                        {r.conta[k] ? formatoCifra(r.conta[k]) : <span className="attenuato">—</span>}
+                      <td key={k}>
+                        <span className={`pf-cifra${r.conta[k] ? '' : ' pf-vuoto'}`}>{r.conta[k] ? formatoCifra(r.conta[k]) : '—'}</span>
                       </td>
                     ))}
                   </tr>
@@ -273,7 +280,7 @@ export function VistaReportGiornaliero({
               </tbody>
             </table>
           </div>
-        </section>
+        </Riquadro>
       )}
 
       {sezioni.length === 0 && (
@@ -288,19 +295,22 @@ export function VistaReportGiornaliero({
           titolo={
             <>
               {s.titolo}
+              <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cosa conta questa sezione">
+                <span className="aiuto-punto" aria-hidden="true">?</span>
+                <span className="aiuto-testo">{s.spiega.charAt(0).toUpperCase() + s.spiega.slice(1)}.</span>
+              </span>
               <span className="chip-gruppo"><span className="chip">{formatoCifra(s.righe.length)}</span></span>
             </>
           }
-          anteprima={s.spiega}
           aperto={s.righe.length <= 40 || Boolean(gruppo)}
           corpoClasse="sotto-dati"
         >
           <div className="tabella-scorre">
-            <table className="schede-mobile">
+            <table className="schede-mobile tabella-colonne tabella-uniforme tabella-report">
               <thead>
                 <tr>
                   <th>Ora</th>
-                  <th>Persona</th>
+                  <th>Cliente</th>
                   <th>Cosa</th>
                   <th>Consulente</th>
                 </tr>
@@ -308,15 +318,25 @@ export function VistaReportGiornaliero({
               <tbody>
                 {s.righe.map((e, i) => (
                   <tr key={`${s.chiave}-${i}`}>
-                    <td className="nowrap piccolo">{e.ora ? formatoOra(e.ora) : '—'}</td>
                     <td>
-                      <Persona id={e.utente_id} nome={e.nome} cognome={e.cognome} nuovaScheda />
-                      <Contatti telefono={e.telefono} email={e.email} />
+                      <div className="riga-dati">
+                        <strong>{e.ora ? formatoOra(e.ora) : '—'}</strong>
+                      </div>
                     </td>
-                    <td className="piccolo info">
-                      <Cosa e={e} />
+                    <td>
+                      <div className="riga-dati">
+                        <Persona id={e.utente_id} nome={e.nome} cognome={e.cognome} nuovaScheda />
+                        <Contatti telefono={e.telefono} email={e.email} />
+                      </div>
                     </td>
-                    <td className="nowrap">{e.consulente ?? <span className="attenuato">—</span>}</td>
+                    <td>
+                      <div className="riga-dati report-cosa">
+                        <Cosa e={e} />
+                      </div>
+                    </td>
+                    <td>
+                      <div className="riga-dati">{e.consulente ? <span className="normale">{e.consulente}</span> : <span className="muto">—</span>}</div>
+                    </td>
                   </tr>
                 ))}
               </tbody>

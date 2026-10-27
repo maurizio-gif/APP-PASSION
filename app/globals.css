@@ -9920,19 +9920,23 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
 .na-toggle > .na-tabs { margin: 18px 22px 14px; }
 .na-toggle > .na-pannello { display: none; }
 #na-v-opp:checked ~ .na-opp,
-#na-v-prove:checked ~ .na-prove { display: block; }
+#na-v-prove:checked ~ .na-prove ,
+#na-v-contr:checked ~ .na-contr { display: block; }
 #na-v-opp:checked ~ .task-tabs label[for='na-v-opp'],
-#na-v-prove:checked ~ .task-tabs label[for='na-v-prove'] {
+#na-v-prove:checked ~ .task-tabs label[for='na-v-prove'] ,
+#na-v-contr:checked ~ .task-tabs label[for='na-v-contr'] {
   background: #17090f;
   color: #fff;
 }
 #na-v-opp:checked ~ .task-tabs label[for='na-v-opp'] span,
-#na-v-prove:checked ~ .task-tabs label[for='na-v-prove'] span {
+#na-v-prove:checked ~ .task-tabs label[for='na-v-prove'] span ,
+#na-v-contr:checked ~ .task-tabs label[for='na-v-contr'] span {
   background: var(--rosso);
   color: #fff;
 }
 #na-v-opp:focus-visible ~ .task-tabs label[for='na-v-opp'],
-#na-v-prove:focus-visible ~ .task-tabs label[for='na-v-prove'] { outline: 2px solid var(--rosso); outline-offset: 2px; }
+#na-v-prove:focus-visible ~ .task-tabs label[for='na-v-prove'] ,
+#na-v-contr:focus-visible ~ .task-tabs label[for='na-v-contr'] { outline: 2px solid var(--rosso); outline-offset: 2px; }
 
 /* «Non assegnati»: l'interruttore e' una fascia scura attaccata alla tabella, nei colori del pannello delle schede. */
 :root:root .na-toggle > .task-tabs.na-tabs {
@@ -9958,14 +9962,16 @@ details.task-fase > summary.fase-titolo:focus-visible { outline: 2px solid var(-
 :root:root .na-toggle > .na-tabs label:hover { color: #fff; border-color: rgba(255, 255, 255, 0.3); }
 :root:root .na-toggle > .na-tabs label span { background: rgba(255, 255, 255, 0.14); color: #fff; }
 :root:root #na-v-opp:checked ~ .task-tabs label[for='na-v-opp'],
-:root:root #na-v-prove:checked ~ .task-tabs label[for='na-v-prove'] {
+:root:root #na-v-prove:checked ~ .task-tabs label[for='na-v-prove'] ,
+:root:root #na-v-contr:checked ~ .task-tabs label[for='na-v-contr'] {
   background: linear-gradient(to bottom, #f0123b, var(--rosso) 55%, #cc0227);
   border-color: var(--rosso);
   color: #fff;
   box-shadow: 0 2px 8px rgba(227, 3, 45, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 :root:root #na-v-opp:checked ~ .task-tabs label[for='na-v-opp'] span,
-:root:root #na-v-prove:checked ~ .task-tabs label[for='na-v-prove'] span { background: rgba(255, 255, 255, 0.25); color: #fff; }
+:root:root #na-v-prove:checked ~ .task-tabs label[for='na-v-prove'] span ,
+:root:root #na-v-contr:checked ~ .task-tabs label[for='na-v-contr'] span { background: rgba(255, 255, 255, 0.25); color: #fff; }
 
 /* Nuovo task: «Per» ha una riga tutta per se' (il testo e' lungo, es. «Pass fino al 23/10/2026»); Task, Quando, A chi e Note stanno sotto. */
 .task-corpo .task-nuovo .modulo > .campo { flex: 1 1 100%; }
@@ -11329,3 +11335,309 @@ a.cv-file .cv-file-testo small { color: var(--rosso-scuro); font-weight: 600; }
   :root:root .filtri.filtri-largo .intervallo > span:nth-child(3) { text-align: center; }
 }
 :root:root .filtri.filtri-largo .a-capo { flex: 1 1 100%; height: 0; margin: -4px 0 0; }
+
+/* ---- «La mia performance» dentro la scheda della home: niente doppia cornice ---- */
+.performance-in-scheda { margin: 0 -2px; }
+.performance-in-scheda .fase-righe { margin-bottom: 14px; }
+
+/* ---- La mia performance: interruttore «La mia performance» / «Settimana per settimana» (stesso aspetto di quello di Senza consulente) ---- */
+#pf-v-sint:checked ~ .pf-sint,
+#pf-v-sett:checked ~ .pf-sett { display: block; }
+:root:root #pf-v-sint:checked ~ .task-tabs label[for='pf-v-sint'],
+:root:root #pf-v-sett:checked ~ .task-tabs label[for='pf-v-sett'] {
+  background: linear-gradient(to bottom, #f0123b, var(--rosso) 55%, #cc0227);
+  border-color: var(--rosso);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(227, 3, 45, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+#pf-v-sint:focus-visible ~ .task-tabs label[for='pf-v-sint'],
+#pf-v-sett:focus-visible ~ .task-tabs label[for='pf-v-sett'] { outline: 2px solid var(--rosso); outline-offset: 2px; }
+.performance-in-scheda .na-toggle > .na-pannello { padding-top: 0; }
+.performance-in-scheda .na-pannello > .fase-righe { margin: 0; }
+.performance-in-scheda .na-pannello > .fase-righe > .fase-titolo { border-radius: 0; margin-top: 0; }
+.performance-in-scheda .fase-titolo { font-size: 12.6px; }
+:root:root .pf-toggle > .na-tabs { align-items: center; }
+:root:root .pf-consulente { display: flex; align-items: center; gap: 8px; margin: 0 0 0 auto; }
+:root:root .pf-consulente select { min-width: 120px; }
+@media (max-width: 720px) {
+  :root:root .pf-consulente { margin: 0; width: 100%; }
+  :root:root .pf-consulente select { flex: 1 1 auto; }
+}
+:root:root:root .pf-consulente select {
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  color-scheme: dark;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+:root:root:root .pf-consulente select:focus { outline: 0; border-color: var(--rosso); box-shadow: 0 0 0 3px rgba(227, 3, 45, 0.28); }
+:root:root:root .pf-consulente .bottone { height: 36px; padding: 0 18px; border-radius: 12px; }
+
+/* ---- La mia performance: riquadri dei numeri ridisegnati (titolo e «i» in alto, cifra grande, confronti in fondo allineati) ---- */
+.pf-tessere { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin: 0 0 24px; }
+.pf-tessera {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 18px 18px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  background:
+    radial-gradient(60% 90% at 0% 0%, rgba(227, 3, 45, 0.18), rgba(227, 3, 45, 0) 70%),
+    linear-gradient(150deg, #2a0b14 0%, #17090f 55%, #0e0f12 100%);
+  box-shadow: 0 14px 30px -18px rgba(0, 0, 0, 0.6);
+  color: #fff;
+}
+.pf-testa { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; min-height: 2.3em; }
+.pf-titolo { font-size: 0.72rem; font-weight: 700; line-height: 1.4; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255, 255, 255, 0.75); }
+:root:root .pf-testa .i-spiega { flex: none; margin: 0; background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.22); color: rgba(255, 255, 255, 0.8); }
+:root:root .pf-testa .i-spiega:hover,
+:root:root .pf-testa .i-spiega[aria-expanded='true'] { border-color: #ff7a92; color: #fff; }
+.pf-valore { margin: 10px 0 6px; font-size: 2.5rem; font-weight: 800; line-height: 1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.pf-tessera.senza-dati .pf-valore { color: rgba(255, 255, 255, 0.28); font-weight: 600; }
+.pf-nota { font-size: 0.85rem; color: rgba(255, 255, 255, 0.72); }
+.pf-sotto { margin-top: 2px; font-size: 0.85rem; color: rgba(255, 255, 255, 0.55); }
+.pf-confronti { display: grid; gap: 8px; margin: auto 0 0; padding-top: 14px; }
+.pf-confronti::before { content: ''; display: block; height: 1px; margin: 2px 0 4px; background: rgba(255, 255, 255, 0.1); }
+.pf-confronto { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.pf-confronto dt { margin: 0; font-size: 0.8rem; color: rgba(255, 255, 255, 0.6); }
+.pf-confronto dd { display: flex; align-items: center; gap: 8px; margin: 0; }
+.pf-confronto strong { font-size: 0.92rem; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
+.pf-diff { padding: 2px 8px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; white-space: nowrap; }
+.pf-diff.verde { background: rgba(31, 138, 76, 0.24); color: #74e3a5; }
+.pf-diff.rosso { background: rgba(227, 3, 45, 0.24); color: #ff8fa3; }
+.pf-diff.grigio { background: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.7); }
+/* otto numeri: quattro per riga sugli schermi larghi, due sui medi, uno sul telefono */
+.pf-tessere { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 1280px) { .pf-tessere { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 720px) { .pf-tessere { grid-template-columns: 1fr; } }
+.pf-confronto dt, .pf-confronto strong { white-space: nowrap; }
+
+/* ---- La mia performance: un solo pannello chiaro diviso da linee sottili (non otto riquadri scuri), testi scuri e leggibili ---- */
+.pf-tessere {
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid rgba(92, 11, 30, 0.14);
+  border-radius: 16px;
+  background: rgba(92, 11, 30, 0.12);
+  box-shadow: 0 10px 26px -20px rgba(42, 11, 20, 0.45);
+}
+.pf-tessera {
+  padding: 18px 20px 16px;
+  border: 0;
+  border-radius: 0;
+  background: #fffafb;
+  box-shadow: none;
+  color: #17090f;
+}
+.pf-titolo { color: #9b0627; letter-spacing: 0.07em; }
+:root:root .pf-testa .i-spiega { background: #fff; border-color: rgba(92, 11, 30, 0.25); color: #5c0b1e; }
+:root:root .pf-testa .i-spiega:hover,
+:root:root .pf-testa .i-spiega[aria-expanded='true'] { border-color: var(--rosso); color: var(--rosso); }
+.pf-valore { color: #17090f; }
+.pf-tessera.senza-dati .pf-valore { color: #17090f; font-weight: 500; }
+.pf-nota { color: #2a1a20; font-weight: 500; }
+.pf-sotto { color: #2a1a20; }
+.pf-confronti::before { background: rgba(92, 11, 30, 0.12); }
+.pf-confronto dt { color: #2a1a20; font-weight: 500; }
+.pf-confronto strong { color: #17090f; }
+.pf-diff.verde { background: #def5e7; color: #0f6b38; }
+.pf-diff.rosso { background: #fde2e8; color: #a8001f; }
+.pf-diff.grigio { background: #f2e8eb; color: #3a2a30; }
+
+/* ---- La mia performance: i cinque grafici del trend su una riga, la descrizione sta nella «i» ---- */
+:root:root .multipli.pf-trend { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px; }
+.pf-trend .multiplo { min-width: 0; }
+:root:root .pf-trend .multiplo h3 { display: flex; align-items: flex-start; gap: 6px; min-height: 2.6em; margin-bottom: 8px; font-size: 0.92rem; line-height: 1.3; }
+.pf-trend .multiplo h3 .i-spiega { flex: none; margin-top: 1px; }
+.pf-trend .grafico { --colonna-min: 14px !important; }
+.pf-trend .grafico-x span:nth-child(even) { visibility: hidden; }
+.pf-trend .grafico-x span { font-size: 0.68rem; }
+@media (max-width: 1279px) { :root:root .multipli.pf-trend { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 900px) { :root:root .multipli.pf-trend { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 720px) { :root:root .multipli.pf-trend { grid-template-columns: 1fr; } }
+:root:root .pf-trend .grafico-scorre { overflow: visible; }
+
+/* ---- La mia performance: tabella «Settimana per settimana» ridisegnata ---- */
+:root:root:root:root .pf-tabella { width: 100%; min-width: 1000px; border-collapse: separate; border-spacing: 0; table-layout: auto; color: #17090f; font-variant-numeric: tabular-nums; background: none; box-shadow: none; }
+:root:root:root:root .pf-tabella thead,
+:root:root:root:root .pf-tabella thead tr { background: none; box-shadow: none; }
+:root:root:root:root .pf-tabella thead th {
+  padding: 16px 14px 12px;
+  border: 0;
+  border-bottom: 2px solid rgba(227, 3, 45, 0.35);
+  background: #fff5f7;
+  color: #5c0b1e;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: right;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+:root:root:root:root .pf-tabella thead th:first-child { text-align: left; }
+.pf-tabella .pf-data { display: block; }
+.pf-tabella .pf-chip { display: inline-block; margin-top: 4px; padding: 1px 8px; border-radius: 999px; background: var(--rosso); color: #fff; font-size: 0.62rem; letter-spacing: 0.04em; }
+:root:root:root:root .pf-tabella th:first-child { position: sticky; left: 0; z-index: 1; }
+:root:root:root:root .pf-tabella tbody th[scope='row'] {
+  padding: 10px 14px;
+  border: 0;
+  border-bottom: 1px solid rgba(92, 11, 30, 0.08);
+  background: #fffafb;
+  color: #17090f;
+  font-size: 0.88rem;
+  font-weight: 500;
+  text-align: left;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.pf-indice { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-width: 230px; }
+.pf-indice .i-spiega { flex: none; margin: 0; }
+:root:root:root:root .pf-tabella tbody td {
+  padding: 10px 14px;
+  border: 0;
+  border-bottom: 1px solid rgba(92, 11, 30, 0.08);
+  background: none;
+  color: #17090f;
+  text-align: right;
+  vertical-align: top;
+  white-space: nowrap;
+}
+.pf-tabella .pf-cifra { display: block; font-size: 0.95rem; font-weight: 700; }
+.pf-tabella .pf-cifra.pf-vuoto { color: #c4b3b8; font-weight: 500; }
+.pf-tabella .pf-rapporto { display: block; margin-top: 2px; font-size: 0.74rem; font-weight: 500; color: #4a3439; }
+:root:root:root:root .pf-tabella .pf-ora { background: rgba(227, 3, 45, 0.06); }
+:root:root:root:root .pf-tabella thead th.pf-ora { background: #fde8ed; color: #a8001f; }
+:root:root:root:root .pf-tabella .pf-media { border-left: 1px solid rgba(92, 11, 30, 0.16); background: #f8eef1; }
+:root:root:root:root .pf-tabella td.pf-media .pf-cifra { font-weight: 600; color: #3a2a30; }
+:root:root:root:root .pf-tabella tbody tr:hover td,
+:root:root:root:root .pf-tabella tbody tr:hover th[scope='row'] { background-color: #fdf0f3; }
+:root:root:root:root .pf-tabella tr.pf-gruppo th {
+  padding: 18px 14px 8px;
+  border: 0;
+  border-bottom: 1px solid rgba(92, 11, 30, 0.16);
+  background: #fffafb;
+  color: var(--rosso-scuro);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  text-align: left;
+}
+:root:root:root:root .pf-tabella tr.pf-gruppo:hover th { background: #fffafb; }
+:root:root:root:root .pf-tabella thead th:first-child { width: 280px; }
+:root:root:root:root .pf-tabella thead th.pf-media { width: 130px; white-space: normal; }
+
+/* ---- Report giornaliero: stessi pannelli e tabelle di La mia performance ---- */
+.pf-tessere.pf-tessere-tre { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 720px) { .pf-tessere.pf-tessere-tre { grid-template-columns: 1fr; } }
+a.pf-tessera.pf-link { color: #17090f; text-decoration: none; transition: background-color var(--t-rapida) var(--curva); }
+a.pf-tessera.pf-link:hover { background: #fdf0f3; }
+a.pf-tessera.pf-link:focus-visible { outline: 2px solid var(--rosso); outline-offset: -2px; }
+.pf-vai { flex: none; color: var(--rosso); font-weight: 700; }
+.pf-tessere-tre .pf-testa { min-height: 0; }
+:root:root:root:root .pf-tabella.pf-tabella-consulenti { min-width: 960px; }
+:root:root:root:root .pf-tabella-consulenti thead th { white-space: normal; line-height: 1.3; }
+:root:root:root:root .pf-tabella-consulenti thead th:first-child { width: 200px; }
+:root:root:root:root .pf-tabella-consulenti tbody th[scope='row'] a { color: var(--rosso-scuro); text-decoration: none; }
+:root:root:root:root .pf-tabella-consulenti tbody th[scope='row'] a:hover { text-decoration: underline; }
+.pf-tabella .pf-senza { font-style: italic; color: #3a2a30; }
+:root:root .numeri-report + .fase-righe, :root:root .pf-tessere + .fase-righe { margin-top: 4px; }
+.tabella-report .report-cosa { gap: 4px; }
+:root:root:root .tabella-report th:first-child { width: 80px; }
+:root:root:root:root .tabella-report thead th:last-child { text-align: left; }
+
+/* ---- Tabelle interne di Performance e Report: testata scura come le altre tabelle, righe dello stesso colore dello sfondo ---- */
+:root:root:root:root .pf-tabella thead th {
+  border: 0;
+  background: linear-gradient(100deg, #0e0f12 0%, #17090f 55%, #2a0b14 100%);
+  color: #fff;
+}
+:root:root:root:root .pf-tabella thead th:first-child { border-top-left-radius: 12px; }
+:root:root:root:root .pf-tabella thead th:last-child { border-top-right-radius: 12px; }
+:root:root:root:root .pf-tabella thead th.pf-ora { background: linear-gradient(100deg, #5c0b1e 0%, #7a0a22 100%); color: #fff; }
+.pf-tabella .pf-chip { background: #fff; color: var(--rosso); }
+:root:root:root:root .pf-tabella tbody th[scope='row'],
+:root:root:root:root .pf-tabella tr.pf-gruppo th,
+:root:root:root:root .pf-tabella .pf-ora,
+:root:root:root:root .pf-tabella .pf-media { background: #fffafb; }
+:root:root:root:root .pf-tabella tbody tr:hover td,
+:root:root:root:root .pf-tabella tbody tr:hover th[scope='row'] { background-color: #fffafb; }
+:root:root:root:root .pf-tabella td.pf-ora { border-left: 1px solid rgba(92, 11, 30, 0.1); border-right: 1px solid rgba(92, 11, 30, 0.1); }
+:root:root:root:root .pf-tabella thead th.pf-media { border-left: 0; }
+
+/* ---- Una tabella sola: la barra del titolo e la testata delle colonne sono un unico blocco scuro, la tabella arriva ai bordi del riquadro ---- */
+:root:root:root .sotto-dati .tabella-scorre:has(.pf-tabella) { padding: 0; }
+:root:root:root:root .pf-tabella thead { background: linear-gradient(100deg, #0e0f12 0%, #17090f 55%, #2a0b14 100%); }
+:root:root:root:root .pf-tabella thead th { background: transparent; border-radius: 0; }
+:root:root:root:root .pf-tabella thead th:first-child,
+:root:root:root:root .pf-tabella thead th:last-child { border-radius: 0; }
+:root:root:root:root .pf-tabella thead th.pf-ora { background: rgba(227, 3, 45, 0.28); }
+:root:root:root:root .pf-tabella thead th:first-child { padding-left: 20px; }
+:root:root:root:root .pf-tabella tbody th[scope='row'],
+:root:root:root:root .pf-tabella tr.pf-gruppo th { padding-left: 20px; }
+:root:root:root:root .pf-tabella thead th { padding-top: 12px; padding-bottom: 12px; }
+:root:root:root .sotto-dati .tabella-scorre:has(.tabella-report) { padding: 0; }
+:root:root:root:root .pf-tabella thead th { box-shadow: none; border-left: 0; border-right: 0; }
+:root:root:root:root .pf-tabella thead th::before, :root:root:root:root .pf-tabella thead th::after { display: none; }
+:root:root:root:root .tabella-report thead th,
+:root:root:root:root .tabella-report thead th:first-child,
+:root:root:root:root .tabella-report thead th:last-child,
+:root:root:root:root .tabella-report thead tr,
+:root:root:root:root .tabella-report thead { border-radius: 0; }
+:root:root:root .sotto-dati .tabella-scorre:has(.tabella-report) .tabella-report { border-radius: 0; }
+:root:root:root:root .pf-tabella-consulenti thead th { white-space: nowrap; line-height: 1.2; }
+:root:root:root:root .pf-tabella.pf-tabella-consulenti { min-width: 1100px; }
+
+/* ---- Appello complessivo: numeri nel pannello unico e lezioni come tabelle ---- */
+.pf-tessere.pf-tessere-quattro { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 900px) { .pf-tessere.pf-tessere-quattro { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.pf-tessere-quattro .pf-testa { min-height: 0; }
+.appello-sezione { scroll-margin-top: 76px; }
+.appello-sezione .fase-titolo .chip-gruppo { display: inline-flex; flex-wrap: wrap; gap: 6px; margin-left: 10px; }
+.tabella-appello .appello-dettagli { gap: 6px; }
+:root:root:root .tabella-appello th:first-child { width: auto; }
+.tabella-appello .appello-segnali-riga:empty::before { content: '—'; color: #8a7a80; }
+
+/* Appello complessivo: i clienti come prima (cerchio, nome, segnali), solo piu' piccoli, dentro la sezione */
+.appello-sezione .sotto-corpo, .appello-sezione .fase-corpo { padding: 14px 16px 16px; }
+:root:root:root .appello-sezione .fase-corpo.sotto-dati { padding: 14px 16px 16px !important; }
+.appello-elenco.appello-compatto { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 6px; }
+.appello-compatto .appello-riga { min-height: 46px; padding: 6px 12px; gap: 10px; border-radius: 12px; }
+.appello-compatto .appello-check { width: 26px; height: 26px; border-width: 2px; font-size: 0.85rem; }
+.appello-compatto .appello-nome { font-size: 0.92rem; }
+.appello-compatto .appello-nome a { color: inherit; text-decoration: none; }
+.appello-compatto .appello-nome a:hover { text-decoration: underline; }
+.appello-compatto .appello-dettagli { font-size: 0.72rem; }
+.appello-compatto .appello-segnale { font-size: 0.64rem; padding: 0 7px; }
+
+/* ---- Utenti: «Nuovo utente» e' un pulsante accanto alla ricerca (apre il modulo sotto), gli utenti in due colonne ---- */
+.nu-apri { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.utenti-barra { display: flex; align-items: stretch; gap: 12px; margin: 0 0 14px; }
+.utenti-barra > .filtri { flex: 1 1 auto; min-width: 0; margin: 0; }
+:root:root .utenti-barra .nu-bottone { flex: none; display: inline-flex; align-items: center; gap: 8px; height: auto; padding: 0 22px; border-radius: 16px; font-size: 0.9rem; cursor: pointer; white-space: nowrap; }
+:root:root .utenti-barra .nu-bottone > span { font-size: 1.2rem; line-height: 1; }
+.nu-apri:focus-visible ~ .utenti-barra .nu-bottone { outline: 2px solid var(--rosso); outline-offset: 2px; }
+.nu-apri:checked ~ .utenti-barra .nu-bottone { background: #17090f; border-color: #17090f; }
+:root:root .nuovo-utente-pannello { display: none; margin: 0 0 16px; }
+.nu-apri:checked ~ .nuovo-utente-pannello { display: block; }
+:root:root .nuovo-utente-pannello .nuovo-utente { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: end; }
+@media (max-width: 900px) { :root:root .nuovo-utente-pannello .nuovo-utente { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 720px) {
+  .utenti-barra { flex-direction: column; }
+  :root:root .utenti-barra .nu-bottone { justify-content: center; padding: 12px 22px; }
+  :root:root .nuovo-utente-pannello .nuovo-utente { grid-template-columns: minmax(0, 1fr); }
+}
+:root:root .nu-apri ~ .utenti, :root:root .nu-apri ~ details > .utenti { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: start; margin-bottom: 14px; }
+@media (max-width: 900px) { :root:root .nu-apri ~ .utenti, :root:root .nu-apri ~ details > .utenti { grid-template-columns: minmax(0, 1fr); } }
+:root:root .nu-apri ~ .utenti > p.vuoto { grid-column: 1 / -1; }
+:root:root:root .utenti-barra > .filtri { padding: 8px 10px; }
+:root:root:root .utenti-barra .nu-bottone { padding: 0 22px; min-height: 0; }
+:root:root:root .utenti-barra .nu-bottone { height: 58px; line-height: 1; padding-block: 0; box-sizing: border-box; }
+@media (max-width: 720px) { :root:root:root .utenti-barra .nu-bottone { height: 48px; } }

@@ -17,6 +17,20 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-27',
+    titolo: 'Nel menu, Report giornaliero sta in Analisi e c’è il gruppo Istruttori',
+    testo:
+      'Il Report giornaliero (solo admin) è ora dentro il gruppo Analisi. Appello e Appello complessivo stanno nel nuovo gruppo Istruttori, tra Analisi e Team.',
+    dove: 'Menu a sinistra',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'In Da gestire ci sono La mia performance e i Contratti senza consulente',
+    testo:
+      'La prima scheda in alto è «La mia performance»: premendola vedi i tuoi numeri settimana per settimana (un admin può guardare quelli di un altro consulente). Nella scheda «Senza consulente» c’è una terza linguetta con i contratti nuovi da prendere in carico. Di base resta aperta «Senza consulente».',
+    dove: 'Da gestire',
+  },
+  {
+    data: '2026-10-27',
     titolo: 'Appello, Report giornaliero e Contratti senza consulente hanno lo stesso aspetto del resto del CRM',
     testo:
       'Le pagine nuove di questi giorni ora hanno il titolo con il punto «?» per leggere la spiegazione, le schede e le tabelle come le altre sezioni, e i filtri leggibili anche sul telefono. Nei Contratti senza consulente il modulo per prendere in carico si apre con il pulsante, così la tabella non si allarga.',
