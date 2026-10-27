@@ -101,6 +101,15 @@ const METRICHE: Metrica[] = [
     sotto: (w) => `${formatoCifra(w.abbonamenti_nuovi)} nuovi`,
   },
   {
+    chiave: 'diretti',
+    titolo: 'Abbonamenti in prima battuta',
+    spiega: 'abbonamenti nuovi, senza un’opportunità, che hai preso in carico da «Contratti senza consulente»',
+    formato: 'intero',
+    meglio: 'alto',
+    valore: (w) => w.abbonamenti_diretti,
+    sotto: (w) => `${scriviEuro(w.importo_diretti)} al mese`,
+  },
+  {
     chiave: 'importo',
     titolo: 'Importo abbonamenti venduti',
     spiega: 'somma dei canoni mensili degli abbonamenti venduti nella settimana; sotto, il valore del vincolo minimo (canone per i mesi minimi del piano), senza la quota amministrativa',
@@ -176,7 +185,9 @@ const CALCOLO: Record<string, string> = {
   'opp-abbonamento':
     'Opportunità prese in carico nella settimana con un abbonamento a pagamento firmato dopo l’arrivo ÷ opportunità prese in carico nella settimana.\n\nContano sia chi si abbona subito sia chi passa prima da una prova.',
   venduti:
-    'Abbonamenti a pagamento firmati nella settimana e attribuiti a te (esclusi pass e abbonamenti aggiuntivi).\n\nUn abbonamento è tuo se l’ha chiuso una tua opportunità o, se non c’è, se la tua è l’ultima opportunità assegnata alla persona.\n\n«Nuovi» sono quelli senza un abbonamento precedente finito da meno di 30 giorni: gli altri sono rinnovi o cambi.',
+    'Abbonamenti a pagamento firmati nella settimana e attribuiti a te (esclusi pass e abbonamenti aggiuntivi).\n\nUn abbonamento è tuo se lo hai preso in carico da «Contratti senza consulente» o, altrimenti, se l’ha chiuso una tua opportunità o la tua è l’ultima opportunità assegnata alla persona.\n\n«Nuovi» sono quelli senza un abbonamento precedente finito da meno di 30 giorni: gli altri sono rinnovi o cambi.',
+  diretti:
+    'Abbonamenti nuovi firmati nella settimana senza un’opportunità a monte (la persona si è iscritta senza chiedere informazioni) che hai preso in carico da «Contratti senza consulente», scrivendo la nota.\n\nSono già contati anche in «Abbonamenti venduti»: qui li vedi a parte, con sotto la somma dei loro canoni mensili. Le iscrizioni fatte online dalla persona da sola, segnate «Online», non vanno a nessuno.',
   importo:
     'Somma dei canoni mensili di listino degli abbonamenti venduti nella settimana (gli stessi del riquadro «Abbonamenti venduti»).\n\nSotto, il valore sul vincolo: canone × mesi minimi del piano (1, 4 o 12), sommati. Sono i prezzi di listino dei piani: non c’è la quota amministrativa.',
   ricontatto:
@@ -281,7 +292,7 @@ export function PerformanceConsulente({
       ],
     }))
 
-  const tessere = METRICHE.filter((m) => ['chiuse', 'pass', 'prove', 'venduti', 'importo', 'ricontatto', 'disdette'].includes(m.chiave))
+  const tessere = METRICHE.filter((m) => ['chiuse', 'pass', 'prove', 'venduti', 'diretti', 'importo', 'ricontatto', 'disdette'].includes(m.chiave))
   const grafici = METRICHE.filter((m) => ['pass', 'prove', 'venduti', 'importo', 'ricontatto-30'].includes(m.chiave))
   const nome = propria ? 'La mia performance' : `Performance di ${p.consulente ?? 'un consulente'}`
 

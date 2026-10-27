@@ -227,7 +227,8 @@ export function VistaReportGiornaliero({
           <h2>Per consulente</h2>
           <p className="piccolo attenuato sotto-titolo">
             Quello che ognuno ha fatto in questo giorno. Pass e abbonamenti vanno al consulente dell’opportunità che li ha chiusi o, se non
-            c’è, dell’ultima opportunità assegnata alla persona. «Arrivate, in attesa» sono le opportunità nate oggi che non hanno ancora un
+            c’è, dell’ultima opportunità assegnata alla persona; gli abbonamenti senza opportunità, a chi li ha preso in carico da «Contratti
+            senza consulente» (finché nessuno lo fa, sono «Senza consulente»). «Arrivate, in attesa» sono le opportunità nate oggi che non hanno ancora un
             consulente.
           </p>
           <div className="tabella-scorre">

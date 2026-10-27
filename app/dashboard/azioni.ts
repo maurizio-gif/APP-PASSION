@@ -196,6 +196,23 @@ export async function aggiornaRinnovo(f: FormData) {
     }))
 }
 
+// --- Contratti senza consulente (20261027g) -----------------------------------
+// Prendere in carico un abbonamento nuovo richiede una nota; «Online» e' di nessuno e la nota e' facoltativa.
+
+export async function assegnaIscrizione(f: FormData) {
+  await esegui(f, () =>
+    rpc('crm_iscrizione_assegna', { p_contratto: Number(testo(f, 'contratto')), p_consulente: testo(f, 'staff'), p_online: false, p_note: testo(f, 'note') }))
+}
+
+export async function iscrizioneOnline(f: FormData) {
+  await esegui(f, () =>
+    rpc('crm_iscrizione_assegna', { p_contratto: Number(testo(f, 'contratto')), p_consulente: null, p_online: true, p_note: testo(f, 'note') }))
+}
+
+export async function rilasciaIscrizione(f: FormData) {
+  await esegui(f, () => rpc('crm_iscrizione_rilascia', { p_contratto: Number(testo(f, 'contratto')) }))
+}
+
 // --- Debitori ----------------------------------------------------------------
 
 export async function debitoTask(f: FormData) {

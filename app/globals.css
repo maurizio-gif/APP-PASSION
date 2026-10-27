@@ -2902,7 +2902,7 @@ details.scheda .utenti {
 
 /* --- «i» che spiega un numero (components/Info.tsx) --------------------- */
 
-.info {
+.i-spiega {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2920,13 +2920,13 @@ details.scheda .utenti {
   vertical-align: middle;
   cursor: help;
 }
-.info:hover,
-.info:focus-visible,
-.info[aria-expanded='true'] {
+.i-spiega:hover,
+.i-spiega:focus-visible,
+.i-spiega[aria-expanded='true'] {
   border-color: var(--rosso);
   color: var(--rosso);
 }
-.info-testo {
+.i-spiega-testo {
   position: fixed;
   z-index: 60;
   padding: 10px 12px;
@@ -2939,4 +2939,18 @@ details.scheda .utenti {
   white-space: pre-line;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
   pointer-events: none;
+}
+
+/* Il modulo di una riga dei Contratti senza consulente: nota, chi, bottone. */
+.modulo-riga {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 240px;
+  margin: 0 0 6px;
+}
+.modulo-riga textarea {
+  width: 100%;
+  min-height: 58px;
+  resize: vertical;
 }

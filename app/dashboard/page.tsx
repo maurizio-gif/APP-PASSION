@@ -60,6 +60,13 @@ export default async function DaGestire({ searchParams }: { searchParams: { erro
             <div className="nota">non ancora prese in carico · {h.mie_disdette} mie</div>
           </Link>
         )}
+        {puoVedere(io, 'lead') && (
+          <Link href="/dashboard/contratti-senza-consulente" className={`numero${h.iscrizioni_da_assegnare ? ' caldo' : ''}`}>
+            <div className="etichetta">Contratti senza consulente</div>
+            <div className="valore">{h.iscrizioni_da_assegnare}</div>
+            <div className="nota">nuovi abbonamenti da prendere in carico</div>
+          </Link>
+        )}
         {puoVedere(io, 'rinnovi') && (
           <Link href="/dashboard/rinnovi?vista=da_gestire" className={`numero${h.rinnovi_da_gestire ? ' caldo' : ''}`}>
             <div className="etichetta">Rinnovi da gestire</div>

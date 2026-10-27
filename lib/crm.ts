@@ -75,6 +75,8 @@ export type Home = {
   disdette_da_gestire: number
   mie_disdette: number
   rinnovi_da_gestire: number
+  // Abbonamenti nuovi senza consulente, da prendere in carico (20261027g).
+  iscrizioni_da_assegnare: number
   miei_rinnovi: number
   miei_task_arretrati: number
   miei_task_oggi: number
@@ -174,6 +176,28 @@ export type NuovoContratto = {
   gestito_da: string | null
 }
 
+// Un abbonamento nuovo e chi lo vende (20261027g): da_assegnare, assegnata o online.
+export type Iscrizione = {
+  contract_id: number
+  utente_id: string | null
+  nome: string | null
+  cognome: string | null
+  telefono: string | null
+  email: string | null
+  piano: string | null
+  canone: number | null
+  mesi: number
+  data_firma: string
+  data_inizio: string | null
+  stato: 'da_assegnare' | 'assegnata' | 'online'
+  consulente_id: string | null
+  consulente: string | null
+  assegnato_da: string | null
+  assegnato_il: string | null
+  note: string | null
+  da_opportunita: boolean
+}
+
 // Il primo ricontatto di un'opportunita' (20261027d): `minuti` sono di orario di lavoro, dall'arrivo al
 // primo ricontatto o, se nessuno ha ancora ricontattato, fino ad adesso.
 export type Velocita = { lead_id: string; primo_contatto: string | null; minuti: number }
@@ -198,6 +222,8 @@ export type PerformanceSettimana = {
   abbonamenti_nuovi: number
   importo_mensile: number
   importo_vincolo: number
+  abbonamenti_diretti: number
+  importo_diretti: number
   disdette_gestite: number
   disdette_recuperate: number
   rinnovi_gestiti: number
@@ -720,6 +746,8 @@ export const crm = {
     for (const r of await rpc<Velocita[]>('crm_lead_velocita', { p_lead: lead })) per[r.lead_id] = r
     return per
   },
+  // Gli abbonamenti nuovi e chi li vende: da assegnare, assegnate, online, tutte.
+  iscrizioni: (vista: string) => rpc<Iscrizione[]>('crm_iscrizioni', { p_vista: vista, p_limite: 500 }),
   performance: (consulente: string | null = null) => rpc<Performance>('crm_performance', { p_consulente: consulente, p_settimane: 8 }),
   prove: (vista: string, consulente: string | null = null) => rpc<Prova[]>('crm_prove', { p_vista: vista, p_consulente: consulente }),
   // Un giro solo per tutti i contratti di una pagina; chi non e' qui non ha dati.
