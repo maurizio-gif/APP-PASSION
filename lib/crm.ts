@@ -840,6 +840,8 @@ export const crm = {
   reportMarketing: (dimensione: string, dal: string | null, al: string | null, fonte: string | null) =>
     rpc<ReportMarketing>('crm_report_marketing', { p_dimensione: dimensione, p_dal: dal, p_al: al, p_fonte: fonte }),
   utenti: () => rpc<Utente[]>('crm_utenti'),
+  // Gli utenti con la sola sezione Appello che hanno lezioni future in calendario (20261027j).
+  istruttoriConLezioni: () => rpc<{ staff_id: string; prossime: number }[]>('crm_istruttori_con_lezioni'),
   ticketElenco: (vista: string, utente: string | null = null) =>
     rpc<TicketRiga[]>('crm_ticket_elenco', { p_vista: vista, p_utente: utente }),
   ticket: (id: number) => rpc<Ticket | null>('crm_ticket', { p_id: id }),

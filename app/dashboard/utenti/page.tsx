@@ -20,7 +20,11 @@ export default async function Utenti({ searchParams }: { searchParams: { errore?
   const attivi = utenti.filter((u) => u.attivo)
   const spenti = utenti.filter((u) => !u.attivo)
   // Gli istruttori creati con la sola sezione Appello e senza accesso: li invita un pulsante solo.
-  const daInvitare = attivi.filter((u) => !u.accesso && u.sezioni.length === 1 && u.sezioni[0] === 'appello')
+  const soloAppello = attivi.filter((u) => !u.accesso && u.sezioni.length === 1 && u.sezioni[0] === 'appello')
+  // Si invitano solo quelli con lezioni in calendario: gli altri non hanno niente da verificare.
+  const conLezioni = new Set(soloAppello.length > 0 ? (await crm.istruttoriConLezioni()).map((x) => x.staff_id) : [])
+  const daInvitare = soloAppello.filter((u) => conLezioni.has(u.id))
+  const senzaLezioni = soloAppello.filter((u) => !conLezioni.has(u.id))
 
   return (
     <>
@@ -56,9 +60,15 @@ export default async function Utenti({ searchParams }: { searchParams: { errore?
           <h2>Istruttori da invitare</h2>
           <p className="piccolo attenuato sotto-titolo">
             {daInvitare.length} {daInvitare.length === 1 ? 'istruttore ha' : 'istruttori hanno'} solo la sezione «Appello istruttore» e non {daInvitare.length === 1 ? 'ha' : 'hanno'} ancora
-            l’accesso: {daInvitare.map((u) => `${u.nome} ${u.cognome ?? ''}`.trim()).join(', ')}. Con un clic arriva a tutti l’email con il link per scegliere la password.
+            l’accesso e lezioni in calendario: {daInvitare.map((u) => `${u.nome} ${u.cognome ?? ''}`.trim()).join(', ')}. Con un clic arriva a tutti l’email con il link per scegliere la password.
             Chi ha già l’accesso o l’invito non viene toccato.
           </p>
+          {senzaLezioni.length > 0 && (
+            <p className="piccolo attenuato">
+              Non compresi, perché non hanno lezioni in calendario su PerfectGym: {senzaLezioni.map((u) => `${u.nome} ${u.cognome ?? ''}`.trim()).join(', ')}. Se serve, li inviti
+              a mano dalla loro scheda.
+            </p>
+          )}
           <form action={invitaIstruttori} className="modulo">
             <label className="spunta">
               <input type="checkbox" required /> Confermo: mando l’email a {daInvitare.length} {daInvitare.length === 1 ? 'persona' : 'persone'}

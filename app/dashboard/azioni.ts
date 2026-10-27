@@ -430,14 +430,15 @@ export async function invitaUtente(f: FormData) {
 }
 
 // L'invito a tutti gli istruttori che non hanno ancora l'accesso: solo gli utenti attivi con la sola sezione
-// «Appello istruttore» (20261027i), cosi' non puo' scrivere a nessun altro. Ognuno riceve l'email con il link per
+// «Appello istruttore» (20261027i) e con lezioni in calendario (20261027j), cosi' non puo' scrivere a nessun altro. Ognuno riceve l'email con il link per
 // scegliere la password; chi non parte resta «senza accesso» e si riprova con lo stesso pulsante.
 export async function invitaIstruttori() {
   let partiti = 0
   const errori: string[] = []
   try {
     const utenti = await rpc<{ id: string; nome: string; cognome: string | null; attivo: boolean; accesso: boolean; sezioni: string[] }[]>('crm_utenti')
-    for (const u of utenti.filter((x) => x.attivo && !x.accesso && x.sezioni.length === 1 && x.sezioni[0] === 'appello')) {
+    const conLezioni = new Set((await rpc<{ staff_id: string }[]>('crm_istruttori_con_lezioni')).map((x) => x.staff_id))
+    for (const u of utenti.filter((x) => x.attivo && !x.accesso && x.sezioni.length === 1 && x.sezioni[0] === 'appello' && conLezioni.has(x.id))) {
       try {
         await invita(u.id)
         partiti++
