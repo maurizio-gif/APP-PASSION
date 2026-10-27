@@ -28,7 +28,14 @@ export default function AuthCallback() {
       const code = new URLSearchParams(window.location.search).get('code')
       if (code) {
         const { error } = await supabase.auth.exchangeCodeForSession(code)
-        if (error) return setErrore(error.message)
+        // Un link chiesto da un altro browser o dispositivo (vecchio flusso PKCE): si dice cosa fare, non l'errore tecnico.
+        if (error) {
+          return setErrore(
+            /code verifier/i.test(error.message)
+              ? 'Questo link è stato chiesto da un altro browser o dispositivo e non si può aprire qui. Chiedi un nuovo link da “Password dimenticata?” e aprilo da qui.'
+              : error.message,
+          )
+        }
         return router.replace('/imposta-password')
       }
 

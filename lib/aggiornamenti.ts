@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-27',
+    titolo: 'Il link per una nuova password si apre da qualsiasi dispositivo',
+    testo:
+      'Chi chiedeva «Password dimenticata?» da un dispositivo e apriva l’email da un altro (o dall’app della posta) vedeva un errore sul codice. Ora il link funziona ovunque lo apri. Se hai ancora un vecchio link che dà errore, chiedine uno nuovo.',
+    dove: 'Accesso → Password dimenticata?',
+  },
+  {
+    data: '2026-10-27',
     titolo: 'In Utenti c’è la ricerca per nome e cognome o email',
     testo:
       'Sopra l’elenco degli utenti c’è un campo di ricerca: scrivi nome e cognome (anche al contrario, anche senza accenti) o un pezzo dell’email e restano solo gli utenti che corrispondono, anche fra quelli non più attivi. «Azzera» toglie la ricerca.',
