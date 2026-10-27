@@ -18,7 +18,7 @@ Ogni opportunità ha una **fonte** (il bollino che compare con il nome del clien
 Se la stessa persona manda due volte lo stesso modulo nella mezz'ora, l'opportunità resta una sola.
 
 ## Chi si iscrive senza chiedere informazioni
-Se una persona si iscrive senza che sia nata un'opportunità («in prima battuta»), il suo abbonamento nuovo compare nella home, nel riquadro **«Contratti senza consulente»** (rinnovi e cambi abbonamento non ci sono). Chi l'ha seguita lo prende in carico con **«Prendo in carico»** e **scrive una nota** (obbligatoria): come è nato il contratto, cosa vi siete detti. La nota resta anche nella scheda della persona.
+Se una persona si iscrive senza che sia nata un'opportunità («in prima battuta»), il suo abbonamento nuovo compare in **[Senza consulente](/dashboard/senza-consulente)**, nella linguetta **«Contratti senza consulente»** (rinnovi e cambi abbonamento non ci sono). Il riquadro **«Senza consulente»** della home porta lì: ci trovi anche le opportunità e le prove in corso che nessuno segue. Chi l'ha seguita lo prende in carico con **«Prendo in carico»** e **scrive una nota** (obbligatoria): come è nato il contratto, cosa vi siete detti. La nota resta anche nella scheda della persona.
 
 - Se l'iscrizione l'ha fatta la persona da sola, online, si segna **«Online, nessun consulente»**: non va a nessuno.
 - Se la persona ha già lavorato con un consulente (task fatti, anche un tentativo, o una prova che seguiva) compare **«Suggerito»**, già scelto nella tendina, con il motivo. È solo un suggerimento: un task non dice chi ha venduto. Confermi o scegli un altro.

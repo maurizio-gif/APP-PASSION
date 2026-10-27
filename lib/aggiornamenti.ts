@@ -17,6 +17,41 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-27',
+    titolo: 'Nuova sezione «Senza consulente»',
+    testo:
+      'Nel menu Clienti, tra Prove e Rinnovi, c’è «Senza consulente»: riunisce in tre linguette le opportunità, le prove in corso e i contratti nuovi che nessun consulente ha ancora in carico, ognuna con il suo pulsante «Prendo in carico». Ci arrivi anche dal primo riquadro della Dashboard consulente.',
+    dove: 'Senza consulente (menu Clienti)',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'L’Appello complessivo è un calendario del giorno',
+    testo:
+      'Le lezioni sono divise per orario, con i presenti e una barra, l’istruttore e la sala; premendo «Prenotati» vedi chi ha prenotato. In alto c’è il passaggio tra lezioni future e passate. Il tutorial è il pulsante «Guarda il tutorial» nella barra, e la spiegazione dei segnali (Prova, Nuovo iscritto, First Timer) è nel «?» accanto al titolo.',
+    dove: 'Appello complessivo',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Report giornaliero e La mia performance hanno nuovi riquadri e tabelle',
+    testo:
+      'I numeri stanno in un unico pannello e le tabelle («Per consulente», «Settimana per settimana» e gli elenchi del report) sono più leggibili, con la testata scura. In La mia performance i cinque grafici stanno su una riga e la descrizione di ogni indice è nella «i». Con «Settimana per settimana» vedi tutti gli indici, una colonna per settimana.',
+    dove: 'Report giornaliero, Dashboard consulente',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'In Utenti «Nuovo utente» è un pulsante e gli utenti sono in due colonne',
+    testo:
+      'Accanto alla barra di ricerca c’è il pulsante «Nuovo utente»: lo premi e sotto compare il modulo per aggiungerlo. Gli utenti, e quelli non più attivi, sono ora disposti in due colonne.',
+    dove: 'Utenti',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'In Disdette i filtri sono in ordine',
+    testo:
+      'Ricerca, consulente e ordine stanno su una riga; sotto, i due intervalli di date (scadenza e disdetta) con il pulsante Filtra. Su telefono ogni campo sta su una riga.',
+    dove: 'Disdette',
+  },
+  {
+    data: '2026-10-27',
     titolo: 'Nel menu, Report giornaliero sta in Analisi e c’è il gruppo Istruttori',
     testo:
       'Il Report giornaliero (solo admin) è ora dentro il gruppo Analisi. Appello e Appello complessivo stanno nel nuovo gruppo Istruttori, tra Analisi e Team.',

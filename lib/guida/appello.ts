@@ -8,9 +8,9 @@ export const appello: Argomento = {
   chiave: 'appello',
   titolo: 'Appello',
   sezione: null,
-  inBreve: 'Come fare l’appello delle tue lezioni: quando si segna, cosa fa il tornello, e cosa vogliono dire First Timer, Prova e Nuovo iscritto.',
+  inBreve: 'Come fare l’appello delle tue lezioni: quando si segna, cosa fa il tornello, cosa vogliono dire First Timer, Prova e Nuovo iscritto, e come leggere l’Appello complessivo.',
   testo: `
-> **Prima di cominciare, guarda il video-tutorial** (46 secondi): è in cima alla pagina **Appello istruttore**, nella scheda «Guarda il tutorial».
+> **Prima di cominciare, guarda il video-tutorial** (46 secondi): in **Appello istruttore** è in cima alla pagina, nella scheda «Guarda il tutorial»; in **Appello complessivo** è il pulsante **«Guarda il tutorial»** a destra, nella barra con le lezioni future e passate.
 
 ## A cosa serve
 In **Appello istruttore** vedi **solo le tue lezioni** e chi le ha prenotate, di oggi e dei prossimi giorni. Ti serve per sapere **chi arriva** (e chi è nuovo, per seguirlo meglio) e per **confermare chi c'è davvero**.
@@ -44,8 +44,16 @@ Se provi a segnare fuori orario o una lezione che non è tua, il CRM non salva e
 
 Così alla fine nell'appello c'è tutto: chi è passato dal tornello e chi hai aggiunto tu.
 
+## Appello complessivo: il calendario del giorno
+In **Appello complessivo** vedi **tutte le lezioni di un giorno, di tutti gli istruttori**, solo da leggere: la presenza la segna l'istruttore dal suo appello. La pagina è un **calendario**: a sinistra l'**orario**, a destra le lezioni che partono a quell'ora.
+
+- In alto, quattro numeri: lezioni, prenotati, presenti e percentuale di presenza sulle lezioni già iniziate;
+- il passaggio **Lezioni future / Lezioni passate** divide quelle ancora da fare (o in corso, con **«Adesso»**) da quelle già finite;
+- ogni lezione mostra i **presenti sui prenotati** con una barra, l'istruttore, la sala e i posti; premendo **«Prenotati»** vedi chi ha prenotato, con i segnali;
+- i filtri (istruttore, lezione, categoria, sala) e le frecce del giorno stanno sopra. Il nome di chi ha prenotato **non apre la scheda del cliente**.
+
 ## I segnali sotto il nome
-Sono le persone **da seguire meglio**. Le pastiglie le assegna il CRM da solo; ne può avere più di una insieme (un Guest Pass alla sua prima lezione è sia Prova sia First Timer). Sotto il nome vedi anche la **data di nascita e l'età**.
+La legenda dei segnali sta anche nel **«?»** accanto al titolo della pagina. Sono le persone **da seguire meglio**. Le pastiglie le assegna il CRM da solo; ne può avere più di una insieme (un Guest Pass alla sua prima lezione è sia Prova sia First Timer). Sotto il nome vedi anche la **data di nascita e l'età**.
 
 - **First Timer**: è la **prima volta** che fa **quel tipo di lezione** (per esempio Pilates, Reformer PLUS, HYROX), non la prima in assoluto. Il CRM controlla se prima di oggi ha già una prenotazione confermata dello stesso tipo: se non c'è, è un First Timer. Un'altra lezione (un altro tipo) non cambia niente: la stessa persona può essere First Timer al Pilates e non all'HYROX che fa da mesi. Chi aveva prenotato e non è venuto conta come «già passato».
 - **Prova**: ha un **Guest Pass in corso**, da **7 o 10 giorni** (o un pass giornaliero), valido il giorno della lezione. Fermandoti sulla pastiglia vedi il nome del pass e fino a quando dura. Non è ancora un abbonato: è una persona da far trovare bene.
