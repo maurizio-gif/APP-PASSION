@@ -27,7 +27,7 @@ Appena entri, i numeri di oggi. Ogni riquadro porta al suo elenco:
 
 Il riquadro è evidenziato quando c'è qualcosa da fare. Niente elenchi qui: cliccando il riquadro apri la sezione con l'elenco completo.
 
-Nella colonna **Primo ricontatto** di ogni opportunità, in **Opportunità**, vedi in quanto tempo è stata ricontattata, anche con un tentativo, o da quanto aspetta. Il tempo conta solo nell'orario di lavoro (8–22 dal lunedì al venerdì, 8–20 sabato e domenica): verde fino a 30 minuti, giallo fino a 2 ore, rosso oltre.
+Nella colonna **Primo ricontatto** di ogni opportunità, in **Opportunità**, vedi in quanto tempo è stata ricontattata, anche con un tentativo, o da quanto aspetta. Il tempo conta solo nell'orario di lavoro (9–21 dal lunedì al venerdì, 10–19:30 sabato e domenica): verde fino a 30 minuti, giallo fino a 2 ore, rosso oltre.
 
 Sotto i riquadri, **La mia performance**: le tue percentuali settimana per settimana (opportunità chiuse, diventate Guest Pass, Guest Pass diventati abbonamenti), gli abbonamenti venduti, il tempo di primo ricontatto, disdette e rinnovi, con il confronto con la settimana scorsa e con la media delle quattro prima.
 

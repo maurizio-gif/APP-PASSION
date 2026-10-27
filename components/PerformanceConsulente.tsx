@@ -2,6 +2,7 @@ import type { Operatore, Performance, PerformanceSettimana as Sett } from '@/lib
 import { formatoCifra } from '@/lib/formato'
 import { ORARIO_LAVORO, SOGLIA_VERDE, tempoLavoro } from '@/lib/velocita'
 import { Colonne, type Punto } from './Colonne'
+import { Info } from './Info'
 
 // La performance del consulente, settimana per settimana (da lunedì a domenica,
 // ora di Roma), col confronto con le settimane passate. I numeri li calcola il
@@ -156,6 +157,42 @@ const METRICHE: Metrica[] = [
 
 const scriviEuro = (v: number) => `€ ${formatoCifra(v, Number.isInteger(v) ? 0 : 2)}`
 
+
+// Come si calcola ogni indice: la formula, cosa vuol dire ogni parola, e dove serve un esempio.
+// Compare nel fumetto dell'«i» accanto al nome dell'indice.
+const ORARIO = '9–21 dal lunedì al venerdì, 10–19:30 sabato e domenica'
+const CALCOLO: Record<string, string> = {
+  prese:
+    'Quante opportunità hai preso in carico nella settimana (da lunedì a domenica).\n\nSono quelle assegnate a te. È la base su cui si calcolano le percentuali delle opportunità.',
+  chiuse:
+    'Opportunità chiuse ÷ opportunità prese in carico nella settimana.\n\n«Chiusa» vuol dire vinta o persa, com’è oggi: la percentuale cresce man mano che le opportunità della settimana si chiudono, per questo l’ultima settimana può ancora salire.\n\nEsempio: 15 chiuse su 24 prese = 63%. Sotto vedi quante vinte e quante perse.',
+  vinte:
+    'Opportunità prese in carico nella settimana che oggi sono chiuse come vinte.\n\nLa vincita la segna da sola PerfectGym quando compare il contratto: anche senza una tua azione.',
+  perse: 'Opportunità prese in carico nella settimana che oggi sono chiuse come perse (chiuse meno vinte).',
+  pass:
+    'Opportunità prese in carico nella settimana con un Guest Pass o un pass giornaliero firmato dopo l’arrivo dell’opportunità ÷ opportunità prese in carico nella settimana.\n\nEsempio: 12 su 24 = 50%. Si guarda se la persona ha attivato un pass, non chi glielo ha venduto.',
+  prove:
+    'Prove tue finite nella settimana che si sono abbonate ÷ prove tue finite nella settimana.\n\n«Tue» sono le prove di cui sei il consulente. «Abbonata» vuol dire che ha firmato un abbonamento a pagamento tra l’inizio della prova e 30 giorni dopo la fine del pass. Le prove finite da poco possono ancora salire.',
+  'opp-abbonamento':
+    'Opportunità prese in carico nella settimana con un abbonamento a pagamento firmato dopo l’arrivo ÷ opportunità prese in carico nella settimana.\n\nContano sia chi si abbona subito sia chi passa prima da una prova.',
+  venduti:
+    'Abbonamenti a pagamento firmati nella settimana e attribuiti a te (esclusi pass e abbonamenti aggiuntivi).\n\nUn abbonamento è tuo se l’ha chiuso una tua opportunità o, se non c’è, se la tua è l’ultima opportunità assegnata alla persona.\n\n«Nuovi» sono quelli senza un abbonamento precedente finito da meno di 30 giorni: gli altri sono rinnovi o cambi.',
+  importo:
+    'Somma dei canoni mensili di listino degli abbonamenti venduti nella settimana (gli stessi del riquadro «Abbonamenti venduti»).\n\nSotto, il valore sul vincolo: canone × mesi minimi del piano (1, 4 o 12), sommati. Sono i prezzi di listino dei piani: non c’è la quota amministrativa.',
+  ricontatto:
+    `Tempo mediano fra la presa in carico e il primo ricontatto. Mediano: metà delle opportunità è stata ricontattata prima di questo tempo, metà dopo.\n\nIl primo ricontatto è il primo task chiuso dopo l’arrivo, anche un tentativo («Non risponde»). Il tempo conta solo nell’orario di lavoro: ${ORARIO}. Se il task è del momento della presa in carico, il tempo è 0.\n\nSolo sulle opportunità ricontattate.`,
+  'ricontatto-30':
+    `Opportunità ricontattate entro 30 minuti di orario di lavoro dalla presa in carico ÷ opportunità ricontattate (anche con un tentativo) nella settimana.\n\nOrario di lavoro: ${ORARIO}.`,
+  disdette:
+    'Disdette che hai gestito nella settimana e chiuso come «Recuperato» ÷ disdette che hai gestito nella settimana.\n\nLa settimana è quella in cui hai segnato l’esito, non quella della disdetta. Contano solo le disdette definitive: un cambio abbonamento (un nuovo abbonamento che parte entro il giorno dopo la fine del vecchio) non è una disdetta.',
+  rinnovi:
+    'Rinnovi tuoi chiusi nella settimana come «Rinnovato» ÷ rinnovi tuoi chiusi nella settimana (rinnovati o non rinnovati).\n\nLa settimana è quella in cui è stato segnato l’esito.',
+  task:
+    'Task assegnati a te e chiusi nella settimana, anche con esito «Non risponde». «Positivi» sono quelli con esito positivo.\n\nNon contano i task archiviati dal sistema.',
+}
+const CALCOLO_CONFRONTI =
+  'Settimana scorsa: lo stesso indice nella settimana completa prima di questa.\n\nMedia delle 4 prima: le quattro settimane complete prima di questa. Per le percentuali si sommano i numeri e poi si divide (non è la media delle percentuali); per i numeri e i tempi è la media.'
+
 const percentuale = (num: number, den: number) => (den > 0 ? Math.round((num / den) * 100) : null)
 
 // Il valore della settimana: una percentuale intera, un numero, o i minuti.
@@ -280,8 +317,11 @@ export function PerformanceConsulente({
           const prima = scorsa ? valoreDi(m, scorsa) : null
           const media = valoreMedio(m, quattro)
           return (
-            <div key={m.chiave} className="numero totale" title={m.spiega}>
-              <div className="etichetta">{m.titolo}</div>
+            <div key={m.chiave} className="numero totale">
+              <div className="etichetta">
+                {m.titolo}
+                <Info titolo={m.titolo} testo={CALCOLO[m.chiave]} />
+              </div>
               <div className="valore">{scrivi(m, v)}</div>
               <div className="nota">{m.num && m.den ? `${formatoCifra(m.num(ora))} su ${formatoCifra(m.den(ora))} questa settimana` : 'questa settimana'}
                 {m.sotto && <div>{m.sotto(ora)}</div>}</div>
@@ -293,7 +333,8 @@ export function PerformanceConsulente({
                   const d = differenza(m, v, c.v)
                   return (
                     <li key={c.chi}>
-                      <span className="attenuato">{c.chi}</span> <strong>{scrivi(m, c.v)}</strong>
+                      <span className="attenuato">{c.chi}</span>
+                      <Info titolo={c.chi} testo={CALCOLO_CONFRONTI} /> <strong>{scrivi(m, c.v)}</strong>
                       {d && <span className={`bollino ${d.tono}`}> {d.testo}</span>}
                     </li>
                   )
@@ -308,7 +349,10 @@ export function PerformanceConsulente({
       <div className="multipli">
         {grafici.map((m) => (
           <div key={m.chiave} className="multiplo">
-            <h3>{m.titolo}</h3>
+            <h3>
+              {m.titolo}
+              <Info titolo={m.titolo} testo={CALCOLO[m.chiave]} />
+            </h3>
             <p className="piccolo attenuato">{m.spiega}</p>
             <Colonne
               punti={punti(m)}
@@ -342,7 +386,10 @@ export function PerformanceConsulente({
             <tbody>
               {METRICHE.map((m) => (
                 <tr key={m.chiave}>
-                  <td title={m.spiega}>{m.titolo}</td>
+                  <td>
+                    {m.titolo}
+                    <Info titolo={m.titolo} testo={CALCOLO[m.chiave]} />
+                  </td>
                   {[...sett].reverse().map((w) => (
                     <td key={w.settimana} className="num">
                       <strong>{scrivi(m, valoreDi(m, w))}</strong>

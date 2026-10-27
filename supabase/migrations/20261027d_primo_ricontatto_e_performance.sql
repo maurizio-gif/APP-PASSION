@@ -2,8 +2,9 @@
 --
 -- 1) crm.minuti_lavoro(da, a): i minuti di ORARIO DI LAVORO fra due momenti.
 --    L'orario e' dalle 8 alle 22 dal lunedi al venerdi, dalle 8 alle 20 il sabato
---    e la domenica (ora di Roma). Fuori orario il tempo non scorre: un'opportunita'
---    arrivata a mezzanotte comincia a contare alle 8 del mattino. Le feste non
+--    e la domenica (ora di Roma): dal 27/10/2026 e' cambiato in 9-21 e 10-19:30,
+--    vedi 20261027f. Fuori orario il tempo non scorre: un'opportunita' arrivata
+--    a mezzanotte comincia a contare alle prime ore del mattino. Le feste non
 --    sono considerate (contano come giorni normali).
 --
 -- 2) public.crm_lead_velocita(lead[]): per ogni opportunita' il primo
