@@ -17,6 +17,12 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-27',
+    titolo: 'Il menu laterale scorre sul computer: ora si raggiungono tutte le voci',
+    testo: 'Con tante voci, sullo schermo del computer le ultime restavano nascoste. Ora l’elenco delle sezioni scorre da solo, mentre logo, ricerca e il tuo nome con «Esci» restano fermi.',
+    dove: 'Menu laterale',
+  },
+  {
+    data: '2026-10-27',
     titolo: 'Dall’appello non si apre più l’anagrafica del cliente',
     testo: 'Nell’Appello complessivo il nome di chi ha prenotato non è più un collegamento: si legge soltanto. Nell’Appello istruttore non lo era già.',
     dove: 'Appello complessivo',
