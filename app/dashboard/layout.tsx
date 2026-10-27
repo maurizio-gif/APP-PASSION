@@ -22,6 +22,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const voci = [
     { href: '/dashboard', testo: 'Dashboard consulente' },
     ...SEZIONI.filter((s) => puoVedere(io, s.chiave)).map(({ href, testo }) => ({ href, testo })),
+    ...(puoVedere(io, 'lead') ? [{ href: '/dashboard/senza-consulente', testo: 'Senza consulente' }] : []),
     ...(ha(io, 'gestione_utenti') ? [{ href: '/dashboard/utenti', testo: 'Utenti' }] : []),
     ...(eAdmin(io) ? [{ href: '/dashboard/report-giornaliero', testo: 'Report giornaliero' }] : []),
     ...(puoRiunioni(io) ? [{ href: '/dashboard/riunioni', testo: 'Report riunioni' }] : []),

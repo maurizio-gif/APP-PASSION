@@ -24,10 +24,10 @@ export const AGGIORNAMENTI: Aggiornamento[] = [
   },
   {
     data: '2026-10-27',
-    titolo: 'In Da gestire ci sono La mia performance e i Contratti senza consulente',
+    titolo: 'La home è la Dashboard consulente: i riquadri portano alle sezioni e sotto c’è La mia performance',
     testo:
-      'La prima scheda in alto è «La mia performance»: premendola vedi i tuoi numeri settimana per settimana (un admin può guardare quelli di un altro consulente). Nella scheda «Senza consulente» c’è una terza linguetta con i contratti nuovi da prendere in carico. Di base resta aperta «Senza consulente».',
-    dove: 'Da gestire',
+      'Prove in scadenza, Rinnovi, Disdette, Task e Senza consulente non aprono più un elenco nella home: premendoli vai alla loro sezione. «Senza consulente» è una sezione nuova, con tre elenchi (opportunità, prove in corso e contratti da prendere in carico). Sotto i riquadri c’è sempre «La mia performance», con il passaggio a «Settimana per settimana».',
+    dove: 'Dashboard consulente, Senza consulente (menu Clienti)',
   },
   {
     data: '2026-10-27',

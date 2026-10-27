@@ -3,7 +3,6 @@ import type { Appello, AppelloTutte, LezioneAppello } from '@/lib/crm'
 import { eta, formatoCifra, formatoData, formatoGiornoLungo, formatoOra, spostaGiorno } from '@/lib/formato'
 import { AppelloLezione } from './AppelloLezione'
 import { LegendaSegnali, Segnali } from './SegnaliAppello'
-import { Accordion } from './FaseRighe'
 import { VideoTutorial } from './VideoTutorial'
 import { ScorriAdesso } from './ScorriAdesso'
 import { Vuoto } from './Ui'
@@ -18,7 +17,10 @@ const giornoRoma = (iso: string) => new Intl.DateTimeFormat('en-CA', { timeZone:
 const Aiuto = ({ children }: { children: React.ReactNode }) => (
   <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
     <span className="aiuto-punto" aria-hidden="true">?</span>
-    <span className="aiuto-testo">{children}</span>
+    <span className="aiuto-testo">
+      {children}
+      <LegendaSegnali />
+    </span>
   </span>
 )
 
@@ -43,7 +45,6 @@ export function VistaAppello({ a, singolo, oggi, base }: { a: Appello; singolo: 
               {a.istruttori.length > 0 && <> Sei collegato come {a.istruttori.join(', ')}.</>}
             </Aiuto>
           </div>
-          <LegendaSegnali />
         </div>
       </div>
 
@@ -120,6 +121,11 @@ export function VistaAppelloTutte({ r, giorno, oggi, filtri: scelti, base }: { r
   const prenotatiIniziate = iniziate.reduce((a, l) => a + l.prenotati.length, 0)
   const presentiIniziate = iniziate.reduce((a, l) => a + l.prenotati.filter((p) => p.presente).length, 0)
   const senzaPrenotati = r.lezioni.filter((l) => l.prenotati.length === 0).length
+  // Passate: gia' finite. Future: in corso o ancora da fare. Un giorno passato e' tutto «passate», uno futuro tutto «future».
+  const finita = (l: LezioneAppello) => Date.parse(l.fine ?? l.inizio) <= adesso
+  const passate = r.lezioni.filter(finita)
+  const future = r.lezioni.filter((l) => !finita(l))
+  const apriFuture = future.length > 0
   // Oggi: «Adesso» sta davanti alla prima lezione non ancora finita.
   const adessoId = giorno === oggi ? r.lezioni.find((l) => Date.parse(l.fine ?? l.inizio) > adesso)?.class_id : null
 
@@ -146,11 +152,8 @@ export function VistaAppelloTutte({ r, giorno, oggi, filtri: scelti, base }: { r
               da 59 minuti prima a 59 minuti dopo la lezione: qui si legge soltanto.
             </Aiuto>
           </div>
-          <LegendaSegnali />
         </div>
       </div>
-
-      <VideoTutorial />
 
       <form className="filtri filtri-largo" action={base}>
         <Link className="bottone secondario" href={con(spostaGiorno(giorno, -1))} aria-label="Giorno prima">
@@ -209,18 +212,34 @@ export function VistaAppelloTutte({ r, giorno, oggi, filtri: scelti, base }: { r
       </div>
 
       {r.lezioni.length === 0 ? (
+        <>
         <div className="scheda">
           <Vuoto>{conFiltri ? 'Nessuna lezione con questi filtri.' : 'Nessuna lezione in questo giorno.'}</Vuoto>
         </div>
+        <VideoTutorial />
+        </>
       ) : (
         <>
           {giorno === oggi && !conFiltri && <ScorriAdesso />}
-          {r.lezioni.map((l) => (
-            <div key={l.class_id}>
-              {adessoId === l.class_id && <div id="adesso" className="appello-adesso">Adesso</div>}
-              <LezioneTabella l={l} aperta={prenotati <= 120 || r.lezioni.length <= 3} />
+          <div className="na-toggle ap-toggle">
+            <input type="radio" name="ap-vista" id="ap-v-fut" className="task-radio" defaultChecked={apriFuture} />
+            <input type="radio" name="ap-vista" id="ap-v-pas" className="task-radio" defaultChecked={!apriFuture} />
+            <div className="task-tabs na-tabs">
+              <label htmlFor="ap-v-fut">
+                Lezioni future <span>{future.length}</span>
+              </label>
+              <label htmlFor="ap-v-pas">
+                Lezioni passate <span>{passate.length}</span>
+              </label>
+              <VideoTutorial inBarra />
             </div>
-          ))}
+            <div className="na-pannello ap-fut">
+              {future.length === 0 ? <p className="vuoto">Nessuna lezione ancora da fare.</p> : <CalendarioLezioni lezioni={future} adessoId={adessoId} />}
+            </div>
+            <div className="na-pannello ap-pas">
+              {passate.length === 0 ? <p className="vuoto">Nessuna lezione ancora finita.</p> : <CalendarioLezioni lezioni={passate} adessoId={null} />}
+            </div>
+          </div>
         </>
       )}
     </>
@@ -233,33 +252,84 @@ const breve = (completo: string | null) => {
   return !primo || resto.length === 0 || completo.includes('@') ? completo : `${primo} ${resto[resto.length - 1][0]}.`
 }
 
-// Una lezione dell'Appello complessivo, solo da leggere (il nome non apre l'anagrafica del cliente): la testata scura (ora, lezione, sala,
-// istruttore, presenti) e sotto la tabella dei prenotati, con i segnali e chi ha segnato la presenza.
-function LezioneTabella({ l, aperta }: { l: LezioneAppello; aperta: boolean }) {
-  const presenti = l.prenotati.filter((p) => p.presente).length
+// L'Appello complessivo come un calendario del giorno: una fascia per ogni orario d'inizio, a sinistra l'ora
+// e a destra le lezioni che partono in quell'ora, ognuna con i presenti e, aprendola, i prenotati (solo da leggere:
+// il nome non apre l'anagrafica del cliente).
+function CalendarioLezioni({ lezioni, adessoId }: { lezioni: LezioneAppello[]; adessoId: number | null | undefined }) {
+  const fasce = new Map<string, LezioneAppello[]>()
+  for (const l of lezioni) {
+    const ora = formatoOra(l.inizio)
+    fasce.set(ora, [...(fasce.get(ora) ?? []), l])
+  }
   return (
-    <div id={`lezione-${l.class_id}`} className="appello-sezione">
-      <Accordion
-        aperto={aperta}
-        corpoClasse="sotto-dati"
-        titolo={
-          <>
-            {formatoOra(l.inizio)}
-            {l.fine ? `–${formatoOra(l.fine)}` : ''} · {l.lezione ?? 'Lezione'}
-            <span className="chip-gruppo">
-              {l.sala && <span className="chip">{l.sala}</span>}
-              <span className="chip">{l.istruttore ?? 'nessun istruttore'}</span>
-              {l.posti ? <span className="chip">{l.posti} posti</span> : null}
-              <span className={`chip${presenti ? '' : ' rosso'}`}>
-                {presenti}/{l.prenotati.length} presenti
-              </span>
+    <div className="cal">
+      {[...fasce.entries()].map(([ora, elenco]) => (
+        <div key={ora} className="cal-fascia">
+          <div className="cal-ora">
+            <strong>{ora}</strong>
+            <span>
+              {elenco.length} {elenco.length === 1 ? 'lezione' : 'lezioni'}
             </span>
-          </>
-        }
-      >
-        {l.prenotati.length === 0 ? (
-          <p className="vuoto nota-sotto">Nessun prenotato.</p>
-        ) : (
+          </div>
+          <div className="cal-lezioni">
+            {elenco.map((l) => (
+              <LezioneCalendario key={l.class_id} l={l} adesso={adessoId === l.class_id} />
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function LezioneCalendario({ l, adesso }: { l: LezioneAppello; adesso: boolean }) {
+  const presenti = l.prenotati.filter((p) => p.presente).length
+  const totale = l.prenotati.length
+  const quota = totale ? Math.round((presenti / totale) * 100) : 0
+  return (
+    <article id={adesso ? 'adesso' : `lezione-${l.class_id}`} className={`cal-lezione${adesso ? ' in-corso' : ''}`}>
+      <header className="cal-testa">
+        <div>
+          <h3 className="cal-titolo">{l.lezione ?? 'Lezione'}</h3>
+          <div className="cal-orario">
+            {formatoOra(l.inizio)}
+            {l.fine ? `–${formatoOra(l.fine)}` : ''}
+            {adesso && <span className="cal-adesso">Adesso</span>}
+          </div>
+        </div>
+        <div className={`cal-conto${totale && !presenti ? ' nessuno' : ''}`}>
+          <strong>
+            {presenti}/{totale}
+          </strong>
+          <span>presenti</span>
+        </div>
+      </header>
+      <div className="cal-barra" aria-hidden="true">
+        <span style={{ width: `${quota}%` }} />
+      </div>
+      <dl className="cal-dati">
+        <div>
+          <dt>Istruttore</dt>
+          <dd>{l.istruttore ?? 'nessuno'}</dd>
+        </div>
+        <div>
+          <dt>Sala</dt>
+          <dd>{l.sala ?? '—'}</dd>
+        </div>
+        {l.posti ? (
+          <div>
+            <dt>Posti</dt>
+            <dd>{l.posti}</dd>
+          </div>
+        ) : null}
+      </dl>
+      {totale === 0 ? (
+        <p className="cal-vuota">Nessun prenotato.</p>
+      ) : (
+        <details className="cal-prenotati">
+          <summary>
+            Prenotati <span>{totale}</span>
+          </summary>
           <ul className="appello-elenco appello-compatto">
             {l.prenotati.map((p) => {
               const nome = `${p.nome ?? ''} ${p.cognome ?? ''}`.trim() || 'Senza nome'
@@ -287,8 +357,8 @@ function LezioneTabella({ l, aperta }: { l: LezioneAppello; aperta: boolean }) {
               )
             })}
           </ul>
-        )}
-      </Accordion>
-    </div>
+        </details>
+      )}
+    </article>
   )
 }

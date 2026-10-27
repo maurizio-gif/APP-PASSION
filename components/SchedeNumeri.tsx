@@ -20,6 +20,8 @@ export type VoceNumero = {
   vaiAltro?: { href: string; testo: string }
   // se il numero non c'e', un pulsante «Calcola» apre la scheda: e' l'apertura a calcolarlo
   calcola?: boolean
+  // un riquadro che non apre niente qui sotto: porta alla sua sezione (come nella Dashboard consulente live)
+  href?: string
 }
 
 export function SchedeNumeri({ voci, attiva, base }: { voci: VoceNumero[]; attiva: string; base: string }) {
@@ -46,6 +48,18 @@ export function SchedeNumeri({ voci, attiva, base }: { voci: VoceNumero[]; attiv
     <div className="numeri numeri-schede" ref={contenitore} role="tablist">
       {voci.map((v) => {
         const aperta = v.chiave === scelta
+        if (v.href) {
+          return (
+            <Link key={v.chiave} href={v.href} className={`numero numero-link${v.caldo ? ' caldo' : ''}`}>
+              <div className="etichetta">{v.testo}</div>
+              {v.n != null && <div className="valore">{v.n}</div>}
+              {v.nota && <div className="nota">{v.nota.split(/(\d+)/).map((pezzo, i) => (i % 2 ? <b key={i}>{pezzo}</b> : pezzo))}</div>}
+              <div className="numero-vai-riga">
+                <span className="numero-vai">{(v.vaiTesto ?? 'Vai').replace(/^Vai a /, '')} →</span>
+              </div>
+            </Link>
+          )
+        }
         return (
           <div
             key={v.chiave}

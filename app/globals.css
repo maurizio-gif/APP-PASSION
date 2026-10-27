@@ -11681,3 +11681,137 @@ a.pf-tessera.pf-link:focus-visible { outline: 2px solid var(--rosso); outline-of
 :root:root:root .utenti-barra .nu-bottone { padding: 0 22px; min-height: 0; }
 :root:root:root .utenti-barra .nu-bottone { height: 58px; line-height: 1; padding-block: 0; box-sizing: border-box; }
 @media (max-width: 720px) { :root:root:root .utenti-barra .nu-bottone { height: 48px; } }
+
+/* ---- Appello complessivo come calendario del giorno: fasce orarie, lezioni chiare e leggibili, toggle passate / future ---- */
+#ap-v-fut:checked ~ .ap-fut,
+#ap-v-pas:checked ~ .ap-pas { display: block; }
+:root:root #ap-v-fut:checked ~ .task-tabs label[for='ap-v-fut'],
+:root:root #ap-v-pas:checked ~ .task-tabs label[for='ap-v-pas'] {
+  background: linear-gradient(to bottom, #f0123b, var(--rosso) 55%, #cc0227);
+  border-color: var(--rosso);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(227, 3, 45, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+:root:root #ap-v-fut:checked ~ .task-tabs label[for='ap-v-fut'] span,
+:root:root #ap-v-pas:checked ~ .task-tabs label[for='ap-v-pas'] span { background: rgba(255, 255, 255, 0.25); color: #fff; }
+#ap-v-fut:focus-visible ~ .task-tabs label[for='ap-v-fut'],
+#ap-v-pas:focus-visible ~ .task-tabs label[for='ap-v-pas'] { outline: 2px solid var(--rosso); outline-offset: 2px; }
+.ap-toggle > .na-pannello { padding-top: 16px; }
+.ap-toggle { margin-bottom: 18px; }
+
+.cal { display: grid; gap: 0; }
+.cal-fascia { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 18px; padding: 14px 0; border-top: 1px solid rgba(255, 255, 255, 0.14); }
+:root:root[data-tema='chiaro'] .cal-fascia { border-top-color: rgba(92, 11, 30, 0.16); }
+.cal-fascia:first-child { border-top: 0; }
+.cal-ora { position: sticky; top: 76px; align-self: start; display: flex; flex-direction: column; gap: 2px; }
+.cal-ora strong { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.02em; color: #fff; font-variant-numeric: tabular-nums; }
+.cal-ora span { font-size: 0.74rem; font-weight: 600; color: rgba(255, 255, 255, 0.72); }
+:root:root[data-tema='chiaro'] .cal-ora strong { color: #17090f; }
+:root:root[data-tema='chiaro'] .cal-ora span { color: #5c4a50; }
+.cal-lezioni { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; align-items: start; min-width: 0; }
+.cal-lezione {
+  min-width: 0;
+  padding: 14px 16px 12px;
+  border: 1px solid rgba(92, 11, 30, 0.14);
+  border-left: 4px solid rgba(92, 11, 30, 0.35);
+  border-radius: 14px;
+  background: #fffafb;
+  color: #17090f;
+  box-shadow: 0 8px 22px -16px rgba(0, 0, 0, 0.55);
+}
+.cal-lezione.in-corso { border-left-color: var(--rosso); box-shadow: 0 0 0 2px rgba(227, 3, 45, 0.25), 0 8px 22px -16px rgba(0, 0, 0, 0.55); }
+.cal-testa { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.cal-titolo { margin: 0; font-size: 1rem; font-weight: 800; line-height: 1.25; color: #17090f; }
+.cal-orario { display: flex; align-items: center; gap: 8px; margin-top: 3px; font-size: 0.82rem; font-weight: 600; color: #3a2a30; font-variant-numeric: tabular-nums; }
+.cal-adesso { padding: 1px 8px; border-radius: 999px; background: var(--rosso); color: #fff; font-size: 0.64rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; }
+.cal-conto { flex: none; text-align: right; line-height: 1.1; }
+.cal-conto strong { display: block; font-size: 1.35rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.cal-conto span { font-size: 0.7rem; font-weight: 600; color: #5c4a50; }
+.cal-conto.nessuno strong { color: #a8001f; }
+.cal-barra { height: 5px; margin: 10px 0 10px; border-radius: 999px; background: rgba(92, 11, 30, 0.12); overflow: hidden; }
+.cal-barra > span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #1f8a4c, #3bb273); }
+.cal-dati { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0; }
+.cal-dati > div { display: flex; flex-direction: column; min-width: 0; }
+.cal-dati dt { font-size: 0.64rem; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; color: #9b0627; }
+.cal-dati dd { margin: 0; font-size: 0.86rem; font-weight: 600; color: #17090f; }
+.cal-vuota { margin: 10px 0 0; font-size: 0.82rem; color: #5c4a50; }
+.cal-prenotati { margin-top: 10px; border-top: 1px solid rgba(92, 11, 30, 0.12); padding-top: 8px; }
+.cal-prenotati > summary { display: flex; align-items: center; justify-content: space-between; cursor: pointer; font-size: 0.8rem; font-weight: 800; color: #5c0b1e; list-style: none; }
+.cal-prenotati > summary::-webkit-details-marker { display: none; }
+.cal-prenotati > summary::after { content: '▾'; margin-left: auto; font-size: 0.85rem; }
+.cal-prenotati[open] > summary::after { content: '▴'; }
+.cal-prenotati > summary span { margin-left: 6px; padding: 0 8px; border-radius: 999px; background: #f2e8eb; color: #3a2a30; font-size: 0.72rem; }
+.cal-prenotati .appello-elenco { grid-template-columns: 1fr; margin-top: 8px; }
+@media (max-width: 720px) {
+  .cal-fascia { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .cal-ora { position: static; flex-direction: row; align-items: baseline; gap: 10px; }
+  .cal-lezioni { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---- Appello: tutorial nella barra delle linguette, legenda nel tip, angoli tondi ---- */
+.ap-toggle > .task-tabs.na-tabs { position: relative; border-radius: 16px; }
+.video-barra { margin-left: auto; position: static; }
+.video-barra > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 16px 6px 6px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 12.6px;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+.video-barra > summary::-webkit-details-marker { display: none; }
+.video-barra > summary:hover { border-color: rgba(255, 255, 255, 0.4); }
+.video-play { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--rosso); position: relative; }
+.video-play::after { content: ''; position: absolute; left: 11px; top: 8px; border-style: solid; border-width: 6px 0 6px 10px; border-color: transparent transparent transparent #fff; }
+.video-barra[open] > summary { border-color: var(--rosso); background: rgba(227, 3, 45, 0.25); }
+.video-pannello {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 30;
+  width: min(620px, calc(100vw - 32px));
+  padding: 10px 10px 12px;
+  border-radius: 16px;
+  background: #17090f;
+  box-shadow: 0 24px 50px -16px rgba(0, 0, 0, 0.7);
+  color: rgba(255, 255, 255, 0.8);
+}
+.video-pannello video { display: block; width: 100%; border-radius: 12px; background: #000; }
+.video-pannello p { margin: 8px 4px 0; }
+:root:root:root .aiuto-testo .appello-legenda { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; color: rgba(255, 255, 255, 0.88); }
+:root:root:root .aiuto-testo .appello-legenda li { align-items: center; }
+@media (max-width: 720px) {
+  .video-barra { margin-left: 0; width: 100%; }
+  .video-pannello { left: 0; right: 0; width: auto; }
+}
+
+/* ---- Da gestire: i riquadri che portano alla loro sezione (come nella Dashboard consulente live) ---- */
+.numeri-schede a.numero.numero-link { color: inherit; text-decoration: none; cursor: pointer; }
+.numeri-schede a.numero.numero-link:hover { background-color: rgba(255, 255, 255, 0.06); }
+.numeri-schede a.numero.numero-link:focus-visible { outline: 2px solid var(--rosso); outline-offset: -2px; }
+.numeri-schede a.numero.numero-link .numero-vai { opacity: 0.75; }
+.numeri-schede a.numero.numero-link:hover .numero-vai { opacity: 1; }
+
+/* ---- Senza consulente: la barra delle linguette e le tabelle arrivano ai bordi del riquadro ---- */
+:root:root:root section.scheda#senza-consulente { padding: 0; overflow: hidden; }
+:root:root:root #senza-consulente .da-gestire-corpo { padding: 0; margin: 0; }
+:root:root:root #senza-consulente .na-toggle > .task-tabs.na-tabs { margin: 0; border-radius: 0; }
+:root:root:root #senza-consulente .na-pannello > p { padding: 0 18px 14px; margin: 0; }
+:root:root:root #senza-consulente .na-pannello > .vuoto { padding: 18px; }
+:root:root:root #senza-consulente .tabella-scorre { margin: 0; padding: 0; }
+:root:root:root #senza-consulente .na-toggle { margin: 0; padding: 0; }
+:root:root:root #senza-consulente .na-pannello { padding-top: 0; }
+:root:root:root #senza-consulente table th:first-child,
+:root:root:root #senza-consulente table td:first-child { padding-left: 22px; }
+:root:root:root #senza-consulente table th:last-child,
+:root:root:root #senza-consulente table td:last-child { padding-right: 22px; }
+:root:root:root #senza-consulente { border-radius: 16px; }
+:root:root:root #senza-consulente .na-toggle > .task-tabs.na-tabs { border-radius: 16px 16px 0 0; }
+:root:root:root .pf-toggle > .task-tabs.na-tabs { border-radius: 16px 16px 0 0; }
+:root:root:root .ap-toggle > .task-tabs.na-tabs { border-radius: 16px; }

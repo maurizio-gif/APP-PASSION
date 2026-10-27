@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 export const ICONE: Record<string, string> = {
   '/dashboard': 'M3 12l9-8 9 8M5 10v10h14V10',
   '/dashboard/lead': 'M16 11a4 4 0 10-8 0 4 4 0 008 0zM4 20c0-3.3 3.6-6 8-6s8 2.7 8 6',
+  '/dashboard/senza-consulente': 'M12 12a4 4 0 100-8 4 4 0 000 8zM4 21c0-3.5 3.6-6 8-6M17 17l4 4M21 17l-4 4',
   '/dashboard/prove': 'M12 8v5l3 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
   '/dashboard/contratti': 'M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h6',
   '/dashboard/disdette': 'M15 4h5v16h-5M10 8l-4 4 4 4M6 12h10',
@@ -42,7 +43,7 @@ const ICONE_GRUPPO: Record<string, string> = {
 // l'ordine in cui compaiono). Le voci che non stanno in nessun gruppo vanno in fondo.
 const GRUPPI: { titolo?: string; voci: string[] }[] = [
   { voci: ['/dashboard'] },
-  { titolo: 'Clienti', voci: ['/dashboard/lead', '/dashboard/prove', '/dashboard/contratti', '/dashboard/rinnovi', '/dashboard/disdette', '/dashboard/debitori', '/dashboard/task', '/dashboard/cerca'] },
+  { titolo: 'Clienti', voci: ['/dashboard/lead', '/dashboard/prove', '/dashboard/senza-consulente', '/dashboard/contratti', '/dashboard/rinnovi', '/dashboard/disdette', '/dashboard/debitori', '/dashboard/task', '/dashboard/cerca'] },
   { titolo: 'Analisi', voci: ['/dashboard/abbonamenti', '/dashboard/marketing', '/dashboard/report-giornaliero', '/dashboard/riunioni'] },
   { titolo: 'Istruttori', voci: ['/dashboard/appello', '/dashboard/appello-tutte'] },
   { titolo: 'Team', voci: ['/dashboard/curriculum', '/dashboard/utenti'] },

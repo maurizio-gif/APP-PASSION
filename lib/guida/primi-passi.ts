@@ -16,15 +16,17 @@ Molte cose il CRM le fa da solo: da fuori arrivano solo le opportunità dei modu
 
 > Airtable non si usa più: dal 30 settembre 2026 tutto il lavoro si fa qui. Da fuori arrivano solo le opportunità dei moduli; il resto nasce da PerfectGym.
 
-## La home: Da gestire
-Appena entri, i numeri di oggi, in alto a schede. Ne è aperta una alla volta: premi su una scheda e sotto compare il suo elenco.
+## La home: Dashboard consulente
+Appena entri, i numeri di oggi, in alto. Ogni riquadro porta alla sua sezione, con l'elenco completo:
 
-- **Senza consulente**: è la prima e si apre da sola. Sono le opportunità e le prove in corso che nessun consulente segue, in due elenchi separati. Le opportunità da prendere in carico sono qui: non c'è più una scheda a parte. Se è aperta un'altra scheda, il numero non c'è subito: premi **«Calcola»** e la scheda si apre e lo calcola;
+- **Senza consulente**: le opportunità e i contratti nuovi che nessun consulente segue, più le prove in corso. Porta alla sezione [Senza consulente](/dashboard/senza-consulente), che le riunisce in tre elenchi;
 - **Prove in scadenza**: finiscono entro 3 giorni;
 - **Rinnovi da gestire** e **Disdette da gestire**: non ancora presi in carico, con quanti sono tuoi;
 - **I miei task**: di oggi e arretrati.
 
-Sotto la scheda aperta trovi l'elenco, con le azioni per ogni riga (per esempio **«Prendo in carico»**, oppure **«Fatto ✓»** e **«Non risponde»** per i task). La scheda è evidenziata quando c'è qualcosa da fare. I ticket non stanno più in home: li trovi nella sezione [Ticket](/dashboard/ticket).
+Il riquadro è evidenziato quando c'è qualcosa da fare. I ticket non stanno in home: li trovi nella sezione [Ticket](/dashboard/ticket).
+
+Sotto i riquadri c'è **La mia performance**: i tuoi numeri della settimana, con il confronto con la settimana scorsa e con la media delle quattro prima. Con **«Settimana per settimana»** vedi tutti gli indici, una colonna per settimana. Un admin può guardare quella di un altro consulente.
 
 Nella colonna **Primo ricontatto** di ogni opportunità, in **Opportunità**, vedi in quanto tempo è stata ricontattata, anche con un tentativo, o da quanto aspetta. Il tempo conta solo nell'orario di lavoro (9–21 dal lunedì al venerdì, 10–19:30 sabato e domenica): verde fino a 30 minuti, giallo fino a 2 ore, rosso oltre.
 
