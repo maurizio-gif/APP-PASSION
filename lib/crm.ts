@@ -174,6 +174,15 @@ export type NuovoContratto = {
   gestito_da: string | null
 }
 
+export type FiltriDisdette = {
+  testo?: string | null
+  scadenzaDa?: string | null
+  scadenzaA?: string | null
+  disdettaDa?: string | null
+  disdettaA?: string | null
+  ordine?: 'scadenza_asc' | 'scadenza_desc' | 'disdetta_asc' | 'disdetta_desc' | null
+}
+
 export type Disdetta = {
   id: string
   contract_id: number | null
@@ -651,8 +660,20 @@ export const crm = {
     return per
   },
   nuoviContratti: (vista: string) => rpc<NuovoContratto[]>('crm_nuovi_contratti', { p_vista: vista }),
-  disdette: (vista: string, consulente: string | null = null) =>
-    rpc<Disdetta[]>('crm_disdette', { p_vista: vista, p_consulente: consulente }),
+  // Ricerca, intervalli di date e ordine: supabase/migrations/20261027b.
+  disdette: (vista: string, consulente: string | null = null, filtri: FiltriDisdette = {}) =>
+    rpc<Disdetta[]>('crm_disdette', {
+      p_vista: vista,
+      p_consulente: consulente,
+      // Con una ricerca o un filtro per data l'elenco puo' essere piu' lungo.
+      p_limite: Object.values(filtri).some(Boolean) ? 1000 : 300,
+      p_testo: filtri.testo ?? null,
+      p_scadenza_da: filtri.scadenzaDa ?? null,
+      p_scadenza_a: filtri.scadenzaA ?? null,
+      p_disdetta_da: filtri.disdettaDa ?? null,
+      p_disdetta_a: filtri.disdettaA ?? null,
+      p_ordine: filtri.ordine ?? null,
+    }),
   task: (chi: string, quando: string, consulente: string | null = null) =>
     rpc<Task[]>('crm_task', { p_chi: chi, p_quando: quando, p_consulente: consulente }),
   persona: (id: string) => rpc<Scheda | null>('crm_persona', { p_id: id }),

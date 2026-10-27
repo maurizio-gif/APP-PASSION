@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-27',
+    titolo: 'Nelle Disdette si cerca, si ordina e si filtra per data',
+    testo:
+      'Sopra l’elenco c’è la ricerca per nome e cognome, cellulare o email. Si può ordinare per data di scadenza o di disdetta e scegliere un periodo, di scadenza e/o di disdetta. Nell’elenco ora si legge la data di scadenza del contratto e il nome della persona apre la sua scheda in un’altra scheda del browser, così non si perde l’elenco.',
+    dove: 'Disdette',
+  },
+  {
+    data: '2026-10-27',
     titolo: 'Pass di prova: tabella mese per mese con durata, Reformer e Formula 8',
     testo:
       'Sotto i pass di prova c’è una scheda da aprire e chiudere con un mese per riga. Per ogni mese dice quante persone si abbonano in tutto, per Guest Pass da 7 giorni, da 10 giorni, con i soli pass giornalieri, e tra chi ha prenotato una lezione di Reformer o di Formula 8.',
