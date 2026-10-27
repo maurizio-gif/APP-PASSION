@@ -196,6 +196,10 @@ export type Iscrizione = {
   assegnato_il: string | null
   note: string | null
   da_opportunita: boolean
+  // Chi ha gia' lavorato con la persona (20261027h): solo un suggerimento.
+  suggerito_id: string | null
+  suggerito: string | null
+  motivo_suggerimento: string | null
 }
 
 // Il primo ricontatto di un'opportunita' (20261027d): `minuti` sono di orario di lavoro, dall'arrivo al

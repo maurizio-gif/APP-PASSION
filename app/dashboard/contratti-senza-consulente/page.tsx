@@ -30,8 +30,8 @@ export default async function ContrattiSenzaConsulente({ searchParams }: { searc
           <h1>Contratti senza consulente</h1>
           <p>
             Abbonamenti nuovi che nessuna opportunità ha portato: la persona si è iscritta senza chiedere informazioni. Chi li ha seguiti li prende in
-            carico e scrive una nota su come è nato il contratto; contano nella sua performance. Se l&apos;iscrizione è stata fatta dalla persona da sola, online,
-            si segna «Online» e non va a nessuno. Qui non entrano rinnovi né cambi abbonamento.
+            carico e scrive una nota su come è nato il contratto; contano nella sua performance. Se la persona ha già lavorato con un consulente (task fatti, prova) lo trovi come suggerimento, già scelto nella tendina: confermi o
+            cambi. Se l&apos;iscrizione è stata fatta dalla persona da sola, online, si segna «Online» e non va a nessuno. Qui non entrano rinnovi né cambi abbonamento.
           </p>
         </div>
       </div>
@@ -78,6 +78,12 @@ export default async function ContrattiSenzaConsulente({ searchParams }: { searc
                         ) : (
                           <span className="bollino rosso">Da prendere in carico</span>
                         )}
+                        {r.stato === 'da_assegnare' && r.suggerito && (
+                          <div className="attenuato" title="Un suggerimento, non un'assegnazione: chi prende in carico conferma o sceglie un altro">
+                            Suggerito: <strong>{r.suggerito}</strong>
+                            {r.motivo_suggerimento && <> · {r.motivo_suggerimento}</>}
+                          </div>
+                        )}
                         {r.note && <div style={{ whiteSpace: 'pre-wrap' }}>{r.note}</div>}
                       </td>
                       <td>
@@ -87,7 +93,7 @@ export default async function ContrattiSenzaConsulente({ searchParams }: { searc
                               <input type="hidden" name="contratto" value={r.contract_id} />
                               <input type="hidden" name="torna" value={qui} />
                               <textarea name="note" required rows={2} placeholder="Nota (obbligatoria): come è nato il contratto, cosa vi siete detti" aria-label="Nota" />
-                              <select name="staff" defaultValue="" aria-label="Chi lo prende in carico">
+                              <select name="staff" defaultValue={r.suggerito_id ?? ''} aria-label="Chi lo prende in carico">
                                 <option value="">Io</option>
                                 {staff.map((o) => (
                                   <option key={o.id} value={o.id}>

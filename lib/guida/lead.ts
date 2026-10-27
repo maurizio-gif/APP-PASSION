@@ -21,6 +21,7 @@ Se la stessa persona manda due volte lo stesso modulo nella mezz'ora, l'opportun
 Se una persona si iscrive senza che sia nata un'opportunità («in prima battuta»), il suo abbonamento nuovo compare nella home, nel riquadro **«Contratti senza consulente»** (rinnovi e cambi abbonamento non ci sono). Chi l'ha seguita lo prende in carico con **«Prendo in carico»** e **scrive una nota** (obbligatoria): come è nato il contratto, cosa vi siete detti. La nota resta anche nella scheda della persona.
 
 - Se l'iscrizione l'ha fatta la persona da sola, online, si segna **«Online, nessun consulente»**: non va a nessuno.
+- Se la persona ha già lavorato con un consulente (task fatti, anche un tentativo, o una prova che seguiva) compare **«Suggerito»**, già scelto nella tendina, con il motivo. È solo un suggerimento: un task non dice chi ha venduto. Confermi o scegli un altro.
 - Un collega lo si può indicare nella tendina; uno già assegnato lo cambia solo chi lo ha in carico, o un admin.
 - Il consulente scritto su PerfectGym **non si usa**: conta solo chi lo prende in carico qui. Gli abbonamenti in prima battuta contano nella performance di chi li ha presi.
 

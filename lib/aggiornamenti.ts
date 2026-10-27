@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-27',
+    titolo: 'Nei contratti senza consulente c’è il consulente suggerito',
+    testo:
+      'Se una persona ha già lavorato con un consulente (task fatti, anche un tentativo, o una prova che seguiva), sotto «Da prendere in carico» compare «Suggerito: nome» con il motivo, già scelto nella tendina. È solo un suggerimento: confermi o scegli un altro, e la nota resta obbligatoria.',
+    dove: 'Dashboard consulente → Contratti senza consulente',
+  },
+  {
+    data: '2026-10-27',
     titolo: 'Gli abbonamenti in prima battuta contano nella tua performance',
     testo:
       'Nella performance c’è il nuovo indice «Abbonamenti in prima battuta», con il numero e la somma dei canoni: sono gli abbonamenti che hai preso in carico da «Contratti senza consulente». Sono contati anche in «Abbonamenti venduti», e nel Report giornaliero vanno a chi li ha presi in carico.',
