@@ -38,15 +38,62 @@ export function LinkGuida({ argomento }: { argomento: string }) {
   )
 }
 
-export function Schede({ voci, attiva, base }: { voci: { chiave: string; testo: string; n?: number }[]; attiva: string; base: string }) {
+type Voce = { chiave: string; testo: string; n?: number; gruppo?: string }
+// Un gruppo di schede: il momento del percorso a cui appartengono, con la sua
+// etichetta e il suo colore (tono: lavoro, prova, chiusi).
+export type GruppoSchede = { chiave: string; testo: string; tono: 'lavoro' | 'prova' | 'chiusi' }
+
+// Gruppi di schede con i link gia' fatti: per le pagine che filtrano su due cose
+// insieme (Task: di chi e quando; Debitori: abbonamento e chi li segue).
+export type GruppoLink = {
+  testo: string
+  tono: GruppoSchede['tono']
+  voci: { testo: string; href: string; attivo: boolean; n?: number }[]
+}
+export function SchedeMulti({ gruppi }: { gruppi: GruppoLink[] }) {
   return (
-    <div className="schede-vista">
-      {voci.map((v) => (
-        <Link key={v.chiave} href={`${base}${base.includes('?') ? '&' : '?'}vista=${v.chiave}`} className={v.chiave === attiva ? 'attivo' : undefined}>
-          {v.testo}
-          {v.n != null && <span className="conta">{v.n}</span>}
-        </Link>
+    <div className="schede-gruppi">
+      {gruppi.map((g) => (
+        <div key={g.testo} className={`schede-gruppo tono-${g.tono}`}>
+          <span className="gruppo-etichetta">{g.testo}</span>
+          <div className="schede-vista">
+            {g.voci.map((v) => (
+              <Link key={v.href} href={v.href} scroll={false} className={v.attivo ? 'attivo' : undefined}>
+                {v.testo}
+                {v.n != null && <span className="conta">{v.n}</span>}
+              </Link>
+            ))}
+          </div>
+        </div>
       ))}
+    </div>
+  )
+}
+
+export function Schede({ voci, attiva, base, gruppi }: { voci: Voce[]; attiva: string; base: string; gruppi?: GruppoSchede[] }) {
+  const link = (v: Voce) => (
+    <Link key={v.chiave} href={`${base}${base.includes('?') ? '&' : '?'}vista=${v.chiave}`} scroll={false} className={v.chiave === attiva ? 'attivo' : undefined}>
+      {v.testo}
+      {v.n != null && <span className="conta">{v.n}</span>}
+    </Link>
+  )
+  if (!gruppi) return <div className="schede-vista">{voci.map(link)}</div>
+  // Le voci senza gruppo (Tutti) stanno da sole in fondo, senza etichetta.
+  const sciolte = voci.filter((v) => !gruppi.some((g) => g.chiave === v.gruppo))
+  return (
+    <div className="schede-gruppi">
+      {gruppi.map((g) => (
+        <div key={g.chiave} className={`schede-gruppo tono-${g.tono}`}>
+          <span className="gruppo-etichetta">{g.testo}</span>
+          <div className="schede-vista">{voci.filter((v) => v.gruppo === g.chiave).map(link)}</div>
+        </div>
+      ))}
+      {sciolte.length > 0 && (
+        <div className="schede-gruppo tono-tutti">
+          <span className="gruppo-etichetta" aria-hidden="true">&nbsp;</span>
+          <div className="schede-vista">{sciolte.map(link)}</div>
+        </div>
+      )}
     </div>
   )
 }

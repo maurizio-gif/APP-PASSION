@@ -17,9 +17,66 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-27',
-    titolo: 'Il menu laterale scorre sul computer: ora si raggiungono tutte le voci',
-    testo: 'Con tante voci, sullo schermo del computer le ultime restavano nascoste. Ora l’elenco delle sezioni scorre da solo, mentre logo, ricerca e il tuo nome con «Esci» restano fermi.',
-    dove: 'Menu laterale',
+    titolo: 'Nuova grafica in tutto il CRM',
+    testo:
+      'Il CRM ha un aspetto nuovo: schede, tabelle e pulsanti rifatti, in nero e rosso, più comodo anche da telefono. È scuro di partenza: con il pulsante col sole, in basso a sinistra, passi al tema chiaro. Funziona tutto come prima. Le novità più grandi sono qui sotto: la Dashboard consulente con i riquadri che portano alle sezioni, la sezione Senza consulente, l’Appello complessivo come calendario e il menu in categorie, con il nuovo gruppo Istruttori.',
+    dove: 'Tutto il CRM',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Nuova sezione «Senza consulente»',
+    testo:
+      'Nel menu Clienti, tra Prove e Rinnovi, c’è «Senza consulente»: riunisce in tre linguette le opportunità, le prove in corso e i contratti nuovi che nessun consulente ha ancora in carico, ognuna con il suo pulsante «Prendo in carico». Ci arrivi anche dal primo riquadro della Dashboard consulente.',
+    dove: 'Senza consulente (menu Clienti)',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'L’Appello complessivo è un calendario del giorno',
+    testo:
+      'Le lezioni sono divise per orario, con i presenti e una barra, l’istruttore e la sala; premendo «Prenotati» vedi chi ha prenotato. In alto c’è il passaggio tra lezioni future e passate. Il tutorial è il pulsante «Guarda il tutorial» nella barra, e la spiegazione dei segnali (Prova, Nuovo iscritto, First Timer) è nel «?» accanto al titolo.',
+    dove: 'Appello complessivo',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Report giornaliero e La mia performance hanno nuovi riquadri e tabelle',
+    testo:
+      'I numeri stanno in un unico pannello e le tabelle («Per consulente», «Settimana per settimana» e gli elenchi del report) sono più leggibili, con la testata scura. In La mia performance i cinque grafici stanno su una riga e la descrizione di ogni indice è nella «i». Con «Settimana per settimana» vedi tutti gli indici, una colonna per settimana.',
+    dove: 'Report giornaliero, Dashboard consulente',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'In Utenti «Nuovo utente» è un pulsante e gli utenti sono in due colonne',
+    testo:
+      'Accanto alla barra di ricerca c’è il pulsante «Nuovo utente»: lo premi e sotto compare il modulo per aggiungerlo. Gli utenti, e quelli non più attivi, sono ora disposti in due colonne.',
+    dove: 'Utenti',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'In Disdette i filtri sono in ordine',
+    testo:
+      'Ricerca, consulente e ordine stanno su una riga; sotto, i due intervalli di date (scadenza e disdetta) con il pulsante Filtra. Su telefono ogni campo sta su una riga.',
+    dove: 'Disdette',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Nel menu, Report giornaliero sta in Analisi e c’è il gruppo Istruttori',
+    testo:
+      'Il Report giornaliero (solo admin) è ora dentro il gruppo Analisi. Appello e Appello complessivo stanno nel nuovo gruppo Istruttori, tra Analisi e Team.',
+    dove: 'Menu a sinistra',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'La home è la Dashboard consulente: i riquadri portano alle sezioni e sotto c’è La mia performance',
+    testo:
+      'Prove in scadenza, Rinnovi, Disdette, Task e Senza consulente non aprono più un elenco nella home: premendoli vai alla loro sezione. «Senza consulente» è una sezione nuova, con tre elenchi (opportunità, prove in corso e contratti da prendere in carico). Sotto i riquadri c’è sempre «La mia performance», con il passaggio a «Settimana per settimana».',
+    dove: 'Dashboard consulente, Senza consulente (menu Clienti)',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Appello, Report giornaliero e Contratti senza consulente hanno lo stesso aspetto del resto del CRM',
+    testo:
+      'Le pagine nuove di questi giorni ora hanno il titolo con il punto «?» per leggere la spiegazione, le schede e le tabelle come le altre sezioni, e i filtri leggibili anche sul telefono. Nei Contratti senza consulente il modulo per prendere in carico si apre con il pulsante, così la tabella non si allarga.',
+    dove: 'Appello, Appello complessivo, Report giornaliero, Contratti senza consulente',
   },
   {
     data: '2026-10-27',
@@ -200,6 +257,104 @@ export const AGGIORNAMENTI: Aggiornamento[] = [
     testo:
       'Nelle schede Prove in corso, Prove scadute e Vinte c’è la colonna Pagamento: dice se il Pass o l’abbonamento è pagato (verde) o da pagare (rosso, con l’importo). Prima per saperlo bisognava aprire la scheda della persona.',
     dove: 'Opportunità → Prove in corso, Prove scadute, Vinte',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'La Guida spiega perché le prove in corso sono due numeri',
+    testo:
+      'Il numero di «In corso» in Prove è più alto di «Prove in corso» in Opportunità: in Prove si contano tutti i pass attivi, in Opportunità solo quelli di chi ha un’opportunità. Ora la Guida lo spiega, e descrive anche le schede «Prove in corso» e «Prove scadute» di Opportunità.',
+    dove: 'Guida (Prove e Opportunità)',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Il numero di righe in cima agli elenchi',
+    testo:
+      'In Prove, Rinnovi, Disdette e Debitori, sopra la tabella c’è una fascia con quante righe stai guardando, per esempio «8 prove». Prima c’era solo in Opportunità.',
+    dove: 'Prove, Rinnovi, Disdette, Debitori',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Il menu a sinistra è in categorie',
+    testo:
+      'Le voci sono raggruppate in Clienti, Analisi, Istruttori, Team e Assistenza, e ogni gruppo si apre e si chiude. In alto, sotto il logo, ci sono il tuo nome e la data.',
+    dove: 'Menu a sinistra',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Il pulsante per tornare indietro',
+    testo:
+      'In alto a sinistra, accanto al titolo, c’è un pulsante tondo per tornare alla pagina di prima.',
+    dove: 'Tutte le pagine',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Le spiegazioni sono nel «?»',
+    testo:
+      'Le frasi che spiegano una sezione o un riquadro ora si leggono passando sul «?» accanto al titolo. Così le pagine sono più libere.',
+    dove: 'Abbonamenti, Marketing, Dashboard consulente e le altre sezioni',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'I ticket non sono più in home',
+    testo:
+      'I riquadri sui ticket sono spariti dalla home. Li trovi tutti in Ticket, nelle viste «Per R2D» e «Per Passion».',
+    dove: 'Dashboard consulente, Ticket',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Prove: nuova scheda «Perse»',
+    testo:
+      'Fra le prove chiuse, «Perse» mostra solo quelle finite senza iscrizione.',
+    dove: 'Prove',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Un campo «Cerca» negli elenchi',
+    testo:
+      'In Prove, Rinnovi, Disdette, Task, Debitori e Ticket puoi scrivere un nome per trovare subito la riga. Cerca solo nella scheda che hai aperto.',
+    dove: 'Prove, Rinnovi, Disdette, Task, Debitori, Ticket',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Ticket: nomi nuovi e thread chiuso',
+    testo:
+      'Il «filo» ora si chiama «Thread» e si apre solo quando serve. La colonna «Socio» è diventata «Cliente», «Aperto» è diventato «Aperto da».',
+    dove: 'Ticket',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'La fonte è un bollino sotto il nome',
+    testo:
+      'In Opportunità e in Prove, da dove arriva la persona (Meta, Sito, Tour…) si vede con un bollino sotto il nome del cliente. In Opportunità non c’è più la colonna «Tipologia».',
+    dove: 'Opportunità, Prove',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'La scheda della persona è rifatta',
+    testo:
+      'Opportunità, Prova, Abbonamento, Rinnovo e Disdetta sono riquadri a righe, con lo storico in fondo. I task si dividono fra da fare e fatti. Prenotazioni, Accessi e Ticket stanno su una riga e si aprono con un tocco.',
+    dove: 'Scheda della persona',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Abbonamenti ridisegnato',
+    testo:
+      'I grafici hanno i colori del marchio. «Quanto durano» è in tre schede, una per tipo di abbonamento, con il confronto fra gli ultimi 12 mesi e i 12 prima. La tabella mese per mese ha i nomi delle colonne in alto.',
+    dove: 'Abbonamenti',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Marketing ridisegnato',
+    testo:
+      'Periodo, date e fonte stanno in un solo pannello. Il percorso delle opportunità è un grafico a barre, con i numeri e le percentuali di ogni passo.',
+    dove: 'Marketing',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Curriculum, Utenti e Guida con la nuova grafica',
+    testo:
+      'In Curriculum il file è un pulsante con il tipo e il peso. In Utenti ogni persona si apre e si chiude e «Aggiungi nuovo utente» è un pulsante scuro. La Guida ha schede per argomento e un indice numerato, e due argomenti nuovi: «Le parole del CRM» e «Risposte rapide».',
+    dove: 'Curriculum, Utenti, Guida',
   },
   {
     data: '2026-10-21',

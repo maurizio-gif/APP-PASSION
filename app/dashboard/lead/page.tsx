@@ -1,21 +1,28 @@
 import Link from 'next/link'
 import { crm, richiediSezione } from '@/lib/crm'
 import { FONTE } from '@/lib/formato'
-import { Avviso, LinkGuida, Schede, Vuoto } from '@/components/Ui'
+import { Avviso, LinkGuida, Schede, Vuoto, type GruppoSchede } from '@/components/Ui'
 import { TabellaLead } from '@/components/TabellaLead'
 
+// Le schede sono raggruppate per momento del percorso: il lavoro da fare, la
+// prova, i lead chiusi. «Tutti» sta da solo.
+const GRUPPI: GruppoSchede[] = [
+  { chiave: 'lavoro', testo: 'Da lavorare', tono: 'lavoro' },
+  { chiave: 'prova', testo: 'In prova', tono: 'prova' },
+  { chiave: 'chiusi', testo: 'Chiusi', tono: 'chiusi' },
+]
 const VISTE = [
-  { chiave: 'da_gestire', testo: 'Da gestire' },
-  { chiave: 'in_gestione', testo: 'In gestione' },
-  { chiave: 'mie', testo: 'Le mie' },
+  { chiave: 'da_gestire', testo: 'Da gestire', gruppo: 'lavoro' },
+  { chiave: 'in_gestione', testo: 'In gestione', gruppo: 'lavoro' },
+  { chiave: 'mie', testo: 'Le mie', gruppo: 'lavoro' },
   // In gestione, ma senza un task aperto da oggi in avanti: nessuno ha fissato il prossimo passo.
-  { chiave: 'senza_task', testo: 'Senza task' },
+  { chiave: 'senza_task', testo: 'Senza task', gruppo: 'lavoro' },
   // Prove in corso: il Pass e' attivo. Prove scadute: il Pass e' finito senza
   // abbonamento. Vinte: chiuse con un abbonamento.
-  { chiave: 'in_prova', testo: 'Prove in corso' },
-  { chiave: 'prove_scadute', testo: 'Prove scadute' },
-  { chiave: 'vinte', testo: 'Vinte' },
-  { chiave: 'perse', testo: 'Perse' },
+  { chiave: 'in_prova', testo: 'Prove in corso', gruppo: 'prova' },
+  { chiave: 'prove_scadute', testo: 'Prove scadute', gruppo: 'prova' },
+  { chiave: 'vinte', testo: 'Vinte', gruppo: 'chiusi' },
+  { chiave: 'perse', testo: 'Perse', gruppo: 'chiusi' },
   { chiave: 'tutte', testo: 'Tutte' },
 ]
 
@@ -53,14 +60,19 @@ export default async function Lead({ searchParams }: { searchParams: Filtri }) {
     <>
       <div className="testata">
         <div>
-          <h1>Opportunità</h1>
-          <p>Si prende in carico, si segue coi task e si chiude come persa: vinta la segna PerfectGym, quando compare il contratto o la prova.{' '}<LinkGuida argomento="lead" /></p>
+          <div className="titolo-riga">
+            <h1>Opportunità</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">Si prende in carico, si segue coi task e si chiude come persa: vinta la segna PerfectGym, quando compare il contratto o la prova.{' '}<LinkGuida argomento="lead" /></span>
+            </span>
+          </div>
         </div>
         <Link className="bottone" href="/dashboard/lead/nuovo">+ Nuova opportunità</Link>
       </div>
       <Avviso errore={searchParams.errore} />
 
-      <Schede voci={VISTE} attiva={vista} base={base} />
+      <Schede voci={VISTE} attiva={vista} base={base} gruppi={GRUPPI} />
 
       <form className="filtri" action="/dashboard/lead">
         <input type="hidden" name="vista" value={vista} />

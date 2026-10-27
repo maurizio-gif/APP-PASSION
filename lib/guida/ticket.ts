@@ -4,7 +4,7 @@ export const ticket: Argomento = {
   chiave: 'ticket',
   titolo: 'Ticket di assistenza',
   sezione: 'ticket',
-  inBreve: 'Quando qualcosa non funziona o serve R2D: prima i controlli, poi il ticket nel CRM. Il supporto lo verifica, R2D risponde nel filo.',
+  inBreve: 'Quando qualcosa non funziona o serve R2D: prima i controlli, poi il ticket nel CRM. Il supporto lo verifica, R2D risponde nel thread.',
   testo: `
 ## Prima di aprire un ticket
 Tanti problemi si risolvono al desk in un minuto. Se riguarda un socio che non entra o non prenota, apri la sua scheda e controlla:
@@ -21,7 +21,7 @@ Se sulla persona c'è già un ticket aperto per lo stesso problema, non aprirne 
 > Se qualcosa blocca il lavoro di tutti (tornello, app giù, pagamenti), apri il ticket spuntando «Blocca il lavoro di tutti» e **chiama anche R2D**: il ticket da solo non avvisa nessuno.
 
 ## Aprire un ticket
-Se riguarda un socio, aprilo dalla sua scheda con **«+ Apri un ticket»**: il ticket si porta dietro la sua situazione di quel momento (abbonamento, saldo, certificato, ultimi ingressi, prenotazioni) e R2D non te la deve chiedere. Altrimenti da [Ticket](/dashboard/ticket), **«+ Nuovo ticket»**.
+Se riguarda un socio, aprilo dalla sua scheda con **«+ Apri un ticket»**: il ticket è collegato a lui e, mentre lo scrivi, vedi la sua situazione (abbonamento, saldo, certificato). Altrimenti da [Ticket](/dashboard/ticket), **«+ Nuovo ticket»**.
 
 1. Scegli **che cosa serve**:
   - **Qualcosa non funziona**: un socio non entra, non prenota, un pagamento o un'automazione che non va;
@@ -42,16 +42,16 @@ Se riguarda un socio, aprilo dalla sua scheda con **«+ Apri un ticket»**: il t
 - Le **proposte di modifica** aspettano la riunione settimanale: il supporto le chiude con quello che si è deciso.
 
 ## Seguire la risposta
-Tutto passa dal **filo** del ticket: i messaggi di Passion e di R2D, e ogni passaggio (inviato, preso in carico, risolto). Per aggiungere qualcosa scrivi in «Scrivi» e **«Aggiungi al filo»**.
+Tutto passa dal **thread** del ticket: i messaggi di Passion e di R2D, e ogni passaggio (inviato, preso in carico, risolto). Per aggiungere qualcosa scrivi in «Scrivi» e **«Aggiungi al thread»**.
 
-- Quando R2D ha bisogno di un'informazione, il ticket va in **Aspetta Passion**. Lo trovi nella vista **«Aspettano Passion»** e in home, nel riquadro **«Ticket in attesa»**. Rispondi nel filo: alla prima risposta torna in lavorazione.
+- Quando R2D ha bisogno di un'informazione, il ticket va in **Aspetta Passion**. Lo trovi nella vista **«Per Passion»** della sezione Ticket. Rispondi nel thread: alla prima risposta torna in lavorazione.
 - R2D chiude il ticket con **di che cosa si trattava, la causa e la soluzione**: le trovi in cima alla pagina del ticket.
 - Se il problema si ripresenta, il supporto (o R2D) lo **riapre** con il motivo. Non aprirne uno nuovo.
 
 ## Le viste
 - **Da verificare**: le segnalazioni che il supporto deve ancora guardare;
-- **Da R2D**: mandate a R2D e in lavorazione;
-- **Aspettano Passion**: R2D aspetta una risposta dal desk;
+- **Per R2D**: mandate a R2D e in lavorazione;
+- **Per Passion**: R2D aspetta una risposta dal desk;
 - **Modifiche**: le modifiche decise in riunione, da confermare o da rilasciare;
 - **Aperti da me**: i tuoi ticket non ancora chiusi;
 - **Chiusi**: gli ultimi 90 giorni;

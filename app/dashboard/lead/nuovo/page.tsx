@@ -18,9 +18,14 @@ export default async function NuovoLead({ searchParams }: { searchParams: { erro
     <>
       <div className="testata">
         <div>
-          <h1>Nuova opportunità</h1>
-          <p>Se la persona c&apos;è già (stesso telefono o email) l&apos;opportunità si aggancia alla sua scheda.
-            L&apos;opportunità nasce anche su PerfectGym (come lead), se la persona non c&apos;è già.</p>
+          <div className="titolo-riga">
+            <h1>Nuova opportunità</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">Se la persona c&apos;è già (stesso telefono o email) l&apos;opportunità si aggancia alla sua scheda.
+            L&apos;opportunità nasce anche su PerfectGym (come lead), se la persona non c&apos;è già.</span>
+            </span>
+          </div>
         </div>
         <Link href="/dashboard/lead">← Opportunità</Link>
       </div>

@@ -2,6 +2,7 @@ import type { Abbonamenti, DurataPeriodo, ProvaPerPass, Vincolo } from '@/lib/cr
 import { formatoCifra, formatoData, formatoFa } from '@/lib/formato'
 import { Colonne, type Punto } from './Colonne'
 import { LinkGuida } from './Ui'
+import { Accordion, Riquadro } from './FaseRighe'
 
 // La dashboard abbonamenti, disegnata: riceve i numeri di crm_abbonamenti() e
 // non ne calcola nessuno (le regole stanno nel database, in
@@ -227,12 +228,15 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
     <>
       <div className="testata">
         <div>
-          <h1>Abbonamenti</h1>
-          <p>
-            Dal mirror di PerfectGym, aggiornato {formatoFa(d.aggiornato_il)}. Conta ogni contratto non aggiuntivo con canone
+          <div className="titolo-riga">
+            <h1>Abbonamenti</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">Dal mirror di PerfectGym, aggiornato {formatoFa(d.aggiornato_il)}. Conta ogni contratto non aggiuntivo con canone
             sopra lo zero: restano fuori pass, certificati, Wellhub e Fitprime, staff e add-on.{' '}
-            <LinkGuida argomento="abbonamenti" />
-          </p>
+            <LinkGuida argomento="abbonamenti" /></span>
+            </span>
+          </div>
         </div>
       </div>
 
@@ -261,62 +265,42 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
         />
       </div>
 
-      <section className="scheda">
-        <h2>Abbonamenti attivi a fine mese</h2>
-        <p className="piccolo attenuato sotto-titolo">Ultimi 24 mesi. Il mese in corso (tratteggiato) è contato a oggi.</p>
+      <Riquadro titolo={<>Abbonamenti attivi a fine mese</>} aiuto={<>Ultimi 24 mesi. Il mese in corso (tratteggiato) è contato a oggi.</>}>
         <Colonne punti={attivi} unita="attivi" />
-      </section>
+      </Riquadro>
 
-      <section className="scheda">
-        <h2>Nuovi abbonamenti</h2>
-        <p className="piccolo attenuato sotto-titolo">
-          Per mese di inizio, esclusi i rinnovi: chi aveva già un abbonamento in corso, o finito da meno di 30 giorni, non è
-          nuovo. Chi torna dopo più di 30 giorni sì.
-        </p>
+      <Riquadro titolo={<>Nuovi abbonamenti</>} aiuto={<>Per mese di inizio, esclusi i rinnovi: chi aveva già un abbonamento in corso, o finito da meno di 30 giorni, non è
+          nuovo. Chi torna dopo più di 30 giorni sì.</>}>
         <Colonne punti={nuovi} unita="nuovi" />
-      </section>
+      </Riquadro>
 
-      <section className="scheda">
-        <h2>Scaduti e non rinnovati</h2>
-        <p className="piccolo attenuato sotto-titolo">
-          Per mese di fine: abbonamenti finiti dopo i quali, entro 30 giorni, non ne è partito un altro. Tratteggiati i mesi con
-          abbonamenti finiti da meno di 30 giorni, il numero può ancora scendere.
-        </p>
+      <Riquadro titolo={<>Scaduti e non rinnovati</>} aiuto={<>Per mese di fine: abbonamenti finiti dopo i quali, entro 30 giorni, non ne è partito un altro. Tratteggiati i mesi con
+          abbonamenti finiti da meno di 30 giorni, il numero può ancora scendere.</>}>
         <Colonne punti={scaduti} unita="scaduti" />
-      </section>
+      </Riquadro>
 
-      <section className="scheda">
-        <h2>Saldo del mese</h2>
-        <p className="piccolo attenuato sotto-titolo">Nuovi abbonamenti meno scaduti non rinnovati. Sotto lo zero, se ne perdono più di quanti ne entrano.</p>
+      <Riquadro titolo={<>Saldo del mese</>} aiuto={<>Nuovi abbonamenti meno scaduti non rinnovati. Sotto lo zero, se ne perdono più di quanti ne entrano.</>}>
         <Colonne punti={saldo} formato="segno" unita="di saldo" />
-      </section>
+      </Riquadro>
 
       {retention.length > 0 && (
-        <section className="scheda">
-          <h2>Retention</h2>
-          <p className="piccolo attenuato sotto-titolo">
-            Su base annuale: degli iscritti di ogni mese, quanti erano iscritti anche lo stesso giorno dell&apos;anno prima,{' '}
+        <Riquadro titolo={<>Retention</>} aiuto={<>Su base annuale: degli iscritti di ogni mese, quanti erano iscritti anche lo stesso giorno dell&apos;anno prima,{' '}
             <strong>senza interruzioni</strong> (settembre 2026 contro settembre 2025, agosto 2026 contro agosto 2025…). Iscritto è chi ha
             un abbonamento principale: non aggiuntivo, a pagamento o dei piani OLD del vecchio gestionale. Un cambio di abbonamento o una
             pausa breve non interrompono: basta ripartire entro 30 giorni dalla fine del precedente, come per i rinnovi. L&apos;ultimo
-            giorno del mese; il mese in corso (tratteggiato) è contato a oggi.
-          </p>
+            giorno del mese; il mese in corso (tratteggiato) è contato a oggi.</>}>
           <Colonne punti={retention} formato="percento" massimo={100} altezza={160} unita="di retention" />
           <p className="piccolo attenuato">
             Quando i soci crescono, la retention scende anche se nessuno se ne va: un anno prima c&apos;erano meno persone da trattenere.
             Nel riquadro di ogni mese c&apos;è anche l&apos;altra lettura: di chi c&apos;era un anno prima, quanti ci sono ancora.
           </p>
-        </section>
+        </Riquadro>
       )}
 
-      <section className="scheda">
-        <h2>Pass di prova: quanti diventano abbonamento</h2>
-        <p className="piccolo attenuato sotto-titolo">
-          Guest Pass e Pass giornalieri (Reformer, Sala Pesi, Corsi Fitness, Crossfit…), contati per <strong>persona</strong>: chi
+      <Riquadro titolo={<>Pass di prova: quanti diventano abbonamento</>} aiuto={<>Guest Pass e Pass giornalieri (Reformer, Sala Pesi, Corsi Fitness, Crossfit…), contati per <strong>persona</strong>: chi
           attiva più pass conta una volta, e i suoi pass a meno di 30 giorni l’uno dall’altro sono una prova sola. Per mese di
           fine della prova: quante persone l’hanno finita e quante si sono abbonate, durante la prova o entro 30 giorni. Non
-          contano i pass di chi era già abbonato.
-        </p>
+          contano i pass di chi era già abbonato.</>}>
         <div className="numeri-guest">
           <ConfrontoProve titolo="Tutte le prove" ora={proveUltimi.tutti} prima={provePrima.tutti} />
           <ConfrontoProve titolo="Con un Guest Pass" ora={proveUltimi.guest} prima={provePrima.guest} />
@@ -352,18 +336,15 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
         </div>
         <h3 className="titoletto">Quante si abbonano, in percentuale</h3>
         <Colonne punti={conversione} formato="percento" massimo={100} altezza={160} unita="di conversione" />
-      </section>
+      </Riquadro>
 
-      <details className="scheda">
-        <summary>
-          <strong>Pass di prova mese per mese: durata del Guest Pass, Reformer e Formula 8</strong>
-        </summary>
-        <p className="piccolo attenuato">
+      <Accordion titolo="Pass di prova mese per mese: durata del Guest Pass, Reformer e Formula 8" corpoClasse="sotto-dati">
+        <p className="piccolo attenuato nota-sotto">
           Per mese di fine della prova. Ogni cella dice quante persone si sono abbonate su quante hanno finito la prova. «Hanno
           prenotato» sono le persone con almeno una lezione prenotata durante la prova. Dove non c’è nessuno compare un trattino.
         </p>
         <div className="tabella-scorre">
-          <table>
+          <table className="tabella-mesi tabella-larga">
             <thead>
               <tr>
                 <th>Mese</th>
@@ -410,41 +391,22 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
             </tbody>
           </table>
         </div>
-        <p className="piccolo attenuato">
+        <p className="piccolo attenuato nota-sotto">
           Le lezioni Formula 8 esistono da settembre 2026. Chi ha finito la prova da meno di 30 giorni può ancora abbonarsi, quindi
           i mesi più recenti possono ancora salire.
         </p>
-      </details>
+      </Accordion>
 
-      <section className="scheda">
-        <h2>Quanto durano</h2>
-        <p className="piccolo attenuato sotto-titolo">
-          Quanto resta chi entra con un abbonamento senza scadenza (Mensile, Flex, Open, Formula 8), e quanti mesi rimane{' '}
+      <Riquadro titolo={<>Quanto durano</>} aiuto={<>Quanto resta chi entra con un abbonamento senza scadenza (Mensile, Flex, Open, Formula 8), e quanti mesi rimane{' '}
           <strong>dopo il vincolo minimo</strong> prima di andarsene. I cambi contano: un mensile che passa al quadrimestrale, un
           quadrimestrale che passa all’annuale, un annuale che cambia piano restano la stessa permanenza, dal primo giorno del
           primo abbonamento all’ultimo dell’ultimo (con al massimo 30 giorni di vuoto). Il tipo è quello con cui la persona è
-          entrata.
-        </p>
+          entrata.</>}>
 
-        <div className="tabella-scorre">
-          <table>
-            <thead>
-              <tr>
-                <th>Tipo</th>
-                <th>Periodo di disdetta</th>
-                <th className="num">Disdetti</th>
-                <th className="num">Durata media</th>
-                <th className="num">Mesi oltre il vincolo</th>
-                <th className="num">Usciti prima del vincolo</th>
-                <th className="num">Con cambio piano</th>
-              </tr>
-            </thead>
-            <tbody>
-              {d.durata.riepilogo.map((r) => (
-                <RigheDurata key={r.vincolo} vincolo={r.vincolo} ultimi={r.periodi.ultimi_12} precedenti={r.periodi.precedenti_12} />
-              ))}
-            </tbody>
-          </table>
+        <div className="durate-schede">
+          {d.durata.riepilogo.map((r) => (
+            <SchedaDurata key={r.vincolo} vincolo={r.vincolo} ultimi={r.periodi.ultimi_12} precedenti={r.periodi.precedenti_12} />
+          ))}
         </div>
         <p className="piccolo attenuato">
           «Mesi oltre il vincolo» è la media su chi il vincolo l’ha finito; chi se n’è andato prima (recesso) è contato a parte. Ancora dentro, oggi:{' '}
@@ -498,14 +460,11 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
           dell’estate 2025, e le durate più lunghe di due anni ancora non si vedono. Senza colonna i trimestri con meno di{' '}
           {MINIMO} disdetti arrivati al vincolo.
         </p>
-      </section>
+      </Riquadro>
 
-      <details className="scheda">
-        <summary>
-          <strong>I numeri mese per mese</strong>
-        </summary>
+      <Accordion titolo="I numeri mese per mese" corpoClasse="sotto-dati">
         <div className="tabella-scorre">
-          <table>
+          <table className="tabella-mesi">
             <thead>
               <tr>
                 <th>Mese</th>
@@ -520,23 +479,23 @@ export function VistaAbbonamenti({ d }: { d: Abbonamenti }) {
               {[...d.mesi].reverse().map((m) => (
                 <tr key={m.mese}>
                   <td className="nowrap">
-                    {meseLungo.format(data(m.mese))}
-                    {m.in_corso && <span className="attenuato"> · in corso</span>}
+                    <strong>{meseLungo.format(data(m.mese))}</strong>
+                    {m.in_corso && <span className="bollino giallo mese-in-corso">in corso</span>}
                   </td>
                   <td className="num">{formatoCifra(m.attivi)}</td>
                   <td className="num">{formatoCifra(m.nuovi)}</td>
                   <td className="num">{formatoCifra(m.rinnovi)}</td>
                   <td className="num">
                     {formatoCifra(m.scaduti)}
-                    {m.scaduti_provvisori > 0 && <span className="attenuato"> ({formatoCifra(m.scaduti_provvisori)} provvisori)</span>}
+                    {m.scaduti_provvisori > 0 && <span className="provvisori"> {formatoCifra(m.scaduti_provvisori)} provvisori</span>}
                   </td>
-                  <td className="num">{segnato(m.nuovi - m.scaduti)}</td>
+                  <td className="num"><span className={`saldo ${m.nuovi - m.scaduti > 0 ? 'positivo' : m.nuovi - m.scaduti < 0 ? 'negativo' : ''}`}>{segnato(m.nuovi - m.scaduti)}</span></td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      </details>
+      </Accordion>
     </>
   )
 }
@@ -570,37 +529,45 @@ function Totale({ titolo, ora, confronti }: { titolo: string; ora: number; confr
   )
 }
 
-function RigheDurata({ vincolo, ultimi, precedenti }: { vincolo: Vincolo; ultimi: DurataPeriodo; precedenti: DurataPeriodo }) {
-  const riga = (p: DurataPeriodo, periodo: string, prima: boolean) => (
-    <tr key={periodo}>
-      {prima && (
-        <td rowSpan={2}>
-          <strong>{NOME_VINCOLO[vincolo]}</strong>
-          <div className="piccolo attenuato">{DETTAGLIO_VINCOLO[vincolo]}</div>
-        </td>
-      )}
-      <td className="nowrap">{periodo}</td>
-      <td className="num">{formatoCifra(p.disdetti)}</td>
-      <td className="num">{p.durata_media == null ? '—' : `${mesi1(p.durata_media)} mesi`}</td>
-      <td className="num">
-        <strong>{p.oltre_medio == null ? '—' : `${p.oltre_medio > 0 ? '+' : ''}${mesi1(p.oltre_medio)}`}</strong>
-        <span className="attenuato"> su {formatoCifra(p.arrivati)}</span>
-      </td>
-      <td className="num">
-        {formatoCifra(p.anticipati)}
-        {p.disdetti > 0 && <span className="attenuato"> · {Math.round((p.anticipati / p.disdetti) * 100)}%</span>}
-      </td>
-      <td className="num">
-        {formatoCifra(p.con_cambio)}
-        {p.disdetti > 0 && <span className="attenuato"> · {Math.round((p.con_cambio / p.disdetti) * 100)}%</span>}
-      </td>
-    </tr>
-  )
+function SchedaDurata({ vincolo, ultimi, precedenti }: { vincolo: Vincolo; ultimi: DurataPeriodo; precedenti: DurataPeriodo }) {
+  const quota = (parte: number, tutto: number) => (tutto > 0 ? `${Math.round((parte / tutto) * 100)}%` : null)
+  // Una riga per dato, le due colonne affiancate: si legge il confronto tra i due periodi a colpo d'occhio.
+  const righe: { nome: string; classe?: string; valore: (p: DurataPeriodo) => React.ReactNode }[] = [
+    { nome: 'Disdetti', valore: (p) => formatoCifra(p.disdetti) },
+    { nome: 'Durata media', valore: (p) => (p.durata_media == null ? '—' : <>{mesi1(p.durata_media)} <small>mesi</small></>) },
+    {
+      nome: 'Mesi oltre il vincolo',
+      classe: 'evidenza',
+      valore: (p) => (p.oltre_medio == null ? '—' : <>{`${p.oltre_medio > 0 ? '+' : ''}${mesi1(p.oltre_medio)}`} <small>su {formatoCifra(p.arrivati)}</small></>),
+    },
+    { nome: 'Usciti prima del vincolo', valore: (p) => <>{formatoCifra(p.anticipati)} {quota(p.anticipati, p.disdetti) && <small>{quota(p.anticipati, p.disdetti)}</small>}</> },
+    { nome: 'Con cambio piano', valore: (p) => <>{formatoCifra(p.con_cambio)} {quota(p.con_cambio, p.disdetti) && <small>{quota(p.con_cambio, p.disdetti)}</small>}</> },
+  ]
   return (
-    <>
-      {riga(ultimi, 'ultimi 12 mesi', true)}
-      {riga(precedenti, '12 mesi prima', false)}
-    </>
+    <div className="durata-scheda">
+      <div className="durata-testa">
+        <strong>{NOME_VINCOLO[vincolo]}</strong>
+        <span>{DETTAGLIO_VINCOLO[vincolo]}</span>
+      </div>
+      <table className="durata-confronto">
+        <thead>
+          <tr>
+            <th />
+            <th className="ora">Ultimi 12 mesi</th>
+            <th className="prima">12 mesi prima</th>
+          </tr>
+        </thead>
+        <tbody>
+          {righe.map((r) => (
+            <tr key={r.nome} className={r.classe}>
+              <th scope="row">{r.nome}</th>
+              <td className="ora">{r.valore(ultimi)}</td>
+              <td className="prima">{r.valore(precedenti)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
 

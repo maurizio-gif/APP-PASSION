@@ -23,8 +23,13 @@ export default async function Contratti({ searchParams }: { searchParams: { vist
     <>
       <div className="testata">
         <div>
-          <h1>Nuovi contratti</h1>
-          <p>I controlli su ogni contratto firmato: pagamento, codice fiscale, tessera.</p>
+          <div className="titolo-riga">
+            <h1>Nuovi contratti</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">I controlli su ogni contratto firmato: pagamento, codice fiscale, tessera.</span>
+            </span>
+          </div>
         </div>
       </div>
       <Avviso errore={searchParams.errore} />

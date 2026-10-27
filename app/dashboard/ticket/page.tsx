@@ -2,8 +2,9 @@ import Link from 'next/link'
 import { crm, richiediSezione, type ResocontoMese } from '@/lib/crm'
 import { NATURA_TICKET, traduci } from '@/lib/formato'
 import { assiste, smista } from '@/lib/permessi'
-import { Avviso, LinkGuida, Schede, Vuoto } from '@/components/Ui'
+import { type GruppoSchede, Avviso, LinkGuida, Schede, Vuoto } from '@/components/Ui'
 import { TabellaTicket } from '@/components/Ticket'
+import { filtraTicket, testoCercato } from '@/lib/ricerca'
 
 const VUOTI: Record<string, string> = {
   da_verificare: 'Nessuna segnalazione da verificare.',
@@ -17,28 +18,40 @@ const VUOTI: Record<string, string> = {
 // I ticket di assistenza: il desk scrive, il supporto verifica e manda a R2D,
 // R2D lavora e chiude con causa e soluzione. Le modifiche le scrive R2D dopo
 // la riunione settimanale col titolare.
-export default async function Ticket({ searchParams }: { searchParams: { vista?: string; errore?: string } }) {
+export default async function Ticket({ searchParams }: { searchParams: { vista?: string; errore?: string; q?: string } }) {
   const io = await richiediSezione('ticket')
   const conti = await crm.ticketConti()
   const viste = [
-    { chiave: 'da_verificare', testo: 'Da verificare', n: conti.da_verificare },
-    { chiave: 'r2d', testo: 'Da R2D', n: conti.r2d },
-    { chiave: 'in_attesa', testo: 'Aspettano Passion', n: conti.in_attesa },
-    { chiave: 'modifiche', testo: 'Modifiche', n: conti.modifiche_da_confermare + conti.modifiche_da_rilasciare },
-    { chiave: 'miei', testo: 'Aperti da me', n: conti.miei },
-    { chiave: 'chiusi', testo: 'Chiusi' },
-    { chiave: 'resoconto', testo: 'Resoconto' },
+    { chiave: 'da_verificare', testo: 'Da verificare', n: conti.da_verificare, gruppo: 'lavoro' },
+    { chiave: 'r2d', testo: 'Per R2D', n: conti.r2d, gruppo: 'lavoro' },
+    { chiave: 'in_attesa', testo: 'Per Passion', n: conti.in_attesa, gruppo: 'lavoro' },
+    { chiave: 'modifiche', testo: 'Modifiche', n: conti.modifiche_da_confermare + conti.modifiche_da_rilasciare, gruppo: 'modifiche' },
+    { chiave: 'miei', testo: 'Aperti da me', n: conti.miei, gruppo: 'tuoi' },
+    { chiave: 'chiusi', testo: 'Chiusi', gruppo: 'archivio' },
+    { chiave: 'resoconto', testo: 'Resoconto', gruppo: 'archivio' },
+  ]
+  const gruppi: GruppoSchede[] = [
+    { chiave: 'lavoro', testo: 'Da lavorare', tono: 'lavoro' },
+    { chiave: 'tuoi', testo: 'Per te', tono: 'prova' },
+  { chiave: 'modifiche', testo: 'Proposte', tono: 'lavoro' },
+    { chiave: 'archivio', testo: 'Archivio', tono: 'chiusi' },
   ]
   const predefinita = assiste(io) ? 'r2d' : smista(io) ? 'da_verificare' : 'miei'
   const vista = viste.some((v) => v.chiave === searchParams.vista) ? searchParams.vista! : predefinita
+  const q = testoCercato(searchParams.q)
 
   return (
     <>
       <div className="testata">
         <div>
-          <h1>Ticket</h1>
-          <p>Le segnalazioni del desk arrivano al supporto, che le verifica, risponde o le manda a R2D.
-            Se qualcosa blocca tutti (tornello, app giù, pagamenti), chiama anche R2D.{' '}<LinkGuida argomento="ticket" /></p>
+          <div className="titolo-riga">
+            <h1>Ticket</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">Le segnalazioni del desk arrivano al supporto, che le verifica, risponde o le manda a R2D.
+            Se qualcosa blocca tutti (tornello, app giù, pagamenti), chiama anche R2D.{' '}<LinkGuida argomento="ticket" /></span>
+            </span>
+          </div>
         </div>
         <div className="azioni-riga">
           {assiste(io) && <Link className="bottone secondario" href="/dashboard/ticket/modifica">+ Nuova modifica</Link>}
@@ -49,18 +62,26 @@ export default async function Ticket({ searchParams }: { searchParams: { vista?:
       {conti.bloccanti > 0 && (
         <p className="avviso">{conti.bloccanti === 1 ? 'C’è un ticket aperto che blocca il lavoro.' : `Ci sono ${conti.bloccanti} ticket aperti che bloccano il lavoro.`}</p>
       )}
-      <Schede voci={viste} attiva={vista} base="/dashboard/ticket" />
+      <Schede voci={viste} attiva={vista} base="/dashboard/ticket" gruppi={gruppi} />
 
-      {vista === 'resoconto' ? <Resoconto mesi={await crm.ticketResoconto(6)} /> : <Elenco vista={vista} />}
+      {vista !== 'resoconto' && (
+        <form className="filtri" action="/dashboard/ticket">
+          <input type="hidden" name="vista" value={vista} />
+          <input type="search" name="q" defaultValue={q ?? ''} placeholder="Numero, titolo, cliente, chi l'ha aperto" aria-label="Cerca nei ticket" />
+          <button className="bottone secondario" type="submit">Cerca</button>
+        </form>
+      )}
+
+      {vista === 'resoconto' ? <Resoconto mesi={await crm.ticketResoconto(6)} /> : <Elenco vista={vista} q={q} />}
     </>
   )
 }
 
-async function Elenco({ vista }: { vista: string }) {
-  const ticket = await crm.ticketElenco(vista)
+async function Elenco({ vista, q }: { vista: string; q: string | null }) {
+  const ticket = filtraTicket(await crm.ticketElenco(vista), q)
   return (
     <div className="scheda">
-      {ticket.length === 0 ? <Vuoto>{VUOTI[vista] ?? 'Nessun ticket.'}</Vuoto> : <TabellaTicket ticket={ticket} />}
+      {ticket.length === 0 ? <Vuoto>{q ? `Nessun ticket trovato per «${q}» in questa scheda.` : VUOTI[vista] ?? 'Nessun ticket.'}</Vuoto> : <TabellaTicket ticket={ticket} />}
     </div>
   )
 }

@@ -41,34 +41,37 @@ export function PercorsoLead({ t }: { t: PercorsoMarketing }) {
     },
   ]
   return (
-    <div className="percorso">
+    <div className="mk-percorso">
       {passi.map((p, i) => (
-        <div className="percorso-passo" key={p.nome}>
-          <div className="percorso-nome">
-            {p.nome}
-            <small>{p.nota}</small>
+        <div className={`mk-passo${i === passi.length - 1 ? ' ultimo' : ''}`} key={p.nome}>
+          <div className="mk-passo-nome">
+            <span className="mk-passo-numero">{i + 1}</span>
+            <span>
+              <strong>{p.nome}</strong>
+              <small>{p.nota}</small>
+            </span>
           </div>
-          <div className="percorso-barra" role="img" aria-label={`${p.nome}: ${formatoCifra(p.n)}`}>
+          <div className="mk-barra" role="img" aria-label={`${p.nome}: ${formatoCifra(p.n)}`}>
             {p.pieno.map((s, k) => (
-              <span key={k} className={`percorso-pieno ${s.classe}`} style={{ width: `${larghezza(s.n, t.lead)}%` }} />
+              <span key={k} className={`mk-pieno ${s.classe}`} style={{ width: `${larghezza(s.n, t.lead)}%` }} />
             ))}
           </div>
-          <div className="percorso-cifre">
+          <div className="mk-cifre">
             <strong>{formatoCifra(p.n)}</strong>
             {i > 0 && (
               <small>
-                {perc(p.n, t.lead)} delle opportunità
-                {i > 1 && ` · ${perc(p.n, t.qualificati)} dei qualificati`}
+                <b>{perc(p.n, t.lead)}</b> delle opportunità
+                {i > 1 && <><br /><b>{perc(p.n, t.qualificati)}</b> dei qualificati</>}
               </small>
             )}
           </div>
         </div>
       ))}
       {t.iscritti > 0 && (
-        <p className="piccolo attenuato percorso-legenda">
-          <span className="percorso-chiave" /> iscritti senza prova: {formatoCifra(senzaProva)}
-          <span className="percorso-chiave dopo-prova" /> iscritti dopo una prova: {formatoCifra(t.iscritti_dopo_prova)}
-        </p>
+        <div className="mk-legenda">
+          <span><i className="mk-chiave" /> Iscritti senza prova <strong>{formatoCifra(senzaProva)}</strong></span>
+          <span><i className="mk-chiave dopo-prova" /> Iscritti dopo una prova <strong>{formatoCifra(t.iscritti_dopo_prova)}</strong></span>
+        </div>
       )}
     </div>
   )

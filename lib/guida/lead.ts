@@ -7,7 +7,7 @@ export const lead: Argomento = {
   inBreve: 'Chi ci contatta e non è ancora iscritto: da dove arriva, chi la prende in carico, e quando si chiude. Vinta la segna PerfectGym, persa la segni tu.',
   testo: `
 ## Da dove arrivano
-Ogni opportunità ha una **fonte** (la «Tipologia» nell'elenco):
+Ogni opportunità ha una **fonte** (il bollino che compare con il nome del cliente nell'elenco):
 
 - **Sito**: i moduli del sito arrivano da soli. Chi chiede il **Pass** dal sito non è un'opportunità da lavorare: arriva già **Vinta · prova**, con la sua prova in [Prove](/dashboard/prove).
 - **Referral**: il modulo referral del sito arriva da solo, un'opportunità per ogni amico presentato; nella scheda c'è **Presentato da**.
@@ -18,7 +18,7 @@ Ogni opportunità ha una **fonte** (la «Tipologia» nell'elenco):
 Se la stessa persona manda due volte lo stesso modulo nella mezz'ora, l'opportunità resta una sola.
 
 ## Chi si iscrive senza chiedere informazioni
-Se una persona si iscrive senza che sia nata un'opportunità («in prima battuta»), il suo abbonamento nuovo compare nella home, nel riquadro **«Contratti senza consulente»** (rinnovi e cambi abbonamento non ci sono). Chi l'ha seguita lo prende in carico con **«Prendo in carico»** e **scrive una nota** (obbligatoria): come è nato il contratto, cosa vi siete detti. La nota resta anche nella scheda della persona.
+Se una persona si iscrive senza che sia nata un'opportunità («in prima battuta»), il suo abbonamento nuovo compare in **[Senza consulente](/dashboard/senza-consulente)**, nella linguetta **«Contratti senza consulente»** (rinnovi e cambi abbonamento non ci sono). Il riquadro **«Senza consulente»** della home porta lì: ci trovi anche le opportunità e le prove in corso che nessuno segue. Chi l'ha seguita lo prende in carico con **«Prendo in carico»** e **scrive una nota** (obbligatoria): come è nato il contratto, cosa vi siete detti. La nota resta anche nella scheda della persona.
 
 - Se l'iscrizione l'ha fatta la persona da sola, online, si segna **«Online, nessun consulente»**: non va a nessuno.
 - Se la persona ha già lavorato con un consulente (task fatti, anche un tentativo, o una prova che seguiva) compare **«Suggerito»**, già scelto nella tendina, con il motivo. È solo un suggerimento: un task non dice chi ha venduto. Confermi o scegli un altro.
@@ -34,7 +34,7 @@ Se una persona si iscrive senza che sia nata un'opportunità («in prima battuta
 > Perché il CRM riconosca l'iscrizione, su PerfectGym la persona deve avere **la stessa email o lo stesso telefono** dell'opportunità. Se li scrivi diversi, l'opportunità resta aperta anche se si è iscritta.
 
 ## Il lavoro di ogni giorno
-1. Apri **Da gestire** (anche dalla home, **«Opportunità da gestire»**): i più recenti sono in cima.
+1. Apri **Da gestire** (anche dalla sezione **Senza consulente**, elenco **Opportunità senza consulente**): i più recenti sono in cima.
 2. Prendi l'opportunità con **«Prendo in carico»**, o assegnala a chi la deve seguire.
 3. Chiama, scrivi su WhatsApp o per email. Ogni contatto segnalo come **task registrato** nella scheda della persona (Task: Telefonata, WhatsApp, Email o In sede; l'esito; le note dell'esito): è la storia dell'opportunità, e le note compaiono nell'elenco in **«Nota task»**.
 4. Se va richiamato, **programma un task** con la data: te lo ritrovi in home il giorno giusto.
@@ -55,9 +55,10 @@ Da **«+ Nuova opportunità»** (in home, in Opportunità e in Cerca):
 > Prima di creare un'opportunità, **cerca la persona**: la nuova opportunità si crea sempre, anche se la persona ne ha già una aperta. La ricerca è in cima al menu.
 
 ## Le viste e i filtri
-- **Da gestire**, **In gestione**, **Le mie** (quelle in gestione a te), **Senza task**, **Vinte**, **Perse**, **Tutte**;
+- **Da gestire**, **In gestione**, **Le mie** (quelle in gestione a te), **Senza task**, **Prove in corso**, **Prove scadute**, **Vinte**, **Perse**, **Tutte**;
 - **Senza task**: le opportunità in gestione su persone che non hanno nessun task aperto da oggi in avanti. Nessuno ha fissato il prossimo passo: o si programma un task, o l'opportunità si chiude. Ci sono anche quelle con solo task arretrati non fatti;
 - in cima: la ricerca per nome, telefono o email, **Tutte le fonti** e **Tutti i consulenti** (il lavoro di un collega), poi **«Filtra»**;
+- **Prove in corso** e **Prove scadute**: le opportunità che si sono chiuse come **Vinta · prova**. In corso, il pass è ancora attivo; scadute, il pass è finito e non c'è ancora un abbonamento. Il numero è quello delle **opportunità**: in [Prove](/dashboard/guida/prove) ce ne sono di più, perché lì si contano tutti i pass, anche di chi non ha un'opportunità;
 - l'elenco mostra al massimo 200 opportunità, le più recenti.
 
 ## Chi può fare cosa

@@ -1,9 +1,13 @@
 import { redirect } from 'next/navigation'
 import { logout } from '@/app/login/actions'
+import { CambiaTema } from '@/components/CambiaTema'
 import { Logo } from '@/components/Logo'
 import { Menu } from '@/components/Menu'
 import { Navigazione } from '@/components/Navigazione'
+import { IconaTitolo } from '@/components/IconaTitolo'
+import { Indietro } from '@/components/Indietro'
 import { crm } from '@/lib/crm'
+import { formatoGiornoLungo, oggiRoma } from '@/lib/formato'
 import { eAdmin, ha, puoRiunioni, puoVedere, SEZIONI, testoRuolo } from '@/lib/permessi'
 import { cerca } from './azioni'
 
@@ -18,6 +22,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const voci = [
     { href: '/dashboard', testo: 'Dashboard consulente' },
     ...SEZIONI.filter((s) => puoVedere(io, s.chiave)).map(({ href, testo }) => ({ href, testo })),
+    ...(puoVedere(io, 'lead') ? [{ href: '/dashboard/senza-consulente', testo: 'Senza consulente' }] : []),
     ...(ha(io, 'gestione_utenti') ? [{ href: '/dashboard/utenti', testo: 'Utenti' }] : []),
     ...(eAdmin(io) ? [{ href: '/dashboard/report-giornaliero', testo: 'Report giornaliero' }] : []),
     ...(puoRiunioni(io) ? [{ href: '/dashboard/riunioni', testo: 'Report riunioni' }] : []),
@@ -31,6 +36,13 @@ export default async function DashboardLayout({ children }: { children: React.Re
         <div className="barra-logo">
           <Logo />
         </div>
+        <div className="barra-saluto">
+          <span className="barra-saluto-ciao">Ciao,</span>
+          <strong>{io.nome}</strong>
+          <span className="barra-saluto-data">
+            <em>{formatoGiornoLungo(oggiRoma()).split(' ')[0]}</em> {formatoGiornoLungo(oggiRoma()).split(' ').slice(1).join(' ')}
+          </span>
+        </div>
         {puoVedere(io, 'cerca') && (
           <form action={cerca} className="barra-cerca">
             <input type="search" name="q" placeholder="Cerca nome, telefono, email" aria-label="Cerca una persona" />
@@ -39,17 +51,21 @@ export default async function DashboardLayout({ children }: { children: React.Re
         <Menu>
           <Navigazione voci={voci} />
           <div className="barra-piede">
-            <div>
-              {io.nome} {io.cognome}
-              {io.ruolo !== 'consulente' && <span className="attenuato"> · {testoRuolo(io.ruolo).toLowerCase()}</span>}
+            <div className="barra-iniziali" aria-hidden="true">
+              {(io.nome?.[0] ?? '') + (io.cognome?.[0] ?? '')}
             </div>
+            <div className="barra-utente">
+              <strong>{io.nome} {io.cognome}</strong>
+              {io.ruolo !== 'consulente' && <span>{testoRuolo(io.ruolo)}</span>}
+            </div>
+            <CambiaTema />
             <form action={logout}>
               <button type="submit">Esci</button>
             </form>
           </div>
         </Menu>
       </aside>
-      <main className="contenuto">{children}</main>
+      <main className="contenuto"><IconaTitolo /><Indietro />{children}</main>
     </div>
   )
 }

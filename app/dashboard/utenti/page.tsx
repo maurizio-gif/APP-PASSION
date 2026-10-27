@@ -44,26 +44,68 @@ export default async function Utenti({ searchParams }: { searchParams: { errore?
     <>
       <div className="testata">
         <div>
-          <h1>Utenti</h1>
-          <p>Chi entra nell’app, quali sezioni vede e cosa può fare. La home e la scheda persona le vedono tutti.</p>
+          <div className="titolo-riga">
+            <h1>Utenti</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">Chi entra nell’app, quali sezioni vede e cosa può fare. La home e la scheda persona le vedono tutti.</span>
+            </span>
+          </div>
         </div>
       </div>
       <Avviso errore={searchParams.errore} ok={searchParams.ok} />
 
-      <form className="filtri" action="/dashboard/utenti">
-        <input type="search" name="q" defaultValue={q} placeholder="Cerca per nome e cognome o email" aria-label="Cerca un utente" />
-        <button className="bottone secondario" type="submit">
-          Cerca
-        </button>
-        {q && <Link href="/dashboard/utenti">Azzera</Link>}
-      </form>
+      <input type="checkbox" id="nu-apri" className="nu-apri" aria-label="Mostra il modulo per aggiungere un utente" />
+      <div className="utenti-barra">
+        <form className="filtri" action="/dashboard/utenti">
+          <input type="search" name="q" defaultValue={q} placeholder="Cerca per nome e cognome o email" aria-label="Cerca un utente" />
+          <button className="bottone secondario" type="submit">
+            Cerca
+          </button>
+          {q && <Link href="/dashboard/utenti">Azzera</Link>}
+        </form>
+        <label htmlFor="nu-apri" className="bottone nu-bottone">
+          <span aria-hidden="true">+</span> Nuovo utente
+        </label>
+      </div>
+      <section className="scheda nuovo-utente-pannello">
+        <div className="nuovo-utente-corpo">
+          <p className="piccolo attenuato sotto-titolo">
+            Nasce con le sezioni operative (Opportunità, Prove, Disdette, Rinnovi, Task, Cerca, Debitori); il resto lo si abilita dalla scheda di ciascun utente.
+            Appena creato gli arriva un’email di invito con il link per scegliere la password.
+          </p>
+          <form action={nuovoUtente} className="modulo nuovo-utente">
+            <div className="campo">
+              <label htmlFor="nu-nome">Nome</label>
+              <input id="nu-nome" type="text" name="nome" required />
+            </div>
+            <div className="campo">
+              <label htmlFor="nu-cognome">Cognome</label>
+              <input id="nu-cognome" type="text" name="cognome" />
+            </div>
+            <div className="campo">
+              <label htmlFor="nu-email">Email</label>
+              <input id="nu-email" type="email" name="email" required />
+            </div>
+            <div className="campo">
+              <label htmlFor="nu-ruolo">Ruolo</label>
+              <select id="nu-ruolo" name="ruolo" defaultValue="consulente">
+                {RUOLI.filter((r) => puoToccareRuolo(io, r.chiave)).map((r) => <option key={r.chiave} value={r.chiave}>{r.testo}</option>)}
+              </select>
+            </div>
+            <div className="campo invio">
+              <BottoneInvio testo="Crea utente" inCorso="Creo…" />
+            </div>
+          </form>
+        </div>
+      </section>
+
       {q && (
         <p className="piccolo attenuato">
           {attiviVisti.length + spenti.length} {attiviVisti.length + spenti.length === 1 ? 'utente trovato' : 'utenti trovati'} per «{q}»
           {spenti.length > 0 ? ` (${spenti.length} non più attivi)` : ''}.
         </p>
       )}
-
       <div className="utenti">
         {attiviVisti.length === 0 && q && spenti.length === 0 && <p className="vuoto">Nessun utente trovato.</p>}
         {attiviVisti.map((u) => (
@@ -106,37 +148,6 @@ export default async function Utenti({ searchParams }: { searchParams: { errore?
           </form>
         </section>
       )}
-
-      <section className="scheda">
-        <h2>Nuovo utente</h2>
-        <p className="piccolo attenuato sotto-titolo">
-          Nasce con le sezioni operative (Opportunità, Prove, Disdette, Rinnovi, Task, Cerca, Debitori); il resto lo si abilita qui sopra.
-          Appena creato gli arriva un’email di invito con il link per scegliere la password.
-        </p>
-        <form action={nuovoUtente} className="modulo nuovo-utente">
-          <div className="campo">
-            <label htmlFor="nu-nome">Nome</label>
-            <input id="nu-nome" type="text" name="nome" required />
-          </div>
-          <div className="campo">
-            <label htmlFor="nu-cognome">Cognome</label>
-            <input id="nu-cognome" type="text" name="cognome" />
-          </div>
-          <div className="campo">
-            <label htmlFor="nu-email">Email</label>
-            <input id="nu-email" type="email" name="email" required />
-          </div>
-          <div className="campo">
-            <label htmlFor="nu-ruolo">Ruolo</label>
-            <select id="nu-ruolo" name="ruolo" defaultValue="consulente">
-              {RUOLI.filter((r) => puoToccareRuolo(io, r.chiave)).map((r) => <option key={r.chiave} value={r.chiave}>{r.testo}</option>)}
-            </select>
-          </div>
-          <div className="campo invio">
-            <BottoneInvio testo="Crea utente" inCorso="Creo…" />
-          </div>
-        </form>
-      </section>
     </>
   )
 }
