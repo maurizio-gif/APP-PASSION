@@ -11885,3 +11885,27 @@ a.pf-tessera.pf-link:focus-visible { outline: 2px solid var(--rosso); outline-of
   :root:root:root table.tabella-prove.schede-mobile td:nth-child(3) .riga-dati { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 2px 12px; font-size: 0.82rem; }
   :root:root:root table.tabella-prove.schede-mobile td:nth-child(3) .riga-dati > .muto { flex: 1 1 100%; }
 }
+
+/* ---- I «?» (tip): il fumetto sta sopra tutto il resto della pagina, anche sopra le schede e i filtri sotto il titolo ---- */
+:root:root:root .testata:has(.aiuto-titolo:hover),
+:root:root:root .testata:has(.aiuto-titolo:focus-within),
+:root:root:root .titolo-riga:has(.aiuto-titolo:hover),
+:root:root:root .titolo-riga:has(.aiuto-titolo:focus-within),
+:root:root:root .fase-titolo:has(.aiuto-titolo:hover),
+:root:root:root .fase-titolo:has(.aiuto-titolo:focus-within) { position: relative; z-index: 90; }
+:root:root:root .aiuto-titolo:hover .aiuto-testo,
+:root:root:root .aiuto-titolo:focus-within .aiuto-testo { z-index: 91; opacity: 1; box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.6); }
+@media (max-width: 720px) {
+  :root:root:root .aiuto-titolo .aiuto-testo { left: 0; right: 0; width: auto; max-width: none; font-size: 0.9rem; line-height: 1.5; padding: 14px 16px; border-radius: 14px; }
+}
+@media (max-width: 720px) {
+  :root:root:root .testata .aiuto-titolo { position: static; }
+  :root:root:root .testata .aiuto-titolo .aiuto-testo { left: 0; right: 0; top: calc(100% + 6px); width: auto; }
+}
+@media (max-width: 720px) {
+  :root:root:root .testata .titolo-riga,
+  :root:root:root .testata .titolo-riga:has(.aiuto-titolo:hover),
+  :root:root:root .testata .titolo-riga:has(.aiuto-titolo:focus-within) { position: static; }
+  :root:root:root .testata:has(.aiuto-titolo:hover),
+  :root:root:root .testata:has(.aiuto-titolo:focus-within) { position: relative; }
+}
