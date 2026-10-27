@@ -40,7 +40,7 @@ export function Info({ testo, titolo }: { testo: string; titolo?: string }) {
       <button
         type="button"
         ref={bottone}
-        className="info"
+        className="i-spiega"
         aria-label={`Come si calcola${titolo ? `: ${titolo}` : ''}`}
         aria-expanded={pos != null}
         onMouseEnter={apri}
@@ -56,7 +56,7 @@ export function Info({ testo, titolo }: { testo: string; titolo?: string }) {
         i
       </button>
       {pos && (
-        <span role="tooltip" className="info-testo" style={{ left: pos.left, width: pos.larghezza, top: pos.top, bottom: pos.bottom }}>
+        <span role="tooltip" className="i-spiega-testo" style={{ left: pos.left, width: pos.larghezza, top: pos.top, bottom: pos.bottom }}>
           {testo}
         </span>
       )}

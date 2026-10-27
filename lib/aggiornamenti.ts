@@ -17,6 +17,27 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-27',
+    titolo: 'Nei contratti senza consulente c’è il consulente suggerito',
+    testo:
+      'Se una persona ha già lavorato con un consulente (task fatti, anche un tentativo, o una prova che seguiva), sotto «Da prendere in carico» compare «Suggerito: nome» con il motivo, già scelto nella tendina. È solo un suggerimento: confermi o scegli un altro, e la nota resta obbligatoria.',
+    dove: 'Dashboard consulente → Contratti senza consulente',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Gli abbonamenti in prima battuta contano nella tua performance',
+    testo:
+      'Nella performance c’è il nuovo indice «Abbonamenti in prima battuta», con il numero e la somma dei canoni: sono gli abbonamenti che hai preso in carico da «Contratti senza consulente». Sono contati anche in «Abbonamenti venduti», e nel Report giornaliero vanno a chi li ha presi in carico.',
+    dove: 'Dashboard consulente → La mia performance',
+  },
+  {
+    data: '2026-10-27',
+    titolo: 'Nuovi abbonamenti senza consulente: si prendono in carico dalla Dashboard',
+    testo:
+      'Nella Dashboard consulente c’è il riquadro «Contratti senza consulente»: sono gli abbonamenti nuovi che nessuna opportunità ha portato (la persona si è iscritta senza chiedere informazioni). Chi li ha seguiti li prende in carico con «Prendo in carico» e scrive una nota obbligatoria su come è nato il contratto; la nota compare anche nella scheda della persona. Se la persona si è iscritta da sola online, si segna «Online» e non va a nessuno. Il consulente di PerfectGym non si usa.',
+    dove: 'Dashboard consulente → Contratti senza consulente',
+  },
+  {
+    data: '2026-10-27',
     titolo: 'Ogni indice della performance spiega come è calcolato',
     testo:
       'Accanto al nome di ogni indice (nei riquadri, nei grafici e nella tabella) c’è una «i»: passandoci sopra, o toccandola sul telefono, si apre la formula con una spiegazione chiara e, dove serve, un esempio. La «i» accanto a «settimana scorsa» e «media delle 4 prima» spiega come si fanno i confronti.',
