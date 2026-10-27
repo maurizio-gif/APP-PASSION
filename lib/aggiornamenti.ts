@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-27',
+    titolo: 'Sul telefono c’è una barra in basso e le schede sono più compatte',
+    testo:
+      'Dal telefono, in fondo allo schermo, c’è una barra con Home, Lead, Prove, Task e Cerca: la sezione in cui sei è evidenziata. Il pulsante del menu resta in alto, con tutte le sezioni. Anche gli elenchi (Prove, Rinnovi, Disdette, Debitori, Task, Contratti, Ticket e Senza consulente) sono schede più basse, le tendine dei filtri non escono più dal riquadro e i «?» si leggono per intero.',
+    dove: 'Tutto il CRM, da telefono',
+  },
+  {
+    data: '2026-10-27',
     titolo: 'Nuova grafica in tutto il CRM',
     testo:
       'Il CRM ha un aspetto nuovo: schede, tabelle e pulsanti rifatti, in nero e rosso, più comodo anche da telefono. È scuro di partenza: con il pulsante col sole, in basso a sinistra, passi al tema chiaro. Funziona tutto come prima. Le novità più grandi sono qui sotto: la Dashboard consulente con i riquadri che portano alle sezioni, la sezione Senza consulente, l’Appello complessivo come calendario e il menu in categorie, con il nuovo gruppo Istruttori.',

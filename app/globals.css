@@ -11982,3 +11982,45 @@ a.pf-tessera.pf-link:focus-visible { outline: 2px solid var(--rosso); outline-of
   :root:root:root .durata-scheda .durata-confronto { min-width: 0; width: 100%; table-layout: fixed; }
   :root:root:root .sotto-dati .durate-schede { padding: 0 12px; }
 }
+
+/* ---- Telefono: barra in basso, stile app (Home, Lead, Prove, Task, Cerca). Il menu resta in alto. ---- */
+.barra-inferiore { display: none; }
+@media (max-width: 860px) {
+  .barra-inferiore {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 15;
+    height: calc(62px + env(safe-area-inset-bottom, 0px));
+    padding: 6px 8px env(safe-area-inset-bottom, 0px);
+    background: linear-gradient(to bottom, #15161a, #0e0f12);
+    border-top: 1px solid rgba(227, 3, 45, 0.55);
+    box-shadow: 0 -10px 30px -12px rgba(0, 0, 0, 0.6);
+  }
+  .barra-inferiore a {
+    position: relative;
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-width: 0;
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .barra-inferiore a svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .barra-inferiore a.attivo { color: #fff; }
+  .barra-inferiore a.attivo svg { stroke: #ff4d68; }
+  .barra-inferiore a.attivo::before { content: ''; position: absolute; top: -7px; left: 28%; right: 28%; height: 3px; border-radius: 0 0 4px 4px; background: var(--rosso); box-shadow: 0 2px 8px rgba(227, 3, 45, 0.7); }
+  .barra-inferiore a:active { background: rgba(255, 255, 255, 0.07); }
+  /* il contenuto non finisce sotto la barra */
+  :root:root .contenuto { padding-bottom: calc(86px + env(safe-area-inset-bottom, 0px)); }
+}
