@@ -1,12 +1,12 @@
 // La velocita' del primo ricontatto di un'opportunita' (supabase/migrations/20261027d).
 //
 // Il primo ricontatto e' il primo task chiuso dopo l'arrivo, anche un tentativo
-// («Non risponde»). Il tempo e' di ORARIO DI LAVORO: dalle 8 alle 22 dal lunedi al
-// venerdi, dalle 8 alle 20 il sabato e la domenica. Un'opportunita' arrivata a
-// mezzanotte comincia a contare alle 8. Il calcolo sta nel database
+// («Non risponde»). Il tempo e' di ORARIO DI LAVORO: dalle 9 alle 21 dal lunedi al
+// venerdi, dalle 10 alle 19:30 il sabato e la domenica (20261027f). Un'opportunita'
+// arrivata a mezzanotte comincia a contare alle 9 (alle 10 nel weekend). Il calcolo sta nel database
 // (`crm.minuti_lavoro`); qui si decide solo come si scrive e di che colore e'.
 
-export const ORARIO_LAVORO = 'orario di lavoro: 8–22 dal lunedì al venerdì, 8–20 sabato e domenica'
+export const ORARIO_LAVORO = 'orario di lavoro: 9–21 dal lunedì al venerdì, 10–19:30 sabato e domenica'
 
 // Fino a questa soglia, in minuti di lavoro, il ricontatto e' tempestivo; fino
 // alla seconda e' accettabile; oltre e' in ritardo.

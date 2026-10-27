@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-27',
+    titolo: 'Ogni indice della performance spiega come è calcolato',
+    testo:
+      'Accanto al nome di ogni indice (nei riquadri, nei grafici e nella tabella) c’è una «i»: passandoci sopra, o toccandola sul telefono, si apre la formula con una spiegazione chiara e, dove serve, un esempio. La «i» accanto a «settimana scorsa» e «media delle 4 prima» spiega come si fanno i confronti.',
+    dove: 'Dashboard consulente → La mia performance',
+  },
+  {
+    data: '2026-10-27',
     titolo: 'Fra le disdette restano solo quelle vere: i cambi abbonamento non ci sono più',
     testo:
       'Se la persona ha un altro abbonamento che dà continuità (il vecchio finisce il 26 e il nuovo comincia il 27) non è una disdetta ma un cambio abbonamento, e non compare più. Vale anche per il passato: delle 2.248 disdette, 903 erano cambi e sono state tolte dall’elenco, dalla home, dalla scheda persona, dal Report giornaliero e dalla tua performance. I task «chiamare per capire il motivo» ancora aperti per i cambi sono stati archiviati. Una disdetta resta da gestire solo se la persona non ha dato continuità.',
@@ -47,7 +54,7 @@ export const AGGIORNAMENTI: Aggiornamento[] = [
     data: '2026-10-27',
     titolo: 'Ogni opportunità mostra quanto ci è voluto per il primo ricontatto',
     testo:
-      'Nella colonna «Primo ricontatto» vedi in quanto tempo l’opportunità è stata ricontattata (anche con un tentativo o «Non risponde») o da quanto aspetta: verde fino a 30 minuti, giallo fino a 2 ore, rosso oltre. Il tempo conta solo nell’orario di lavoro, 8–22 dal lunedì al venerdì e 8–20 sabato e domenica: un’opportunità arrivata a mezzanotte comincia a contare alle 8.',
+      'Nella colonna «Primo ricontatto» vedi in quanto tempo l’opportunità è stata ricontattata (anche con un tentativo o «Non risponde») o da quanto aspetta: verde fino a 30 minuti, giallo fino a 2 ore, rosso oltre. Il tempo conta solo nell’orario di lavoro, 9–21 dal lunedì al venerdì e 10–19:30 sabato e domenica: un’opportunità arrivata a mezzanotte comincia a contare alle 9 (alle 10 nel weekend).',
     dove: 'Opportunità',
   },
   {
