@@ -11822,3 +11822,21 @@ a.pf-tessera.pf-link:focus-visible { outline: 2px solid var(--rosso); outline-of
 .pf-tabella .pf-data { display: inline; }
 .pf-tabella .pf-chip { display: inline-block; margin: 0 0 0 8px; vertical-align: middle; }
 :root:root:root .performance-in-scheda .pf-sett .fase-titolo { border-bottom: 0; box-shadow: none; }
+
+/* ---- Dashboard consulente su telefono: i riquadri scorrono di lato ---- */
+@media (max-width: 720px) {
+  :root:root:root .numeri.numeri-schede {
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  :root:root:root .numeri.numeri-schede::-webkit-scrollbar { display: none; }
+  :root:root:root .numeri.numeri-schede > .numero { flex: 0 0 62%; scroll-snap-align: start; }
+}
+@media (max-width: 720px) {
+  :root:root:root #da-gestire .numeri.numeri-schede { overflow-x: auto; overflow-y: hidden; }
+  :root:root:root #da-gestire .numeri.numeri-schede > .numero { flex: 0 0 62%; }
+}
