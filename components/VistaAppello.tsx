@@ -233,7 +233,7 @@ const breve = (completo: string | null) => {
   return !primo || resto.length === 0 || completo.includes('@') ? completo : `${primo} ${resto[resto.length - 1][0]}.`
 }
 
-// Una lezione dell'Appello complessivo, solo da leggere: la testata scura (ora, lezione, sala,
+// Una lezione dell'Appello complessivo, solo da leggere (il nome non apre l'anagrafica del cliente): la testata scura (ora, lezione, sala,
 // istruttore, presenti) e sotto la tabella dei prenotati, con i segnali e chi ha segnato la presenza.
 function LezioneTabella({ l, aperta }: { l: LezioneAppello; aperta: boolean }) {
   const presenti = l.prenotati.filter((p) => p.presente).length
@@ -271,15 +271,7 @@ function LezioneTabella({ l, aperta }: { l: LezioneAppello; aperta: boolean }) {
                       {p.presente ? '✓' : ''}
                     </span>
                     <span className="appello-persona">
-                      <span className="appello-nome">
-                        {p.utente_id ? (
-                          <Link href={`/dashboard/persone/${p.utente_id}`} target="_blank" rel="noopener noreferrer">
-                            {nome}
-                          </Link>
-                        ) : (
-                          nome
-                        )}
-                      </span>
+                      <span className="appello-nome">{nome}</span>
                       <span className="appello-dettagli">
                         {p.data_nascita && (
                           <span title={`Nato il ${formatoData(p.data_nascita)}`}>
