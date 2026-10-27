@@ -19,7 +19,7 @@ export const AGGIORNAMENTI: Aggiornamento[] = [
     data: '2026-10-27',
     titolo: 'Creati gli utenti degli istruttori, con la sola sezione Appello',
     testo:
-      'Sono stati creati gli utenti di 25 istruttori, con nome ed email presi da PerfectGym, e hanno accesso solo a «Appello istruttore». In Utenti, «Istruttori da invitare» manda l’email di registrazione a tutti con un clic. Gli istruttori che su PerfectGym non hanno l’email vanno creati a mano.',
+      'Sono stati creati gli utenti di 25 istruttori, con nome ed email presi da PerfectGym, e hanno accesso solo a «Appello istruttore». In Utenti, «Istruttori da invitare» manda l’email di registrazione con un clic a chi ha lezioni in calendario su PerfectGym; gli altri si invitano a mano dalla loro scheda. Gli istruttori che su PerfectGym non hanno l’email vanno creati a mano.',
     dove: 'Utenti',
   },
   {
