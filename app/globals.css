@@ -11815,3 +11815,10 @@ a.pf-tessera.pf-link:focus-visible { outline: 2px solid var(--rosso); outline-of
 :root:root:root #senza-consulente .na-toggle > .task-tabs.na-tabs { border-radius: 16px 16px 0 0; }
 :root:root:root .pf-toggle > .task-tabs.na-tabs { border-radius: 16px 16px 0 0; }
 :root:root:root .ap-toggle > .task-tabs.na-tabs { border-radius: 16px; }
+
+/* ---- Settimana per settimana: testata tutta scura, date su una riga (anche «in corso») ---- */
+:root:root:root:root .pf-tabella thead th.pf-media { background: transparent; color: #fff; white-space: nowrap; width: auto; border-left: 0; }
+:root:root:root:root .pf-tabella thead th { white-space: nowrap; }
+.pf-tabella .pf-data { display: inline; }
+.pf-tabella .pf-chip { display: inline-block; margin: 0 0 0 8px; vertical-align: middle; }
+:root:root:root .performance-in-scheda .pf-sett .fase-titolo { border-bottom: 0; box-shadow: none; }
