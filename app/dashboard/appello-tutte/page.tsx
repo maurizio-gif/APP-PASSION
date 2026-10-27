@@ -3,6 +3,7 @@ import { crm, richiediSezione } from '@/lib/crm'
 import { eGiornoValido, formatoCifra, formatoGiornoLungo, formatoOra, oggiRoma, spostaGiorno } from '@/lib/formato'
 import { AppelloLezione } from '@/components/AppelloLezione'
 import { LegendaSegnali } from '@/components/SegnaliAppello'
+import { VideoTutorial } from '@/components/VideoTutorial'
 import { ScorriAdesso } from '@/components/ScorriAdesso'
 import { Vuoto } from '@/components/Ui'
 
@@ -64,6 +65,8 @@ export default async function AppelloTutte({ searchParams }: { searchParams: Fil
           <LegendaSegnali />
         </div>
       </div>
+
+      <VideoTutorial />
 
       <form className="filtri" action="/dashboard/appello-tutte">
         <Link className="bottone secondario" href={con(spostaGiorno(giorno, -1))} aria-label="Giorno prima">
