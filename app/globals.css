@@ -11822,3 +11822,210 @@ a.pf-tessera.pf-link:focus-visible { outline: 2px solid var(--rosso); outline-of
 .pf-tabella .pf-data { display: inline; }
 .pf-tabella .pf-chip { display: inline-block; margin: 0 0 0 8px; vertical-align: middle; }
 :root:root:root .performance-in-scheda .pf-sett .fase-titolo { border-bottom: 0; box-shadow: none; }
+
+/* ---- Dashboard consulente su telefono: i riquadri scorrono di lato ---- */
+@media (max-width: 720px) {
+  :root:root:root .numeri.numeri-schede {
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  :root:root:root .numeri.numeri-schede::-webkit-scrollbar { display: none; }
+  :root:root:root .numeri.numeri-schede > .numero { flex: 0 0 62%; scroll-snap-align: start; }
+}
+@media (max-width: 720px) {
+  :root:root:root #da-gestire .numeri.numeri-schede { overflow-x: auto; overflow-y: hidden; }
+  :root:root:root #da-gestire .numeri.numeri-schede > .numero { flex: 0 0 62%; }
+}
+
+/* ---- Telefono: le tendine dei filtri non fanno uscire la freccetta dal riquadro ---- */
+@media (max-width: 720px) {
+  :root:root:root .filtri select { flex: 1 1 150px; min-width: 0; gap: 6px; padding-right: 10px; font-size: 0.84rem; }
+  :root:root:root .filtri select::picker-icon { flex: none; margin-left: auto; }
+  :root:root:root .filtri > .bottone[type='submit'],
+  :root:root:root .filtri > button.bottone { flex: 1 1 100%; justify-content: center; }
+}
+
+/* ---- Prove su telefono: una scheda compatta per prova (nome e «Gestisci» in cima, poi pass, ingressi, note) ---- */
+@media (max-width: 720px) {
+  :root:root:root table.tabella-prove.schede-mobile tbody tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px 10px;
+    margin: 0 0 12px;
+    padding: 14px 16px;
+    border: 1px solid rgba(92, 11, 30, 0.14);
+    border-radius: 14px;
+    background: #fffafb;
+    box-shadow: 0 8px 20px -16px rgba(0, 0, 0, 0.55);
+  }
+  :root:root:root table.tabella-prove.schede-mobile tbody tr:last-child { margin-bottom: 0; }
+  :root:root:root table.tabella-prove.schede-mobile tbody td {
+    display: block;
+    grid-column: 1 / -1;
+    padding: 0;
+    border: 0;
+    background: none;
+    min-width: 0;
+  }
+  /* il cliente a sinistra e «Gestisci» a destra, sulla stessa riga */
+  :root:root:root table.tabella-prove.schede-mobile tbody td:first-child { grid-column: 1; grid-row: 1; }
+  :root:root:root table.tabella-prove.schede-mobile tbody td.gestisci { display: block; grid-column: 2; grid-row: 1; align-self: start; }
+  /* il pass: nome, date e stato su due righe; sotto una linea sottile come separatore */
+  :root:root:root table.tabella-prove.schede-mobile tbody td:nth-child(2) { grid-row: 2; padding-top: 10px; border-top: 1px solid rgba(92, 11, 30, 0.1); }
+  :root:root:root table.tabella-prove.schede-mobile tbody td:nth-child(3) { grid-row: 3; }
+  :root:root:root table.tabella-prove.schede-mobile tbody td:nth-child(4) { grid-row: 4; }
+  :root:root:root table.tabella-prove.schede-mobile tbody td.cella-vuota { display: none; }
+  :root:root:root table.tabella-prove.schede-mobile .riga-dati { gap: 3px; }
+  :root:root:root table.tabella-prove.schede-mobile td:nth-child(2) .riga-dati { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
+  :root:root:root table.tabella-prove.schede-mobile td:nth-child(2) .riga-dati > strong { flex: 1 1 100%; }
+  :root:root:root table.tabella-prove.schede-mobile td:nth-child(3) .riga-dati { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 2px 12px; font-size: 0.82rem; }
+  :root:root:root table.tabella-prove.schede-mobile td:nth-child(3) .riga-dati > .muto { flex: 1 1 100%; }
+}
+
+/* ---- I «?» (tip): il fumetto sta sopra tutto il resto della pagina, anche sopra le schede e i filtri sotto il titolo ---- */
+:root:root:root .testata:has(.aiuto-titolo:hover),
+:root:root:root .testata:has(.aiuto-titolo:focus-within),
+:root:root:root .titolo-riga:has(.aiuto-titolo:hover),
+:root:root:root .titolo-riga:has(.aiuto-titolo:focus-within),
+:root:root:root .fase-titolo:has(.aiuto-titolo:hover),
+:root:root:root .fase-titolo:has(.aiuto-titolo:focus-within) { position: relative; z-index: 90; }
+:root:root:root .aiuto-titolo:hover .aiuto-testo,
+:root:root:root .aiuto-titolo:focus-within .aiuto-testo { z-index: 91; opacity: 1; box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.6); }
+@media (max-width: 720px) {
+  :root:root:root .aiuto-titolo .aiuto-testo { left: 0; right: 0; width: auto; max-width: none; font-size: 0.9rem; line-height: 1.5; padding: 14px 16px; border-radius: 14px; }
+}
+@media (max-width: 720px) {
+  :root:root:root .testata .aiuto-titolo { position: static; }
+  :root:root:root .testata .aiuto-titolo .aiuto-testo { left: 0; right: 0; top: calc(100% + 6px); width: auto; }
+}
+@media (max-width: 720px) {
+  :root:root:root .testata .titolo-riga,
+  :root:root:root .testata .titolo-riga:has(.aiuto-titolo:hover),
+  :root:root:root .testata .titolo-riga:has(.aiuto-titolo:focus-within) { position: static; }
+  :root:root:root .testata:has(.aiuto-titolo:hover),
+  :root:root:root .testata:has(.aiuto-titolo:focus-within) { position: relative; }
+}
+
+/* ---- Telefono: Rinnovi, Disdette, Debitori, Task e Contratti in schede compatte (come Prove) ---- */
+@media (max-width: 720px) {
+  :root:root:root table.schede-mobile.tabella-colonne:not(.tabella-prove) tbody tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px 10px;
+    margin: 0 0 12px;
+    padding: 14px 16px;
+    border: 1px solid rgba(92, 11, 30, 0.14);
+    border-radius: 14px;
+    background: #fffafb;
+    box-shadow: 0 8px 20px -16px rgba(0, 0, 0, 0.55);
+  }
+  :root:root:root table.schede-mobile.tabella-colonne:not(.tabella-prove) tbody tr:last-child { margin-bottom: 0; }
+  :root:root:root table.schede-mobile.tabella-colonne:not(.tabella-prove) tbody td {
+    display: block;
+    grid-column: 1 / -1;
+    padding: 0;
+    border: 0;
+    background: none;
+    min-width: 0;
+  }
+  :root:root:root table.schede-mobile.tabella-colonne:not(.tabella-prove) tbody td:first-child { grid-column: 1; grid-row: 1; }
+  /* chi ha un solo pulsante di azione (Prendo in carico, Gestisci) lo tiene in alto a destra */
+  :root:root:root table.schede-mobile.tabella-uniforme:not(.tabella-prove) tbody td:last-child { grid-column: 2; grid-row: 1; align-self: start; }
+  :root:root:root table.schede-mobile.tabella-colonne:not(.tabella-uniforme) tbody td:last-child { padding-top: 4px; }
+  :root:root:root table.schede-mobile.tabella-colonne:not(.tabella-prove) tbody td:nth-child(2) { padding-top: 10px; border-top: 1px solid rgba(92, 11, 30, 0.1); }
+  :root:root:root table.schede-mobile.tabella-colonne:not(.tabella-prove) tbody td.cella-vuota { display: none; }
+  :root:root:root table.schede-mobile.tabella-colonne:not(.tabella-prove) .riga-dati { gap: 3px; }
+  :root:root:root table.schede-mobile.tabella-colonne:not(.tabella-prove) tbody td:not(:first-child):not(:last-child) .riga-dati { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 3px 10px; }
+  :root:root:root table.schede-mobile.tabella-colonne:not(.tabella-prove) tbody td:not(:first-child):not(:last-child) .riga-dati > strong { flex: 1 1 100%; }
+  :root:root:root table.schede-mobile.tabella-colonne:not(.tabella-prove) tbody td:not(:first-child):not(:last-child) .riga-dati > .muto:only-of-type { flex: 1 1 100%; }
+
+  /* Senza consulente: le linguette in una riga che scorre, le righe con il loro margine */
+  :root:root:root #senza-consulente .na-toggle > .task-tabs.na-tabs { flex-direction: row; flex-wrap: nowrap; align-items: center; overflow-x: auto; padding: 12px 14px; gap: 8px; scrollbar-width: none; }
+  :root:root:root #senza-consulente .na-toggle > .task-tabs.na-tabs::-webkit-scrollbar { display: none; }
+  :root:root:root #senza-consulente .na-toggle > .na-tabs label { flex: 0 0 auto; white-space: nowrap; }
+  :root:root:root #senza-consulente .na-pannello { padding: 12px; }
+  :root:root:root #senza-consulente .na-pannello > .tabella-scorre:has(.tabella-lead) { display: none; }
+  :root:root:root #senza-consulente .lead-telefono { padding: 0 6px; }
+  :root:root:root #senza-consulente .na-pannello > p { padding: 10px 6px 0; }
+}
+@media (max-width: 720px) {
+  :root:root:root:root #senza-consulente table td:first-child,
+  :root:root:root:root #senza-consulente table td:last-child { padding-left: 0; padding-right: 0; }
+}
+@media (max-width: 720px) {
+  :root:root:root .tabella-task .task-azioni { display: flex; flex-wrap: wrap; gap: 8px; width: 100%; }
+  :root:root:root .tabella-task .task-azioni input[type='text'] { flex: 1 1 100%; min-width: 0; width: 100%; }
+  :root:root:root .tabella-task .task-azioni .bottone { flex: 1 1 0; justify-content: center; min-height: 40px; }
+}
+
+/* ---- Telefono: linguette a pillola (Marketing, Curriculum) in una riga che scorre; schede «Quanto durano» dentro il riquadro ---- */
+@media (max-width: 720px) {
+  :root:root:root .mk-schede .schede-vista,
+  :root:root:root .cv-schede .schede-vista {
+    display: flex;
+    flex-wrap: nowrap;
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+  :root:root:root .mk-schede .schede-vista::-webkit-scrollbar,
+  :root:root:root .cv-schede .schede-vista::-webkit-scrollbar { display: none; }
+  :root:root:root .mk-schede .schede-vista a,
+  :root:root:root .cv-schede .schede-vista a { flex: 0 0 auto; white-space: nowrap; }
+  :root:root:root .durate-schede { grid-template-columns: minmax(0, 1fr); }
+  :root:root:root .durata-scheda { min-width: 0; max-width: 100%; }
+  :root:root:root .durata-scheda .durata-confronto { min-width: 0; width: 100%; table-layout: fixed; }
+  :root:root:root .sotto-dati .durate-schede { padding: 0 12px; }
+}
+
+/* ---- Telefono: barra in basso, stile app (Home, Lead, Prove, Task, Cerca). Il menu resta in alto. ---- */
+.barra-inferiore { display: none; }
+@media (max-width: 860px) {
+  .barra-inferiore {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 15;
+    height: calc(62px + env(safe-area-inset-bottom, 0px));
+    padding: 6px 8px env(safe-area-inset-bottom, 0px);
+    background: linear-gradient(to bottom, #15161a, #0e0f12);
+    border-top: 1px solid rgba(227, 3, 45, 0.55);
+    box-shadow: 0 -10px 30px -12px rgba(0, 0, 0, 0.6);
+  }
+  .barra-inferiore a {
+    position: relative;
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-width: 0;
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .barra-inferiore a svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .barra-inferiore a.attivo { color: #fff; }
+  .barra-inferiore a.attivo svg { stroke: #ff4d68; }
+  .barra-inferiore a.attivo::before { content: ''; position: absolute; top: -7px; left: 28%; right: 28%; height: 3px; border-radius: 0 0 4px 4px; background: var(--rosso); box-shadow: 0 2px 8px rgba(227, 3, 45, 0.7); }
+  .barra-inferiore a:active { background: rgba(255, 255, 255, 0.07); }
+  /* il contenuto non finisce sotto la barra */
+  :root:root .contenuto { padding-bottom: calc(86px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* ---- Ticket, «Cosa fare»: «Prendo in carico» nella barra scura, a destra; sotto le tre colonne del lavoro ---- */
+.fase-titolo .fase-titolo-azione { margin-left: auto; display: inline-flex; align-items: center; text-transform: none; letter-spacing: 0; }
+.fase-titolo .fase-titolo-azione .azioni-scheda { margin: 0; }
+.fase-titolo .fase-titolo-azione .bottone { min-height: 32px; padding: 5px 14px; font-size: 0.82rem; }

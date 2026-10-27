@@ -47,7 +47,7 @@ export function TabellaRinnovi({ rinnovi, io, staff, torna }: { rinnovi: Rinnovo
                     <span className="normale"><span className="prefisso-mobile">Scade il </span>{formatoData(r.scadenza)}</span>
                   </div>
                 </td>
-                <td>
+                <td className={!r.note && r.task_aperti === 0 ? 'cella-vuota' : undefined}>
                   <div className="riga-dati">
                     {r.note ? <span className="normale">{r.note}</span> : <span className="muto">–</span>}
                     {r.task_aperti > 0 && <span className="muto">{r.task_aperti} {r.task_aperti === 1 ? 'task aperto' : 'task aperti'}</span>}

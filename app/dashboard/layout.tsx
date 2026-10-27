@@ -4,6 +4,7 @@ import { CambiaTema } from '@/components/CambiaTema'
 import { Logo } from '@/components/Logo'
 import { Menu } from '@/components/Menu'
 import { Navigazione } from '@/components/Navigazione'
+import { BarraInferiore } from '@/components/BarraInferiore'
 import { IconaTitolo } from '@/components/IconaTitolo'
 import { Indietro } from '@/components/Indietro'
 import { crm } from '@/lib/crm'
@@ -66,6 +67,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         </Menu>
       </aside>
       <main className="contenuto"><IconaTitolo /><Indietro />{children}</main>
+      <BarraInferiore voci={voci} />
     </div>
   )
 }
