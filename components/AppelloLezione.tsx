@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { segnaPresenze } from '@/app/dashboard/azioni'
 import type { LezioneAppello, PrenotatoAppello } from '@/lib/crm'
@@ -19,7 +18,8 @@ import { Segnali } from './SegnaliAppello'
 // - Si segna da 59 minuti prima dell'inizio a 59 minuti dopo la fine: fuori da
 //   questa finestra le righe si leggono e basta (la testata dice da che ora si
 //   segna). Il controllo vero e' nel database.
-// - `soloLettura` e' l'Appello complessivo: le stesse righe, senza segnare.
+// - `soloLettura` e' l'Appello complessivo: le stesse righe, senza segnare. Il nome non e' mai un collegamento:
+//   dall'appello non si apre l'anagrafica del cliente.
 
 const breve = (completo: string | null) => {
   if (!completo) return '—'
@@ -93,13 +93,7 @@ export function AppelloLezione({ l, soloLettura = false }: { l: LezioneAppello; 
     return (
       <span className="appello-persona">
         <span className="appello-nome">
-          {soloLettura && p.utente_id ? (
-            <Link href={`/dashboard/persone/${p.utente_id}`} target="_blank" rel="noopener noreferrer">
-              {nomeCompleto(p)}
-            </Link>
-          ) : (
-            nomeCompleto(p)
-          )}
+          {nomeCompleto(p)}
         </span>
         <span className="appello-dettagli">
           {p.data_nascita && (

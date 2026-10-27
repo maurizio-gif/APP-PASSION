@@ -17,6 +17,12 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-27',
+    titolo: 'Dall’appello non si apre più l’anagrafica del cliente',
+    testo: 'Nell’Appello complessivo il nome di chi ha prenotato non è più un collegamento: si legge soltanto. Nell’Appello istruttore non lo era già.',
+    dove: 'Appello complessivo',
+  },
+  {
+    data: '2026-10-27',
     titolo: 'Il tutorial dell’appello è più facile da trovare',
     testo:
       'In cima ad Appello istruttore (e ad Appello complessivo) il video-tutorial è ora un riquadro con bordo rosso e il pulsante play, «Guarda il tutorial · 46 secondi»: si apre con un tocco.',
