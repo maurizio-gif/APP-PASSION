@@ -222,6 +222,8 @@ function Azioni({ t, io, qui }: { t: Ticket; io: Io; qui: string }) {
   const puoAssistere = assiste(io)
   const aperto = ['da_verificare', 'inviato', 'in_lavorazione', 'in_attesa'].includes(t.stato)
   const blocchi: React.ReactNode[] = []
+  // «Prendo in carico» sta nella barra del riquadro, a destra: sotto restano le colonne del lavoro.
+  let presa: React.ReactNode = null
 
   if (t.stato === 'da_verificare' && puoSmistare) {
     blocchi.push(
@@ -252,11 +254,11 @@ function Azioni({ t, io, qui }: { t: Ticket; io: Io; qui: string }) {
 
   if (aperto && puoAssistere) {
     if (t.stato !== 'in_lavorazione' || t.preso_da !== io?.id) {
-      blocchi.push(
-        <form key="prendi" action={prendiTicket} className="azioni-scheda">
+      presa = (
+        <form action={prendiTicket} className="azioni-scheda">
           <Nascosti t={t} qui={qui} />
           <BottoneInvio testo={t.preso_nome && t.preso_da !== io?.id ? `Prendo io (ora ${t.preso_nome})` : 'Prendo in carico'} inCorso="…" />
-        </form>,
+        </form>
       )
     }
     if (t.stato !== 'da_verificare') {
@@ -362,10 +364,10 @@ function Azioni({ t, io, qui }: { t: Ticket; io: Io; qui: string }) {
     }
   }
 
-  if (blocchi.length === 0) return null
+  if (blocchi.length === 0 && !presa) return null
   return (
-    <Riquadro titolo={<>Cosa fare</>} classe="ticket-azioni">
-      <div className="stack">{blocchi}</div>
+    <Riquadro titolo={<>Cosa fare</>} azione={presa} classe="ticket-azioni">
+      {blocchi.length > 0 && <div className="stack">{blocchi}</div>}
     </Riquadro>
   )
 }
