@@ -429,6 +429,33 @@ export async function invitaUtente(f: FormData) {
   )
 }
 
+// L'invito a tutti gli istruttori che non hanno ancora l'accesso: solo gli utenti attivi con la sola sezione
+// «Appello istruttore» (20261027i), cosi' non puo' scrivere a nessun altro. Ognuno riceve l'email con il link per
+// scegliere la password; chi non parte resta «senza accesso» e si riprova con lo stesso pulsante.
+export async function invitaIstruttori() {
+  let partiti = 0
+  const errori: string[] = []
+  try {
+    const utenti = await rpc<{ id: string; nome: string; cognome: string | null; attivo: boolean; accesso: boolean; sezioni: string[] }[]>('crm_utenti')
+    for (const u of utenti.filter((x) => x.attivo && !x.accesso && x.sezioni.length === 1 && x.sezioni[0] === 'appello')) {
+      try {
+        await invita(u.id)
+        partiti++
+      } catch (e) {
+        errori.push(`${u.nome} ${u.cognome ?? ''}: ${e instanceof Error ? e.message : 'non partito'}`.trim())
+      }
+    }
+  } catch (e) {
+    revalidatePath('/dashboard', 'layout')
+    redirect(`/dashboard/utenti?errore=${encodeURIComponent(e instanceof Error ? e.message : 'Inviti non partiti')}`)
+  }
+  revalidatePath('/dashboard', 'layout')
+  if (errori.length > 0) {
+    redirect(`/dashboard/utenti?errore=${encodeURIComponent(`Inviti partiti: ${partiti}. Non partiti: ${errori.length} (${errori.slice(0, 3).join('; ')}${errori.length > 3 ? '…' : ''}). Riprova col pulsante.`)}`)
+  }
+  redirect(partiti === 0 ? '/dashboard/utenti?ok=istruttori_nessuno' : '/dashboard/utenti?ok=istruttori_invitati')
+}
+
 // Il lavoro aperto passa a chi si sceglie (vuoto: torna da assegnare). Senza
 // storia nel CRM l'utente si cancella, altrimenti resta nella storia, rimosso.
 export async function rimuoviUtente(f: FormData) {

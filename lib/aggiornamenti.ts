@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-27',
+    titolo: 'Creati gli utenti degli istruttori, con la sola sezione Appello',
+    testo:
+      'Sono stati creati gli utenti di 25 istruttori, con nome ed email presi da PerfectGym, e hanno accesso solo a «Appello istruttore». In Utenti, «Istruttori da invitare» manda l’email di registrazione a tutti con un clic. Gli istruttori che su PerfectGym non hanno l’email vanno creati a mano.',
+    dove: 'Utenti',
+  },
+  {
+    data: '2026-10-27',
     titolo: 'Nuovo Appello complessivo: tutte le lezioni del giorno, con i filtri',
     testo:
       'Mostra tutte le lezioni di un giorno, di tutti gli istruttori, con chi ha prenotato e chi è presente. Si filtra per istruttore, lezione, categoria e sala; in cima ci sono lezioni, prenotati, presenti e percentuale di presenza. Lo vedono gli admin e i consulenti. Si legge soltanto: la presenza la segna l’istruttore.',
