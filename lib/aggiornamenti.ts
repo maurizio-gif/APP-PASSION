@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-27',
+    titolo: 'Nuovo Report giornaliero, per gli admin',
+    testo:
+      'Mostra tutto quello che è successo in un giorno: opportunità arrivate e prese in carico, commenti, task fatti e creati, pass attivati, abbonamenti venduti, opportunità chiuse, disdette e rinnovi. In cima i numeri del giorno, poi una tabella con quello che ha fatto ogni consulente e, sotto, l’elenco di ogni cosa con la persona (si apre in un’altra scheda). Si cambia giorno con le frecce e si filtra per consulente e per tipologia.',
+    dove: 'Report giornaliero (solo admin)',
+  },
+  {
+    data: '2026-10-27',
     titolo: 'Nelle Disdette si cerca, si ordina e si filtra per data',
     testo:
       'Sopra l’elenco c’è la ricerca per nome e cognome, cellulare o email. Si può ordinare per data di scadenza o di disdetta e scegliere un periodo, di scadenza e/o di disdetta. Nell’elenco ora si legge la data di scadenza del contratto e il nome della persona apre la sua scheda in un’altra scheda del browser, così non si perde l’elenco.',

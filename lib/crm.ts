@@ -174,6 +174,36 @@ export type NuovoContratto = {
   gestito_da: string | null
 }
 
+// Il report giornaliero (supabase/migrations/20261027c_report_giornaliero.sql): una riga per ogni cosa successa.
+export type TipoEvento =
+  | 'lead_arrivato'
+  | 'lead_preso'
+  | 'lead_chiuso'
+  | 'commento'
+  | 'task_creato'
+  | 'task_fatto'
+  | 'pass'
+  | 'abbonamento'
+  | 'disdetta_arrivata'
+  | 'disdetta_gestita'
+  | 'rinnovo_gestito'
+export type EventoGiorno = {
+  ora: string | null
+  tipo: TipoEvento
+  sottotipo: string | null
+  esito: string | null
+  titolo: string | null
+  dettaglio: string | null
+  consulente_id: string | null
+  consulente: string | null
+  utente_id: string | null
+  nome: string | null
+  cognome: string | null
+  telefono: string | null
+  email: string | null
+}
+export type ReportGiornaliero = { giorno: string; eventi: EventoGiorno[] }
+
 export type FiltriDisdette = {
   testo?: string | null
   scadenzaDa?: string | null
@@ -660,6 +690,9 @@ export const crm = {
     return per
   },
   nuoviContratti: (vista: string) => rpc<NuovoContratto[]>('crm_nuovi_contratti', { p_vista: vista }),
+  // Solo admin: tutto quello che e' successo in un giorno (20261027c).
+  reportGiornaliero: (giorno: string, consulente: string | null = null) =>
+    rpc<ReportGiornaliero>('crm_report_giornaliero', { p_giorno: giorno, p_consulente: consulente }),
   // Ricerca, intervalli di date e ordine: supabase/migrations/20261027b.
   disdette: (vista: string, consulente: string | null = null, filtri: FiltriDisdette = {}) =>
     rpc<Disdetta[]>('crm_disdette', {
