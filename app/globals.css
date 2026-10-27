@@ -12032,3 +12032,20 @@ a.pf-tessera.pf-link:focus-visible { outline: 2px solid var(--rosso); outline-of
 
 /* ---- Schermi larghi: il contenuto occupa tutta la larghezza, come prima del restyle (niente fascia vuota a destra) ---- */
 :root:root .contenuto { max-width: none; }
+
+/* ---- Telefono: chi segue la riga (tendina + Assegna + rimetti) va in fondo alla scheda, a tutta larghezza, senza coprire il nome ---- */
+@media (max-width: 720px) {
+  :root:root:root:root:root:root table.schede-mobile tbody td:last-child:has(select) {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    align-self: stretch;
+    padding-top: 10px;
+    border-top: 1px solid rgba(92, 11, 30, 0.1);
+  }
+  :root:root:root:root:root:root table.schede-mobile tbody td:last-child:has(select) .azioni-gruppo { display: flex; align-items: center; gap: 8px; width: 100%; }
+  :root:root:root:root:root:root table.schede-mobile tbody td:last-child:has(select) .azioni-riga { display: flex; align-items: center; gap: 8px; flex: 1 1 auto; min-width: 0; margin: 0; }
+  :root:root:root:root:root:root table.schede-mobile tbody td:last-child:has(select) select { flex: 1 1 auto; min-width: 0; width: auto; }
+  :root:root:root:root:root:root table.schede-mobile tbody td:last-child:has(select) .bottone { flex: none; min-height: 36px; }
+  /* senza la colonna di destra occupata, il nome usa tutta la riga */
+  :root:root:root:root:root:root table.schede-mobile tbody tr:has(> td:last-child select) > td:first-child { grid-column: 1 / -1; }
+}

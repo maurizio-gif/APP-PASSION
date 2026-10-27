@@ -19,7 +19,7 @@ export const AGGIORNAMENTI: Aggiornamento[] = [
     data: '2026-10-27',
     titolo: 'Nuova grafica in tutto il CRM',
     testo:
-      'Il CRM ha un aspetto nuovo: schede, tabelle e pulsanti rifatti, in nero e rosso, più comodo anche da telefono. È scuro di partenza: con il pulsante col sole, in basso a sinistra, passi al tema chiaro. Funziona tutto come prima. Le novità più grandi sono qui sotto: la Dashboard consulente con i riquadri che portano alle sezioni, la sezione Senza consulente, l’Appello complessivo come calendario e il menu in categorie, con il nuovo gruppo Istruttori.',
+      'Il CRM ha un aspetto nuovo: schede, tabelle e pulsanti rifatti, in nero e rosso, più comodo anche da telefono. È chiaro di partenza: con il pulsante con la luna, in basso a sinistra, passi al tema scuro. Funziona tutto come prima. Le novità più grandi sono qui sotto: la Dashboard consulente con i riquadri che portano alle sezioni, la sezione Senza consulente, l’Appello complessivo come calendario e il menu in categorie, con il nuovo gruppo Istruttori.',
     dove: 'Tutto il CRM',
   },
   {

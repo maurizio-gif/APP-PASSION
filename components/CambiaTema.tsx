@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-// Tema chiaro o scuro: la scelta resta in questo browser (nessun dato esce dal computer).
+// Tema chiaro o scuro: di partenza e' chiaro; la scelta resta in questo browser (nessun dato esce dal computer).
 export function CambiaTema() {
   const [chiaro, setChiaro] = useState(false)
   useEffect(() => setChiaro(document.documentElement.getAttribute('data-tema') === 'chiaro'), [])
