@@ -11840,3 +11840,48 @@ a.pf-tessera.pf-link:focus-visible { outline: 2px solid var(--rosso); outline-of
   :root:root:root #da-gestire .numeri.numeri-schede { overflow-x: auto; overflow-y: hidden; }
   :root:root:root #da-gestire .numeri.numeri-schede > .numero { flex: 0 0 62%; }
 }
+
+/* ---- Telefono: le tendine dei filtri non fanno uscire la freccetta dal riquadro ---- */
+@media (max-width: 720px) {
+  :root:root:root .filtri select { flex: 1 1 150px; min-width: 0; gap: 6px; padding-right: 10px; font-size: 0.84rem; }
+  :root:root:root .filtri select::picker-icon { flex: none; margin-left: auto; }
+  :root:root:root .filtri > .bottone[type='submit'],
+  :root:root:root .filtri > button.bottone { flex: 1 1 100%; justify-content: center; }
+}
+
+/* ---- Prove su telefono: una scheda compatta per prova (nome e «Gestisci» in cima, poi pass, ingressi, note) ---- */
+@media (max-width: 720px) {
+  :root:root:root table.tabella-prove.schede-mobile tbody tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px 10px;
+    margin: 0 0 12px;
+    padding: 14px 16px;
+    border: 1px solid rgba(92, 11, 30, 0.14);
+    border-radius: 14px;
+    background: #fffafb;
+    box-shadow: 0 8px 20px -16px rgba(0, 0, 0, 0.55);
+  }
+  :root:root:root table.tabella-prove.schede-mobile tbody tr:last-child { margin-bottom: 0; }
+  :root:root:root table.tabella-prove.schede-mobile tbody td {
+    display: block;
+    grid-column: 1 / -1;
+    padding: 0;
+    border: 0;
+    background: none;
+    min-width: 0;
+  }
+  /* il cliente a sinistra e «Gestisci» a destra, sulla stessa riga */
+  :root:root:root table.tabella-prove.schede-mobile tbody td:first-child { grid-column: 1; grid-row: 1; }
+  :root:root:root table.tabella-prove.schede-mobile tbody td.gestisci { display: block; grid-column: 2; grid-row: 1; align-self: start; }
+  /* il pass: nome, date e stato su due righe; sotto una linea sottile come separatore */
+  :root:root:root table.tabella-prove.schede-mobile tbody td:nth-child(2) { grid-row: 2; padding-top: 10px; border-top: 1px solid rgba(92, 11, 30, 0.1); }
+  :root:root:root table.tabella-prove.schede-mobile tbody td:nth-child(3) { grid-row: 3; }
+  :root:root:root table.tabella-prove.schede-mobile tbody td:nth-child(4) { grid-row: 4; }
+  :root:root:root table.tabella-prove.schede-mobile tbody td.cella-vuota { display: none; }
+  :root:root:root table.tabella-prove.schede-mobile .riga-dati { gap: 3px; }
+  :root:root:root table.tabella-prove.schede-mobile td:nth-child(2) .riga-dati { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
+  :root:root:root table.tabella-prove.schede-mobile td:nth-child(2) .riga-dati > strong { flex: 1 1 100%; }
+  :root:root:root table.tabella-prove.schede-mobile td:nth-child(3) .riga-dati { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 2px 12px; font-size: 0.82rem; }
+  :root:root:root table.tabella-prove.schede-mobile td:nth-child(3) .riga-dati > .muto { flex: 1 1 100%; }
+}
