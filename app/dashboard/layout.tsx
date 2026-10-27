@@ -16,7 +16,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   if (!io) redirect('/login?error=non-autorizzato')
 
   const voci = [
-    { href: '/dashboard', testo: 'Da gestire' },
+    { href: '/dashboard', testo: 'Dashboard consulente' },
     ...SEZIONI.filter((s) => puoVedere(io, s.chiave)).map(({ href, testo }) => ({ href, testo })),
     ...(ha(io, 'gestione_utenti') ? [{ href: '/dashboard/utenti', testo: 'Utenti' }] : []),
     ...(eAdmin(io) ? [{ href: '/dashboard/report-giornaliero', testo: 'Report giornaliero' }] : []),

@@ -174,6 +174,37 @@ export type NuovoContratto = {
   gestito_da: string | null
 }
 
+// Il primo ricontatto di un'opportunita' (20261027d): `minuti` sono di orario di lavoro, dall'arrivo al
+// primo ricontatto o, se nessuno ha ancora ricontattato, fino ad adesso.
+export type Velocita = { lead_id: string; primo_contatto: string | null; minuti: number }
+
+// La performance di un consulente, una riga per settimana, dalla piu' vecchia (20261027d).
+export type PerformanceSettimana = {
+  settimana: string
+  in_corso: boolean
+  prese: number
+  chiuse: number
+  vinte: number
+  con_pass: number
+  con_abbonamento: number
+  ricontattate: number
+  ricontatto_mediano_min: number | null
+  ricontatto_30: number
+  dopo_presa_mediano_min: number | null
+  dopo_presa_30: number
+  prove_finite: number
+  prove_iscritte: number
+  abbonamenti: number
+  abbonamenti_nuovi: number
+  disdette_gestite: number
+  disdette_recuperate: number
+  rinnovi_gestiti: number
+  rinnovi_rinnovati: number
+  task_fatti: number
+  task_positivi: number
+}
+export type Performance = { consulente_id: string; consulente: string | null; oggi: string; settimane: PerformanceSettimana[] }
+
 // Il report giornaliero (supabase/migrations/20261027c_report_giornaliero.sql): una riga per ogni cosa successa.
 export type TipoEvento =
   | 'lead_arrivato'
@@ -680,6 +711,14 @@ export const crm = {
     for (const r of await rpc<ContrattoLead[]>('crm_lead_contratti', { p_lead: lead })) per[r.lead_id] = r
     return per
   },
+  // Il primo ricontatto di ogni opportunita' di una pagina.
+  leadVelocita: async (lead: string[]) => {
+    const per: Record<string, Velocita> = {}
+    if (lead.length === 0) return per
+    for (const r of await rpc<Velocita[]>('crm_lead_velocita', { p_lead: lead })) per[r.lead_id] = r
+    return per
+  },
+  performance: (consulente: string | null = null) => rpc<Performance>('crm_performance', { p_consulente: consulente, p_settimane: 8 }),
   prove: (vista: string, consulente: string | null = null) => rpc<Prova[]>('crm_prove', { p_vista: vista, p_consulente: consulente }),
   // Un giro solo per tutti i contratti di una pagina; chi non e' qui non ha dati.
   pagamenti: async (contratti: (number | null | undefined)[]) => {
