@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-27',
+    titolo: 'In Utenti c’è la ricerca per nome e cognome o email',
+    testo:
+      'Sopra l’elenco degli utenti c’è un campo di ricerca: scrivi nome e cognome (anche al contrario, anche senza accenti) o un pezzo dell’email e restano solo gli utenti che corrispondono, anche fra quelli non più attivi. «Azzera» toglie la ricerca.',
+    dove: 'Utenti',
+  },
+  {
+    data: '2026-10-27',
     titolo: 'Un video-tutorial di 46 secondi spiega l’appello',
     testo:
       'In cima alle pagine Appello istruttore e Appello complessivo c’è «Guarda il tutorial»: un video breve, con le scritte, che mostra come si fa l’appello (quando si segna, il tornello, un tocco per la presenza) e cosa vogliono dire First Timer, Prova e Nuovo iscritto.',
