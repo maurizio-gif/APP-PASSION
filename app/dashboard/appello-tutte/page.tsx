@@ -1,6 +1,9 @@
 import Link from 'next/link'
 import { crm, richiediSezione } from '@/lib/crm'
 import { eGiornoValido, formatoCifra, formatoGiornoLungo, formatoOra, oggiRoma, spostaGiorno } from '@/lib/formato'
+import { AppelloLezione } from '@/components/AppelloLezione'
+import { LegendaSegnali } from '@/components/SegnaliAppello'
+import { ScorriAdesso } from '@/components/ScorriAdesso'
 import { Vuoto } from '@/components/Ui'
 
 type Filtri = { giorno?: string; istruttore?: string; lezione?: string; categoria?: string; sala?: string }
@@ -34,6 +37,8 @@ export default async function AppelloTutte({ searchParams }: { searchParams: Fil
   const prenotatiIniziate = iniziate.reduce((a, l) => a + l.prenotati.length, 0)
   const presentiIniziate = iniziate.reduce((a, l) => a + l.prenotati.filter((p) => p.presente).length, 0)
   const senzaPrenotati = r.lezioni.filter((l) => l.prenotati.length === 0).length
+  // Oggi: «Adesso» sta davanti alla prima lezione non ancora finita.
+  const adessoId = giorno === oggi ? r.lezioni.find((l) => Date.parse(l.fine ?? l.inizio) > adesso)?.class_id : null
 
   const Scelta = ({ nome, valore, scelte, tutti }: { nome: string; valore: number | null; scelte: { id: number; nome: string }[]; tutti: string }) => (
     <select name={nome} defaultValue={valore ?? ''} aria-label={tutti}>
@@ -56,6 +61,7 @@ export default async function AppelloTutte({ searchParams }: { searchParams: Fil
             {formatoGiornoLungo(giorno)}. Tutte le lezioni del giorno, con chi ha prenotato e chi è presente. La presenza la segna l&apos;istruttore dal suo appello,
             da 59 minuti prima a 59 minuti dopo la lezione: qui si legge soltanto.
           </p>
+          <LegendaSegnali />
         </div>
       </div>
 
@@ -112,52 +118,15 @@ export default async function AppelloTutte({ searchParams }: { searchParams: Fil
           <Vuoto>{conFiltri ? 'Nessuna lezione con questi filtri.' : 'Nessuna lezione in questo giorno.'}</Vuoto>
         </div>
       ) : (
-        r.lezioni.map((l) => {
-          const finita = l.fine ? Date.parse(l.fine) < adesso : Date.parse(l.inizio) + 3600_000 < adesso
-          const p = l.prenotati.filter((x) => x.presente).length
-          return (
-            <details key={l.class_id} className="scheda" open={r.lezioni.length <= 6}>
-              <summary>
-                <strong>
-                  {formatoOra(l.inizio)}
-                  {l.fine ? `–${formatoOra(l.fine)}` : ''} · {l.lezione ?? 'Lezione'}
-                </strong>{' '}
-                <span className="piccolo attenuato">
-                  {[l.sala, l.istruttore ?? 'nessun istruttore'].filter(Boolean).join(' · ')} · {formatoCifra(p)} presenti su {formatoCifra(l.prenotati.length)}
-                  {l.posti ? ` (${formatoCifra(l.posti)} posti)` : ''}
-                </span>
-              </summary>
-              {l.prenotati.length === 0 ? (
-                <p className="vuoto">Nessun prenotato.</p>
-              ) : (
-                <ul className="appello-elenco">
-                  {l.prenotati.map((x) => (
-                    <li key={x.booking_id}>
-                      <div className={`appello-riga${x.presente ? ' presente' : ''}`} style={{ cursor: 'default' }}>
-                        <span aria-hidden="true">{x.presente ? '✓' : finita ? '✗' : '·'}</span>
-                        <span>
-                          {x.utente_id ? (
-                            <Link href={`/dashboard/persone/${x.utente_id}`} target="_blank" rel="noopener noreferrer">
-                              {x.cognome ?? ''} {x.nome ?? ''}
-                            </Link>
-                          ) : (
-                            <>
-                              {x.cognome ?? ''} {x.nome ?? ''}
-                            </>
-                          )}
-                          <span className="piccolo attenuato">
-                            {' '}
-                            {x.presente ? (x.segnato_da ? `· segnato da ${x.segnato_da}` : '· presente') : finita ? '· assente' : ''}
-                          </span>
-                        </span>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </details>
-          )
-        })
+        <>
+          {giorno === oggi && !conFiltri && <ScorriAdesso />}
+          {r.lezioni.map((l) => (
+            <div key={l.class_id}>
+              {adessoId === l.class_id && <div id="adesso" className="appello-adesso">Adesso</div>}
+              <AppelloLezione l={l} soloLettura />
+            </div>
+          ))}
+        </>
       )}
     </>
   )

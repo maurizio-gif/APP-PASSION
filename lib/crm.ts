@@ -186,9 +186,16 @@ export type PrenotatoAppello = {
   cognome: string | null
   presente: boolean
   segnato_da: string | null
+  data_nascita?: string | null
+  segnato_il?: string | null
   // Segnata nel CRM e non ancora mandata a PerfectGym.
   da_inviare: boolean
   utente_id?: string | null
+  // I segnali (20261027k): prima volta a questo tipo di lezione, in prova con un pass, prime due settimane di abbonamento.
+  prima_volta?: boolean
+  prova_piano?: string | null
+  prova_fine?: string | null
+  primo_abbonamento?: string | null
 }
 export type LezioneAppello = {
   class_id: number

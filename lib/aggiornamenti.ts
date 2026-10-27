@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-27',
+    titolo: 'L’appello ha una nuova impaginazione, con i segnali First Timer, Prova e Nuovo iscritto',
+    testo:
+      'Appello istruttore e Appello complessivo ora hanno le righe grandi da toccare: un tocco segna la presenza («Segna presente» diventa «✓ Presente»), togliere chiede conferma. Sotto il nome ci sono la data di nascita e l’età, chi ha segnato la presenza e quando (o «tornello/PG»), e tre pastiglie: Prova (ha un Guest Pass da 7 o 10 giorni in corso), Nuovo iscritto (nelle prime due settimane del primo abbonamento) e First Timer (prima volta a quel tipo di lezione). Sopra c’è la legenda; oggi si apre sulla riga «Adesso».',
+    dove: 'Appello istruttore, Appello complessivo',
+  },
+  {
+    data: '2026-10-27',
     titolo: 'Creati gli utenti degli istruttori, con la sola sezione Appello',
     testo:
       'Sono stati creati gli utenti di 25 istruttori, con nome ed email presi da PerfectGym, e hanno accesso solo a «Appello istruttore». In Utenti, «Istruttori da invitare» manda l’email di registrazione con un clic a chi ha lezioni in calendario su PerfectGym; gli altri si invitano a mano dalla loro scheda. Gli istruttori che su PerfectGym non hanno l’email vanno creati a mano.',
