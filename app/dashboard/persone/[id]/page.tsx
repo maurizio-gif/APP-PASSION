@@ -29,8 +29,11 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
   // I ticket della persona, per chi vede la sezione Ticket.
   const ticket = puoVedere(io, 'ticket') ? await crm.ticketElenco('tutti', p.id) : null
   const qui = `/dashboard/persone/${p.id}`
-  // Nella scheda solo i task: i commenti (quelli di Airtable) non si mostrano.
   const task = s.storia.filter((e): e is Extract<Scheda['storia'][number], { tipo: 'task' }> => e.tipo === 'task')
+  // I commenti, dal piu' recente: quelli di Airtable e il «Primo commento» del modulo Nuova opportunita'.
+  const commenti = s.storia
+    .filter((e): e is Extract<Scheda['storia'][number], { tipo: 'commento' }> => e.tipo === 'commento')
+    .sort((a, b) => new Date(b.quando).getTime() - new Date(a.quando).getTime())
   const leadAperto = s.lead.find((l) => l.fase === 'da_gestire' || l.fase === 'in_gestione')
   const pgm = linkPgm(p.member_id)
   // Gli abbonamenti arrivano gia' in ordine: il primo e' quello in corso.
@@ -351,6 +354,30 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
 </div>
         </section>
       </details>
+
+      {/* ---- Commenti: le note scritte sulla persona (anche il «Primo commento» di una nuova opportunita'). ---- */}
+      {commenti.length > 0 && (
+        <details className="fase-righe task-fase">
+          <summary className="fase-titolo">
+            Commenti
+            <span className="chip-gruppo"><span className="chip">{commenti.length}</span></span>
+            <span className="task-apri" aria-hidden="true" />
+          </summary>
+          <section className="scheda fase-corpo task-corpo">
+            <ol className="task-lista">
+              {commenti.map((e) => (
+                <li key={e.id} className="task-voce task-chiuso">
+                  <div className="task-riga">
+                    <span className="task-quando"><b>{formatoDataOra(e.quando)}</b></span>
+                    {e.autore && <span className="task-chi"><AvatarTask nome={e.autore} />{e.autore}</span>}
+                  </div>
+                  <div className="task-nota">{e.testo}</div>
+                </li>
+              ))}
+            </ol>
+          </section>
+        </details>
+      )}
 
       {/* ---- Le fasi una sotto l'altra: lead, prova, abbonamento, poi rinnovo e disdetta ---- */}
       <div className="funnel funnel-righe">

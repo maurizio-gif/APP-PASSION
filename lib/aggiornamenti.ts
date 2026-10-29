@@ -16,6 +16,13 @@ export type Aggiornamento = {
 
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
+    data: '2026-10-29',
+    titolo: 'Nella scheda della persona si vedono i commenti',
+    testo:
+      'Sotto i Task c’è «Commenti»: le note scritte sulla persona, dalla più recente, con data e autore. Ci sono anche quelle vecchie e il «Primo commento» che si scrive creando una nuova opportunità: prima venivano salvati ma non si vedevano da nessuna parte.',
+    dove: 'Scheda della persona → Commenti',
+  },
+  {
     data: '2026-10-27',
     titolo: 'Nuova grafica in tutto il CRM',
     testo:
