@@ -1,8 +1,9 @@
 import Link from 'next/link'
-import type { ContrattoLead, Io, Lead, Operatore, Pagamento } from '@/lib/crm'
+import type { ContrattoLead, Io, Lead, Operatore, Pagamento, Velocita } from '@/lib/crm'
 import { formatoData, formatoOra, nomeCompleto } from '@/lib/formato'
-import { BollinoFase, BollinoFonte } from '@/components/Ui'
+import { BollinoFase, BollinoFonte, Contatti } from '@/components/Ui'
 import { BollinoPagamento } from '@/components/Bollini'
+import { BollinoVelocita } from '@/components/BollinoVelocita'
 import { assegnaLead, prendiLead, rilasciaLead } from '@/app/dashboard/azioni'
 import { puoGestire } from '@/lib/permessi'
 
@@ -25,7 +26,7 @@ function NomeScheda({ href, l }: { href: string; l: Lead }) {
   )
 }
 
-export function TabellaLead({ lead, io, staff, torna, contratti, pagamenti, firma }: { lead: Lead[]; io: Io; staff: Operatore[]; torna: string; contratti?: Record<string, ContrattoLead> | null; pagamenti?: Record<number, Pagamento> | null; firma?: boolean }) {
+export function TabellaLead({ lead, io, staff, torna, contratti, pagamenti, firma, velocita }: { lead: Lead[]; io: Io; staff: Operatore[]; torna: string; contratti?: Record<string, ContrattoLead> | null; pagamenti?: Record<number, Pagamento> | null; firma?: boolean; velocita?: Record<string, Velocita> | null }) {
   // Pagato / da pagare del contratto di una riga (lo stesso bollino della scheda persona).
   const pagamento = (id: string) => {
     const c = contratti?.[id]
@@ -34,13 +35,11 @@ export function TabellaLead({ lead, io, staff, torna, contratti, pagamenti, firm
   return (
     <>
       <div className="tabella-scorre solo-computer">
-        <table className="tabella-lead">
+        <table className={`tabella-lead tabella-colonne${contratti ? '' : ' tabella-uniforme'}`}>
           <thead>
             <tr>
+              <th>Cliente</th>
               <th>{firma ? 'Data firma' : 'Data di creazione'}</th>
-              <th></th>
-              <th>Nome + Cognome</th>
-              <th>Tipologia</th>
               {contratti ? (
                 <>
                   <th>Abbonamento</th>
@@ -50,38 +49,48 @@ export function TabellaLead({ lead, io, staff, torna, contratti, pagamenti, firm
                 </>
               ) : (
                 <>
+                  {velocita && <th title="Tempo di lavoro dall'arrivo al primo ricontatto, anche un tentativo">Primo ricontatto</th>}
                   <th>Attività di interesse</th>
-                  <th>Nota task</th>
+                  <th>Nota</th>
                 </>
               )}
-              <th></th>
+              <th>{contratti ? '' : 'In carico'}</th>
             </tr>
           </thead>
           <tbody>
             {lead.map((l) => {
               const scheda = `/dashboard/persone/${l.utente_id}`
+              const c = contratti?.[l.id]
               return (
                 <tr key={l.id}>
-                  <td className="nowrap"><Link href={scheda} target="_blank" rel="noopener noreferrer" className="muto">{firma ? (contratti?.[l.id]?.data_firma ? formatoData(contratti[l.id].data_firma) : '–') : formatoData(l.creato_il)}</Link></td>
-                  <td className="nowrap attenuato">{firma ? '' : formatoOra(l.creato_il)}</td>
-                  <td className="nowrap">
-                    <NomeScheda href={scheda} l={l} />
+                  <td>
+                    <div className="riga-dati">
+                      <NomeScheda href={scheda} l={l} />
+                      <Contatti telefono={l.telefono} email={l.email} />
+                      {l.fonte && <span className="etichetta-riga"><BollinoFonte fonte={l.fonte} dettaglio={l.fonte_dettaglio} /></span>}
+                    </div>
                   </td>
-                  <td className="nowrap"><BollinoFonte fonte={l.fonte} dettaglio={l.fonte_dettaglio} /></td>
+                  <td>
+                    <div className="riga-dati">
+                      <Link href={scheda} target="_blank" rel="noopener noreferrer" className="normale">{firma ? (c?.data_firma ? formatoData(c.data_firma) : '–') : formatoData(l.creato_il)}</Link>
+                      {!firma && <span className="muto">{formatoOra(l.creato_il)}</span>}
+                    </div>
+                  </td>
                   {contratti ? (
                     <>
-                      <td><span className="taglia" title={contratti[l.id]?.piano ?? undefined}>{contratti[l.id]?.piano || '–'}</span></td>
-                      <td className="nowrap">{contratti[l.id]?.data_inizio ? formatoData(contratti[l.id].data_inizio) : '–'}</td>
-                      <td className="nowrap"><BollinoPagamento p={pagamento(l.id)} /></td>
-                      <td className="nowrap">{l.assegnato_nome || <span className="attenuato">nessuno</span>}</td>
+                      <td><div className="riga-dati"><strong>{c?.piano || '–'}</strong></div></td>
+                      <td><div className="riga-dati"><span className="normale">{c?.data_inizio ? formatoData(c.data_inizio) : '–'}</span></div></td>
+                      <td><div className="riga-dati"><BollinoPagamento p={pagamento(l.id)} /></div></td>
+                      <td><div className="riga-dati">{l.assegnato_nome ? <span className="normale">{l.assegnato_nome}</span> : <span className="muto">nessuno</span>}</div></td>
                     </>
                   ) : (
                     <>
-                      <td><span className="taglia" title={l.attivita_interesse ?? undefined}>{l.attivita_interesse || '–'}</span></td>
-                      <td><span className="taglia" title={l.note_task ?? undefined}>{l.note_task || ''}</span></td>
+                      {velocita && <td><div className="riga-dati"><BollinoVelocita v={velocita[l.id]} chiusa={l.fase === 'vinta' || l.fase === 'persa'} /></div></td>}
+                      <td><div className="riga-dati"><span className="normale">{l.attivita_interesse || '–'}</span></div></td>
+                      <td><div className="riga-dati">{l.note_task ? <span className="normale">{l.note_task}</span> : <span className="muto">–</span>}</div></td>
                     </>
                   )}
-                  <td className="nowrap"><Azione l={l} io={io} staff={staff} torna={torna} /></td>
+                  <td><Azione l={l} io={io} staff={staff} torna={torna} /></td>
                 </tr>
               )
             })}
@@ -101,6 +110,7 @@ export function TabellaLead({ lead, io, staff, torna, contratti, pagamenti, firm
               <div className="lead-telefono-testa">
                 <NomeScheda href={`/dashboard/persone/${l.utente_id}`} l={l} />{' '}
                 <BollinoFonte fonte={l.fonte} dettaglio={l.fonte_dettaglio} />{' '}
+                {velocita && !contratti && <><BollinoVelocita v={velocita[l.id]} chiusa={l.fase === 'vinta' || l.fase === 'persa'} />{' '}</>}
                 <BollinoPagamento p={pagamento(l.id)} />
               </div>
               <div className="lead-telefono-dettaglio">{dettaglio}</div>
@@ -129,7 +139,7 @@ function Azione({ l, io, staff, torna }: { l: Lead; io: Io; staff: Operatore[]; 
   }
   if (assegna(l, io)) {
     return (
-      <div className="azioni-riga">
+      <div className="azioni-gruppo">
         <form action={assegnaLead} className="azioni-riga">
           <input type="hidden" name="lead" value={l.id} />
           <input type="hidden" name="torna" value={torna} />
@@ -141,7 +151,7 @@ function Azione({ l, io, staff, torna }: { l: Lead; io: Io; staff: Operatore[]; 
         <form action={rilasciaLead}>
           <input type="hidden" name="lead" value={l.id} />
           <input type="hidden" name="torna" value={torna} />
-          <button className="bottone secondario piccolo" title="Torna fra le opportunità da gestire, senza nessuno">Rimetti da assegnare</button>
+          <button className="bottone secondario piccolo icona" title="Rimetti da assegnare: torna fra le opportunità da gestire, senza nessuno" aria-label="Rimetti da assegnare"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5M4 9h10a6 6 0 010 12h-3" /></svg></button>
         </form>
       </div>
     )

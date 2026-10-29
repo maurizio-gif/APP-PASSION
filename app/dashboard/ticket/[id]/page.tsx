@@ -1,13 +1,14 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { crm, linkPgm, richiediSezione, type ContestoTicket, type Io, type Ticket } from '@/lib/crm'
+import { crm, linkPgm, richiediSezione, type Io, type Ticket } from '@/lib/crm'
 import { createSupabaseServerClient } from '@/lib/supabase/server'
 import {
-  EVENTO_TICKET, formatoData, formatoDataOra, formatoEuro, NATURA_TICKET, STATI_TICKET_CHIUSI, traduci, VERIFICHE_TICKET,
+  EVENTO_TICKET, formatoData, formatoDataOra, NATURA_TICKET, STATI_TICKET_CHIUSI, traduci, VERIFICHE_TICKET,
 } from '@/lib/formato'
 import { assiste, smista } from '@/lib/permessi'
 import { Avviso, Contatti, Persona } from '@/components/Ui'
 import { BottoneInvio } from '@/components/BottoneInvio'
+import { Accordion, Riquadro } from '@/components/FaseRighe'
 import { CaricaAllegati } from '@/components/CaricaAllegati'
 import { ModuloModifica } from '@/components/ModuloModifica'
 import { BollinoStato, BollinoTipo, NumeroTicket } from '@/components/Ticket'
@@ -34,155 +35,154 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
   return (
     <>
       <div className="testata">
-        <div>
-          <h1><NumeroTicket id={t.id} /> {t.titolo}</h1>
-          <div className="ticket-bollini">
-            <BollinoTipo tipo={t.tipo} /> <BollinoStato stato={t.stato} />
-            {t.bloccante && <span className="bollino rosso">Blocca il lavoro</span>}
+        <div className="testata-ticket">
+          <div className="ticket-riga-sopra">
+            <span className="ticket-sopra">Ticket <NumeroTicket id={t.id} /></span>
+            <div className="ticket-bollini">
+              <BollinoTipo tipo={t.tipo} /> <BollinoStato stato={t.stato} />
+              {t.bloccante && <span className="bollino rosso blocca">Blocca il lavoro</span>}
+            </div>
           </div>
-          <p className="piccolo attenuato">
-            Aperto da {t.aperto_da_nome ?? '—'} il {formatoDataOra(t.aperto_il)}
-            {t.inviato_il && ` · a R2D il ${formatoDataOra(t.inviato_il)}${t.inviato_nome && t.inviato_nome !== t.aperto_da_nome ? ` da ${t.inviato_nome}` : ''}`}
-            {t.preso_nome && ` · lo segue ${t.preso_nome}`}
-          </p>
+          <h1>{t.titolo}</h1>
+          <ul className="ticket-meta">
+            <li><span>Aperto da</span> <strong>{t.aperto_da_nome ?? '—'}</strong> · {formatoDataOra(t.aperto_il)}</li>
+            {t.inviato_il && (
+              <li>
+                <span>Mandato a R2D</span> {formatoDataOra(t.inviato_il)}
+                {t.inviato_nome && t.inviato_nome !== t.aperto_da_nome && <> · da <strong>{t.inviato_nome}</strong></>}
+              </li>
+            )}
+            {t.preso_nome && <li><span>Lo segue</span> <strong>{t.preso_nome}</strong></li>}
+          </ul>
         </div>
-        <Link href="/dashboard/ticket">← Ticket</Link>
+        <Link className="bottone secondario" href="/dashboard/ticket">← Ticket</Link>
       </div>
       <Avviso errore={searchParams.errore} ok={searchParams.ok} />
       {t.doppione_di && (
         <p className="avviso">Unito al <Link href={`/dashboard/ticket/${t.doppione_di}`}>#{t.doppione_di}</Link>: si segue lì.</p>
       )}
       {t.stato === 'in_attesa' && (
-        <p className="avviso">R2D aspetta una risposta di Passion: scrivila nel filo qui sotto e il ticket torna in lavorazione.</p>
+        <p className="avviso">R2D aspetta una risposta di Passion: scrivila nel thread qui sotto e il ticket torna in lavorazione.</p>
       )}
 
-      <div className="griglia">
-        {/* ---- Colonna 1: il ticket e il filo ---- */}
-        <div>
-          <section className="scheda">
-            <h2>{t.tipo === 'modifica' ? 'Cosa cambia' : 'Cosa succede'}</h2>
-            <p className="ticket-testo">{t.descrizione}</p>
-            {t.tipo === 'modifica' && (
-              <dl className="dati">
-                <dt>Per</dt><dd>{t.abbonamenti ?? <span className="attenuato">non indicato</span>}</dd>
-                <dt>Da quando</dt><dd>{t.dal ? formatoData(t.dal) : <span className="attenuato">non indicato</span>}</dd>
-                <dt>Comunicazione</dt><dd>{t.comunicazione ?? <span className="attenuato">nessuna</span>}</dd>
-                <dt>Riunione</dt><dd>{formatoData(t.riunione)}</dd>
-                {t.confermata_il && (<><dt>Conferma</dt><dd>{t.confermata_nota} <span className="piccolo attenuato">(registrata da {t.confermata_nome} il {formatoDataOra(t.confermata_il)})</span></dd></>)}
-              </dl>
-            )}
-            {t.tipo !== 'modifica' && t.verifiche.length > 0 && (
+      <div className="griglia ticket-pagina">
+        <Riquadro titolo={<>{t.tipo === 'modifica' ? 'Cosa cambia' : 'Cosa succede'}</>}>
+          <p className="ticket-testo">{t.descrizione}</p>
+          {t.tipo === 'modifica' && (
+            <dl className="dati">
+              <dt>Per</dt><dd>{t.abbonamenti ?? <span className="attenuato">non indicato</span>}</dd>
+              <dt>Da quando</dt><dd>{t.dal ? formatoData(t.dal) : <span className="attenuato">non indicato</span>}</dd>
+              <dt>Comunicazione</dt><dd>{t.comunicazione ?? <span className="attenuato">nessuna</span>}</dd>
+              <dt>Riunione</dt><dd>{formatoData(t.riunione)}</dd>
+              {t.confermata_il && (<><dt>Conferma</dt><dd>{t.confermata_nota} <span className="piccolo attenuato">(registrata da {t.confermata_nome} il {formatoDataOra(t.confermata_il)})</span></dd></>)}
+            </dl>
+          )}
+          {t.tipo !== 'modifica' && t.verifiche.length > 0 && (
+            <>
+              <h3 className="titoletto">Già controllato</h3>
+              <ul className="elenco-breve">{t.verifiche.map((v) => <li key={v}>✓ {traduci(VERIFICHE_TICKET, v)}</li>)}</ul>
+            </>
+          )}
+        </Riquadro>
+
+        {(t.persona || t.doppioni.length > 0 || t.stessa_persona.length > 0) && (
+          <Riquadro titolo={<>Cliente</>}>
+            {t.persona && (
               <>
-                <h3 className="titoletto">Già controllato</h3>
-                <ul className="elenco-breve">{t.verifiche.map((v) => <li key={v}>✓ {traduci(VERIFICHE_TICKET, v)}</li>)}</ul>
+                <div className="cliente-riga">
+                  <Persona id={t.persona.id} nome={t.persona.nome} cognome={t.persona.cognome} />
+                  {linkPgm(t.persona.member_id) && (
+                    <a className="bottone secondario piccolo" href={linkPgm(t.persona.member_id)!} target="_blank" rel="noreferrer">Apri su PerfectGym ↗</a>
+                  )}
+                </div>
+                <Contatti telefono={t.persona.telefono} email={t.persona.email} />
               </>
             )}
-          </section>
-
-          {(t.soluzione || t.causa) && (
-            <section className="scheda ticket-soluzione">
-              <h2>{t.stato === 'rilasciata' ? 'Rilasciata' : 'Soluzione'}</h2>
-              <dl className="dati">
-                {t.natura && (<><dt>Di cosa si trattava</dt><dd>{traduci(NATURA_TICKET, t.natura)}</dd></>)}
-                {t.causa && (<><dt>Causa</dt><dd className="ticket-testo">{t.causa}</dd></>)}
-                <dt>{t.stato === 'rilasciata' ? 'Verificato' : t.stato === 'risolto_desk' ? 'Risposta del desk' : 'Soluzione'}</dt>
-                <dd className="ticket-testo">{t.soluzione}</dd>
-                {t.chiuso_il && (<><dt>Chiuso</dt><dd>{t.chiuso_nome} · {formatoDataOra(t.chiuso_il)}</dd></>)}
-              </dl>
-            </section>
-          )}
-
-          <section className="scheda">
-            <h2>Filo</h2>
-            <ul className="filo-ticket">
-              {t.messaggi.map((m) => (
-                <li key={m.id} className={`lato-${m.lato}${m.evento ? ' evento' : ''}`}>
-                  <div className="storia-testa">
-                    <strong>{m.autore ?? '—'}</strong>{m.lato === 'r2d' && <span className="bollino grigio">R2D</span>}
-                    {m.evento && <> {traduci(EVENTO_TICKET, m.evento)}</>} · {formatoDataOra(m.creato_il)}
-                  </div>
-                  {m.testo && <div className="storia-testo">{m.testo}</div>}
-                </li>
-              ))}
-            </ul>
-            {t.stato !== 'doppione' && (
-              <form action={messaggioTicket} className="modulo">
-                <input type="hidden" name="ticket" value={t.id} />
-                <input type="hidden" name="torna" value={qui} />
-                <div className="campo">
-                  <label htmlFor="testo">Scrivi</label>
-                  <textarea id="testo" name="testo" rows={3} required placeholder={chiuso ? 'Un aggiornamento (il ticket resta chiuso)' : 'Una risposta, un aggiornamento, un dettaglio in più'} />
-                </div>
-                <BottoneInvio testo="Aggiungi al filo" inCorso="Invio…" classe="secondario" />
-              </form>
+            {t.stessa_persona.length > 0 && (
+              <>
+                <h3 className="titoletto">Altri ticket aperti sul cliente</h3>
+                <ul className="elenco-breve">
+                  {t.stessa_persona.map((o) => (
+                    <li key={o.id}><Link href={`/dashboard/ticket/${o.id}`}><NumeroTicket id={o.id} /> {o.titolo}</Link> <BollinoStato stato={o.stato} /></li>
+                  ))}
+                </ul>
+              </>
             )}
-          </section>
-
-          <section className="scheda">
-            <h2>Allegati</h2>
-            {t.allegati.length === 0 ? (
-              <p className="vuoto">Nessun allegato.</p>
-            ) : (
-              <ul className="allegati-elenco">
-                {t.allegati.map((a) => {
-                  const url = link.get(a.percorso)
-                  const immagine = a.tipo?.startsWith('image/') && a.tipo !== 'image/heic' && a.tipo !== 'image/heif'
-                  return (
-                    <li key={a.id}>
-                      {url ? (
-                        <a href={url} target="_blank" rel="noreferrer">
-                          {immagine ? <img src={url} alt={a.nome} loading="lazy" /> : <span className="allegato-file">{a.nome}</span>}
-                        </a>
-                      ) : <span className="allegato-file attenuato">{a.nome} (non raggiungibile)</span>}
-                      <div className="piccolo attenuato">{a.caricato_nome} · {formatoDataOra(a.caricato_il)}</div>
-                    </li>
-                  )
-                })}
-              </ul>
+            {t.doppioni.length > 0 && (
+              <>
+                <h3 className="titoletto">Uniti a questo</h3>
+                <ul className="elenco-breve">
+                  {t.doppioni.map((d) => (
+                    <li key={d.id}><Link href={`/dashboard/ticket/${d.id}`}><NumeroTicket id={d.id} /> {d.titolo}</Link>
+                      <span className="piccolo attenuato"> · {d.aperto_da_nome}, {formatoData(d.aperto_il)}</span></li>
+                  ))}
+                </ul>
+              </>
             )}
-            {t.stato !== 'doppione' && <CaricaAllegati ticket={t.id} />}
-          </section>
-        </div>
+          </Riquadro>
+        )}
+        {(t.soluzione || t.causa) && (
+          <Riquadro titolo={<>{t.stato === 'rilasciata' ? 'Rilasciata' : 'Soluzione'}</>} classe="ticket-soluzione piena">
+            <dl className="dati">
+              {t.natura && (<><dt>Di cosa si trattava</dt><dd>{traduci(NATURA_TICKET, t.natura)}</dd></>)}
+              {t.causa && (<><dt>Causa</dt><dd className="ticket-testo">{t.causa}</dd></>)}
+              <dt>{t.stato === 'rilasciata' ? 'Verificato' : t.stato === 'risolto_desk' ? 'Risposta del desk' : 'Soluzione'}</dt>
+              <dd className="ticket-testo">{t.soluzione}</dd>
+              {t.chiuso_il && (<><dt>Chiuso</dt><dd>{t.chiuso_nome} · {formatoDataOra(t.chiuso_il)}</dd></>)}
+            </dl>
+          </Riquadro>
+        )}
 
-        {/* ---- Colonna 2: il socio e le azioni ---- */}
-        <div>
-          <Azioni t={t} io={io} qui={qui} />
-
-          {t.persona && (
-            <section className="scheda">
-              <h2>Socio</h2>
-              <Persona id={t.persona.id} nome={t.persona.nome} cognome={t.persona.cognome} />
-              <Contatti telefono={t.persona.telefono} email={t.persona.email} />
-              {linkPgm(t.persona.member_id) && (
-                <p><a href={linkPgm(t.persona.member_id)!} target="_blank" rel="noreferrer">Apri su PerfectGym ↗</a></p>
+        <Accordion aperto={t.allegati.length > 0} titolo={<>Allegati <span className={`conta-titolo${t.allegati.length === 0 ? ' zero' : ''}`}>{t.allegati.length}</span></>}>
+              {t.allegati.length === 0 ? (
+                <p className="vuoto">Nessun allegato.</p>
+              ) : (
+                <ul className="allegati-elenco">
+                  {t.allegati.map((a) => {
+                    const url = link.get(a.percorso)
+                    const immagine = a.tipo?.startsWith('image/') && a.tipo !== 'image/heic' && a.tipo !== 'image/heif'
+                    return (
+                      <li key={a.id}>
+                        {url ? (
+                          <a href={url} target="_blank" rel="noreferrer">
+                            {immagine ? <img src={url} alt={a.nome} loading="lazy" /> : <span className="allegato-file">{a.nome}</span>}
+                          </a>
+                        ) : <span className="allegato-file attenuato">{a.nome} (non raggiungibile)</span>}
+                        <div className="piccolo attenuato">{a.caricato_nome} · {formatoDataOra(a.caricato_il)}</div>
+                      </li>
+                    )
+                  })}
+                </ul>
               )}
-              {t.contesto && <Fotografia c={t.contesto} />}
-            </section>
-          )}
+              {t.stato !== 'doppione' && <CaricaAllegati ticket={t.id} />}
+          </Accordion>
 
-          {t.doppioni.length > 0 && (
-            <section className="scheda">
-              <h2>Uniti a questo</h2>
-              <ul className="elenco-breve">
-                {t.doppioni.map((d) => (
-                  <li key={d.id}><Link href={`/dashboard/ticket/${d.id}`}><NumeroTicket id={d.id} /> {d.titolo}</Link>
-                    <span className="piccolo attenuato"> · {d.aperto_da_nome}, {formatoData(d.aperto_il)}</span></li>
+        <Accordion titolo={<>Thread <span className="conta-titolo">{t.messaggi.filter((m) => !m.evento).length}</span></>}>
+              <ul className="filo-ticket">
+                {t.messaggi.map((m) => (
+                  <li key={m.id} className={`lato-${m.lato}${m.evento ? ' evento' : ''}`}>
+                    <div className="storia-testa">
+                      <strong>{m.autore ?? '—'}</strong>{m.lato === 'r2d' && <span className="bollino grigio">R2D</span>}
+                      {m.evento && <> {traduci(EVENTO_TICKET, m.evento)}</>} · {formatoDataOra(m.creato_il)}
+                    </div>
+                    {m.testo && <div className="storia-testo">{m.testo}</div>}
+                  </li>
                 ))}
               </ul>
-            </section>
-          )}
+              {t.stato !== 'doppione' && (
+                <form action={messaggioTicket} className="modulo">
+                  <input type="hidden" name="ticket" value={t.id} />
+                  <input type="hidden" name="torna" value={qui} />
+                  <div className="campo">
+                    <label htmlFor="testo">Scrivi</label>
+                    <textarea id="testo" name="testo" rows={3} required placeholder={chiuso ? 'Un aggiornamento (il ticket resta chiuso)' : 'Una risposta, un aggiornamento, un dettaglio in più'} />
+                  </div>
+                  <BottoneInvio testo="Aggiungi al thread" inCorso="Invio…" classe="secondario" />
+                </form>
+              )}
+          </Accordion>
 
-          {t.stessa_persona.length > 0 && (
-            <section className="scheda">
-              <h2>Altri ticket aperti sul socio</h2>
-              <ul className="elenco-breve">
-                {t.stessa_persona.map((o) => (
-                  <li key={o.id}><Link href={`/dashboard/ticket/${o.id}`}><NumeroTicket id={o.id} /> {o.titolo}</Link> <BollinoStato stato={o.stato} /></li>
-                ))}
-              </ul>
-            </section>
-          )}
-        </div>
+        <Azioni t={t} io={io} qui={qui} />
       </div>
     </>
   )
@@ -196,30 +196,6 @@ async function linkAllegati(t: Ticket) {
   const { data } = await supabase.storage.from('ticket').createSignedUrls(t.allegati.map((a) => a.percorso), 3600)
   for (const d of data ?? []) if (d.path && d.signedUrl) mappa.set(d.path, d.signedUrl)
   return mappa
-}
-
-// La situazione del socio quando si e' aperto il ticket.
-function Fotografia({ c }: { c: ContestoTicket }) {
-  if (!c.socio) return <p className="piccolo attenuato">Non era un socio di PerfectGym quando si è aperto il ticket.</p>
-  const [abb] = c.abbonamenti ?? []
-  const giorno = c.fotografata_il.slice(0, 10)
-  const scadenza = c.certificato?.scadenza ?? null
-  return (
-    <>
-      <h3 className="titoletto">All’apertura ({formatoDataOra(c.fotografata_il)})</h3>
-      <dl className="dati">
-        <dt>Abbonamento</dt>
-        <dd>{abb ? <>{abb.piano ?? '—'} <span className="piccolo attenuato">dal {formatoData(abb.data_inizio)} al {formatoData(abb.data_fine)}</span>
-          {abb.data_inizio && abb.data_inizio > giorno && <> <span className="bollino rosso">non ancora iniziato</span></>}</> : 'nessuno'}</dd>
-        <dt>Saldo</dt>
-        <dd className={c.saldo != null && c.saldo < 0 ? 'negativo' : undefined}>{formatoEuro(c.saldo)}</dd>
-        <dt>Certificato</dt>
-        <dd>{!scadenza ? 'non presente' : scadenza >= giorno ? `valido fino al ${formatoData(scadenza)}` : <span className="testo-rosso">scaduto il {formatoData(scadenza)}</span>}</dd>
-        <dt>Ingressi</dt>
-        <dd>{c.ingressi_30gg ?? 0} in 30 giorni{c.ultimo_ingresso ? `, l’ultimo il ${formatoDataOra(c.ultimo_ingresso)}` : ''}</dd>
-      </dl>
-    </>
-  )
 }
 
 function Nascosti({ t, qui }: { t: Ticket; qui: string }) {
@@ -246,6 +222,8 @@ function Azioni({ t, io, qui }: { t: Ticket; io: Io; qui: string }) {
   const puoAssistere = assiste(io)
   const aperto = ['da_verificare', 'inviato', 'in_lavorazione', 'in_attesa'].includes(t.stato)
   const blocchi: React.ReactNode[] = []
+  // «Prendo in carico» sta nella barra del riquadro, a destra: sotto restano le colonne del lavoro.
+  let presa: React.ReactNode = null
 
   if (t.stato === 'da_verificare' && puoSmistare) {
     blocchi.push(
@@ -276,29 +254,18 @@ function Azioni({ t, io, qui }: { t: Ticket; io: Io; qui: string }) {
 
   if (aperto && puoAssistere) {
     if (t.stato !== 'in_lavorazione' || t.preso_da !== io?.id) {
-      blocchi.push(
-        <form key="prendi" action={prendiTicket} className="azioni-scheda">
+      presa = (
+        <form action={prendiTicket} className="azioni-scheda">
           <Nascosti t={t} qui={qui} />
           <BottoneInvio testo={t.preso_nome && t.preso_da !== io?.id ? `Prendo io (ora ${t.preso_nome})` : 'Prendo in carico'} inCorso="…" />
-        </form>,
-      )
-    }
-    if (t.stato === 'inviato' || t.stato === 'in_lavorazione') {
-      blocchi.push(
-        <form key="chiedi" action={chiediTicket} className="modulo">
-          <Nascosti t={t} qui={qui} />
-          <div className="campo">
-            <label htmlFor="domanda">Chiedi informazioni a Passion</label>
-            <textarea id="domanda" name="domanda" rows={2} required placeholder="Cosa serve sapere per andare avanti" />
-          </div>
-          <BottoneInvio testo="Chiedi e metti in attesa" inCorso="Invio…" classe="secondario" />
-        </form>,
+        </form>
       )
     }
     if (t.stato !== 'da_verificare') {
       blocchi.push(
         <form key="risolvi" action={risolviTicket} className="modulo">
           <Nascosti t={t} qui={qui} />
+          <div className="modulo-titolo">Risolvi il ticket</div>
           <SceltaNatura />
           <div className="campo">
             <label htmlFor="causa">Causa</label>
@@ -312,15 +279,29 @@ function Azioni({ t, io, qui }: { t: Ticket; io: Io; qui: string }) {
         </form>,
       )
     }
+    if (t.stato === 'inviato' || t.stato === 'in_lavorazione') {
+      blocchi.push(
+        <form key="chiedi" action={chiediTicket} className="modulo">
+          <Nascosti t={t} qui={qui} />
+          <div className="campo">
+            <label htmlFor="domanda" className="modulo-titolo">Chiedi informazioni a Passion</label>
+            <textarea id="domanda" name="domanda" rows={2} required placeholder="Cosa serve sapere per andare avanti" />
+          </div>
+          <BottoneInvio testo="Chiedi e metti in attesa" inCorso="Invio…" classe="secondario" />
+        </form>,
+      )
+    }
   }
 
   if (aperto && (puoSmistare || puoAssistere)) {
     blocchi.push(
       <form key="unisci" action={unisciTicket} className="azioni-scheda">
         <Nascosti t={t} qui={qui} />
-        <label htmlFor="unisci-in" className="piccolo">Stesso problema del ticket</label>
-        <input id="unisci-in" name="in" type="number" min={1} required placeholder="#" className="campo-breve" />
-        <button className="bottone secondario piccolo">Unisci</button>
+        <label htmlFor="unisci-in" className="modulo-titolo">Stesso problema del ticket</label>
+        <div className="azioni-riga">
+          <input id="unisci-in" name="in" type="number" min={1} required placeholder="#" className="campo-breve" />
+          <button className="bottone secondario piccolo">Unisci</button>
+        </div>
       </form>,
     )
   }
@@ -383,11 +364,10 @@ function Azioni({ t, io, qui }: { t: Ticket; io: Io; qui: string }) {
     }
   }
 
-  if (blocchi.length === 0) return null
+  if (blocchi.length === 0 && !presa) return null
   return (
-    <section className="scheda ticket-azioni">
-      <h2>Cosa fare</h2>
-      <div className="stack">{blocchi}</div>
-    </section>
+    <Riquadro titolo={<>Cosa fare</>} azione={presa} classe="ticket-azioni">
+      {blocchi.length > 0 && <div className="stack">{blocchi}</div>}
+    </Riquadro>
   )
 }

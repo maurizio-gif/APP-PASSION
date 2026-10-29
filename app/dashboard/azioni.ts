@@ -196,6 +196,37 @@ export async function aggiornaRinnovo(f: FormData) {
     }))
 }
 
+// --- Appello (20261027i) -----------------------------------------------------
+// Segna (o toglie) la presenza di alcuni prenotati. Non torna a una pagina: risponde alla schermata
+// dell'appello, che cambia la spunta e mostra l'errore del database (appello non ancora aperto,
+// chiuso, non e' una sua lezione...).
+export async function segnaPresenze(prenotazioni: number[], presente: boolean): Promise<{ ok: true; cambiate: number } | { ok: false; errore: string }> {
+  try {
+    const cambiate = await rpc<number>('crm_appello_segna', { p_prenotazioni: prenotazioni, p_presente: presente })
+    revalidatePath('/dashboard/appello')
+    return { ok: true, cambiate: Number(cambiate) || 0 }
+  } catch (e) {
+    return { ok: false, errore: e instanceof Error ? e.message : 'Presenza non salvata' }
+  }
+}
+
+// --- Contratti senza consulente (20261027g) -----------------------------------
+// Prendere in carico un abbonamento nuovo richiede una nota; «Online» e' di nessuno e la nota e' facoltativa.
+
+export async function assegnaIscrizione(f: FormData) {
+  await esegui(f, () =>
+    rpc('crm_iscrizione_assegna', { p_contratto: Number(testo(f, 'contratto')), p_consulente: testo(f, 'staff'), p_online: false, p_note: testo(f, 'note') }))
+}
+
+export async function iscrizioneOnline(f: FormData) {
+  await esegui(f, () =>
+    rpc('crm_iscrizione_assegna', { p_contratto: Number(testo(f, 'contratto')), p_consulente: null, p_online: true, p_note: testo(f, 'note') }))
+}
+
+export async function rilasciaIscrizione(f: FormData) {
+  await esegui(f, () => rpc('crm_iscrizione_rilascia', { p_contratto: Number(testo(f, 'contratto')) }))
+}
+
 // --- Debitori ----------------------------------------------------------------
 
 export async function debitoTask(f: FormData) {
@@ -396,6 +427,34 @@ export async function invitaUtente(f: FormData) {
       inviato = (await invita(testo(f, 'utente'))).inviato
     },
   )
+}
+
+// L'invito a tutti gli istruttori che non hanno ancora l'accesso: solo gli utenti attivi con la sola sezione
+// «Appello istruttore» (20261027i) e con lezioni in calendario (20261027j), cosi' non puo' scrivere a nessun altro. Ognuno riceve l'email con il link per
+// scegliere la password; chi non parte resta «senza accesso» e si riprova con lo stesso pulsante.
+export async function invitaIstruttori() {
+  let partiti = 0
+  const errori: string[] = []
+  try {
+    const utenti = await rpc<{ id: string; nome: string; cognome: string | null; attivo: boolean; accesso: boolean; sezioni: string[] }[]>('crm_utenti')
+    const conLezioni = new Set((await rpc<{ staff_id: string }[]>('crm_istruttori_con_lezioni')).map((x) => x.staff_id))
+    for (const u of utenti.filter((x) => x.attivo && !x.accesso && x.sezioni.length === 1 && x.sezioni[0] === 'appello' && conLezioni.has(x.id))) {
+      try {
+        await invita(u.id)
+        partiti++
+      } catch (e) {
+        errori.push(`${u.nome} ${u.cognome ?? ''}: ${e instanceof Error ? e.message : 'non partito'}`.trim())
+      }
+    }
+  } catch (e) {
+    revalidatePath('/dashboard', 'layout')
+    redirect(`/dashboard/utenti?errore=${encodeURIComponent(e instanceof Error ? e.message : 'Inviti non partiti')}`)
+  }
+  revalidatePath('/dashboard', 'layout')
+  if (errori.length > 0) {
+    redirect(`/dashboard/utenti?errore=${encodeURIComponent(`Inviti partiti: ${partiti}. Non partiti: ${errori.length} (${errori.slice(0, 3).join('; ')}${errori.length > 3 ? '…' : ''}). Riprova col pulsante.`)}`)
+  }
+  redirect(partiti === 0 ? '/dashboard/utenti?ok=istruttori_nessuno' : '/dashboard/utenti?ok=istruttori_invitati')
 }
 
 // Il lavoro aperto passa a chi si sceglie (vuoto: torna da assegnare). Senza

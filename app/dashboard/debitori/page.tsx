@@ -1,8 +1,9 @@
 import Link from 'next/link'
 import { crm, linkPgm, richiediSezione } from '@/lib/crm'
 import { formatoData, formatoDataOra, formatoEuro, formatoFa, STATO_CONTRATTO, TIPI_TASK_NUOVI, traduci } from '@/lib/formato'
-import { Avviso, Contatti, LinkGuida, Persona, Vuoto } from '@/components/Ui'
+import { Avviso, Contatti, LinkGuida, Persona, SchedeMulti, Vuoto } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
+import { filtraTesto, testoCercato } from '@/lib/ricerca'
 import { debitoAssegna, debitoTask } from '../azioni'
 
 const VISTE = [
@@ -20,15 +21,17 @@ const CHI = [
 // Chi ha il saldo negativo su PerfectGym. Il saldo e' quello del mirror, letto
 // a ogni apertura: chi paga esce dall'elenco da solo e finisce in Rientrati.
 // Il recupero si segue coi task, che restano anche nella scheda della persona.
-export default async function Debitori({ searchParams }: { searchParams: { vista?: string; chi?: string; consulente?: string; errore?: string } }) {
+export default async function Debitori({ searchParams }: { searchParams: { vista?: string; chi?: string; consulente?: string; q?: string; errore?: string } }) {
   const io = await richiediSezione('debitori')
   const vista = VISTE.some((v) => v.chiave === searchParams.vista) ? searchParams.vista! : 'attivi'
   const staff = await crm.staff()
   // Il consulente: a chi e' assegnato il recupero (con lui, «di chi» e' «di tutti»).
   const consulente = consulenteScelto(staff, searchParams.consulente)
   const chi = consulente ? 'tutti' : CHI.some((v) => v.chiave === searchParams.chi) ? searchParams.chi! : 'tutti'
-  const debitori = await crm.debitori(vista, chi, consulente)
-  const perConsulente = consulente ? `&consulente=${consulente}` : ''
+  const q = testoCercato(searchParams.q)
+  const debitori = filtraTesto(await crm.debitori(vista, chi, consulente), q)
+  const perQ = q ? `&q=${encodeURIComponent(q)}` : ''
+  const perConsulente = `${consulente ? `&consulente=${consulente}` : ''}${perQ}`
   const qui = `/dashboard/debitori?vista=${vista}&chi=${chi}${perConsulente}`
   const rientrati = vista === 'rientrati'
   const totale = debitori.reduce((s, d) => s + (d.saldo != null && d.saldo < 0 ? d.saldo : 0), 0)
@@ -38,41 +41,41 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
     <>
       <div className="testata">
         <div>
-          <h1>Debitori</h1>
-          <p>Chi ha il saldo negativo su PerfectGym: si recupera coi task, e quando paga esce da solo.{' '}<LinkGuida argomento="debitori" /></p>
+          <div className="titolo-riga">
+            <h1>Debitori</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">Chi ha il saldo negativo su PerfectGym: si recupera coi task, e quando paga esce da solo.{' '}<LinkGuida argomento="debitori" /></span>
+            </span>
+          </div>
         </div>
       </div>
       <Avviso errore={searchParams.errore} />
-      <div className="schede-vista">
-        {VISTE.map((v) => (
-          <Link key={v.chiave} href={`/dashboard/debitori?vista=${v.chiave}&chi=${chi}${perConsulente}`} className={v.chiave === vista ? 'attivo' : undefined}>{v.testo}</Link>
-        ))}
-      </div>
-      <div className="schede-vista">
-        {CHI.map((v) => (
-          <Link key={v.chiave} href={`/dashboard/debitori?vista=${vista}&chi=${v.chiave}`} className={!consulente && v.chiave === chi ? 'attivo' : undefined}>{v.testo}</Link>
-        ))}
-      </div>
-      <FiltroConsulente azione="/dashboard/debitori" staff={staff} consulente={consulente} tieni={{ vista, chi: 'tutti' }} />
+      <SchedeMulti gruppi={[
+        { testo: 'Situazione', tono: 'prova', voci: VISTE.map((v) => ({ testo: v.testo, href: `/dashboard/debitori?vista=${v.chiave}&chi=${chi}${perConsulente}`, attivo: v.chiave === vista })) },
+        { testo: 'Chi li segue', tono: 'lavoro', voci: CHI.map((v) => ({ testo: v.testo, href: `/dashboard/debitori?vista=${vista}&chi=${v.chiave}${perQ}`, attivo: !consulente && v.chiave === chi })) },
+      ]} />
+      <FiltroConsulente azione="/dashboard/debitori" staff={staff} consulente={consulente} tieni={{ vista, chi: 'tutti' }} q={q} />
 
+      {debitori.length > 0 && (
+        <div className="debitori-totale">
+          {rientrati ? (
+            <span className="debitori-label"><strong>{debitori.length}</strong> rientrati negli ultimi 90 giorni</span>
+          ) : (
+            <span className="debitori-valori">
+              <strong className="negativo debitori-cifra">{formatoEuro(totale)}</strong>
+              <span className="debitori-label">da {debitori.length} {debitori.length === 1 ? 'socio' : 'soci'}</span>
+            </span>
+          )}
+          {controllato && <span className="debitori-controllo">Saldi controllati su PerfectGym {formatoFa(controllato)}</span>}
+        </div>
+      )}
       <div className="scheda">
-        {debitori.length > 0 && (
-          <p className="piccolo attenuato debitori-totale">
-            {rientrati ? (
-              <>{debitori.length} rientrati negli ultimi 90 giorni</>
-            ) : (
-              <>
-                <strong className="negativo">{formatoEuro(totale)}</strong> da {debitori.length} {debitori.length === 1 ? 'socio' : 'soci'}
-              </>
-            )}
-            {controllato && <> · saldi controllati su PerfectGym {formatoFa(controllato)}</>}
-          </p>
-        )}
         {debitori.length === 0 ? (
           <Vuoto>{rientrati ? 'Nessun debito rientrato negli ultimi 90 giorni.' : 'Nessun debitore qui.'}</Vuoto>
         ) : (
           <div className="tabella-scorre">
-            <table className="schede-mobile">
+            <table className="schede-mobile tabella-colonne">
               <thead>
                 <tr>
                   <th>Socio</th>
@@ -88,56 +91,66 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
                   return (
                     <tr key={d.debito_id ?? d.member_id}>
                       <td>
-                        <Persona id={d.utente_id} nome={d.nome} cognome={d.cognome} />
-                        <Contatti telefono={d.telefono} email={d.email} />
-                        {pgm && <a className="piccolo" href={pgm} target="_blank" rel="noreferrer">PerfectGym ↗</a>}
-                      </td>
-                      <td className="nowrap info">
-                        <div className={d.saldo != null && d.saldo < 0 ? 'negativo' : undefined}>{formatoEuro(d.saldo)}</div>
-                        {d.negativo_da && <div className="piccolo attenuato">in negativo dal {formatoData(d.negativo_da)}</div>}
-                        <div className="piccolo attenuato">
-                          {d.ultimo_pagamento ? `ultimo pagamento ${formatoData(d.ultimo_pagamento)} · ${formatoEuro(d.ultimo_importo)}` : 'nessun pagamento'}
+                        <div className="riga-dati">
+                          <Persona id={d.utente_id} nome={d.nome} cognome={d.cognome} />
+                          <Contatti telefono={d.telefono} email={d.email} />
+                          {pgm && <a href={pgm} target="_blank" rel="noreferrer">PerfectGym ↗</a>}
                         </div>
-                        {d.rientrato_il && <span className="bollino verde">Rientrato il {formatoData(d.rientrato_il)}</span>}
                       </td>
-                      <td className="piccolo info">
-                        <span className={`bollino ${d.abbonamento_attivo ? 'verde' : 'grigio'}`}>{d.abbonamento_attivo ? 'Attivo' : 'Scaduto'}</span>
-                        <div><strong>{d.piano ?? 'nessun abbonamento'}</strong></div>
-                        {d.stato_contratto && (
-                          <div className="attenuato">
-                            {traduci(STATO_CONTRATTO, d.stato_contratto)}
-                            {d.data_fine ? ` · fine ${formatoData(d.data_fine)}` : ''}
-                          </div>
-                        )}
+                      <td>
+                        <div className="riga-dati">
+                          <strong className={d.saldo != null && d.saldo < 0 ? 'negativo' : undefined}>{formatoEuro(d.saldo)}</strong>
+                          {d.negativo_da && <span className="muto">in negativo dal {formatoData(d.negativo_da)}</span>}
+                          <span className="muto">
+                            {d.ultimo_pagamento ? `ultimo pagamento ${formatoData(d.ultimo_pagamento)} · ${formatoEuro(d.ultimo_importo)}` : 'nessun pagamento'}
+                          </span>
+                          {d.rientrato_il && <span className="etichetta-riga"><span className="bollino verde">Rientrato il {formatoData(d.rientrato_il)}</span></span>}
+                        </div>
+                      </td>
+                      <td>
+                        <div className="riga-dati">
+                          <strong>{d.piano ?? 'nessun abbonamento'}</strong>
+                          {d.stato_contratto && (
+                            <span className="muto">
+                              {traduci(STATO_CONTRATTO, d.stato_contratto)}
+                              {d.data_fine ? ` · fine ${formatoData(d.data_fine)}` : ''}
+                            </span>
+                          )}
+                          <span className="etichetta-riga"><span className={`bollino ${d.abbonamento_attivo ? 'verde' : 'grigio'}`}>{d.abbonamento_attivo ? 'Attivo' : 'Scaduto'}</span></span>
+                        </div>
                       </td>
                       <td className="recupero">
-                        {rientrati ? (
-                          <span className="piccolo">{d.assegnato_nome ?? '—'}</span>
-                        ) : (
-                          <form action={debitoAssegna} className="azioni-riga">
-                            <input type="hidden" name="socio" value={d.member_id} />
-                            <input type="hidden" name="torna" value={qui} />
-                            {d.assegnato_a ? (
-                              <>
-                                <select name="staff" defaultValue={d.assegnato_a} aria-label="Chi segue il recupero" className="piccola">
-                                  {staff.map((s) => <option key={s.id} value={s.id}>{s.nome} {s.cognome ?? ''}</option>)}
-                                </select>
-                                <button className="bottone secondario piccolo">Assegna</button>
-                              </>
-                            ) : (
-                              <button className="bottone piccolo">Prendo in carico</button>
-                            )}
-                          </form>
-                        )}
-                        <div className="piccolo debitori-task">
-                          {d.task_aperti > 0 ? (
-                            <span className={`bollino${d.prossimo_task && new Date(d.prossimo_task) < new Date() ? ' rosso' : ''}`}>
-                              {d.task_aperti} {d.task_aperti === 1 ? 'task aperto' : 'task aperti'} · {formatoDataOra(d.prossimo_task)}
-                            </span>
+                        <div className="riga-dati">
+                          {rientrati ? (
+                            <span className="normale">{d.assegnato_nome ?? '—'}</span>
                           ) : (
-                            <span className="attenuato">nessun task aperto</span>
+                            <div className="azioni-gruppo">
+                              <form action={debitoAssegna} className="azioni-riga">
+                                <input type="hidden" name="socio" value={d.member_id} />
+                                <input type="hidden" name="torna" value={qui} />
+                                {d.assegnato_a ? (
+                                  <>
+                                    <select name="staff" defaultValue={d.assegnato_a} aria-label="Chi segue il recupero" className="piccola">
+                                      {staff.map((s) => <option key={s.id} value={s.id}>{s.nome} {s.cognome ?? ''}</option>)}
+                                    </select>
+                                    <button className="bottone secondario piccolo">Assegna</button>
+                                  </>
+                                ) : (
+                                  <button className="bottone piccolo">Prendo in carico</button>
+                                )}
+                              </form>
+                            </div>
                           )}
-                          {d.note_task && <span className="taglia larga" title={d.note_task}>{d.note_task}</span>}
+                          <div className="debitori-task">
+                            {d.task_aperti > 0 ? (
+                              <span className={`bollino${d.prossimo_task && new Date(d.prossimo_task) < new Date() ? ' rosso' : ''}`}>
+                                {d.task_aperti} {d.task_aperti === 1 ? 'task aperto' : 'task aperti'} · {formatoDataOra(d.prossimo_task)}
+                              </span>
+                            ) : (
+                              <span className="muto">nessun task aperto</span>
+                            )}
+                            {d.note_task && <span className="muto taglia larga" title={d.note_task}>{d.note_task}</span>}
+                          </div>
                         </div>
                       </td>
                       {!rientrati && (
@@ -169,6 +182,7 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
             </table>
           </div>
         )}
+        <p className="piccolo attenuato conteggio">{debitori.length} {rientrati ? (debitori.length === 1 ? 'rientrato' : 'rientrati') : (debitori.length === 1 ? 'debitore' : 'debitori')}</p>
       </div>
     </>
   )

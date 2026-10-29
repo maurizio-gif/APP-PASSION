@@ -1,17 +1,19 @@
 import { crm, richiediSezione, type Prova } from '@/lib/crm'
-import { formatoData, formatoFa } from '@/lib/formato'
-import { Avviso, BollinoFonte, Contatti, Gestione, LinkGuida, Persona, Schede, Vuoto } from '@/components/Ui'
+import { Avviso, LinkGuida, Schede, Vuoto, type GruppoSchede } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
-import { SceltaOperatore } from '@/components/SceltaOperatore'
-import { BollinoPagamento } from '@/components/Bollini'
-import { aggiornaProva } from '../azioni'
+import { filtraTesto, testoCercato } from '@/lib/ricerca'
+import { TabellaProve } from '@/components/TabellaProve'
 
+const GRUPPI: GruppoSchede[] = [
+  { chiave: 'prova', testo: 'In prova', tono: 'prova' },
+  { chiave: 'finite', testo: 'Finite', tono: 'chiusi' },
+]
 const VISTE = [
-  { chiave: 'in_corso', testo: 'In corso' },
-  { chiave: 'in_scadenza', testo: 'In scadenza' },
-  { chiave: 'senza_esito', testo: 'Finite senza esito' },
-  { chiave: 'chiuse', testo: 'Chiuse' },
-  { chiave: 'perse', testo: 'Perse' },
+  { chiave: 'in_corso', testo: 'In corso', gruppo: 'prova' },
+  { chiave: 'in_scadenza', testo: 'In scadenza', gruppo: 'prova' },
+  { chiave: 'senza_esito', testo: 'Finite senza esito', gruppo: 'finite' },
+  { chiave: 'chiuse', testo: 'Chiuse', gruppo: 'finite' },
+  { chiave: 'perse', testo: 'Perse', gruppo: 'finite' },
 ]
 
 // L'ordine si sceglie qui, sulle righe gia' arrivate da crm_prove (che ne da'
@@ -41,39 +43,43 @@ const ORDINI: { chiave: string; testo: string; confronto?: (a: Prova, b: Prova) 
 // (ingressi, lezioni) e com'e' finita. L'esito lo mette il mirror (20260929u):
 // iscritto quando su PerfectGym compare l'abbonamento, non iscritto 30 giorni
 // dopo la fine del pass. A mano si chiude prima come non iscritto.
-export default async function Prove({ searchParams }: { searchParams: { vista?: string; consulente?: string; ordine?: string; errore?: string } }) {
+export default async function Prove({ searchParams }: { searchParams: { vista?: string; consulente?: string; ordine?: string; q?: string; errore?: string } }) {
   await richiediSezione('prove')
   const vista = VISTE.some((v) => v.chiave === searchParams.vista) ? searchParams.vista! : 'in_corso'
   const ordine = ORDINI.find((o) => o.chiave === searchParams.ordine) ?? ORDINI[0]
   const staff = await crm.staff()
   // Il consulente: chi segue la prova.
   const consulente = consulenteScelto(staff, searchParams.consulente)
+  const q = testoCercato(searchParams.q)
   // Perse: fra le chiuse (le piu' recenti, come in Chiuse) quelle finite come «Non iscritto».
   const arrivate = await crm.prove(vista === 'perse' ? 'chiuse' : vista, consulente)
-  const prove = vista === 'perse' ? arrivate.filter((p) => p.esito === 'non_iscritto') : arrivate
+  const prove = filtraTesto(vista === 'perse' ? arrivate.filter((p) => p.esito === 'non_iscritto') : arrivate, q)
   const pagamenti = await crm.pagamenti(prove.map((p) => p.contract_id))
   // sort e' stabile: a parita' resta l'ordine di crm_prove.
   if (ordine.confronto) prove.sort(ordine.confronto)
   // Consulente e ordine restano cambiando scheda e dopo il Salva.
-  const resta = [consulente && `consulente=${consulente}`, ordine.confronto && `ordine=${ordine.chiave}`].filter(Boolean).join('&')
+  const resta = [consulente && `consulente=${consulente}`, ordine.confronto && `ordine=${ordine.chiave}`, q && `q=${encodeURIComponent(q)}`].filter(Boolean).join('&')
   const qui = `/dashboard/prove?vista=${vista}${resta ? `&${resta}` : ''}`
 
   return (
     <>
       <div className="testata">
         <div>
-          <h1>Prove</h1>
-          <p>
-            Qui ci sono solo le prove attivate, cioè con il Pass su PerfectGym: chi ha solo chiesto la prova resta fra le Opportunità.
+          <div className="titolo-riga">
+            <h1>Prove</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">Qui ci sono solo le prove attivate, cioè con il Pass su PerfectGym: chi ha solo chiesto la prova resta fra le Opportunità.
             Il Pass arriva da PerfectGym da solo, e anche l&apos;esito: Iscritto quando compare l&apos;abbonamento, Non iscritto 30 giorni
             dopo la fine del pass. Qui si segue la persona fino all&apos;iscrizione.{' '}
-            <LinkGuida argomento="prove" />
-          </p>
+            <LinkGuida argomento="prove" /></span>
+            </span>
+          </div>
         </div>
       </div>
       <Avviso errore={searchParams.errore} />
-      <Schede voci={VISTE} attiva={vista} base={`/dashboard/prove${resta ? `?${resta}` : ''}`} />
-      <FiltroConsulente azione="/dashboard/prove" staff={staff} consulente={consulente} tieni={{ vista }}>
+      <Schede voci={VISTE} attiva={vista} base={`/dashboard/prove${resta ? `?${resta}` : ''}`} gruppi={GRUPPI} />
+      <FiltroConsulente azione="/dashboard/prove" staff={staff} consulente={consulente} tieni={{ vista }} q={q}>
         <select name="ordine" defaultValue={ordine.chiave} aria-label="Ordina per">
           {ORDINI.map((o) => <option key={o.chiave} value={o.chiave}>Ordina: {o.testo}</option>)}
         </select>
@@ -83,65 +89,9 @@ export default async function Prove({ searchParams }: { searchParams: { vista?: 
         {prove.length === 0 ? (
           <Vuoto>Nessuna prova qui.</Vuoto>
         ) : (
-          <div className="tabella-scorre">
-            <table className="schede-mobile">
-              <thead>
-                <tr>
-                  <th>Persona</th>
-                  <th>Pass</th>
-                  <th>Come va</th>
-                  <th>Esito</th>
-                </tr>
-              </thead>
-              <tbody>
-                {prove.map((p) => (
-                  <tr key={p.id}>
-                    <td>
-                      <Persona id={p.utente_id} nome={p.nome} cognome={p.cognome} />
-                      <Contatti telefono={p.telefono} email={p.email} />
-                      <BollinoFonte fonte={p.fonte} dettaglio={p.fonte_dettaglio} />
-                    </td>
-                    <td className="piccolo info">
-                      <div>{p.tipo_pass ?? '—'}</div>
-                      <div className="attenuato nowrap">{formatoData(p.data_inizio)} → {formatoData(p.data_fine)}</div>
-                      {p.contract_id != null && <BollinoPagamento p={pagamenti[p.contract_id]} />}
-                      {p.giorni_rimasti != null && p.giorni_rimasti >= 0 && !p.esito && (
-                        <span className={`bollino ${p.giorni_rimasti <= 3 ? 'rosso' : 'giallo'}`}>
-                          {p.giorni_rimasti === 0 ? 'finisce oggi' : `${p.giorni_rimasti} gg`}
-                        </span>
-                      )}
-                    </td>
-                    <td className="piccolo info">
-                      <div><strong>{p.ingressi}</strong> ingressi{p.ultimo_ingresso ? ` · ultimo ${formatoFa(p.ultimo_ingresso)}` : ''}</div>
-                      <div><strong>{p.prenotazioni}</strong> lezioni prenotate · {p.presenze} fatte</div>
-                      {p.ingressi === 0 && <span className="bollino rosso">mai entrato</span>}
-                      {p.iscritto_su_pgm && !p.esito && <div className="bollino verde">ha già un contratto su PerfectGym</div>}
-                      <div className="attenuato">{p.gestito_nome ? `segue ${p.gestito_nome}` : 'nessuno la segue'}</div>
-                    </td>
-                    <td className="gestisci">
-                      <Gestione id={p.id}>
-                        <form action={aggiornaProva} className="modulo compatto">
-                          <input type="hidden" name="prova" value={p.id} />
-                          <input type="hidden" name="torna" value={qui} />
-                          {/* Iscritto non si sceglie: resta solo se c'e' gia'. */}
-                          <select name="esito" defaultValue={p.esito ?? ''} aria-label="Esito">
-                            <option value="">Ancora aperta</option>
-                            {p.esito === 'iscritto' && <option value="iscritto">Iscritto</option>}
-                            <option value="non_iscritto">Non iscritto</option>
-                          </select>
-                          <input type="text" name="obiezione" defaultValue={p.obiezione ?? ''} placeholder="Obiezione" />
-                          <input type="text" name="note" defaultValue={p.note ?? ''} placeholder="Note" />
-                          <SceltaOperatore staff={staff} attuale={p.gestito_da} attualeNome={p.gestito_nome} />
-                          <button className="bottone piccolo">Salva</button>
-                        </form>
-                      </Gestione>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <TabellaProve prove={prove} pagamenti={pagamenti} staff={staff} torna={qui} />
         )}
+        <p className="piccolo attenuato conteggio">{prove.length === 300 ? 'Le 300 più recenti' : `${prove.length} ${prove.length === 1 ? 'prova' : 'prove'}`}</p>
       </div>
     </>
   )

@@ -15,7 +15,7 @@ Ognuno nel CRM ha un ruolo. Il tuo è scritto in fondo al menu, accanto al tuo n
 - **Superadmin**: R2D. Vede e può tutto, lavora e chiude i ticket, scrive le modifiche decise in riunione.
 
 ## Le sezioni
-Il menu mostra solo le sezioni che puoi vedere: Opportunità, Prove, Disdette, Rinnovi, Task, Cerca, Debitori, Abbonamenti, Ticket. La home (**Da gestire**), la **scheda persona** e questa **Guida** le vedono tutti. Se ti manca una sezione che ti serve, chiedila a un admin: si dà da Utenti.
+Il menu mostra solo le sezioni che puoi vedere: Opportunità, Prove, Disdette, Rinnovi, Task, Cerca, Debitori, Abbonamenti, Ticket. La home (**Dashboard consulente**), la **scheda persona** e questa **Guida** le vedono tutti. Se ti manca una sezione che ti serve, chiedila a un admin: si dà da Utenti.
 
 La sezione **Abbonamenti** ha i numeri dell'azienda: la vedono gli admin e chi la riceve apposta.
 

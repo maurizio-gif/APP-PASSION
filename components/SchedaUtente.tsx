@@ -32,8 +32,9 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
 
   return (
     <div className="scheda utente" id={`u-${u.id}`}>
-      <form action={aggiornaUtente}>
-        <input type="hidden" name="utente" value={u.id} />
+      <details className="utente-acc">
+        <summary>
+        <span className={`utente-avatar ${u.accesso ? "in" : "fuori"}`} aria-hidden="true">{(u.nome?.[0] ?? '') + (u.cognome?.[0] ?? '')}</span>
         <div className="utente-testa">
           <div>
             <h3>
@@ -42,7 +43,7 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
             <div className="piccolo attenuato">{u.email ?? 'senza email'}</div>
           </div>
           <div className="utente-bollini">
-            {u.ruolo !== 'consulente' && <span className="bollino rosso">{testoRuolo(u.ruolo)}</span>}
+            <span className={`bollino ${u.ruolo === 'consulente' ? 'grigio' : 'rosso'}`}>{testoRuolo(u.ruolo)}</span>
             {ioStesso && <span className="bollino grigio">Sei tu</span>}
             {u.accesso ? (
               <span className="bollino verde" title={u.ultimo_accesso ? `ultimo accesso ${formatoDataOra(u.ultimo_accesso)}` : undefined}>
@@ -53,7 +54,9 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
             )}
           </div>
         </div>
-
+        </summary>
+      <form action={aggiornaUtente}>
+        <input type="hidden" name="utente" value={u.id} />
         <fieldset disabled={bloccato}>
           <div className="utente-riga">
             <label className="campo-breve">
@@ -128,7 +131,7 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
                       </>
                     )}
                     <span>
-                      <strong>{a.testo}</strong> <span className="attenuato">— {a.descrizione}</span>
+                      <strong>{a.testo}</strong> <span className="attenuato">{a.descrizione}</span>
                     </span>
                   </label>
                 )
@@ -197,6 +200,7 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
           </form>
         </details>
       )}
+      </details>
     </div>
   )
 }

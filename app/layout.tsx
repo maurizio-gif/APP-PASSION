@@ -24,7 +24,15 @@ export const viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="it">
+    <html lang="it" suppressHydrationWarning>
+      <head>
+        {/* Il tema scelto (chiaro o scuro) si applica subito, prima del disegno della pagina. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "try{if(localStorage.getItem('tema')==='chiaro')document.documentElement.setAttribute('data-tema','chiaro')}catch(e){}",
+          }}
+        />
+      </head>
       <body>{children}</body>
     </html>
   )

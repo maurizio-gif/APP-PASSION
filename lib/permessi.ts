@@ -18,6 +18,10 @@ export const SEZIONI = [
   { chiave: 'marketing', href: '/dashboard/marketing', testo: 'Marketing' },
   { chiave: 'ticket', href: '/dashboard/ticket', testo: 'Ticket' },
   { chiave: 'curriculum', href: '/dashboard/curriculum', testo: 'Curriculum' },
+  // L'appello (20261027i): l'istruttore segna le presenze delle sue lezioni; l'appello complessivo
+  // e' di tutte le lezioni, da leggere, per gli admin e i consulenti.
+  { chiave: 'appello', href: '/dashboard/appello', testo: 'Appello istruttore' },
+  { chiave: 'appello_tutte', href: '/dashboard/appello-tutte', testo: 'Appello complessivo' },
 ] as const
 
 export type Sezione = (typeof SEZIONI)[number]['chiave']
@@ -59,9 +63,12 @@ export const eSuperadmin = (io: Io) => io?.ruolo === 'superadmin'
 // un superadmin solo un superadmin, un admin o un supporto solo un admin.
 export const puoToccareRuolo = (io: Io, ruolo: string) =>
   ruolo === 'superadmin' ? eSuperadmin(io) : ruoloAdmin(ruolo) ? eAdmin(io) : true
+// L'Appello complessivo lo vedono anche i consulenti (chi riceve le opportunita'), senza spunta in Utenti.
 export const puoVedere = (io: Io, sezione: Sezione) =>
   !SOSPESE.includes(sezione) &&
-  (Boolean(io?.sezioni.includes(sezione)) || (eAdmin(io) && !SEZIONI_PER_PERSONA.includes(sezione)))
+  (Boolean(io?.sezioni.includes(sezione)) ||
+    (eAdmin(io) && !SEZIONI_PER_PERSONA.includes(sezione)) ||
+    (sezione === 'appello_tutte' && Boolean(io?.assegnabile)))
 export const ha = (io: Io, autorizzazione: Autorizzazione) => eAdmin(io) || Boolean(io?.autorizzazioni.includes(autorizzazione))
 
 // I ticket (supabase/migrations/20260930b_ticket.sql): tutti scrivono, il

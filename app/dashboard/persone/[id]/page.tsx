@@ -3,13 +3,16 @@ import { crm, linkPgm, type Pagamento, type Scheda } from '@/lib/crm'
 import { DatiPagamento } from '@/components/Bollini'
 import {
   CONTROLLO, ESITO_DISDETTA, ESITO_RINNOVO, FONTE, formatoData, formatoDataOra, formatoEuro, formatoGiorno, formatoOra,
-  MOTIVI_DISDETTA, oggiRoma, STATO_CONTRATTO, TIPO_SOCIO, TIPO_TASK, traduci,
+  MOTIVI_DISDETTA, oggiRoma, STATI_TICKET_CHIUSI, STATO_CONTRATTO, TIPO_SOCIO, TIPO_TASK, traduci,
 } from '@/lib/formato'
 import { Avviso, BollinoFase, BollinoFonte, Contatti, Provenienza, Riapri, Vuoto } from '@/components/Ui'
 import { BottoneInvio } from '@/components/BottoneInvio'
 import { NuovoTask } from '@/components/NuovoTask'
 import { SceltaOperatore } from '@/components/SceltaOperatore'
 import { InCarico } from '@/components/InCarico'
+import { Iniziali } from '@/components/RigaProva'
+import { AvatarTask, IconaTask } from '@/components/IconaTask'
+import { Accordion, Col, Fase, FaseVuota, Storico, StoricoPiede } from '@/components/FaseRighe'
 import { puoGestire, puoVedere } from '@/lib/permessi'
 import { TabellaTicket } from '@/components/Ticket'
 import {
@@ -42,400 +45,452 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
   const per = [
     ...s.disdette.filter((d) => !d.esito).map((d) => ({ valore: `disdetta:${d.id}`, testo: `Disdetta del ${formatoData(d.data_disdetta)}` })),
     ...rinnovi.filter((r) => !r.esito).map((r) => ({ valore: `rinnovo:${r.id}`, testo: `Rinnovo, scade il ${formatoData(r.scadenza)}` })),
-    ...s.prove.filter((pr) => !pr.esito).map((pr) => ({ valore: `prova:${pr.id}`, testo: `Pass fino al ${formatoData(pr.data_fine)}` })),
+    ...s.prove.filter((pr) => !pr.esito).map((pr) => ({ valore: `prova:${pr.id}`, testo: pr.data_fine ? `Pass fino al ${formatoData(pr.data_fine)}` : 'Prova senza pass su PerfectGym' })),
     ...(leadAperto ? [{ valore: `lead:${leadAperto.id}`, testo: `Opportunità ${traduci(FONTE, leadAperto.fonte)}` }] : []),
   ]
 
-  return (
-    <>
-      <div className="testata">
-        <div>
-          <h1>{[p.nome, p.cognome].filter(Boolean).join(' ') || 'Senza nome'}</h1>
-          <Contatti telefono={p.telefono} email={p.email} grande />
-          <StatoCertificato c={s.socio?.certificato} />
-        </div>
-        {pgm && <a className="bottone secondario" href={pgm} target="_blank" rel="noreferrer">Apri su PerfectGym ↗</a>}
-      </div>
-      <Avviso errore={searchParams.errore} ok={searchParams.ok} />
-
-      <div className="griglia">
-        {/* ---- Colonna 1: il lavoro ---- */}
-        <div>
-          {(() => {
-            const carta = (l: Scheda['lead'][number]) => {
-            const puo = puoGestire(io, l.assegnato_a)
-            return (
-              <section className="scheda" key={l.id}>
-                <div className="testata-scheda">
-                  <h2>Opportunità</h2>
-                  <span>
-                    <BollinoFonte fonte={l.fonte} dettaglio={l.fonte_dettaglio} /> <BollinoFase fase={l.fase} esito={l.esito} />
-                  </span>
-                </div>
-                <dl className="dati">
-                  <dt>Arrivata</dt><dd>{formatoDataOra(l.creato_il)}</dd>
-                  {(l.richieste ?? 1) > 1 && (<><dt>Richieste</dt><dd>{l.richieste} volte{l.ultima_richiesta_il ? `, l'ultima il ${formatoDataOra(l.ultima_richiesta_il)}` : ''}</dd></>)}
-                  {l.fonte_dettaglio && (<><dt>Da</dt><dd>{l.fonte_dettaglio}</dd></>)}
-                  {l.attivita_interesse && (<><dt>Interesse</dt><dd>{l.attivita_interesse}</dd></>)}
-                  {l.orario_ricontatto && (<><dt>Richiamare</dt><dd>{l.orario_ricontatto}</dd></>)}
-                  {l.presentato_da && (<><dt>Presentato da</dt><dd>{l.presentato_da}</dd></>)}
-                  <dt>In carico a</dt><dd>{l.assegnato_nome ?? <span className="attenuato">nessuno</span>}</dd>
-                  {l.chiuso_il && (<><dt>Chiusa</dt><dd>{formatoDataOra(l.chiuso_il)}</dd></>)}
-                  {l.consenso_privacy != null && (<><dt>Privacy</dt><dd>{l.consenso_privacy ? 'Consenso dato' : 'Nessun consenso'}</dd></>)}
-                  {l.origine === 'app' && (
-                    <><dt>PerfectGym</dt><dd>
-                      {l.pgm_stato === 'creato' ? <>Lead creato su PerfectGym{l.pgm_lead_id ? ` (n. ${l.pgm_lead_id})` : ''}</>
-                        : l.pgm_stato === 'gia_su_pgm' ? 'Già presente: nessun lead nuovo'
-                        : l.pgm_stato === 'errore' ? <span className="testo-rosso">Non creato: {l.pgm_errore}</span>
-                        : <span className="attenuato">non mandato</span>}
-                    </dd></>
-                  )}
-                </dl>
-                {l.note && <p className="nota-socio">{l.note}</p>}
-
-                {l.origine === 'app' && (l.pgm_stato === 'errore' || !l.pgm_stato) && (
-                  <form action={leadSuPerfectGym} className="azioni-scheda">
+  const cartaLead = (l: Scheda['lead'][number], piede?: React.ReactNode) => {
+    const puo = puoGestire(io, l.assegnato_a)
+    const daPgm = l.origine === 'app' && (l.pgm_stato === 'errore' || !l.pgm_stato)
+    const aperto = l.fase === 'da_gestire' || l.fase === 'in_gestione'
+    const azioni = daPgm || l.fase === 'da_gestire' || (aperto && puo) || ((l.fase === 'vinta' || l.fase === 'persa') && puo)
+    return (
+      <div key={l.id}>
+        <Fase numero={1} nome="Opportunità" piede={piede}>
+          <Col titolo="Opportunità">
+            <dl className="dati">
+              <dt>Fonte</dt><dd>{traduci(FONTE, l.fonte)}</dd>
+              <dt>Stato</dt><dd><BollinoFase fase={l.fase} esito={l.esito} /></dd>
+              <dt>Arrivata</dt><dd>{formatoDataOra(l.creato_il)}</dd>
+              {(l.richieste ?? 1) > 1 && (<><dt>Richieste</dt><dd>{l.richieste} volte{l.ultima_richiesta_il ? `, l'ultima il ${formatoDataOra(l.ultima_richiesta_il)}` : ''}</dd></>)}
+              {l.fonte_dettaglio && (<><dt>Da</dt><dd>{l.fonte_dettaglio}</dd></>)}
+              {l.presentato_da && (<><dt>Presentato da</dt><dd>{l.presentato_da}</dd></>)}
+              {l.consenso_privacy != null && (<><dt>Privacy</dt><dd>{l.consenso_privacy ? 'Consenso dato' : 'Nessun consenso'}</dd></>)}
+              {l.origine === 'app' && (
+                <><dt>PerfectGym</dt><dd>
+                  {l.pgm_stato === 'creato' ? <>Lead creato su PerfectGym{l.pgm_lead_id ? ` (n. ${l.pgm_lead_id})` : ''}</>
+                    : l.pgm_stato === 'gia_su_pgm' ? 'Già presente: nessun lead nuovo'
+                    : l.pgm_stato === 'errore' ? <span className="testo-rosso">Non creato: {l.pgm_errore}</span>
+                    : <span className="attenuato">non mandato</span>}
+                </dd></>
+              )}
+            </dl>
+          </Col>
+          <Col titolo="Gestione">
+            <dl className="dati">
+              {l.attivita_interesse && (<><dt>Interesse</dt><dd>{l.attivita_interesse}</dd></>)}
+              {l.orario_ricontatto && (<><dt>Richiamare</dt><dd>{l.orario_ricontatto}</dd></>)}
+              <dt>In carico a</dt><dd>{l.assegnato_nome ?? <span className="attenuato">nessuno</span>}</dd>
+              {l.chiuso_il && (<><dt>Chiusa</dt><dd>{formatoDataOra(l.chiuso_il)}</dd></>)}
+            </dl>
+            {l.note && <p className="nota-socio">{l.note}</p>}
+          </Col>
+          <Col titolo="Azioni">
+            {azioni && (
+              <div className="fase-azioni">
+                {daPgm && (
+                  <form action={leadSuPerfectGym} className="azioni-riga">
                     <input type="hidden" name="lead" value={l.id} />
                     <input type="hidden" name="torna" value={qui} />
                     <BottoneInvio testo={l.pgm_stato === 'errore' ? 'Riprova su PerfectGym' : 'Manda a PerfectGym'} inCorso="Invio…" classe="secondario piccolo" />
                   </form>
                 )}
-
                 {l.fase === 'da_gestire' && (
-                  <form action={prendiLead} className="azioni-scheda">
+                  <form action={prendiLead} className="azioni-riga">
                     <input type="hidden" name="lead" value={l.id} />
                     <input type="hidden" name="torna" value={qui} />
-                    <button className="bottone">Prendo in carico</button>
+                    <button className="bottone piccolo">Prendo in carico</button>
                   </form>
                 )}
-                {(l.fase === 'da_gestire' || l.fase === 'in_gestione') && puo && (
+                {aperto && puo && (
                   <>
-                    <form action={assegnaLead} className="azioni-scheda">
-                      <input type="hidden" name="lead" value={l.id} />
-                      <input type="hidden" name="torna" value={qui} />
-                      <select name="staff" defaultValue={l.assegnato_a ?? ''} aria-label="Assegna a">
-                        <option value="" disabled>Assegna a…</option>
-                        {staff.map((o) => <option key={o.id} value={o.id}>{o.nome} {o.cognome ?? ''}</option>)}
-                      </select>
-                      <button className="bottone secondario">Assegna</button>
-                    </form>
-                    {l.fase === 'in_gestione' && (
-                      <form action={rilasciaLead} className="azioni-scheda">
+                    <div className="azioni-gruppo fase-assegna">
+                      <form action={assegnaLead} className="azioni-riga">
                         <input type="hidden" name="lead" value={l.id} />
                         <input type="hidden" name="torna" value={qui} />
-                        <button className="bottone secondario" title="Torna fra le opportunità da gestire, senza nessuno">Rimetti da assegnare</button>
+                        <select name="staff" defaultValue={l.assegnato_a ?? ''} aria-label="Assegna a" className="piccola">
+                          <option value="" disabled>Assegna a…</option>
+                          {staff.map((o) => <option key={o.id} value={o.id}>{o.nome} {o.cognome ?? ''}</option>)}
+                        </select>
+                        <button className="bottone secondario piccolo">Assegna</button>
                       </form>
-                    )}
-                    <form action={chiudiLead} className="azioni-scheda chiusura">
+                      {l.fase === 'in_gestione' && (
+                        <form action={rilasciaLead}>
+                          <input type="hidden" name="lead" value={l.id} />
+                          <input type="hidden" name="torna" value={qui} />
+                          <button className="bottone secondario piccolo icona" title="Rimetti da assegnare: torna fra le opportunità da gestire, senza nessuno" aria-label="Rimetti da assegnare"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5M4 9h10a6 6 0 010 12h-3" /></svg></button>
+                        </form>
+                      )}
+                    </div>
+                    <form action={chiudiLead} className="azioni-riga">
                       <input type="hidden" name="lead" value={l.id} />
                       <input type="hidden" name="torna" value={qui} />
                       <input type="text" name="nota" placeholder="Perché è persa (facoltativo)" />
-                      <button type="button" className="bottone" disabled title={VINTA_DA_SOLA}>Vinta: prova attivata</button>
-                      <button type="button" className="bottone" disabled title={VINTA_DA_SOLA}>Vinta: contratto</button>
-                      <button className="bottone secondario" name="chiusura" value="persa">Persa</button>
-                      <p className="piccolo attenuato">{VINTA_DA_SOLA}.</p>
+                      <button className="bottone secondario piccolo" name="chiusura" value="persa">Persa</button>
                     </form>
+                    <p className="piccolo attenuato aiuto aiuto-riga" title={`${VINTA_DA_SOLA}.`}>{VINTA_DA_SOLA}.</p>
                   </>
                 )}
                 {(l.fase === 'vinta' || l.fase === 'persa') && puo && (
-                  <div className="azioni-scheda">
-                    <Riapri
-                      azione={riapriLead}
-                      campi={{ lead: l.id, torna: qui }}
-                      avviso={`riaprendo l'opportunità si toglie l'esito «${l.fase === 'vinta' ? `Vinta${l.esito ? ` · ${l.esito}` : ''}` : 'Persa'}» e torna ${l.assegnato_a ? 'in gestione' : 'da gestire'}. Lo storico cambia.`}
-                    />
-                  </div>
+                  <Riapri
+                    azione={riapriLead}
+                    campi={{ lead: l.id, torna: qui }}
+                    avviso={`riaprendo l'opportunità si toglie l'esito «${l.fase === 'vinta' ? `Vinta${l.esito ? ` · ${l.esito}` : ''}` : 'Persa'}» e torna ${l.assegnato_a ? 'in gestione' : 'da gestire'}. Lo storico cambia.`}
+                  />
                 )}
-              </section>
-            )
-            }
-            const aperti = s.lead.filter((l) => l.fase === 'da_gestire' || l.fase === 'in_gestione')
-            const chiusi = s.lead.filter((l) => !(l.fase === 'da_gestire' || l.fase === 'in_gestione'))
-            return (
-              <>
-                {aperti.map(carta)}
-                {chiusi.length > 0 && (
-                  <details className="contratti-precedenti" open={aperti.length === 0 && chiusi.length === 1}>
-                    <summary><strong>Storico opportunità</strong> <span className="attenuato">· {chiusi.length}</span></summary>
-                    {chiusi.map(carta)}
-                  </details>
-                )}
-              </>
-            )
-          })()}
-
-          {(() => {
-            const carta = (pr: Scheda['prove'][number]) => (
-            <section className="scheda" key={pr.id}>
-              <div className="testata-scheda">
-                <h2>Prova</h2>
-                <span className={`bollino ${pr.esito === 'iscritto' ? 'verde' : pr.esito ? 'grigio' : 'giallo'}`}>
-                  {pr.esito === 'iscritto' ? 'Iscritto' : pr.esito === 'non_iscritto' ? 'Non iscritto' : 'In corso / senza esito'}
-                </span>
               </div>
-              <dl className="dati">
-                <dt>Pass</dt><dd>{pr.tipo_pass ?? '—'}</dd>
-                <dt>Dal</dt><dd>{pr.data_fine ? `${formatoData(pr.data_inizio)} al ${formatoData(pr.data_fine)}` : `richiesta del ${formatoData(pr.data_inizio)}, senza pass su PerfectGym`}</dd>
-                <DatiPagamento p={pr.contract_id != null ? pagamenti[pr.contract_id] : null} />
-                <dt>La segue</dt><dd>{pr.gestito_nome ?? <span className="attenuato">nessuno</span>}</dd>
-                {pr.esito && pr.obiezione && (<><dt>Obiezione</dt><dd>{pr.obiezione}</dd></>)}
-              </dl>
-              {/* L'esito lo mette il mirror (20260929u): iscritto quando su
-                  PerfectGym compare l'abbonamento, non iscritto 30 giorni dopo
-                  la fine del pass. Chiusa non si modifica: si riapre, con
-                  l'avviso; quella iscritta da sola no, tornerebbe iscritta. */}
-              {pr.esito ? (
-                <>
-                  {pr.automatico && (
-                    <p className="piccolo attenuato">
-                      {pr.esito === 'iscritto'
-                        ? `Segnata da sola: su PerfectGym c'è l'abbonamento${pr.abbonamento ? ` «${pr.abbonamento.piano}», firmato il ${formatoData(pr.abbonamento.dal)}` : ''}.`
-                        : 'Chiusa da sola: nessun abbonamento entro 30 giorni dalla fine del pass.'}
-                    </p>
-                  )}
-                  {pr.note && <p className="nota-socio">{pr.note}</p>}
-                  {!(pr.automatico && pr.esito === 'iscritto') && (
-                    <div className="azioni-scheda">
-                      <Riapri
-                        azione={aggiornaProva}
-                        campi={{ prova: pr.id, torna: qui, esito: '', obiezione: pr.obiezione ?? '', note: pr.note ?? '' }}
-                        avviso={
-                          pr.esito === 'iscritto'
-                            ? "riaprendo la prova si toglie l'esito «Iscritto» e torna aperta; Iscritto non si rimette a mano, torna da solo se su PerfectGym c'è l'abbonamento. Lo storico cambia."
-                            : "riaprendo la prova si toglie l'esito «Non iscritto» e torna aperta. Lo storico cambia."
-                        }
-                      />
-                    </div>
-                  )}
-                </>
-              ) : (
-                <form action={aggiornaProva} className="modulo">
-                  <input type="hidden" name="prova" value={pr.id} />
-                  <input type="hidden" name="torna" value={qui} />
-                  <div className="due-colonne">
-                    <div className="campo">
-                      <label>Esito</label>
-                      <select name="esito" defaultValue="">
-                        <option value="">Ancora aperta</option>
-                        <option value="non_iscritto">Non iscritto</option>
-                      </select>
-                    </div>
-                    <div className="campo">
-                      <label>Obiezione</label>
-                      <input type="text" name="obiezione" defaultValue={pr.obiezione ?? ''} placeholder="Prezzo, orari, distanza…" />
-                    </div>
-                  </div>
-                  <p className="piccolo attenuato">
-                    Iscritto si segna da solo, quando su PerfectGym compare l&apos;abbonamento. Non iscritto da solo 30 giorni dopo la fine
-                    del pass; prima, a mano.
-                  </p>
-                  <div className="campo">
-                    <label>Note</label>
-                    <input type="text" name="note" defaultValue={pr.note ?? ''} />
-                  </div>
-                  <div className="campo">
-                    <label>La segue</label>
-                    <SceltaOperatore staff={staff} attuale={pr.gestito_da} attualeNome={pr.gestito_nome} etichetta="Da assegnare" />
-                  </div>
-                  <BottoneInvio testo="Salva la prova" inCorso="Salvataggio…" />
-                </form>
-              )}
-            </section>
-            )
-            const aperte = s.prove.filter((pr) => !pr.esito)
-            const chiuse = s.prove.filter((pr) => pr.esito)
-            return (
-              <>
-                {aperte.map(carta)}
-                {chiuse.length > 0 && (
-                  <details className="contratti-precedenti" open={aperte.length === 0 && chiuse.length === 1}>
-                    <summary><strong>Storico prove</strong> <span className="attenuato">· {chiuse.length}</span></summary>
-                    {chiuse.map(carta)}
-                  </details>
-                )}
-              </>
-            )
-          })()}
+            )}
+          </Col>
+        </Fase>
+      </div>
+    )
+  }
 
-          {/* Gli abbonamenti di PerfectGym, senza i certificati medici (che su
-              PerfectGym sono contratti aggiuntivi): in vista quello in corso,
-              gli altri nella tendina sotto. */}
-          {s.socio && (
-            <section className="scheda contratto">
-              <h2>Abbonamenti</h2>
-              {!ultimo ? (
-                <Vuoto>Nessun abbonamento su PerfectGym.</Vuoto>
-              ) : (
-                <>
-                  <Contratto c={ultimo} controllo={controllo(ultimo.id)} pagamento={pagamenti[ultimo.id]} />
-                  {precedenti.length > 0 && (
-                    <details className="contratti-precedenti">
-                      <summary>
-                        <strong>Storico abbonamenti</strong> <span className="attenuato">· {precedenti.length}</span>
-                      </summary>
-                      {precedenti.map((c) => <Contratto key={c.id} c={c} controllo={controllo(c.id)} pagamento={pagamenti[c.id]} />)}
-                    </details>
-                  )}
-                </>
-              )}
-            </section>
+  const cartaProva = (pr: Scheda['prove'][number], piede?: React.ReactNode) => (
+    <div key={pr.id}>
+      <Fase numero={2} nome="Prova" piede={piede}>
+        <Col titolo="Prova">
+          <dl className="dati">
+            <dt>Pass</dt><dd>{pr.tipo_pass ?? '—'}</dd>
+            <dt>Stato</dt>
+            <dd>
+              <span className={`bollino ${pr.esito === 'iscritto' ? 'verde' : pr.esito ? 'grigio' : 'giallo'}`}>
+                {pr.esito === 'iscritto' ? 'Iscritto' : pr.esito === 'non_iscritto' ? 'Non iscritto' : 'In corso / senza esito'}
+              </span>
+            </dd>
+            <dt>Dal</dt><dd>{pr.data_fine ? `${formatoData(pr.data_inizio)} al ${formatoData(pr.data_fine)}` : `richiesta del ${formatoData(pr.data_inizio)}, senza pass su PerfectGym`}</dd>
+            <DatiPagamento p={pr.contract_id != null ? pagamenti[pr.contract_id] : null} />
+          </dl>
+        </Col>
+        <Col titolo="Gestione">
+          <dl className="dati">
+            <dt>La segue</dt><dd>{pr.gestito_nome ?? <span className="attenuato">nessuno</span>}</dd>
+            {pr.esito && pr.obiezione && (<><dt>Obiezione</dt><dd>{pr.obiezione}</dd></>)}
+          </dl>
+          {pr.esito && pr.automatico && (
+            <p className="piccolo attenuato">
+              {pr.esito === 'iscritto'
+                ? `Segnata da sola: su PerfectGym c'è l'abbonamento${pr.abbonamento ? ` «${pr.abbonamento.piano}», firmato il ${formatoData(pr.abbonamento.dal)}` : ''}.`
+                : 'Chiusa da sola: nessun abbonamento entro 30 giorni dalla fine del pass.'}
+            </p>
           )}
-
-          {/* Rinnovi e disdette si gestiscono qui, come i lead: si prendono in
-              carico, e chi li ha (o un admin) scrive l'esito; chiusi con l'esito,
-              si leggono e si riaprono, con l'avviso. */}
-          {rinnovi.map((r) => {
-            const puo = puoVedere(io, 'rinnovi') && puoGestire(io, r.assegnato_a)
-            return (
-              <section className="scheda" key={r.id}>
-                <div className="testata-scheda">
-                  <h2>Rinnovo</h2>
-                  <span className={`bollino ${r.esito === 'rinnovato' ? 'verde' : r.esito ? 'grigio' : 'giallo'}`}>
-                    {r.esito ? traduci(ESITO_RINNOVO, r.esito) : r.assegnato_a ? 'In gestione' : 'Da gestire'}
-                  </span>
-                </div>
-                <p className="piccolo">
-                  scade il <strong>{formatoData(r.scadenza)}</strong>{r.piano ? ` · ${r.piano}` : ''} · lo segue {r.assegnato_nome ?? 'nessuno'}
-                </p>
-                {puoVedere(io, 'rinnovi') && !r.esito && (
-                  <InCarico id={r.id} assegnatoA={r.assegnato_a} assegnatoNome={r.assegnato_nome} aperto io={io} staff={staff}
-                    torna={qui} assegna={assegnaRinnovo} rilascia={rilasciaRinnovo} completo />
-                )}
-                {!puo || r.esito ? (
-                  <>
-                    {r.note && <p className="nota-socio">{r.note}</p>}
-                    {puo && r.esito && (
-                      <div className="azioni-scheda">
-                        <Riapri
-                          azione={aggiornaRinnovo}
-                          campi={{ rinnovo: r.id, torna: qui, esito: '', note: r.note ?? '' }}
-                          avviso={`riaprendo il rinnovo si toglie l'esito «${traduci(ESITO_RINNOVO, r.esito)}» e torna ${r.assegnato_a ? 'in gestione' : 'da gestire'}. Lo storico cambia.`}
-                        />
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <ModuloRinnovo r={r} torna={qui} />
-                )}
-              </section>
+          {pr.esito && pr.note && <p className="nota-socio">{pr.note}</p>}
+        </Col>
+        <Col titolo="Azioni">
+          {/* L'esito lo mette il mirror (20260929u): iscritto quando su
+              PerfectGym compare l'abbonamento, non iscritto 30 giorni dopo
+              la fine del pass. Chiusa non si modifica: si riapre, con
+              l'avviso; quella iscritta da sola no, tornerebbe iscritta. */}
+          {pr.esito ? (
+            !(pr.automatico && pr.esito === 'iscritto') && (
+              <div className="fase-azioni">
+                <Riapri
+                  azione={aggiornaProva}
+                  campi={{ prova: pr.id, torna: qui, esito: '', obiezione: pr.obiezione ?? '', note: pr.note ?? '' }}
+                  avviso={
+                    pr.esito === 'iscritto'
+                      ? "riaprendo la prova si toglie l'esito «Iscritto» e torna aperta; Iscritto non si rimette a mano, torna da solo se su PerfectGym c'è l'abbonamento. Lo storico cambia."
+                      : "riaprendo la prova si toglie l'esito «Non iscritto» e torna aperta. Lo storico cambia."
+                  }
+                />
+              </div>
             )
-          })}
+          ) : (
+            <form action={aggiornaProva} className="fase-azioni">
+              <input type="hidden" name="prova" value={pr.id} />
+              <input type="hidden" name="torna" value={qui} />
+              <div className="azioni-riga">
+                <select name="esito" defaultValue="" aria-label="Esito">
+                  <option value="">Ancora aperta</option>
+                  <option value="non_iscritto">Non iscritto</option>
+                </select>
+                <SceltaOperatore staff={staff} attuale={pr.gestito_da} attualeNome={pr.gestito_nome} etichetta="Da assegnare" />
+                <BottoneInvio testo="Salva la prova" inCorso="Salvataggio…" classe="piccolo" />
+              </div>
+              <div className="azioni-riga">
+                <input type="text" name="obiezione" defaultValue={pr.obiezione ?? ''} placeholder="Obiezione: prezzo, orari, distanza…" aria-label="Obiezione" />
+                <input type="text" name="note" defaultValue={pr.note ?? ''} placeholder="Note" aria-label="Note" />
+              </div>
+              <p className="piccolo attenuato aiuto aiuto-riga" title="Iscritto si segna da solo, quando su PerfectGym compare l'abbonamento. Non iscritto da solo 30 giorni dopo la fine del pass; prima, a mano.">Iscritto si segna da solo; non iscritto da solo 30 giorni dopo la fine del pass.</p>
+            </form>
+          )}
+        </Col>
+      </Fase>
+    </div>
+  )
 
-          {s.disdette.map((d) => {
-            const puo = puoVedere(io, 'disdette') && puoGestire(io, d.gestito_da ?? null)
-            const aperta = !d.esito || d.esito === 'standby'
-            return (
-              <section className="scheda" key={d.id}>
-                <div className="testata-scheda">
-                  <h2>Disdetta</h2>
-                  <span className={`bollino ${d.esito === 'vinto' ? 'verde' : d.esito === 'perso' ? 'grigio' : 'giallo'}`}>
-                    {d.esito ? traduci(ESITO_DISDETTA, d.esito) : d.gestito_da ? 'In gestione' : 'Da gestire'}
-                  </span>
-                </div>
-                <p className="piccolo">
-                  del <strong>{formatoData(d.data_disdetta)}</strong>{d.piano ? ` · ${d.piano}` : ''} · la segue {d.gestito_nome ?? 'nessuno'}
-                </p>
-                {puoVedere(io, 'disdette') && aperta && (
-                  <InCarico id={d.id} assegnatoA={d.gestito_da ?? null} assegnatoNome={d.gestito_nome ?? null} aperto io={io} staff={staff}
-                    torna={qui} assegna={assegnaDisdetta} rilascia={rilasciaDisdetta} completo />
-                )}
-                {!puo || (d.esito && d.esito !== 'standby') ? (
-                  <>
-                    {d.motivo && <p className="piccolo">Motivo: {d.motivo}</p>}
-                    {d.note && <p className="nota-socio">{d.note}</p>}
-                    {puo && d.esito && (
-                      <div className="azioni-scheda">
-                        <Riapri
-                          azione={aggiornaDisdetta}
-                          campi={{ disdetta: d.id, torna: qui, esito: '', contatto: d.contatto ?? '', motivo: d.motivo ?? '', note: d.note ?? '' }}
-                          avviso={`riaprendo la disdetta si toglie l'esito «${traduci(ESITO_DISDETTA, d.esito)}» e torna ${d.gestito_da ? 'in gestione' : 'da gestire'}. Lo storico cambia.`}
-                        />
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <ModuloDisdetta d={d} torna={qui} />
-                )}
-              </section>
-            )
-          })}
+  // Aperti in vista, chiusi nello storico sotto.
+  function conStorico<T>(voci: T[], aperto: (x: T) => boolean, carta: (x: T, piede?: React.ReactNode) => React.ReactNode, titolo: string, numero: number, cosa: [string, string]) {
+    const aperti = voci.filter(aperto)
+    const chiusi = voci.filter((x) => !aperto(x))
+    // Con almeno una voce aperta lo storico sta in fondo alla sua scheda (un blocco solo); senza, ha la sua barra.
+    const piede = chiusi.length > 0 && aperti.length > 0
+      ? <StoricoPiede conta={chiusi.length} cosa={cosa}>{chiusi.map((x) => carta(x))}</StoricoPiede>
+      : undefined
+    return (
+      <>
+        {aperti.map((x, i) => carta(x, i === aperti.length - 1 ? piede : undefined))}
+        {chiusi.length > 0 && aperti.length === 0 && (
+          <Storico numero={numero} titolo={titolo} conta={chiusi.length} cosa={cosa} aperto={chiusi.length === 1}>
+            {chiusi.map((x) => carta(x))}
+          </Storico>
+        )}
+      </>
+    )
+  }
 
-          {/* I task in un riquadro solo, che sul telefono resta insieme: prima
-              lo storico, sotto il nuovo task. */}
-          <section className="scheda">
-            <h2>Task</h2>
-            {task.length === 0 ? (
-              <Vuoto>Nessun task: lo crei qui sotto.</Vuoto>
-            ) : (
-              <ol className="storia">
-                {task.map((e) => (
-                    <li key={e.id} className={`storia-task${e.archiviato ? ' archiviato' : e.completato_il ? ' fatto' : ''}`}>
-                      <div className="storia-testa">
-                        <span className="bollino">{traduci(TIPO_TASK, e.task_tipo)}</span>{' '}
-                        <Provenienza origine={e.origine} />{' '}
-                        {e.archiviato ? `del ${formatoDataOra(e.data)} · archiviato` : e.completato_il ? `fatto ${formatoDataOra(e.completato_il)}` : `per ${formatoDataOra(e.data)}`}
-                        {e.assegnato_nome ? ` · ${e.assegnato_nome}` : ''}
-                        {e.esito && <span className={`bollino ${e.esito === 'positivo' ? 'verde' : 'rosso'}`}>{e.esito}</span>}
-                      </div>
-                      {e.nota && <div className="storia-testo">{e.nota}</div>}
-                      {e.nota_esito && <div className="storia-testo"><strong>Com&apos;è andata:</strong> {e.nota_esito}</div>}
-                      {!e.completato_il && (
-                        <form action={completaTask} className="azioni-riga">
+  // Task aperti (gli scaduti prima) e fatti: solo come si mostrano, i dati sono gli stessi.
+  const scaduto = (e: (typeof task)[number]) => e.data != null && new Date(e.data).getTime() < Date.now()
+  const daFare = task.filter((e) => !e.completato_il && !e.archiviato).sort((x, y) => Number(scaduto(y)) - Number(scaduto(x)))
+  const fatti = task.filter((e) => e.completato_il || e.archiviato)
+  const scaduti = daFare.filter(scaduto).length
+
+  return (
+    <>
+      <Avviso errore={searchParams.errore} ok={searchParams.ok} />
+
+      {/* ---- Chi e': nome, contatti, i numeri che contano, il percorso ---- */}
+      <section className="scheda persona-testa">
+        <div className="persona-chi">
+          <Iniziali nome={p.nome} cognome={p.cognome} classe="grandi" />
+          <div className="persona-nome">
+            <h1>{[p.nome, p.cognome].filter(Boolean).join(' ') || 'Senza nome'}</h1>
+            <Contatti telefono={p.telefono} email={p.email} grande />
+            <StatoCertificato c={s.socio?.certificato} />
+          </div>
+          {pgm && <a className="bottone secondario piccolo persona-pgm" href={pgm} target="_blank" rel="noreferrer">Apri su PerfectGym ↗</a>}
+        </div>
+        <dl className="persona-fatti">
+          {s.socio ? (
+            <>
+              <div><dt>N. socio</dt><dd>{s.socio.numero}</dd></div>
+              <div><dt>Tipo</dt><dd>{traduci(TIPO_SOCIO, s.socio.tipo)}</dd></div>
+              <div><dt>Saldo</dt><dd className={s.socio.saldo != null && s.socio.saldo < 0 ? 'negativo' : undefined}>{formatoEuro(s.socio.saldo)}</dd></div>
+              <div><dt>Accessi in 30 giorni</dt><dd>{s.socio.ingressi_30gg}</dd></div>
+            </>
+          ) : (
+            <div><dt>PerfectGym</dt><dd className="attenuato">non ancora agganciato a un socio</dd></div>
+          )}
+          {s.socio && p.codice_fiscale && <div><dt>Codice fiscale</dt><dd>{p.codice_fiscale}</dd></div>}
+          {s.socio && p.data_nascita && <div><dt>Nato il</dt><dd>{formatoData(p.data_nascita)}</dd></div>}
+        </dl>
+      </section>
+
+      {/* ---- Task: il lavoro di questa persona, in cima. Da fare (gli scaduti prima) e fatti. ---- */}
+      <details className="fase-righe task-fase">
+        <summary className="fase-titolo">
+          Task
+          <span className="chip-gruppo">
+            <span className="chip">{daFare.length} da fare</span>
+            {scaduti > 0 && <span className="chip rosso">{scaduti} scaduti</span>}
+          </span>
+          <span className="task-apri" aria-hidden="true" />
+</summary>
+        <section className="scheda fase-corpo task-corpo">
+          <div className="task-griglia">
+<div className="task-nuovo">
+            <NuovoTask utente={p.id} per={per} torna={qui} staff={staff} io={io?.id ?? null} />
+          </div>
+          <div className="task-elenco">
+<input type="radio" name="task-vista" id="task-v-fare" className="task-radio" defaultChecked />
+<input type="radio" name="task-vista" id="task-v-fatti" className="task-radio" />
+<div className="task-tabs">
+<label htmlFor="task-v-fare">Da fare <span>{daFare.length}</span></label>
+<label htmlFor="task-v-fatti">Fatti <span>{fatti.length}</span></label>
+</div>
+            <div className="task-col task-col-fare">
+              <h3 className="task-gruppo">Da fare <span className="conta-titolo">{daFare.length}</span></h3>
+              {daFare.length === 0 ? <p className="task-vuoto">Niente da fare su questa persona.</p> : (
+                <ol className="task-lista">
+                  {daFare.map((e) => {
+                    const tardi = scaduto(e)
+                    return (
+                      <li key={e.id} className={`task-voce${tardi ? ' scaduta' : ''}`}>
+                        <div className="task-riga">
+                          <IconaTask tipo={e.task_tipo} /><b className="task-tipo">{traduci(TIPO_TASK, e.task_tipo)}</b>
+                          <Provenienza origine={e.origine} />
+                          <span className="task-quando">{tardi ? 'era per' : 'per'} <b>{formatoDataOra(e.data)}</b></span>
+                          {tardi && <span className="bollino rosso">scaduto</span>}
+                          {e.assegnato_nome && <span className="task-chi"><AvatarTask nome={e.assegnato_nome} />{e.assegnato_nome}</span>}
+                        </div>
+                        {e.nota && <div className="task-nota">{e.nota}</div>}
+                        <form action={completaTask} className="azioni-riga task-chiudi">
                           <input type="hidden" name="task" value={e.id} />
                           <input type="hidden" name="torna" value={qui} />
-                          <input type="text" name="nota" placeholder="Com'è andata" />
+                          <input type="text" name="nota" placeholder="Com'è andata" aria-label="Com'è andata" />
                           <button className="bottone piccolo" name="esito" value="positivo">Fatto ✓</button>
                           <button className="bottone secondario piccolo" name="esito" value="negativo">Negativo</button>
                         </form>
-                      )}
-                    </li>
-                ))}
-              </ol>
-            )}
-            <div className="task-nuovo">
-              <h3>Nuovo task</h3>
-              <NuovoTask utente={p.id} per={per} torna={qui} staff={staff} io={io?.id ?? null} />
+                      </li>
+                    )
+                  })}
+                </ol>
+              )}
             </div>
-          </section>
+            <div className="task-col task-col-fatti">
+              <h3 className="task-gruppo">Fatti <span className="conta-titolo">{fatti.length}</span></h3>
+              {fatti.length === 0 ? <p className="task-vuoto">Ancora nessun task fatto.</p> : (
+                <ol className="task-lista">
+                  {fatti.map((e) => (
+                    <li key={e.id} className={`task-voce task-chiuso${e.archiviato ? ' archiviata' : ''}`}>
+                      <div className="task-riga">
+                        <IconaTask tipo={e.task_tipo} /><b className="task-tipo">{traduci(TIPO_TASK, e.task_tipo)}</b>
+                        <Provenienza origine={e.origine} />
+                        <span className="task-quando">{e.archiviato ? 'del' : 'fatto'} <b>{formatoDataOra(e.archiviato ? e.data : e.completato_il)}</b>{e.archiviato ? ' · archiviato' : ''}</span>
+                        {e.esito && <span className={`bollino ${e.esito === 'positivo' ? 'verde' : 'rosso'}`}>{e.esito}</span>}
+                        {e.assegnato_nome && <span className="task-chi"><AvatarTask nome={e.assegnato_nome} />{e.assegnato_nome}</span>}
+                      </div>
+                      {e.nota && <div className="task-nota">{e.nota}</div>}
+                      {e.nota_esito && <div className="task-nota"><span><strong>Com&apos;è andata:</strong> {e.nota_esito}</span></div>}
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </div>
+          </div>
+</div>
+        </section>
+      </details>
 
+      {/* ---- Le fasi una sotto l'altra: lead, prova, abbonamento, poi rinnovo e disdetta ---- */}
+      <div className="funnel funnel-righe">
+        {s.lead.length === 0
+          ? <FaseVuota numero={1} nome="Opportunità" testo="Nessuna opportunità." />
+          : conStorico(s.lead, (l) => l.fase === 'da_gestire' || l.fase === 'in_gestione', cartaLead, 'Storico opportunità', 1, ['opportunità', 'opportunità'])}
+
+        {s.prove.length === 0
+          ? <FaseVuota numero={2} nome="Prova" testo="Nessuna prova." />
+          : conStorico(s.prove, (pr) => !pr.esito, cartaProva, 'Storico prove', 2, ['prova', 'prove'])}
+
+        {/* Gli abbonamenti di PerfectGym, senza i certificati medici (che su
+            PerfectGym sono contratti aggiuntivi): in vista quello in corso,
+            gli altri nella tendina sotto. */}
+        {!ultimo ? (
+          <FaseVuota numero={3} nome="Abbonamento" testo={s.socio ? 'Nessun abbonamento su PerfectGym.' : 'Non ancora iscritto.'} />
+        ) : (
+          <div>
+            <Contratto
+              c={ultimo}
+              controllo={controllo(ultimo.id)}
+              pagamento={pagamenti[ultimo.id]}
+              piede={precedenti.length > 0 ? (
+                <StoricoPiede conta={precedenti.length} cosa={['abbonamento', 'abbonamenti']}>
+                  {precedenti.map((c) => <Contratto key={c.id} c={c} controllo={controllo(c.id)} pagamento={pagamenti[c.id]} />)}
+                </StoricoPiede>
+              ) : undefined}
+            />
+          </div>
+        )}
+
+        {/* Rinnovi e disdette si gestiscono qui, come i lead: si prendono in
+            carico, e chi li ha (o un admin) scrive l'esito; chiusi con l'esito,
+            si leggono e si riaprono, con l'avviso. */}
+        {rinnovi.map((r) => {
+          const puo = puoVedere(io, 'rinnovi') && puoGestire(io, r.assegnato_a)
+          return (
+            <Fase key={r.id} nome="Rinnovo">
+              <Col titolo="Rinnovo">
+                <dl className="dati">
+                  <dt>Scade il</dt><dd><strong>{formatoData(r.scadenza)}</strong></dd>
+                  {r.piano && (<><dt>Piano</dt><dd>{r.piano}</dd></>)}
+                  <dt>Stato</dt>
+                  <dd>
+                    <span className={`bollino ${r.esito === 'rinnovato' ? 'verde' : r.esito ? 'grigio' : 'giallo'}`}>
+                      {r.esito ? traduci(ESITO_RINNOVO, r.esito) : r.assegnato_a ? 'In gestione' : 'Da gestire'}
+                    </span>
+                  </dd>
+                </dl>
+              </Col>
+              <Col titolo="Gestione">
+                <dl className="dati">
+                  <dt>Lo segue</dt><dd>{r.assegnato_nome ?? <span className="attenuato">nessuno</span>}</dd>
+                </dl>
+                {(!puo || r.esito) && r.note && <p className="nota-socio">{r.note}</p>}
+              </Col>
+              <Col titolo="Azioni">
+                {puo && r.esito && (
+                  <div className="fase-azioni">
+                    <Riapri
+                      azione={aggiornaRinnovo}
+                      campi={{ rinnovo: r.id, torna: qui, esito: '', note: r.note ?? '' }}
+                      avviso={`riaprendo il rinnovo si toglie l'esito «${traduci(ESITO_RINNOVO, r.esito)}» e torna ${r.assegnato_a ? 'in gestione' : 'da gestire'}. Lo storico cambia.`}
+                    />
+                  </div>
+                )}
+                {puoVedere(io, 'rinnovi') && !r.esito && (
+                  <div className="fase-azioni">
+                    <InCarico id={r.id} assegnatoA={r.assegnato_a} assegnatoNome={r.assegnato_nome} aperto io={io} staff={staff}
+                      torna={qui} assegna={assegnaRinnovo} rilascia={rilasciaRinnovo} completo />
+                    {puo && <ModuloRinnovo r={r} torna={qui} />}
+                  </div>
+                )}
+              </Col>
+            </Fase>
+          )
+        })}
+
+        {s.disdette.map((d) => {
+          const puo = puoVedere(io, 'disdette') && puoGestire(io, d.gestito_da ?? null)
+          const aperta = !d.esito || d.esito === 'standby'
+          return (
+            <Fase key={d.id} nome="Disdetta">
+              <Col titolo="Disdetta">
+                <dl className="dati">
+                  <dt>Disdetta il</dt><dd><strong>{formatoData(d.data_disdetta)}</strong></dd>
+                  {d.piano && (<><dt>Piano</dt><dd>{d.piano}</dd></>)}
+                  <dt>Stato</dt>
+                  <dd>
+                    <span className={`bollino ${d.esito === 'vinto' ? 'verde' : d.esito === 'perso' ? 'grigio' : 'giallo'}`}>
+                      {d.esito ? traduci(ESITO_DISDETTA, d.esito) : d.gestito_da ? 'In gestione' : 'Da gestire'}
+                    </span>
+                  </dd>
+                </dl>
+              </Col>
+              <Col titolo="Gestione">
+                <dl className="dati">
+                  <dt>La segue</dt><dd>{d.gestito_nome ?? <span className="attenuato">nessuno</span>}</dd>
+                  {!(puo && aperta) && d.motivo && (<><dt>Motivo</dt><dd>{d.motivo}</dd></>)}
+                </dl>
+                {(!puo || (d.esito && d.esito !== 'standby')) && d.note && <p className="nota-socio">{d.note}</p>}
+              </Col>
+              <Col titolo="Azioni">
+                {puo && d.esito && d.esito !== 'standby' && (
+                  <div className="fase-azioni">
+                    <Riapri
+                      azione={aggiornaDisdetta}
+                      campi={{ disdetta: d.id, torna: qui, esito: '', contatto: d.contatto ?? '', motivo: d.motivo ?? '', note: d.note ?? '' }}
+                      avviso={`riaprendo la disdetta si toglie l'esito «${traduci(ESITO_DISDETTA, d.esito)}» e torna ${d.gestito_da ? 'in gestione' : 'da gestire'}. Lo storico cambia.`}
+                    />
+                  </div>
+                )}
+                {puoVedere(io, 'disdette') && aperta && (
+                  <div className="fase-azioni">
+                    <InCarico id={d.id} assegnatoA={d.gestito_da ?? null} assegnatoNome={d.gestito_nome ?? null} aperto io={io} staff={staff}
+                      torna={qui} assegna={assegnaDisdetta} rilascia={rilasciaDisdetta} completo />
+                    {puo && <ModuloDisdetta d={d} torna={qui} />}
+                  </div>
+                )}
+              </Col>
+            </Fase>
+          )
+        })}
+      </div>
+
+      {/* ---- Il lavoro e la presenza in palestra ---- */}
+      <div className="persona-sotto">
+        <div>
           {ticket && (
-            <section className="scheda">
-              <div className="testata-scheda">
-                <h2>Ticket</h2>
-                <a className="bottone secondario piccolo" href={`/dashboard/ticket/nuovo?persona=${p.id}`}>+ Apri un ticket</a>
-              </div>
+            <Accordion classe="sotto-tick" titolo="Ticket" azione={<a className="bottone secondario piccolo fase-azione" href={`/dashboard/ticket/nuovo?persona=${p.id}`}>+ Apri un ticket</a>} anteprima={ticket ? (ticket.length === 0 ? 'Nessun ticket' : `${ticket.length} ${ticket.length === 1 ? 'ticket' : 'ticket'} · ${ticket.filter((x) => !STATI_TICKET_CHIUSI.includes(x.stato)).length} aperti`) : null} corpoClasse="sotto-tabella">
               {ticket.length === 0
                 ? <Vuoto>Nessun ticket su questa persona.</Vuoto>
                 : <TabellaTicket ticket={ticket} socio={false} />}
-            </section>
+            </Accordion>
           )}
         </div>
 
-        {/* ---- Colonna 2: chi e' su PerfectGym ---- */}
         <div>
-          <section className="scheda">
-            <h2>Su PerfectGym</h2>
-            {!s.socio ? (
-              <Vuoto>Non ancora agganciato a un socio di PerfectGym.</Vuoto>
-            ) : (
-              <>
-                <dl className="dati">
-                  <dt>Numero</dt><dd>{s.socio.numero}</dd>
-                  <dt>Tipo</dt><dd>{traduci(TIPO_SOCIO, s.socio.tipo)}</dd>
-                  {p.codice_fiscale && (<><dt>Codice fiscale</dt><dd>{p.codice_fiscale}</dd></>)}
-                  {p.data_nascita && (<><dt>Nato il</dt><dd>{formatoData(p.data_nascita)}</dd></>)}
-                  <dt>Saldo</dt><dd className={s.socio.saldo != null && s.socio.saldo < 0 ? 'negativo' : undefined}>{formatoEuro(s.socio.saldo)}</dd>
-                </dl>
-              </>
-            )}
-          </section>
-
           {s.socio && (
-            <section className="scheda">
-              <div className="testata-scheda">
-                <h2>Ultimi accessi</h2>
-                <span className="piccolo attenuato">{s.socio.ingressi_30gg} negli ultimi 30 giorni</span>
-              </div>
+            <Accordion classe="sotto-acc" titolo="Ultimi accessi" anteprima={s.socio ? (s.socio.ingressi.length === 0 ? 'Nessun accesso' : `${s.socio.ingressi_30gg} in 30 giorni · ultimo ${formatoGiorno(s.socio.ingressi[0].entrata)}, ${formatoOra(s.socio.ingressi[0].entrata)}`) : null} corpoClasse="">
               {s.socio.ingressi.length === 0 ? (
                 <Vuoto>Nessun accesso registrato.</Vuoto>
               ) : (
@@ -448,12 +503,11 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                   ))}
                 </ul>
               )}
-            </section>
+            </Accordion>
           )}
 
           {s.socio && (
-            <section className="scheda">
-              <h2>Prenotazioni</h2>
+            <Accordion classe="sotto-pren" titolo="Prenotazioni" anteprima={s.socio ? (s.socio.prenotazioni.length === 0 ? 'Nessuna prenotazione' : `${s.socio.prenotazioni.length} · ultima ${formatoGiorno(s.socio.prenotazioni[0].inizio)}, ${formatoOra(s.socio.prenotazioni[0].inizio)} · ${s.socio.prenotazioni[0].lezione ?? 'Lezione'}`) : null} corpoClasse="">
               {s.socio.prenotazioni.length === 0 ? (
                 <Vuoto>Nessuna prenotazione.</Vuoto>
               ) : (
@@ -466,41 +520,52 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                   ))}
                 </ul>
               )}
-            </section>
+            </Accordion>
           )}
-
         </div>
       </div>
     </>
   )
 }
 
+
 type Socio = NonNullable<Scheda['socio']>
 
-// Un abbonamento: il nome del piano, lo stato e le sue date.
-function Contratto({ c, controllo, pagamento }: { c: Socio['contratti'][number]; controllo?: string; pagamento?: Pagamento }) {
+// Un abbonamento: il piano, la durata e il pagamento, in tre colonne.
+function Contratto({ c, controllo, pagamento, piede }: { c: Socio['contratti'][number]; controllo?: string; pagamento?: Pagamento; piede?: React.ReactNode }) {
   return (
-    <div className="abbonamento">
-      <div className="testata-scheda">
-        <h3>{c.piano ?? 'Contratto'}</h3>
-        <span className={`bollino ${c.stato === 'Current' ? 'verde' : c.stato === 'NotStarted' ? 'giallo' : 'grigio'}`}>
-          {traduci(STATO_CONTRATTO, c.stato)}
-        </span>
-      </div>
-      <dl className="dati">
-        <dt>Firmato il</dt><dd>{formatoData(c.data_firma)}</dd>
-        <dt>Inizio</dt><dd>{formatoData(c.data_inizio)}</dd>
-        {/* La fine dell'abbonamento, in evidenza. */}
-        <dt>Fine</dt><dd><strong>{c.data_fine ? formatoData(c.data_fine) : 'a tempo indeterminato'}</strong></dd>
-        <dt>Disdetta</dt><dd>{c.data_disdetta ? formatoData(c.data_disdetta) : '—'}</dd>
-        <dt>Canone</dt><dd>{formatoEuro(c.canone)}</dd>
-        {c.giorno_addebito != null && (<><dt>Addebito</dt><dd>il {c.giorno_addebito} del mese</dd></>)}
-        <dt>Rinnovo automatico</dt><dd>{c.rinnovo_automatico ? 'sì' : 'no'}</dd>
-        {c.aggiuntivo && (<><dt>Tipo</dt><dd>contratto aggiuntivo</dd></>)}
-        <DatiPagamento p={pagamento} />
-        {controllo && (<><dt>Controllo</dt><dd>{traduci(CONTROLLO, controllo)}</dd></>)}
-      </dl>
-    </div>
+    <Fase numero={3} nome="Abbonamento" piede={piede}>
+      <Col titolo="Abbonamento">
+        <dl className="dati">
+          <dt>Piano</dt><dd>{c.piano ?? 'Contratto'}</dd>
+          <dt>Stato</dt>
+          <dd>
+            <span className={`bollino ${c.stato === 'Current' ? 'verde' : c.stato === 'NotStarted' ? 'giallo' : 'grigio'}`}>
+              {traduci(STATO_CONTRATTO, c.stato)}
+            </span>
+          </dd>
+          <dt>Firmato il</dt><dd>{formatoData(c.data_firma)}</dd>
+          {c.aggiuntivo && (<><dt>Tipo</dt><dd>contratto aggiuntivo</dd></>)}
+          {controllo && (<><dt>Controllo</dt><dd>{traduci(CONTROLLO, controllo)}</dd></>)}
+        </dl>
+      </Col>
+      <Col titolo="Durata">
+        <dl className="dati">
+          <dt>Inizio</dt><dd>{formatoData(c.data_inizio)}</dd>
+          {/* La fine dell'abbonamento, in evidenza. */}
+          <dt>Fine</dt><dd><strong>{c.data_fine ? formatoData(c.data_fine) : 'a tempo indeterminato'}</strong></dd>
+          <dt>Disdetta</dt><dd>{c.data_disdetta ? formatoData(c.data_disdetta) : '—'}</dd>
+          <dt>Rinnovo auto.</dt><dd>{c.rinnovo_automatico ? 'sì' : 'no'}</dd>
+        </dl>
+      </Col>
+      <Col titolo="Pagamento">
+        <dl className="dati">
+          <dt>Canone</dt><dd>{formatoEuro(c.canone)}</dd>
+          {c.giorno_addebito != null && (<><dt>Addebito</dt><dd>il {c.giorno_addebito} del mese</dd></>)}
+          <DatiPagamento p={pagamento} />
+        </dl>
+      </Col>
+    </Fase>
   )
 }
 
@@ -528,62 +593,46 @@ function StatoCertificato({ c }: { c: Socio['certificato'] | undefined }) {
 // con «Assegna» (InCarico); salvare quello di nessuno lo prende in carico.
 function ModuloRinnovo({ r, torna }: { r: NonNullable<Scheda['rinnovi']>[number]; torna: string }) {
   return (
-    <form action={aggiornaRinnovo} className="modulo">
+    <form action={aggiornaRinnovo} className="fase-azioni">
       <input type="hidden" name="rinnovo" value={r.id} />
       <input type="hidden" name="torna" value={torna} />
-      <div className="due-colonne">
-        <div className="campo">
-          <label>Esito</label>
-          <select name="esito" defaultValue={r.esito ?? ''}>
-            <option value="">Ancora aperto</option>
-            {Object.entries(ESITO_RINNOVO).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-          </select>
-        </div>
-        <div className="campo">
-          <label>Note</label>
-          <input type="text" name="note" defaultValue={r.note ?? ''} />
-        </div>
+      <div className="azioni-riga">
+        <select name="esito" defaultValue={r.esito ?? ''} aria-label="Esito">
+          <option value="">Ancora aperto</option>
+          {Object.entries(ESITO_RINNOVO).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+        </select>
+        <input type="text" name="note" defaultValue={r.note ?? ''} placeholder="Note" aria-label="Note" />
+        <BottoneInvio testo="Salva il rinnovo" inCorso="Salvataggio…" classe="piccolo" />
       </div>
-      <BottoneInvio testo="Salva il rinnovo" inCorso="Salvataggio…" />
     </form>
   )
 }
 
 function ModuloDisdetta({ d, torna }: { d: Scheda['disdette'][number]; torna: string }) {
   return (
-    <form action={aggiornaDisdetta} className="modulo">
+    <form action={aggiornaDisdetta} className="fase-azioni">
       <input type="hidden" name="disdetta" value={d.id} />
       <input type="hidden" name="torna" value={torna} />
-      <div className="due-colonne">
-        <div className="campo">
-          <label>Contatto</label>
-          <select name="contatto" defaultValue={d.contatto ?? ''}>
-            <option value="">Non ancora</option>
-            <option value="telefonata">Telefonata</option>
-            <option value="appuntamento">Appuntamento</option>
-          </select>
-        </div>
-        <div className="campo">
-          <label>Esito</label>
-          <select name="esito" defaultValue={d.esito ?? ''}>
-            <option value="">Da gestire</option>
-            {Object.entries(ESITO_DISDETTA).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-          </select>
-        </div>
+      <div className="azioni-riga">
+        <select name="contatto" defaultValue={d.contatto ?? ''} aria-label="Contatto">
+          <option value="">Contatto: non ancora</option>
+          <option value="telefonata">Telefonata</option>
+          <option value="appuntamento">Appuntamento</option>
+        </select>
+        <select name="esito" defaultValue={d.esito ?? ''} aria-label="Esito">
+          <option value="">Da gestire</option>
+          {Object.entries(ESITO_DISDETTA).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+        </select>
       </div>
-      <div className="campo">
-        <label>Motivo</label>
-        <select name="motivo" defaultValue={d.motivo ?? ''}>
-          <option value="">Non ancora</option>
+      <div className="azioni-riga">
+        <select name="motivo" defaultValue={d.motivo ?? ''} aria-label="Motivo">
+          <option value="">Motivo: non ancora</option>
           {d.motivo && !MOTIVI_DISDETTA.includes(d.motivo) && <option value={d.motivo}>{d.motivo}</option>}
           {MOTIVI_DISDETTA.map((m) => <option key={m} value={m}>{m}</option>)}
         </select>
+        <input type="text" name="note" defaultValue={d.note ?? ''} placeholder="Note" aria-label="Note" />
+        <BottoneInvio testo="Salva la disdetta" inCorso="Salvataggio…" classe="piccolo" />
       </div>
-      <div className="campo">
-        <label>Note</label>
-        <input type="text" name="note" defaultValue={d.note ?? ''} />
-      </div>
-      <BottoneInvio testo="Salva la disdetta" inCorso="Salvataggio…" />
     </form>
   )
 }

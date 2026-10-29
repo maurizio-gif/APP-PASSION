@@ -44,6 +44,8 @@ export type Io = {
   ruolo: Ruolo
   sezioni: string[]
   autorizzazioni: string[]
+  // Riceve le opportunita' (un consulente): vede anche l'Appello complessivo.
+  assegnabile?: boolean
 } | null
 
 export type Utente = {
@@ -75,6 +77,8 @@ export type Home = {
   disdette_da_gestire: number
   mie_disdette: number
   rinnovi_da_gestire: number
+  // Abbonamenti nuovi senza consulente, da prendere in carico (20261027g).
+  iscrizioni_da_assegnare: number
   miei_rinnovi: number
   miei_task_arretrati: number
   miei_task_oggi: number
@@ -172,6 +176,153 @@ export type NuovoContratto = {
   gestito_il: string | null
   creato_il: string
   gestito_da: string | null
+}
+
+// L'appello (20261027i): le lezioni con i loro prenotati.
+export type PrenotatoAppello = {
+  booking_id: number
+  member_id: number | null
+  nome: string | null
+  cognome: string | null
+  presente: boolean
+  segnato_da: string | null
+  data_nascita?: string | null
+  segnato_il?: string | null
+  // Segnata nel CRM e non ancora mandata a PerfectGym.
+  da_inviare: boolean
+  utente_id?: string | null
+  // I segnali (20261027k): prima volta a questo tipo di lezione, in prova con un pass, prime due settimane di abbonamento.
+  prima_volta?: boolean
+  prova_piano?: string | null
+  prova_fine?: string | null
+  primo_abbonamento?: string | null
+}
+export type LezioneAppello = {
+  class_id: number
+  inizio: string
+  fine: string | null
+  lezione: string | null
+  lezione_id: number | null
+  categoria: string | null
+  categoria_id: number | null
+  sala: string | null
+  sala_id: number | null
+  istruttore: string | null
+  istruttore_id: number | null
+  posti: number | null
+  finestra: 'presto' | 'aperto' | 'chiuso'
+  // Da 59 minuti prima dell'inizio a 59 minuti dopo la fine: quando si segna.
+  apre_il: string
+  chiude_il: string
+  prenotati: PrenotatoAppello[]
+}
+export type Appello = { giorno: string; oggi: string; giorni: number; collegato: boolean; istruttori: string[]; lezioni: LezioneAppello[] }
+type Scelta = { id: number; nome: string }
+export type AppelloTutte = {
+  giorno: string
+  oggi: string
+  filtri: { istruttori: Scelta[]; lezioni: Scelta[]; categorie: Scelta[]; sale: Scelta[] }
+  lezioni: LezioneAppello[]
+}
+
+// Un abbonamento nuovo e chi lo vende (20261027g): da_assegnare, assegnata o online.
+export type Iscrizione = {
+  contract_id: number
+  utente_id: string | null
+  nome: string | null
+  cognome: string | null
+  telefono: string | null
+  email: string | null
+  piano: string | null
+  canone: number | null
+  mesi: number
+  data_firma: string
+  data_inizio: string | null
+  stato: 'da_assegnare' | 'assegnata' | 'online'
+  consulente_id: string | null
+  consulente: string | null
+  assegnato_da: string | null
+  assegnato_il: string | null
+  note: string | null
+  da_opportunita: boolean
+  // Chi ha gia' lavorato con la persona (20261027h): solo un suggerimento.
+  suggerito_id: string | null
+  suggerito: string | null
+  motivo_suggerimento: string | null
+}
+
+// Il primo ricontatto di un'opportunita' (20261027d): `minuti` sono di orario di lavoro, dall'arrivo al
+// primo ricontatto o, se nessuno ha ancora ricontattato, fino ad adesso.
+export type Velocita = { lead_id: string; primo_contatto: string | null; minuti: number }
+
+// La performance di un consulente, una riga per settimana, dalla piu' vecchia (20261027d).
+export type PerformanceSettimana = {
+  settimana: string
+  in_corso: boolean
+  prese: number
+  chiuse: number
+  vinte: number
+  con_pass: number
+  con_abbonamento: number
+  ricontattate: number
+  ricontatto_mediano_min: number | null
+  ricontatto_30: number
+  dopo_presa_mediano_min: number | null
+  dopo_presa_30: number
+  prove_finite: number
+  prove_iscritte: number
+  abbonamenti: number
+  abbonamenti_nuovi: number
+  importo_mensile: number
+  importo_vincolo: number
+  abbonamenti_diretti: number
+  importo_diretti: number
+  disdette_gestite: number
+  disdette_recuperate: number
+  rinnovi_gestiti: number
+  rinnovi_rinnovati: number
+  task_fatti: number
+  task_positivi: number
+}
+export type Performance = { consulente_id: string; consulente: string | null; oggi: string; settimane: PerformanceSettimana[] }
+
+// Il report giornaliero (supabase/migrations/20261027c_report_giornaliero.sql): una riga per ogni cosa successa.
+export type TipoEvento =
+  | 'lead_arrivato'
+  | 'lead_preso'
+  | 'lead_chiuso'
+  | 'commento'
+  | 'task_creato'
+  | 'task_fatto'
+  | 'pass'
+  | 'abbonamento'
+  | 'disdetta_arrivata'
+  | 'disdetta_gestita'
+  | 'rinnovo_gestito'
+export type EventoGiorno = {
+  ora: string | null
+  tipo: TipoEvento
+  sottotipo: string | null
+  esito: string | null
+  titolo: string | null
+  dettaglio: string | null
+  consulente_id: string | null
+  consulente: string | null
+  utente_id: string | null
+  nome: string | null
+  cognome: string | null
+  telefono: string | null
+  email: string | null
+}
+export type ReportGiornaliero = { giorno: string; eventi: EventoGiorno[] }
+
+export type FiltriDisdette = {
+  testo?: string | null
+  scadenzaDa?: string | null
+  scadenzaA?: string | null
+  disdettaDa?: string | null
+  disdettaA?: string | null
+  ordine?: 'scadenza_asc' | 'scadenza_desc' | 'disdetta_asc' | 'disdetta_desc' | null
 }
 
 export type Disdetta = {
@@ -385,6 +536,9 @@ export type Abbonamenti = {
     prove_guest_abbonati: number
     prove_piu_pass: number
     prove_pass: number
+    // Le prove per durata del Guest Pass (null = solo pass giornalieri), con
+    // chi ha prenotato Reformer o Formula 8 (20261027a).
+    prove_per_pass?: ProvaPerPass[]
   }[]
   durata: {
     trimestri: (DurataPeriodo & { trimestre: string; vincolo: Vincolo; in_corso: boolean })[]
@@ -396,6 +550,15 @@ export type Abbonamenti = {
       periodi: Record<'ultimi_12' | 'precedenti_12', DurataPeriodo>
     }[]
   }
+}
+export type ProvaPerPass = {
+  giorni_guest: number | null
+  persone: number
+  abbonati: number
+  reformer: number
+  reformer_abbonati: number
+  formula8: number
+  formula8_abbonati: number
 }
 export type Vincolo = 1 | 4 | 12
 export type DurataPeriodo = {
@@ -629,6 +792,22 @@ export const crm = {
     for (const r of await rpc<ContrattoLead[]>('crm_lead_contratti', { p_lead: lead })) per[r.lead_id] = r
     return per
   },
+  // Il primo ricontatto di ogni opportunita' di una pagina.
+  leadVelocita: async (lead: string[]) => {
+    const per: Record<string, Velocita> = {}
+    if (lead.length === 0) return per
+    for (const r of await rpc<Velocita[]>('crm_lead_velocita', { p_lead: lead })) per[r.lead_id] = r
+    return per
+  },
+  // L'Appello istruttore (le mie lezioni) e quello complessivo, con i filtri (20261027i).
+  appello: (giorno: string | null, giorni = 7) => rpc<Appello>('crm_appello', { p_giorno: giorno, p_giorni: giorni }),
+  appelloTutte: (giorno: string | null, f: { istruttore?: number | null; lezione?: number | null; categoria?: number | null; sala?: number | null } = {}) =>
+    rpc<AppelloTutte>('crm_appello_tutte', {
+      p_giorno: giorno, p_istruttore: f.istruttore ?? null, p_lezione: f.lezione ?? null, p_categoria: f.categoria ?? null, p_sala: f.sala ?? null,
+    }),
+  // Gli abbonamenti nuovi e chi li vende: da assegnare, assegnate, online, tutte.
+  iscrizioni: (vista: string) => rpc<Iscrizione[]>('crm_iscrizioni', { p_vista: vista, p_limite: 500 }),
+  performance: (consulente: string | null = null) => rpc<Performance>('crm_performance', { p_consulente: consulente, p_settimane: 8 }),
   prove: (vista: string, consulente: string | null = null) => rpc<Prova[]>('crm_prove', { p_vista: vista, p_consulente: consulente }),
   // Un giro solo per tutti i contratti di una pagina; chi non e' qui non ha dati.
   pagamenti: async (contratti: (number | null | undefined)[]) => {
@@ -639,8 +818,23 @@ export const crm = {
     return per
   },
   nuoviContratti: (vista: string) => rpc<NuovoContratto[]>('crm_nuovi_contratti', { p_vista: vista }),
-  disdette: (vista: string, consulente: string | null = null) =>
-    rpc<Disdetta[]>('crm_disdette', { p_vista: vista, p_consulente: consulente }),
+  // Solo admin: tutto quello che e' successo in un giorno (20261027c).
+  reportGiornaliero: (giorno: string, consulente: string | null = null) =>
+    rpc<ReportGiornaliero>('crm_report_giornaliero', { p_giorno: giorno, p_consulente: consulente }),
+  // Ricerca, intervalli di date e ordine: supabase/migrations/20261027b.
+  disdette: (vista: string, consulente: string | null = null, filtri: FiltriDisdette = {}) =>
+    rpc<Disdetta[]>('crm_disdette', {
+      p_vista: vista,
+      p_consulente: consulente,
+      // Con una ricerca o un filtro per data l'elenco puo' essere piu' lungo.
+      p_limite: Object.values(filtri).some(Boolean) ? 1000 : 300,
+      p_testo: filtri.testo ?? null,
+      p_scadenza_da: filtri.scadenzaDa ?? null,
+      p_scadenza_a: filtri.scadenzaA ?? null,
+      p_disdetta_da: filtri.disdettaDa ?? null,
+      p_disdetta_a: filtri.disdettaA ?? null,
+      p_ordine: filtri.ordine ?? null,
+    }),
   task: (chi: string, quando: string, consulente: string | null = null) =>
     rpc<Task[]>('crm_task', { p_chi: chi, p_quando: quando, p_consulente: consulente }),
   persona: (id: string) => rpc<Scheda | null>('crm_persona', { p_id: id }),
@@ -653,6 +847,8 @@ export const crm = {
   reportMarketing: (dimensione: string, dal: string | null, al: string | null, fonte: string | null) =>
     rpc<ReportMarketing>('crm_report_marketing', { p_dimensione: dimensione, p_dal: dal, p_al: al, p_fonte: fonte }),
   utenti: () => rpc<Utente[]>('crm_utenti'),
+  // Gli utenti con la sola sezione Appello che hanno lezioni future in calendario (20261027j).
+  istruttoriConLezioni: () => rpc<{ staff_id: string; prossime: number }[]>('crm_istruttori_con_lezioni'),
   ticketElenco: (vista: string, utente: string | null = null) =>
     rpc<TicketRiga[]>('crm_ticket_elenco', { p_vista: vista, p_utente: utente }),
   ticket: (id: number) => rpc<Ticket | null>('crm_ticket', { p_id: id }),

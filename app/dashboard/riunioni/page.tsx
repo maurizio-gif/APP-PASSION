@@ -22,9 +22,14 @@ export default async function Riunioni() {
     <>
       <div className="testata">
         <div>
-          <h1>Report riunioni</h1>
-          <p>Qui troviamo tutti i report delle riunioni: un&apos;unica raccolta dello stato d&apos;avanzamento del progetto.
-            Questo strumento ci aiuta a mantenere la coerenza nello sviluppo delle informazioni e di tutto quello che ci diciamo.</p>
+          <div className="titolo-riga">
+            <h1>Report riunioni</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">Qui troviamo tutti i report delle riunioni: un&apos;unica raccolta dello stato d&apos;avanzamento del progetto.
+            Questo strumento ci aiuta a mantenere la coerenza nello sviluppo delle informazioni e di tutto quello che ci diciamo.</span>
+            </span>
+          </div>
         </div>
       </div>
 

@@ -16,16 +16,19 @@ Molte cose il CRM le fa da solo: da fuori arrivano solo le opportunità dei modu
 
 > Airtable non si usa più: dal 30 settembre 2026 tutto il lavoro si fa qui. Da fuori arrivano solo le opportunità dei moduli; il resto nasce da PerfectGym.
 
-## La home: Da gestire
-Appena entri, i numeri di oggi. Ogni riquadro porta al suo elenco:
+## La home: Dashboard consulente
+Appena entri, i numeri di oggi, in alto. Ogni riquadro porta alla sua sezione, con l'elenco completo:
 
-- **Opportunità da gestire**: non ancora prese in carico; **Le mie opportunità**: in gestione a te;
+- **Senza consulente**: le opportunità e i contratti nuovi che nessun consulente segue, più le prove in corso. Porta alla sezione [Senza consulente](/dashboard/senza-consulente), che le riunisce in tre elenchi;
 - **Prove in scadenza**: finiscono entro 3 giorni;
-- **Disdette da gestire** e **Rinnovi da gestire**: non ancora presi in carico, con quanti sono tuoi;
-- **I miei task**: di oggi e arretrati;
-- **Ticket in attesa**: R2D aspetta una risposta dal desk. Il supporto vede anche **Ticket da verificare**.
+- **Rinnovi da gestire** e **Disdette da gestire**: non ancora presi in carico, con quanti sono tuoi;
+- **I miei task**: di oggi e arretrati.
 
-Sotto, le opportunità da gestire, i tuoi task di oggi (con **«Fatto ✓»** e **«Non risponde»**) e le prove in scadenza. Il riquadro è evidenziato quando c'è qualcosa da fare.
+Il riquadro è evidenziato quando c'è qualcosa da fare. I ticket non stanno in home: li trovi nella sezione [Ticket](/dashboard/ticket).
+
+Sotto i riquadri c'è **La mia performance**: i tuoi numeri della settimana, con il confronto con la settimana scorsa e con la media delle quattro prima. Con **«Settimana per settimana»** vedi tutti gli indici, una colonna per settimana. Un admin può guardare quella di un altro consulente.
+
+Nella colonna **Primo ricontatto** di ogni opportunità, in **Opportunità**, vedi in quanto tempo è stata ricontattata, anche con un tentativo, o da quanto aspetta. Il tempo conta solo nell'orario di lavoro (9–21 dal lunedì al venerdì, 10–19:30 sabato e domenica): verde fino a 30 minuti, giallo fino a 2 ore, rosso oltre.
 
 ## Le regole che valgono ovunque
 - **Il lavoro sta nei task.** Ogni contatto con una persona si segna come task, fatto o da fare: è la sua storia. Vedi [Task](/dashboard/guida/task).

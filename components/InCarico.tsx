@@ -41,23 +41,25 @@ export function InCarico({ id, assegnatoA, assegnatoNome, aperto, io, staff, tor
   // Chi lo segue ma non e' fra gli operatori (un admin, uno spento) resta scelto, col suo nome.
   const fuori = assegnatoA && !staff.some((o) => o.id === assegnatoA)
   return (
-    <div className={completo ? undefined : 'azioni-riga'}>
+    <div className={completo ? 'azioni-blocco' : undefined}>
       {prendi}
-      <form action={assegna} className={completo ? 'azioni-scheda' : 'azioni-riga'}>
-        {campi}
-        <select name="staff" defaultValue={assegnatoA ?? ''} aria-label="Assegna a" className={completo ? undefined : 'piccola'} required>
-          <option value="" disabled>Assegna a…</option>
-          {fuori && <option value={assegnatoA}>{assegnatoNome ?? 'Operatore'}</option>}
-          {staff.map((o) => <option key={o.id} value={o.id}>{o.nome} {o.cognome ?? ''}</option>)}
-        </select>
-        <button className={`bottone secondario${piccolo}`}>Assegna</button>
-      </form>
-      {assegnatoA && (
-        <form action={rilascia} className={completo ? 'azioni-scheda' : undefined}>
+      <div className="azioni-gruppo">
+        <form action={assegna} className="azioni-riga">
           {campi}
-          <button className={`bottone secondario${piccolo}`} title="Torna fra quelli da gestire, senza nessuno">Rimetti da assegnare</button>
+          <select name="staff" defaultValue={assegnatoA ?? ''} aria-label="Assegna a" className="piccola" required>
+            <option value="" disabled>Assegna a…</option>
+            {fuori && <option value={assegnatoA}>{assegnatoNome ?? 'Operatore'}</option>}
+            {staff.map((o) => <option key={o.id} value={o.id}>{o.nome} {o.cognome ?? ''}</option>)}
+          </select>
+          <button className="bottone secondario piccolo">Assegna</button>
         </form>
-      )}
+        {assegnatoA && (
+          <form action={rilascia}>
+            {campi}
+            <button className="bottone secondario piccolo icona" title="Rimetti da assegnare: torna fra quelli da gestire, senza nessuno" aria-label="Rimetti da assegnare"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5M4 9h10a6 6 0 010 12h-3" /></svg></button>
+          </form>
+        )}
+      </div>
     </div>
   )
 }

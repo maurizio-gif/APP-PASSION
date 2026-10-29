@@ -1,3 +1,4 @@
+import { Riquadro } from '@/components/FaseRighe'
 import Link from 'next/link'
 import { crm, richiediSezione, type Scheda } from '@/lib/crm'
 import { formatoData, formatoEuro, oggiRoma, STATI_TICKET_CHIUSI, TIPI_TICKET_NUOVI, VERIFICHE_TICKET } from '@/lib/formato'
@@ -23,10 +24,15 @@ export default async function NuovoTicket({ searchParams }: { searchParams: { pe
     <>
       <div className="testata">
         <div>
-          <h1>Nuovo ticket{nome ? ` per ${nome}` : ''}</h1>
-          <p>{smista(io)
+          <div className="titolo-riga">
+            <h1>Nuovo ticket{nome ? ` per ${nome}` : ''}</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">{smista(io)
             ? 'Va subito a R2D. Le proposte di modifica restano per la riunione settimanale.'
-            : 'Arriva al supporto: lo verifica, ti risponde o lo manda a R2D.'}</p>
+            : 'Arriva al supporto: lo verifica, ti risponde o lo manda a R2D.'}</span>
+            </span>
+          </div>
         </div>
         <Link href={scheda ? `/dashboard/persone/${scheda.persona.id}` : '/dashboard/ticket'}>← {scheda ? 'Scheda' : 'Ticket'}</Link>
       </div>
@@ -80,11 +86,9 @@ export default async function NuovoTicket({ searchParams }: { searchParams: { pe
 
         <aside>
           {scheda ? <Situazione s={scheda} /> : (
-            <div className="scheda">
-              <h2>Riguarda un socio?</h2>
+            <Riquadro titolo="Riguarda un socio?">
               <p className="piccolo">Cercalo in alto e apri il ticket dalla sua scheda. Il ticket si porterà dietro abbonamento, saldo,
-                certificato e ultimi ingressi, e R2D non dovrà chiederteli.</p>
-            </div>
+                certificato e ultimi ingressi, e R2D non dovrà chiederteli.</p></Riquadro>
           )}
         </aside>
       </div>
@@ -97,18 +101,15 @@ function Situazione({ s }: { s: Scheda }) {
   const socio = s.socio
   if (!socio) {
     return (
-      <div className="scheda">
-        <h2>Non è su PerfectGym</h2>
-        <p className="piccolo">Questa persona non è un socio: il ticket non avrà abbonamento, saldo e certificato.</p>
-      </div>
+      <Riquadro titolo="Non è su PerfectGym">
+        <p className="piccolo">Questa persona non è un socio: il ticket non avrà abbonamento, saldo e certificato.</p></Riquadro>
     )
   }
   const oggi = oggiRoma()
   const [abb] = socio.contratti
   const scadenza = socio.certificato?.scadenza ?? null
   return (
-    <div className="scheda">
-      <h2>Cosa vede R2D</h2>
+    <Riquadro titolo="Cosa vede R2D">
       <dl className="dati">
         <dt>Abbonamento</dt>
         <dd>{abb ? <>{abb.piano ?? '—'}<br /><span className="piccolo attenuato">dal {formatoData(abb.data_inizio)} al {formatoData(abb.data_fine)}</span>
@@ -119,7 +120,6 @@ function Situazione({ s }: { s: Scheda }) {
         <dd>{!scadenza ? 'non presente' : scadenza >= oggi ? `valido fino al ${formatoData(scadenza)}` : <span className="testo-rosso">scaduto il {formatoData(scadenza)}</span>}</dd>
         <dt>Ingressi</dt>
         <dd>{socio.ingressi_30gg} negli ultimi 30 giorni</dd>
-      </dl>
-    </div>
+      </dl></Riquadro>
   )
 }

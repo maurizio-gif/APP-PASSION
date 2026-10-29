@@ -13,8 +13,13 @@ export default function Aggiornamenti() {
     <>
       <div className="testata">
         <div>
-          <h1>Aggiornamenti</h1>
-          <p>Cosa è cambiato nel CRM, spiegato semplice. Le novità più recenti sono in alto.</p>
+          <div className="titolo-riga">
+            <h1>Aggiornamenti</h1>
+            <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
+              <span className="aiuto-punto" aria-hidden="true">?</span>
+              <span className="aiuto-testo">Cosa è cambiato nel CRM, spiegato semplice. Le novità più recenti sono in alto.</span>
+            </span>
+          </div>
         </div>
       </div>
       {date.map((d) => (
