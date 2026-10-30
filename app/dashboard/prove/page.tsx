@@ -1,6 +1,6 @@
 import { crm, richiediSezione, type Prova } from '@/lib/crm'
 import { Avviso, LinkGuida, Schede, Vuoto, type GruppoSchede } from '@/components/Ui'
-import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
+import { FiltroConsulente, NESSUN_CONSULENTE, consulenteScelto } from '@/components/FiltroConsulente'
 import { filtraTesto, testoCercato } from '@/lib/ricerca'
 import { TabellaProve } from '@/components/TabellaProve'
 
@@ -49,11 +49,14 @@ export default async function Prove({ searchParams }: { searchParams: { vista?: 
   const ordine = ORDINI.find((o) => o.chiave === searchParams.ordine) ?? ORDINI[0]
   const staff = await crm.staff()
   // Il consulente: chi segue la prova.
-  const consulente = consulenteScelto(staff, searchParams.consulente)
+  const consulente = consulenteScelto(staff, searchParams.consulente, true)
+  const nessuno = consulente === NESSUN_CONSULENTE
   const q = testoCercato(searchParams.q)
   // Perse: fra le chiuse (le piu' recenti, come in Chiuse) quelle finite come «Non iscritto».
-  const arrivate = await crm.prove(vista === 'perse' ? 'chiuse' : vista, consulente)
-  const prove = filtraTesto(vista === 'perse' ? arrivate.filter((p) => p.esito === 'non_iscritto') : arrivate, q)
+  // Nessun consulente: si prendono tutte e si tengono quelle senza chi le segue.
+  const arrivate = await crm.prove(vista === 'perse' ? 'chiuse' : vista, nessuno ? null : consulente)
+  const dellaVista = vista === 'perse' ? arrivate.filter((p) => p.esito === 'non_iscritto') : arrivate
+  const prove = filtraTesto(nessuno ? dellaVista.filter((p) => !p.gestito_da) : dellaVista, q)
   const pagamenti = await crm.pagamenti(prove.map((p) => p.contract_id))
   // sort e' stabile: a parita' resta l'ordine di crm_prove.
   if (ordine.confronto) prove.sort(ordine.confronto)
@@ -79,7 +82,7 @@ export default async function Prove({ searchParams }: { searchParams: { vista?: 
       </div>
       <Avviso errore={searchParams.errore} />
       <Schede voci={VISTE} attiva={vista} base={`/dashboard/prove${resta ? `?${resta}` : ''}`} gruppi={GRUPPI} />
-      <FiltroConsulente azione="/dashboard/prove" staff={staff} consulente={consulente} tieni={{ vista }} q={q}>
+      <FiltroConsulente azione="/dashboard/prove" staff={staff} consulente={consulente} tieni={{ vista }} q={q} conNessuno>
         <select name="ordine" defaultValue={ordine.chiave} aria-label="Ordina per">
           {ORDINI.map((o) => <option key={o.chiave} value={o.chiave}>Ordina: {o.testo}</option>)}
         </select>
@@ -91,7 +94,7 @@ export default async function Prove({ searchParams }: { searchParams: { vista?: 
         ) : (
           <TabellaProve prove={prove} pagamenti={pagamenti} staff={staff} torna={qui} />
         )}
-        <p className="piccolo attenuato conteggio">{prove.length === 300 ? 'Le 300 più recenti' : `${prove.length} ${prove.length === 1 ? 'prova' : 'prove'}`}</p>
+        <p className="piccolo attenuato conteggio">{arrivate.length === 300 ? 'Le 300 più recenti' : `${prove.length} ${prove.length === 1 ? 'prova' : 'prove'}`}</p>
       </div>
     </>
   )

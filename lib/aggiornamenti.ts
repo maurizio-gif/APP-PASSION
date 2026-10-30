@@ -16,6 +16,13 @@ export type Aggiornamento = {
 
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
+    data: '2026-10-30',
+    titolo: 'Nelle Prove c’è il filtro «Nessun consulente»',
+    testo:
+      'Nel filtro dei consulenti, in tutte le schede delle Prove, c’è «Nessun consulente»: mostra le prove che nessuno sta seguendo.',
+    dove: 'Prove',
+  },
+  {
     data: '2026-10-29',
     titolo: 'Nella scheda della persona si vedono i commenti',
     testo:
