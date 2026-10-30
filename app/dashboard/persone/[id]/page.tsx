@@ -228,13 +228,13 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
     const chiusi = voci.filter((x) => !aperto(x))
     // Con almeno una voce aperta lo storico sta in fondo alla sua scheda (un blocco solo); senza, ha la sua barra.
     const piede = chiusi.length > 0 && aperti.length > 0
-      ? <StoricoPiede conta={chiusi.length} cosa={cosa}>{chiusi.map((x) => carta(x))}</StoricoPiede>
+      ? <StoricoPiede conta={chiusi.length} cosa={cosa} aperto>{chiusi.map((x) => carta(x))}</StoricoPiede>
       : undefined
     return (
       <>
         {aperti.map((x, i) => carta(x, i === aperti.length - 1 ? piede : undefined))}
         {chiusi.length > 0 && aperti.length === 0 && (
-          <Storico numero={numero} titolo={titolo} conta={chiusi.length} cosa={cosa} aperto={chiusi.length === 1}>
+          <Storico numero={numero} titolo={titolo} conta={chiusi.length} cosa={cosa} aperto>
             {chiusi.map((x) => carta(x))}
           </Storico>
         )}
@@ -280,7 +280,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
       </section>
 
       {/* ---- Task: il lavoro di questa persona, in cima. Da fare (gli scaduti prima) e fatti. ---- */}
-      <details className="fase-righe task-fase">
+      <details className="fase-righe task-fase" open>
         <summary className="fase-titolo">
           Task
           <span className="chip-gruppo">
@@ -357,7 +357,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
 
       {/* ---- Commenti: le note scritte sulla persona (anche il «Primo commento» di una nuova opportunita'). ---- */}
       {commenti.length > 0 && (
-        <details className="fase-righe task-fase">
+        <details className="fase-righe task-fase" open>
           <summary className="fase-titolo">
             Commenti
             <span className="chip-gruppo"><span className="chip">{commenti.length}</span></span>
@@ -401,7 +401,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
               controllo={controllo(ultimo.id)}
               pagamento={pagamenti[ultimo.id]}
               piede={precedenti.length > 0 ? (
-                <StoricoPiede conta={precedenti.length} cosa={['abbonamento', 'abbonamenti']}>
+                <StoricoPiede conta={precedenti.length} cosa={['abbonamento', 'abbonamenti']} aperto>
                   {precedenti.map((c) => <Contratto key={c.id} c={c} controllo={controllo(c.id)} pagamento={pagamenti[c.id]} />)}
                 </StoricoPiede>
               ) : undefined}
@@ -507,7 +507,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
       <div className="persona-sotto">
         <div>
           {ticket && (
-            <Accordion classe="sotto-tick" titolo="Ticket" azione={<a className="bottone secondario piccolo fase-azione" href={`/dashboard/ticket/nuovo?persona=${p.id}`}>+ Apri un ticket</a>} anteprima={ticket ? (ticket.length === 0 ? 'Nessun ticket' : `${ticket.length} ${ticket.length === 1 ? 'ticket' : 'ticket'} · ${ticket.filter((x) => !STATI_TICKET_CHIUSI.includes(x.stato)).length} aperti`) : null} corpoClasse="sotto-tabella">
+            <Accordion aperto classe="sotto-tick" titolo="Ticket" azione={<a className="bottone secondario piccolo fase-azione" href={`/dashboard/ticket/nuovo?persona=${p.id}`}>+ Apri un ticket</a>} anteprima={ticket ? (ticket.length === 0 ? 'Nessun ticket' : `${ticket.length} ${ticket.length === 1 ? 'ticket' : 'ticket'} · ${ticket.filter((x) => !STATI_TICKET_CHIUSI.includes(x.stato)).length} aperti`) : null} corpoClasse="sotto-tabella">
               {ticket.length === 0
                 ? <Vuoto>Nessun ticket su questa persona.</Vuoto>
                 : <TabellaTicket ticket={ticket} socio={false} />}
@@ -517,7 +517,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
 
         <div>
           {s.socio && (
-            <Accordion classe="sotto-acc" titolo="Ultimi accessi" anteprima={s.socio ? (s.socio.ingressi.length === 0 ? 'Nessun accesso' : `${s.socio.ingressi_30gg} in 30 giorni · ultimo ${formatoGiorno(s.socio.ingressi[0].entrata)}, ${formatoOra(s.socio.ingressi[0].entrata)}`) : null} corpoClasse="">
+            <Accordion aperto classe="sotto-acc" titolo="Ultimi accessi" anteprima={s.socio ? (s.socio.ingressi.length === 0 ? 'Nessun accesso' : `${s.socio.ingressi_30gg} in 30 giorni · ultimo ${formatoGiorno(s.socio.ingressi[0].entrata)}, ${formatoOra(s.socio.ingressi[0].entrata)}`) : null} corpoClasse="">
               {s.socio.ingressi.length === 0 ? (
                 <Vuoto>Nessun accesso registrato.</Vuoto>
               ) : (
@@ -534,7 +534,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
           )}
 
           {s.socio && (
-            <Accordion classe="sotto-pren" titolo="Prenotazioni" anteprima={s.socio ? (s.socio.prenotazioni.length === 0 ? 'Nessuna prenotazione' : `${s.socio.prenotazioni.length} · ultima ${formatoGiorno(s.socio.prenotazioni[0].inizio)}, ${formatoOra(s.socio.prenotazioni[0].inizio)} · ${s.socio.prenotazioni[0].lezione ?? 'Lezione'}`) : null} corpoClasse="">
+            <Accordion aperto classe="sotto-pren" titolo="Prenotazioni" anteprima={s.socio ? (s.socio.prenotazioni.length === 0 ? 'Nessuna prenotazione' : `${s.socio.prenotazioni.length} · ultima ${formatoGiorno(s.socio.prenotazioni[0].inizio)}, ${formatoOra(s.socio.prenotazioni[0].inizio)} · ${s.socio.prenotazioni[0].lezione ?? 'Lezione'}`) : null} corpoClasse="">
               {s.socio.prenotazioni.length === 0 ? (
                 <Vuoto>Nessuna prenotazione.</Vuoto>
               ) : (

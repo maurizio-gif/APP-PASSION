@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-30',
+    titolo: 'La scheda della persona si apre con tutto aperto',
+    testo:
+      'Aprendo la scheda di una persona, Task, Commenti, Ticket, Ultimi accessi, Prenotazioni e gli Storici sono già aperti: prima bisognava aprirli uno a uno. Con il pulsante in alto a destra di ogni riquadro si chiudono ancora.',
+    dove: 'Scheda della persona',
+  },
+  {
+    data: '2026-10-30',
     titolo: 'Nelle Prove c’è il filtro «Nessun consulente»',
     testo:
       'Nel filtro dei consulenti, in tutte le schede delle Prove, c’è «Nessun consulente»: mostra le prove che nessuno sta seguendo.',
