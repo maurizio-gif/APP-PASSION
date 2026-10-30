@@ -20,6 +20,9 @@ import {
   leadSuPerfectGym, prendiLead, riapriLead, rilasciaDisdetta, rilasciaLead, rilasciaRinnovo,
 } from '../../azioni'
 
+// I commenti da questa data in poi sono del CRM; prima sono quelli di Airtable.
+const COMMENTI_DEL_CRM_DAL = '2026-06-01'
+
 const VINTA_DA_SOLA = 'Vinta si segna da sola, quando su PerfectGym compare la prova o il contratto'
 
 export default async function SchedaPersona({ params, searchParams }: { params: { id: string }; searchParams: { errore?: string; ok?: string } }) {
@@ -30,9 +33,11 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
   const ticket = puoVedere(io, 'ticket') ? await crm.ticketElenco('tutti', p.id) : null
   const qui = `/dashboard/persone/${p.id}`
   const task = s.storia.filter((e): e is Extract<Scheda['storia'][number], { tipo: 'task' }> => e.tipo === 'task')
-  // I commenti, dal piu' recente: quelli di Airtable e il «Primo commento» del modulo Nuova opportunita'.
+  // I commenti scritti nel CRM (il «Primo commento» del modulo Nuova opportunita'), dal piu' recente.
+  // Quelli importati da Airtable non si mostrano: arrivano fino al 22/05/2026 e quelli del CRM
+  // cominciano il 30/09/2026, quindi li separa la data (la scheda non sa l'origine del commento).
   const commenti = s.storia
-    .filter((e): e is Extract<Scheda['storia'][number], { tipo: 'commento' }> => e.tipo === 'commento')
+    .filter((e): e is Extract<Scheda['storia'][number], { tipo: 'commento' }> => e.tipo === 'commento' && e.quando >= COMMENTI_DEL_CRM_DAL)
     .sort((a, b) => new Date(b.quando).getTime() - new Date(a.quando).getTime())
   const leadAperto = s.lead.find((l) => l.fase === 'da_gestire' || l.fase === 'in_gestione')
   const pgm = linkPgm(p.member_id)
