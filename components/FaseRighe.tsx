@@ -80,9 +80,9 @@ export function Storico({ numero, titolo, conta, cosa, aperto = false, children 
 }
 
 // Lo storico attaccato in fondo alla fase (dentro la stessa scheda): una barra scura a fisarmonica, aperta mostra le voci chiuse.
-export function StoricoPiede({ conta, cosa, children }: { conta: number; cosa: [string, string]; children: React.ReactNode }) {
+export function StoricoPiede({ conta, cosa, aperto = false, children }: { conta: number; cosa: [string, string]; aperto?: boolean; children: React.ReactNode }) {
   return (
-    <details className="fase-storico">
+    <details className="fase-storico" open={aperto}>
       <summary>
         <span className="fase-storico-nome">Storico</span>
         <span className="chip">{conta} {conta === 1 ? cosa[0] : cosa[1]}</span>

@@ -4,7 +4,7 @@ import type { Operatore } from '@/lib/crm'
 // operatori che ricevono lead e task (`crm.staff()`), che rimanda alla stessa
 // pagina con `consulente=<id>` e gli altri parametri della vista (`tieni`).
 // `children`: altre tendine della sezione, inviate con lo stesso Filtra.
-export function FiltroConsulente({ azione, staff, consulente, tieni = {}, q, classe = '', children }: {
+export function FiltroConsulente({ azione, staff, consulente, tieni = {}, q, classe = '', conNessuno = false, children }: {
   azione: string
   staff: Operatore[]
   consulente: string | null
@@ -13,6 +13,8 @@ export function FiltroConsulente({ azione, staff, consulente, tieni = {}, q, cla
   q?: string | null
   // Classe in piu' sul modulo (filtri-largo: sul telefono ogni campo sta su una riga).
   classe?: string
+  // Aggiunge «Nessun consulente»: le righe che nessuno segue.
+  conNessuno?: boolean
   children?: React.ReactNode
 }) {
   return (
@@ -23,6 +25,7 @@ export function FiltroConsulente({ azione, staff, consulente, tieni = {}, q, cla
       )}
       <select name="consulente" defaultValue={consulente ?? ''} aria-label="Consulente">
         <option value="">Tutti i consulenti</option>
+        {conNessuno && <option value={NESSUN_CONSULENTE}>Nessun consulente</option>}
         {staff.map((o) => <option key={o.id} value={o.id}>{o.nome} {o.cognome ?? ''}</option>)}
       </select>
       {children}
@@ -31,6 +34,10 @@ export function FiltroConsulente({ azione, staff, consulente, tieni = {}, q, cla
   )
 }
 
-// Il consulente dai parametri della pagina, solo se e' uno degli operatori.
-export const consulenteScelto = (staff: Operatore[], id: string | undefined) =>
-  staff.some((o) => o.id === id) ? id! : null
+// «Nessun consulente»: un uuid a zero, che non e' di nessun operatore.
+export const NESSUN_CONSULENTE = '00000000-0000-0000-0000-000000000000'
+
+// Il consulente dai parametri della pagina, solo se e' uno degli operatori
+// (o «Nessun consulente», dove la pagina lo prevede).
+export const consulenteScelto = (staff: Operatore[], id: string | undefined, conNessuno = false) =>
+  staff.some((o) => o.id === id) || (conNessuno && id === NESSUN_CONSULENTE) ? id! : null
