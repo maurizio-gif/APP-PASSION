@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-10-30',
+    titolo: 'In Disdette si vedono le note dei task',
+    testo:
+      'Nella colonna Nota, in cima, compaiono le note dei task della disdetta, dalla più recente: come in Opportunità da gestire. Prima per leggerle bisognava aprire la scheda della persona.',
+    dove: 'Disdette',
+  },
+  {
+    data: '2026-10-30',
     titolo: 'Nelle Prove c’è il filtro «Nessun consulente»',
     testo:
       'Nel filtro dei consulenti, in tutte le schede delle Prove, c’è «Nessun consulente»: mostra le prove che nessuno sta seguendo.',

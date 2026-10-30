@@ -347,6 +347,8 @@ export type Disdetta = {
   gestito_il: string | null
   creato_il: string
   gestito_da: string | null
+  // Le note dei task di questa disdetta, dalla piu' recente (20261030a).
+  note_task?: string | null
 }
 
 export type Task = {
