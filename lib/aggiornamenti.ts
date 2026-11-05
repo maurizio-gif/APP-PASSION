@@ -16,6 +16,13 @@ export type Aggiornamento = {
 
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
+    data: '2026-11-05',
+    titolo: 'Nome, email e telefono sono quelli di Perfect Gym',
+    testo:
+      'Se una persona è già socia, il CRM mostra il suo nome, cognome, email e telefono come stanno su Perfect Gym: se li correggi lì, li vedi corretti anche qui. Prima restavano quelli scritti la prima volta. Anche la ricerca trova la persona sia col dato nuovo sia con quello vecchio.',
+    dove: 'Scheda della persona, Opportunità, Prove, Task, Ticket, Report giornaliero, Contratti senza consulente, Cerca',
+  },
+  {
     data: '2026-10-30',
     titolo: 'La scheda della persona si apre con tutto aperto',
     testo:
