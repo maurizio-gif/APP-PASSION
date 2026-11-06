@@ -16,13 +16,6 @@ export type Aggiornamento = {
 
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
-    data: '2026-11-06',
-    titolo: 'Unendo due ticket non si perde più niente',
-    testo:
-      'Quando un ticket viene unito a un altro, nel ticket che resta si vedono anche il testo scritto e le foto del ticket unito. Prima arrivava solo una riga con il numero e il titolo.',
-    dove: 'Ticket',
-  },
-  {
     data: '2026-11-05',
     titolo: 'Nome, email e telefono sono quelli di Perfect Gym',
     testo:
