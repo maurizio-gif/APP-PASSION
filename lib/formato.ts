@@ -180,6 +180,8 @@ export const EVENTO_TICKET: Record<string, string> = {
   aperto: 'ha aperto il ticket', aperto_inviato: 'ha aperto il ticket e l’ha mandato a R2D',
   inviato: 'l’ha mandato a R2D', risolto_desk: 'l’ha risolto al desk', unito: 'l’ha unito a un altro ticket',
   unito_qui: 'ha unito qui un altro ticket', riaperto: 'l’ha riaperto', preso: 'l’ha preso in carico',
+  richiuso: 'l’ha richiuso: resta la soluzione di prima',
+  soluzione_precedente: 'la soluzione di prima, ora sostituita da una nuova',
   in_attesa: 'chiede informazioni a Passion', risposta_passion: 'ha risposto: torna in lavorazione',
   risolto: 'l’ha risolto', modifica_scritta: 'ha scritto la modifica', modifica_corretta: 'ha corretto la modifica',
   confermata: 'ha registrato la conferma', rilasciata: 'l’ha rilasciata', annullata: 'l’ha annullata',

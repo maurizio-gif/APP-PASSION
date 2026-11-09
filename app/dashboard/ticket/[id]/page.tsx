@@ -14,8 +14,18 @@ import { ModuloModifica } from '@/components/ModuloModifica'
 import { BollinoStato, BollinoTipo, NumeroTicket } from '@/components/Ticket'
 import {
   annullaModifica, aggiornaModifica, chiediTicket, confermaModifica, inviaTicket, messaggioTicket, prendiTicket,
-  riapriTicket, rilasciaModifica, risolviTicket, risolviTicketDesk, unisciTicket,
+  riapriTicket, richiudiTicket, rilasciaModifica, risolviTicket, risolviTicketDesk, unisciTicket,
 } from '../../azioni'
+
+// Un ticket aperto che era gia' risolto e poi e' stato riaperto: quando, da chi, perche'.
+// La soluzione di prima resta scritta nel ticket.
+function riapertura(t: Ticket) {
+  if (!t.soluzione || !['inviato', 'in_lavorazione', 'in_attesa'].includes(t.stato)) return null
+  const ri = [...t.messaggi].reverse().find((m) => m.evento === 'riaperto')
+  if (!ri) return null
+  const ris = [...t.messaggi].reverse().find((m) => (m.evento === 'risolto' || m.evento === 'risolto_desk') && m.creato_il < ri.creato_il)
+  return { chi: ri.autore, il: ri.creato_il, motivo: ri.testo, risoltoIl: ris?.creato_il ?? null }
+}
 
 // La natura proposta a chi risolve al desk, secondo il tipo.
 const NATURA_DESK: Record<string, string> = {
@@ -61,6 +71,17 @@ export default async function PaginaTicket({ params, searchParams }: { params: {
       {t.doppione_di && (
         <p className="avviso">Unito al <Link href={`/dashboard/ticket/${t.doppione_di}`}>#{t.doppione_di}</Link>: si segue lì.</p>
       )}
+      {(() => {
+        const r = riapertura(t)
+        if (!r) return null
+        return (
+          <p className="avviso riaperto-avviso">
+            <strong>Questo ticket era già risolto{r.risoltoIl ? ` il ${formatoData(r.risoltoIl)}` : ''}.</strong>{' '}
+            È tornato qui perché {r.chi ?? 'qualcuno'} l'ha riaperto il {formatoData(r.il)}{r.motivo ? <>: «{r.motivo}»</> : ''}.{' '}
+            Se la soluzione di prima vale ancora, usa «Richiudi, la soluzione resta quella».
+          </p>
+        )
+      })()}
       {t.stato === 'in_attesa' && (
         <p className="avviso">R2D aspetta una risposta di Passion: scrivila nel thread qui sotto e il ticket torna in lavorazione.</p>
       )}
@@ -262,20 +283,31 @@ function Azioni({ t, io, qui }: { t: Ticket; io: Io; qui: string }) {
       )
     }
     if (t.stato !== 'da_verificare') {
+      const riaperto = riapertura(t) !== null
+      if (riaperto) {
+        // Era gia' risolto: se la soluzione vale ancora basta richiuderlo.
+        blocchi.push(
+          <form key="richiudi" action={richiudiTicket} className="modulo">
+            <Nascosti t={t} qui={qui} />
+            <div className="modulo-titolo">Era già risolto</div>
+            <BottoneInvio testo="Richiudi, la soluzione resta quella" inCorso="Salvataggio…" />
+          </form>,
+        )
+      }
       blocchi.push(
         <form key="risolvi" action={risolviTicket} className="modulo">
           <Nascosti t={t} qui={qui} />
-          <div className="modulo-titolo">Risolvi il ticket</div>
-          <SceltaNatura />
+          <div className="modulo-titolo">{riaperto ? 'Oppure scrivi una nuova soluzione' : 'Risolvi il ticket'}</div>
+          <SceltaNatura predefinita={t.natura ?? undefined} />
           <div className="campo">
             <label htmlFor="causa">Causa</label>
-            <textarea id="causa" name="causa" rows={2} required placeholder="Perché succedeva" />
+            <textarea id="causa" name="causa" rows={2} required defaultValue={t.causa ?? ''} placeholder="Perché succedeva" />
           </div>
           <div className="campo">
             <label htmlFor="soluzione">Soluzione</label>
-            <textarea id="soluzione" name="soluzione" rows={3} required placeholder="Cosa si è fatto, e cosa deve fare il desk la prossima volta" />
+            <textarea id="soluzione" name="soluzione" rows={3} required defaultValue={riaperto ? t.soluzione ?? '' : ''} placeholder="Cosa si è fatto, e cosa deve fare il desk la prossima volta" />
           </div>
-          <BottoneInvio testo="Risolto" inCorso="Salvataggio…" />
+          <BottoneInvio testo={riaperto ? 'Salva la nuova soluzione' : 'Risolto'} inCorso="Salvataggio…" classe={riaperto ? 'secondario' : undefined} />
         </form>,
       )
     }
