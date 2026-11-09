@@ -12029,3 +12029,20 @@ a.pf-tessera.pf-link:focus-visible { outline: 2px solid var(--rosso); outline-of
 .fase-titolo .fase-titolo-azione { margin-left: auto; display: inline-flex; align-items: center; text-transform: none; letter-spacing: 0; }
 .fase-titolo .fase-titolo-azione .azioni-scheda { margin: 0; }
 .fase-titolo .fase-titolo-azione .bottone { min-height: 32px; padding: 5px 14px; font-size: 0.82rem; }
+
+/* --- Ticket riaperti: erano gia' risolti ------------------------------------ */
+
+.bollino.riaperto {
+  background: transparent;
+  color: var(--serie);
+  box-shadow: inset 0 0 0 1px currentColor;
+}
+.riaperto-nota {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+.riaperto-avviso {
+  border-left: 3px solid var(--serie);
+}

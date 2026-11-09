@@ -615,6 +615,11 @@ export type TicketRiga = {
   messaggi: number
   allegati: number
   ultimo_lato: 'passion' | 'r2d' | null
+  // Solo per i ticket aperti che erano gia' risolti (riaperti con «Riapri»).
+  riaperto_il: string | null
+  riaperto_da: string | null
+  riaperto_motivo: string | null
+  risolto_il: string | null
 }
 
 // La situazione del socio al momento dell'apertura (crm.ticket_contesto()).

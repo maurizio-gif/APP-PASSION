@@ -80,9 +80,28 @@ export default async function Ticket({ searchParams }: { searchParams: { vista?:
 
 async function Elenco({ vista, q }: { vista: string; q: string | null }) {
   const ticket = filtraTicket(await crm.ticketElenco(vista), q)
+  // I ticket gia' risolti e poi riaperti stanno in una parte a parte: non sono nuovi.
+  const riaperti = ticket.filter((t) => t.riaperto_il)
+  const altri = ticket.filter((t) => !t.riaperto_il)
   return (
     <div className="scheda">
-      {ticket.length === 0 ? <Vuoto>{q ? `Nessun ticket trovato per «${q}» in questa scheda.` : VUOTI[vista] ?? 'Nessun ticket.'}</Vuoto> : <TabellaTicket ticket={ticket} />}
+      {ticket.length === 0 ? (
+        <Vuoto>{q ? `Nessun ticket trovato per «${q}» in questa scheda.` : VUOTI[vista] ?? 'Nessun ticket.'}</Vuoto>
+      ) : riaperti.length === 0 ? (
+        <TabellaTicket ticket={ticket} />
+      ) : (
+        <>
+          <h3 className="titoletto">Riaperti, già risolti <span className="conta-titolo">{riaperti.length}</span></h3>
+          <p className="piccolo attenuato">Erano già risolti: sono tornati qui perché qualcuno li ha riaperti. Se la soluzione vale ancora, richiudili senza scriverne un'altra.</p>
+          <TabellaTicket ticket={riaperti} />
+          {altri.length > 0 && (
+            <>
+              <h3 className="titoletto">Da lavorare <span className="conta-titolo">{altri.length}</span></h3>
+              <TabellaTicket ticket={altri} />
+            </>
+          )}
+        </>
+      )}
     </div>
   )
 }

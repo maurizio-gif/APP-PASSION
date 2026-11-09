@@ -46,9 +46,17 @@ export function TabellaTicket({ ticket, socio = true }: { ticket: TicketRiga[]; 
                   </Link>
                   <div className="ticket-bollini">
                     <BollinoTipo tipo={t.tipo} /> <BollinoStato stato={t.stato} />
+                    {t.riaperto_il && <span className="bollino riaperto">Riaperto</span>}
                     {t.bloccante && <span className="bollino rosso blocca">Blocca il lavoro</span>}
                     {t.doppione_di && <span className="muto"> nel #{t.doppione_di}</span>}
                   </div>
+                  {t.riaperto_il && (
+                    <span className="muto riaperto-nota">
+                      {t.risolto_il ? `Era già risolto il ${formatoData(t.risolto_il)}. ` : 'Era già risolto. '}
+                      Riaperto{t.riaperto_da ? ` da ${t.riaperto_da}` : ''} il {formatoData(t.riaperto_il)}
+                      {t.riaperto_motivo ? `: «${t.riaperto_motivo.length > 110 ? `${t.riaperto_motivo.slice(0, 110)}…` : t.riaperto_motivo}»` : ''}
+                    </span>
+                  )}
                 </div>
               </td>
               {socio && (

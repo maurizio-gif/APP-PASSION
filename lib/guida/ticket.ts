@@ -47,6 +47,7 @@ Tutto passa dal **thread** del ticket: i messaggi di Passion e di R2D, e ogni pa
 - Quando R2D ha bisogno di un'informazione, il ticket va in **Aspetta Passion**. Lo trovi nella vista **«Per Passion»** della sezione Ticket. Rispondi nel thread: alla prima risposta torna in lavorazione.
 - R2D chiude il ticket con **di che cosa si trattava, la causa e la soluzione**: le trovi in cima alla pagina del ticket.
 - Se il problema si ripresenta, il supporto (o R2D) lo **riapre** con il motivo. Non aprirne uno nuovo.
+- Un ticket riaperto resta riconoscibile: ha l’etichetta **«Riaperto»**, sta nella parte **«Riaperti, già risolti»** della lista e dice quando era stato risolto e perché è stato riaperto. R2D lo richiude con **«Richiudi, la soluzione resta quella»**, oppure scrive una nuova soluzione: quella di prima resta nel thread.
 
 ## Le viste
 - **Da verificare**: le segnalazioni che il supporto deve ancora guardare;

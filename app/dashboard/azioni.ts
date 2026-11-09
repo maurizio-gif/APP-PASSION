@@ -293,6 +293,11 @@ export async function riapriTicket(f: FormData) {
   await esegui(f, () => rpc('crm_ticket_riapri', { p_id: numero(f, 'ticket'), p_motivo: testo(f, 'motivo') }))
 }
 
+// Un ticket riaperto si richiude lasciando causa e soluzione di prima.
+export async function richiudiTicket(f: FormData) {
+  await esegui(f, () => rpc('crm_ticket_richiudi', { p_id: numero(f, 'ticket') }))
+}
+
 export async function prendiTicket(f: FormData) {
   await esegui(f, () => rpc('crm_ticket_prendi', { p_id: numero(f, 'ticket') }))
 }
