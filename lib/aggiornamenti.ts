@@ -19,8 +19,8 @@ export const AGGIORNAMENTI: Aggiornamento[] = [
     data: '2026-11-10',
     titolo: 'Azioni istruttore: la lista «Recupero Formula 8»',
     testo:
-      'Dentro Azioni istruttore c’è un secondo contenitore, a parte da «Nuovi iscritti»: sono gli iscritti di prima che hanno un abbonamento vero attivo e non hanno mai prenotato una lezione Formula 8, da riportare a provare. Sono migliaia, create tutte insieme: si lavorano un po’ alla volta, come le libere da prendere (prendi in carico, contatta, chiudi con l’esito). Si cerca per nome, telefono o email. Nelle Impostazioni automazioni se ne possono creare altre quando le regole cambiano.',
-    dove: 'Azioni istruttore → Recupero Formula 8; Impostazioni automazioni',
+      'Dentro Azioni istruttore c’è un secondo contenitore, a parte da «Nuovi iscritti»: è una lista fissa degli iscritti di prima che hanno un abbonamento vero in corso (non Guest Pass, prove, Wellhub e simili, né certificati) e non hanno mai prenotato una lezione Formula 8, da riportare a provare. Si lavora un po’ alla volta, come le libere da prendere: prendi in carico, contatta, chiudi con l’esito. Si cerca per nome, telefono o email. La lista non cresce: chi si iscrive da adesso in poi arriva in «Nuovi iscritti».',
+    dove: 'Azioni istruttore → Recupero Formula 8',
   },
   {
     data: '2026-11-10',
@@ -40,7 +40,7 @@ export const AGGIORNAMENTI: Aggiornamento[] = [
     data: '2026-11-10',
     titolo: 'Nuova sezione «Azioni istruttore»: il benvenuto ai nuovi iscritti',
     testo:
-      'Dopo 7 giorni dall’iscrizione, il CRM crea un’azione per i nuovi iscritti che hanno già un abbonamento vero attivo e non hanno ancora prenotato nessuna lezione Formula 8: l’istruttore li contatta per farli provare. Pass, prove, Guest Pass e Wellhub e simili non contano come abbonamento. Le azioni nascono libere: l’istruttore ne sceglie una con «Prendi in carico», contatta la persona e la chiude con come è andata (ha prenotato, da richiamare, non risponde, non interessata). Sul telefono ogni persona diventa una scheda. Sta nel menu «Istruttori», a parte dal lavoro dei consulenti: chi lavora solo da istruttore apre direttamente le sue azioni e non vede la Dashboard consulente.',
+      'Dopo 7 giorni dall’iscrizione, il CRM crea un’azione per i nuovi iscritti che hanno già un abbonamento vero attivo e non hanno ancora prenotato nessuna lezione Formula 8: l’istruttore li contatta per farli provare. Pass, prove, Guest Pass e Wellhub e simili non contano come abbonamento, e deve essere in corso. Le azioni nascono libere: l’istruttore ne sceglie una con «Prendi in carico», contatta la persona e la chiude con come è andata (ha prenotato, da richiamare, non risponde, non interessata). Sul telefono ogni persona diventa una scheda. Sta nel menu «Istruttori», a parte dal lavoro dei consulenti: chi lavora solo da istruttore apre direttamente le sue azioni e non vede la Dashboard consulente.',
     dove: 'Menu Istruttori → Azioni istruttore (per chi è nel cluster «Istruttori · nuovi iscritti» e per gli admin)',
   },
   {

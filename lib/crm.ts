@@ -917,7 +917,6 @@ export const crm = {
   utenti: () => rpc<Utente[]>('crm_utenti'),
   azioniIstruttori: (chi: string, quando: string, lista: 'benvenuto' | 'recupero' = 'benvenuto', testo: string | null = null) =>
     rpc<AzioneIstruttore[]>('crm_azioni_istruttori', { p_chi: chi, p_quando: quando, p_lista: lista, p_testo: testo }),
-  anteprimaRecupero: () => rpc<{ da_creare: number; create: number; aperte: number }>('crm_azioni_recupero_anteprima'),
   numeriAzioniIstruttori: () => rpc<NumeriAzioniIstruttori>('crm_azioni_istruttori_numeri'),
   automazioni: () => rpc<Automazione[]>('crm_automazioni'),
   opzioniAutomazioni: () => rpc<OpzioniAutomazioni>('crm_automazioni_opzioni'),

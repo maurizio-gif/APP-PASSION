@@ -3,7 +3,7 @@ import type { Automazione, OpzioniAutomazioni } from '@/lib/crm'
 import { formatoDataOra } from '@/lib/formato'
 import { Avviso } from '@/components/Ui'
 import { BottoneInvio } from '@/components/BottoneInvio'
-import { creaAzioniRecupero, salvaAutomazione } from '../azioni'
+import { salvaAutomazione } from '../azioni'
 
 const ABBONAMENTO = [
   { chiave: 'attivo', testo: 'Ha un abbonamento vero attivo adesso' },
@@ -18,11 +18,9 @@ const LEZIONI = [
 ]
 
 type Stima = { persone_30_giorni: number; al_giorno: number } | null
-type StimaRecupero = { da_creare: number; create: number; aperte: number } | null
 
-function ModuloAutomazione({ a, opzioni, stima, recupero }: { a: Automazione; opzioni: OpzioniAutomazioni; stima: Stima; recupero: StimaRecupero }) {
+function ModuloAutomazione({ a, opzioni, stima }: { a: Automazione; opzioni: OpzioniAutomazioni; stima: Stima }) {
   const p = a.parametri
-  // Il benvenuto nasce N giorni dopo l'iscrizione; il recupero guarda tutti gli iscritti di prima.
   const eBenvenuto = p.giorni != null
   return (
     <section className="scheda">
@@ -52,7 +50,7 @@ function ModuloAutomazione({ a, opzioni, stima, recupero }: { a: Automazione; op
           </div>
           <p className="piccolo attenuato">
             L’iscrizione è la data in cui la persona è stata creata su Perfect Gym. «Guarda gli iscritti dal» evita che arrivi tutto lo storico: contano solo gli iscritti da quel giorno in poi.
-            Chi era iscritto prima di quel giorno si recupera con l’automazione di recupero.
+            Chi era già iscritto prima di quel giorno sta nella lista fissa «Recupero Formula 8».
           </p>
         </div>
         )}
@@ -117,16 +115,6 @@ function ModuloAutomazione({ a, opzioni, stima, recupero }: { a: Automazione; op
           <> Con le regole salvate sarebbero circa <strong>{String(stima.al_giorno).replace('.', ',')} al giorno</strong> ({stima.persone_30_giorni} persone fra gli iscritti degli ultimi 30 giorni, guardando la situazione di oggi).</>
         )}
       </p>
-      {!eBenvenuto && recupero && (
-        <form action={creaAzioniRecupero} className="modulo">
-          <p className="piccolo">
-            Persone che rispettano le regole e non hanno ancora un’azione: <strong>{recupero.da_creare}</strong>.
-            Le azioni si creano {recupero.da_creare > 300 ? 'a gruppi di 300: premi il pulsante finché non ne restano.' : 'tutte insieme.'}
-            Nascono tra le libere da prendere, nel contenitore «Recupero Formula 8».
-          </p>
-          <BottoneInvio testo={recupero.da_creare === 0 ? 'Niente da creare' : `Crea ${Math.min(300, recupero.da_creare)} azioni`} inCorso="Creo…" />
-        </form>
-      )}
     </section>
   )
 }
@@ -138,7 +126,6 @@ export default async function Automazioni({ searchParams }: { searchParams: { er
   await richiediSezione('automazioni')
   const [automazioni, opzioni] = await Promise.all([crm.automazioni(), crm.opzioniAutomazioni()])
   const stime = await Promise.all(automazioni.map((a) => (a.parametri.giorni != null ? crm.anteprimaAutomazione(a.chiave, a.parametri).catch(() => null) : null)))
-  const recupero = automazioni.some((a) => a.parametri.giorni == null) ? await crm.anteprimaRecupero().catch(() => null) : null
 
   return (
     <>
@@ -155,7 +142,7 @@ export default async function Automazioni({ searchParams }: { searchParams: { er
       </div>
       <Avviso errore={searchParams.errore} ok={searchParams.ok} />
       {automazioni.map((a, i) => (
-        <ModuloAutomazione key={a.chiave} a={a} opzioni={opzioni} stima={stime[i]} recupero={recupero} />
+        <ModuloAutomazione key={a.chiave} a={a} opzioni={opzioni} stima={stime[i]} />
       ))}
     </>
   )

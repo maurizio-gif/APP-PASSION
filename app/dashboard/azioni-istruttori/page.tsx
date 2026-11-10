@@ -20,8 +20,9 @@ const MOSTRATE = 300
 // Le azioni degli istruttori del cluster «Istruttori · nuovi iscritti» (20261110a). Due contenitori separati,
 // con la stessa logica (libere da prendere, le mie, di tutti; «Prendi in carico»; gli stessi esiti):
 //   - Nuovi iscritti: le crea da sole un'automazione, 7 giorni dopo l'iscrizione (regole in «Impostazioni automazioni»);
-//   - Recupero Formula 8 (20261110c): gli iscritti di prima con un abbonamento attivo che non hanno mai prenotato
-//     Formula 8, creati in blocco, da smaltire un po' alla volta.
+//   - Recupero Formula 8 (20261110c/d): lista FISSA, creata una volta, degli iscritti di prima con un abbonamento
+//     attivo (contratto Current) che non hanno mai prenotato Formula 8, da smaltire un po' alla volta. I nuovi
+//     iscritti non ci arrivano: vanno in «Nuovi iscritti».
 export default async function AzioniIstruttori({ searchParams }: { searchParams: { lista?: string; chi?: string; quando?: string; q?: string; errore?: string } }) {
   const io = await richiediSezione('azioni_istruttori')
   const lista = searchParams.lista === 'recupero' ? 'recupero' : 'benvenuto'
@@ -44,7 +45,7 @@ export default async function AzioniIstruttori({ searchParams }: { searchParams:
             <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
               <span className="aiuto-punto" aria-hidden="true">?</span>
               <span className="aiuto-testo">
-                Le persone da contattare per portarle a provare Formula 8. «Nuovi iscritti» nasce da solo, qualche giorno dopo l’iscrizione. «Recupero Formula 8» è la lista di chi è già abbonato da prima e non ha mai provato:
+                Le persone da contattare per portarle a provare Formula 8. «Nuovi iscritti» nasce da solo, qualche giorno dopo l’iscrizione. «Recupero Formula 8» è la lista fissa di chi era già abbonato e non ha mai provato:
                 si smaltisce un po’ alla volta. In entrambe: prendi in carico quelle che vuoi seguire, poi chiudile dicendo com’è andata.
               </span>
             </span>
