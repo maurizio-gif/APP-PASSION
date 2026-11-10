@@ -822,6 +822,15 @@ export type NumeriAzioniIstruttori = {
   recupero_fatte_totale: number
 }
 
+// L'efficacia delle azioni (20261111a): per ogni riga, quante persone hanno prenotato Formula 8, attivato
+// l'add on o l'abbonamento Formula 8 dopo l'azione.
+export type RigaEfficacia = { azioni: number; prenotata: number; addon: number; abbonamento: number; attivato: number }
+export type EfficaciaAzioni = {
+  generale: (RigaEfficacia & { tipo: 'benvenuto' | 'recupero_formula8'; lavorata: boolean })[]
+  per_esito: (RigaEfficacia & { tipo: 'benvenuto' | 'recupero_formula8'; esito: EsitoAzioneIstruttore | null })[]
+  per_istruttore: (RigaEfficacia & { staff_id: string | null; nome: string | null })[]
+}
+
 export type ParametriAutomazione = {
   // Solo il benvenuto: il recupero guarda tutti gli iscritti di prima.
   giorni?: number
@@ -920,6 +929,7 @@ export const crm = {
   numeriAzioniIstruttori: () => rpc<NumeriAzioniIstruttori>('crm_azioni_istruttori_numeri'),
   automazioni: () => rpc<Automazione[]>('crm_automazioni'),
   opzioniAutomazioni: () => rpc<OpzioniAutomazioni>('crm_automazioni_opzioni'),
+  efficaciaAzioni: (giorni: number) => rpc<EfficaciaAzioni>('crm_efficacia_azioni', { p_giorni: giorni }),
   anteprimaAutomazione: (chiave: string, parametri: ParametriAutomazione) =>
     rpc<{ persone_30_giorni: number; al_giorno: number }>('crm_automazione_anteprima', { p_chiave: chiave, p_parametri: parametri }),
   // Gli utenti con la sola sezione Appello che hanno lezioni future in calendario (20261027j).

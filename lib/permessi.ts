@@ -27,6 +27,8 @@ export const SEZIONI = [
   { chiave: 'azioni_istruttori', href: '/dashboard/azioni-istruttori', testo: 'Azioni istruttore' },
   // Le regole delle automazioni (quanti giorni, quale categoria, quali abbonamenti...): gli admin, e chi la riceve.
   { chiave: 'automazioni', href: '/dashboard/automazioni', testo: 'Impostazioni automazioni' },
+  // Quante persone, dopo un'azione degli istruttori, attivano Formula 8 (20261111a): gli admin, e chi la riceve.
+  { chiave: 'efficacia_azioni', href: '/dashboard/efficacia-azioni', testo: 'Efficacia azioni' },
 ] as const
 
 export type Sezione = (typeof SEZIONI)[number]['chiave']
