@@ -21,7 +21,7 @@ const MOSTRATE = 300
 // con la stessa logica (libere da prendere, le mie, di tutti; «Prendi in carico»; gli stessi esiti):
 //   - Nuovi iscritti: le crea da sole un'automazione, 7 giorni dopo l'iscrizione (regole in «Impostazioni automazioni»);
 //   - Recupero Formula 8 (20261110c/d): lista FISSA, creata una volta, degli iscritti di prima con un abbonamento
-//     attivo (contratto Current) che non hanno mai prenotato Formula 8, da smaltire un po' alla volta. I nuovi
+//     attivo (contratto Current o in pausa) che non hanno mai prenotato Formula 8, da smaltire un po' alla volta. I nuovi
 //     iscritti non ci arrivano: vanno in «Nuovi iscritti».
 export default async function AzioniIstruttori({ searchParams }: { searchParams: { lista?: string; chi?: string; quando?: string; q?: string; errore?: string } }) {
   const io = await richiediSezione('azioni_istruttori')

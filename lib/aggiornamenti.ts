@@ -26,7 +26,7 @@ export const AGGIORNAMENTI: Aggiornamento[] = [
     data: '2026-11-10',
     titolo: 'Azioni istruttore: la lista «Recupero Formula 8»',
     testo:
-      'Dentro Azioni istruttore c’è un secondo contenitore, a parte da «Nuovi iscritti»: è una lista fissa degli iscritti di prima che hanno un abbonamento vero in corso (non Guest Pass, prove, Wellhub e simili, né certificati) e non hanno mai prenotato una lezione Formula 8, da riportare a provare. Si lavora un po’ alla volta, come le libere da prendere: prendi in carico, contatta, chiudi con l’esito. Si cerca per nome, telefono o email. La lista non cresce: chi si iscrive da adesso in poi arriva in «Nuovi iscritti».',
+      'Dentro Azioni istruttore c’è un secondo contenitore, a parte da «Nuovi iscritti»: è una lista fissa degli iscritti di prima che hanno un abbonamento vero in corso, anche se in pausa o con la disdetta già data ma ancora valido (non Guest Pass, prove, Wellhub e simili, né certificati) e non hanno mai prenotato una lezione Formula 8, da riportare a provare. Si lavora un po’ alla volta, come le libere da prendere: prendi in carico, contatta, chiudi con l’esito. Si cerca per nome, telefono o email. La lista non cresce: chi si iscrive da adesso in poi arriva in «Nuovi iscritti».',
     dove: 'Azioni istruttore → Recupero Formula 8',
   },
   {
