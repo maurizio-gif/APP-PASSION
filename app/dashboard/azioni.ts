@@ -396,6 +396,7 @@ export async function aggiornaUtente(f: FormData) {
       p_sezioni: lista(f, 'sezioni'),
       p_autorizzazioni: lista(f, 'autorizzazioni'),
       p_assegnabile: f.get('assegnabile') === 'on',
+      p_cluster: lista(f, 'cluster'),
     }),
   )
 }
@@ -472,4 +473,41 @@ export async function rimuoviUtente(f: FormData) {
       esito = await rpc<string>('crm_utente_rimuovi', { p_id: testo(f, 'utente'), p_passa_a: testo(f, 'passa_a') })
     },
   )
+}
+
+// --- Azioni istruttore e automazioni (20261110a) ------------------------------
+
+export async function prendiAzioneIstruttore(f: FormData) {
+  await esegui(f, () => rpc('crm_azione_istruttore_prendi', { p_id: testo(f, 'azione') }))
+}
+
+export async function lasciaAzioneIstruttore(f: FormData) {
+  await esegui(f, () => rpc('crm_azione_istruttore_lascia', { p_id: testo(f, 'azione') }))
+}
+
+export async function completaAzioneIstruttore(f: FormData) {
+  await esegui(f, () => rpc('crm_azione_istruttore_completa', { p_id: testo(f, 'azione'), p_esito: testo(f, 'esito'), p_nota: testo(f, 'nota') }))
+}
+
+// Le regole di un'automazione: il database controlla ogni valore e dice cosa non va.
+export async function salvaAutomazione(f: FormData) {
+  const categoria = testo(f, 'categoria_lezione')
+  try {
+    await rpc('crm_automazione_salva', {
+      p_chiave: testo(f, 'automazione'),
+      p_attiva: f.get('attiva') === 'on',
+      p_parametri: {
+        giorni: Number(testo(f, 'giorni')),
+        iscritti_dal: testo(f, 'iscritti_dal'),
+        abbonamento: testo(f, 'abbonamento'),
+        lezioni: testo(f, 'lezioni'),
+        categoria_lezione: categoria ? Number(categoria) : null,
+        piani_esclusi: lista(f, 'piani_esclusi').map(Number),
+      },
+    })
+  } catch (e) {
+    redirect(`/dashboard/automazioni?errore=${encodeURIComponent(e instanceof Error ? e.message : 'Operazione non riuscita')}`)
+  }
+  revalidatePath('/dashboard', 'layout')
+  redirect(`/dashboard/automazioni?ok=${encodeURIComponent('Impostazioni salvate')}`)
 }

@@ -23,6 +23,8 @@ export const ICONE: Record<string, string> = {
   '/dashboard/utenti': 'M9 11a3.5 3.5 0 100-7 3.5 3.5 0 000 7zM2 20c0-3 3-5 7-5s7 2 7 5M17 4.5a3.5 3.5 0 010 6.5M19 15c2 .6 3 2.2 3 4',
   '/dashboard/report-giornaliero': 'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4M9 15l2 2 4-4',
   '/dashboard/appello': 'M9 4h6M9 4a2 2 0 00-2 2v14h10V6a2 2 0 00-2-2M9.5 11l1.5 1.5 3-3M9.5 16h5',
+  '/dashboard/azioni-istruttori': 'M12 21a9 9 0 100-18 9 9 0 000 18zM12 7v5l3.5 2M9 3.5L7.5 6M15 3.5L16.5 6',
+  '/dashboard/automazioni': 'M4 7h9M17 7h3M4 17h3M11 17h9M15 5v4M9 15v4',
   '/dashboard/appello-tutte': 'M4 6h3M4 12h3M4 18h3M10 6h10M10 12h10M10 18h10',
   '/dashboard/riunioni': 'M4 5h16v11H9l-5 4zM8 9h8M8 12h5',
   '/dashboard/guida': 'M4 5.5C6 4 9 4 12 6c3-2 6-2 8-.5V19c-2-1.5-5-1.5-8 .5-3-2-6-2-8-.5zM12 6v13.5',
@@ -45,8 +47,8 @@ const GRUPPI: { titolo?: string; voci: string[] }[] = [
   { voci: ['/dashboard'] },
   { titolo: 'Clienti', voci: ['/dashboard/lead', '/dashboard/prove', '/dashboard/senza-consulente', '/dashboard/contratti', '/dashboard/rinnovi', '/dashboard/disdette', '/dashboard/debitori', '/dashboard/task', '/dashboard/cerca'] },
   { titolo: 'Analisi', voci: ['/dashboard/abbonamenti', '/dashboard/marketing', '/dashboard/report-giornaliero', '/dashboard/riunioni'] },
-  { titolo: 'Istruttori', voci: ['/dashboard/appello', '/dashboard/appello-tutte'] },
-  { titolo: 'Team', voci: ['/dashboard/curriculum', '/dashboard/utenti'] },
+  { titolo: 'Istruttori', voci: ['/dashboard/azioni-istruttori', '/dashboard/appello', '/dashboard/appello-tutte'] },
+  { titolo: 'Team', voci: ['/dashboard/curriculum', '/dashboard/utenti', '/dashboard/automazioni'] },
   { titolo: 'Assistenza', voci: ['/dashboard/ticket', '/dashboard/guida', '/dashboard/aggiornamenti'] },
 ]
 

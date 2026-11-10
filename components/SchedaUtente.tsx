@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import type { Io, Utente } from '@/lib/crm'
 import { formatoDataOra } from '@/lib/formato'
-import { AUTORIZZAZIONI, puoToccareRuolo, RUOLI, ruoloAdmin, SEZIONI_ATTIVE, SEZIONI_PER_PERSONA, SOSPESE, testoRuolo } from '@/lib/permessi'
+import { AUTORIZZAZIONI, CLUSTER, puoToccareRuolo, RUOLI, ruoloAdmin, SEZIONI_ATTIVE, SEZIONI_DA_CLUSTER, SEZIONI_PER_PERSONA, SOSPESE, testoRuolo } from '@/lib/permessi'
 import { BottoneInvio } from '@/components/BottoneInvio'
 import { aggiornaUtente, invitaUtente, rimuoviUtente } from '@/app/dashboard/azioni'
 
@@ -45,6 +45,7 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
           <div className="utente-bollini">
             <span className={`bollino ${u.ruolo === 'consulente' ? 'grigio' : 'rosso'}`}>{testoRuolo(u.ruolo)}</span>
             {ioStesso && <span className="bollino grigio">Sei tu</span>}
+            {(u.cluster?.length ?? 0) > 0 && <span className="bollino giallo" title={CLUSTER.filter((c) => u.cluster.includes(c.chiave)).map((c) => c.testo).join(', ')}>Cluster</span>}
             {u.accesso ? (
               <span className="bollino verde" title={u.ultimo_accesso ? `ultimo accesso ${formatoDataOra(u.ultimo_accesso)}` : undefined}>
                 ✓ {u.ultimo_accesso ? `entrato il ${formatoDataOra(u.ultimo_accesso).slice(0, 10)}` : 'invitato, non ancora entrato'}
@@ -99,7 +100,7 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
               {admin && <span className="attenuato"> · un admin le vede tutte{nomiPerPersona && ` (tranne ${nomiPerPersona}, che si dà a una persona alla volta)`}: per sceglierle, ruolo Consulente</span>}
             </div>
             <div className="spunte">
-              {SEZIONI_ATTIVE.map((s) => (
+              {SEZIONI_ATTIVE.filter((s) => !SEZIONI_DA_CLUSTER.includes(s.chiave)).map((s) => (
                 <label key={s.chiave} className="chip">
                   {admin && !perPersona(s.chiave) ? (
                     <input type="checkbox" checked readOnly disabled />
@@ -136,6 +137,22 @@ export function SchedaUtente({ u, io, operatori }: { u: Utente; io: Io; operator
                   </label>
                 )
               })}
+            </div>
+          </div>
+
+          <div className="utente-gruppo">
+            <div className="utente-etichetta">
+              Cluster <span className="attenuato">· gruppi di lavoro che ricevono azioni dedicate, create da sole dalle automazioni</span>
+            </div>
+            <div className="autorizzazioni">
+              {CLUSTER.map((c) => (
+                <label key={c.chiave} className="spunta">
+                  <input type="checkbox" name="cluster" value={c.chiave} defaultChecked={u.cluster?.includes(c.chiave)} />
+                  <span>
+                    <strong>{c.testo}</strong> <span className="attenuato">{c.descrizione}</span>
+                  </span>
+                </label>
+              ))}
             </div>
           </div>
 

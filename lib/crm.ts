@@ -46,6 +46,8 @@ export type Io = {
   autorizzazioni: string[]
   // Riceve le opportunita' (un consulente): vede anche l'Appello complessivo.
   assegnabile?: boolean
+  // I cluster di cui fa parte (20261110a): gli danno le azioni dedicate.
+  cluster?: string[]
 } | null
 
 export type Utente = {
@@ -63,6 +65,7 @@ export type Utente = {
   task_aperti: number
   altro_aperto: number
   assegnabile: boolean
+  cluster: string[]
 }
 export type Operatore = { id: string; nome: string; cognome: string | null; ruolo: string }
 
@@ -784,6 +787,57 @@ export type PercorsoMarketing = {
 export type RigaMarketing = PercorsoMarketing & { fonte: string | null; etichetta: string }
 export type ReportMarketing = { dimensione: string; totale: PercorsoMarketing; righe: RigaMarketing[] }
 
+// Le azioni per gli istruttori (20261110a) e le impostazioni delle automazioni che le creano.
+export type AzioneIstruttore = {
+  id: string
+  tipo: 'benvenuto'
+  utente_id: string
+  nome: string | null
+  cognome: string | null
+  telefono: string | null
+  email: string | null
+  iscritto_il: string
+  da_fare_dal: string
+  giorni_ritardo: number
+  assegnato_a: string | null
+  assegnato_nome: string | null
+  // L'ultimo pass di prova (Guest Pass...) e quando finisce; vuoti se non ne ha mai avuti.
+  pass_nome: string | null
+  pass_fine: string | null
+  // Si e' abbonato dopo che l'azione e' nata.
+  abbonato_ora: boolean
+  completato_il: string | null
+  completato_da_nome: string | null
+  esito: EsitoAzioneIstruttore | null
+  nota: string | null
+}
+export type EsitoAzioneIstruttore = 'prenotata' | 'da_richiamare' | 'non_risponde' | 'non_interessata'
+export type NumeriAzioniIstruttori = { mie_da_fare: number; mie_in_ritardo: number; libere: number; fatte_settimana: number }
+
+export type ParametriAutomazione = {
+  giorni: number
+  iscritti_dal: string
+  abbonamento: 'mai' | 'nessuno_attivo' | 'non_controllare'
+  piani_esclusi: number[]
+  lezioni: 'nessuna' | 'almeno_una' | 'non_controllare'
+  categoria_lezione: number | null
+}
+export type Automazione = {
+  chiave: string
+  nome: string
+  descrizione: string | null
+  attiva: boolean
+  parametri: ParametriAutomazione
+  aggiornato_il: string
+  aggiornato_da_nome: string | null
+  azioni_create: number
+  azioni_aperte: number
+}
+export type OpzioniAutomazioni = {
+  categorie: { id: number; nome: string }[]
+  piani: { id: number; nome: string; canone: number | null }[]
+}
+
 export const crm = {
   // Una volta per richiesta: la chiedono il layout e la pagina.
   io: cache(() => rpc<Io>('crm_io')),
@@ -852,6 +906,13 @@ export const crm = {
   reportMarketing: (dimensione: string, dal: string | null, al: string | null, fonte: string | null) =>
     rpc<ReportMarketing>('crm_report_marketing', { p_dimensione: dimensione, p_dal: dal, p_al: al, p_fonte: fonte }),
   utenti: () => rpc<Utente[]>('crm_utenti'),
+  azioniIstruttori: (chi: string, quando: string) =>
+    rpc<AzioneIstruttore[]>('crm_azioni_istruttori', { p_chi: chi, p_quando: quando }),
+  numeriAzioniIstruttori: () => rpc<NumeriAzioniIstruttori>('crm_azioni_istruttori_numeri'),
+  automazioni: () => rpc<Automazione[]>('crm_automazioni'),
+  opzioniAutomazioni: () => rpc<OpzioniAutomazioni>('crm_automazioni_opzioni'),
+  anteprimaAutomazione: (chiave: string, parametri: ParametriAutomazione) =>
+    rpc<{ persone_30_giorni: number; al_giorno: number }>('crm_automazione_anteprima', { p_chiave: chiave, p_parametri: parametri }),
   // Gli utenti con la sola sezione Appello che hanno lezioni future in calendario (20261027j).
   istruttoriConLezioni: () => rpc<{ staff_id: string; prossime: number }[]>('crm_istruttori_con_lezioni'),
   ticketElenco: (vista: string, utente: string | null = null) =>

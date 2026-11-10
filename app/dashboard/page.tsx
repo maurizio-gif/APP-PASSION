@@ -1,8 +1,9 @@
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { crm } from '@/lib/crm'
 import { Avviso } from '@/components/Ui'
 import { SchedeNumeri } from '@/components/SchedeNumeri'
-import { eAdmin, puoVedere } from '@/lib/permessi'
+import { eAdmin, puoVedere, soloIstruttore } from '@/lib/permessi'
 import { consulenteScelto } from '@/components/FiltroConsulente'
 import { PerformanceConsulente } from '@/components/PerformanceConsulente'
 
@@ -12,6 +13,9 @@ import { PerformanceConsulente } from '@/components/PerformanceConsulente'
 // sotto, la performance settimanale del consulente. Un admin puo' guardare quella di un
 // altro (`?consulente=`).
 export default async function DaGestire({ searchParams }: { searchParams: { errore?: string; consulente?: string } }) {
+  const io0 = await crm.io()
+  // Chi lavora solo da istruttore parte dalle sue azioni, non dalla dashboard dei consulenti.
+  if (soloIstruttore(io0)) redirect(`/dashboard/azioni-istruttori${searchParams.errore ? `?errore=${encodeURIComponent(searchParams.errore)}` : ''}`)
   const [h, io, staff] = await Promise.all([crm.home(), crm.io(), crm.staff()])
   const senza = h.lead_da_gestire + h.iscrizioni_da_assegnare
   const schede = [

@@ -22,6 +22,11 @@ export const SEZIONI = [
   // e' di tutte le lezioni, da leggere, per gli admin e i consulenti.
   { chiave: 'appello', href: '/dashboard/appello', testo: 'Appello istruttore' },
   { chiave: 'appello_tutte', href: '/dashboard/appello-tutte', testo: 'Appello complessivo' },
+  // Le azioni per gli istruttori (20261110a): le vede chi e' nel cluster «Istruttori · nuovi iscritti»
+  // (si sceglie in Utenti, non fra le sezioni) e gli admin.
+  { chiave: 'azioni_istruttori', href: '/dashboard/azioni-istruttori', testo: 'Azioni istruttore' },
+  // Le regole delle automazioni (quanti giorni, quale categoria, quali abbonamenti...): gli admin, e chi la riceve.
+  { chiave: 'automazioni', href: '/dashboard/automazioni', testo: 'Impostazioni automazioni' },
 ] as const
 
 export type Sezione = (typeof SEZIONI)[number]['chiave']
@@ -36,6 +41,20 @@ export const SEZIONI_ATTIVE = SEZIONI.filter((s) => !SOSPESE.includes(s.chiave))
 // Sezioni che nemmeno un admin vede d'ufficio: le vede solo chi le riceve in
 // Utenti, una persona alla volta (crm.puo_vedere(), 20261020c).
 export const SEZIONI_PER_PERSONA: readonly Sezione[] = ['marketing']
+
+// Sezioni che non hanno una spunta fra le sezioni di Utenti: si ricevono con un cluster.
+export const SEZIONI_DA_CLUSTER: readonly Sezione[] = ['azioni_istruttori']
+
+// I cluster (20261110a): gruppi di operatori che ricevono azioni dedicate, create dalle
+// automazioni. Si abilitano dalla scheda di ciascun utente.
+export const CLUSTER = [
+  {
+    chiave: 'istruttori_nuovi_iscritti',
+    testo: 'Istruttori · nuovi iscritti',
+    descrizione: 'riceve le azioni per i nuovi iscritti che non si sono ancora abbonati e vede la sezione «Azioni istruttore»',
+  },
+] as const
+export type Cluster = (typeof CLUSTER)[number]['chiave']
 
 export const AUTORIZZAZIONI = [
   { chiave: 'lead_altrui', testo: 'Opportunità degli altri', descrizione: 'riassegnare e chiudere anche le opportunità, le disdette e i rinnovi in carico a un altro' },
@@ -68,7 +87,13 @@ export const puoVedere = (io: Io, sezione: Sezione) =>
   !SOSPESE.includes(sezione) &&
   (Boolean(io?.sezioni.includes(sezione)) ||
     (eAdmin(io) && !SEZIONI_PER_PERSONA.includes(sezione)) ||
-    (sezione === 'appello_tutte' && Boolean(io?.assegnabile)))
+    (sezione === 'appello_tutte' && Boolean(io?.assegnabile)) ||
+    (sezione === 'azioni_istruttori' && Boolean(io?.cluster?.includes('istruttori_nuovi_iscritti'))))
+// Chi lavora solo da istruttore: e' nel cluster, non e' admin e non ha nessuna sezione dei consulenti. Per
+// lui il menu e la home sono quelli degli istruttori (Azioni istruttore, Appello), a parte dal lavoro dei consulenti.
+const SEZIONI_CONSULENTE: readonly Sezione[] = ['lead', 'prove', 'contratti', 'disdette', 'rinnovi', 'task', 'cerca', 'debitori', 'abbonamenti', 'marketing']
+export const soloIstruttore = (io: Io) =>
+  Boolean(io) && !eAdmin(io) && Boolean(io?.cluster?.includes('istruttori_nuovi_iscritti')) && !io!.sezioni.some((s) => SEZIONI_CONSULENTE.some((c) => c === s))
 export const ha = (io: Io, autorizzazione: Autorizzazione) => eAdmin(io) || Boolean(io?.autorizzazioni.includes(autorizzazione))
 
 // I ticket (supabase/migrations/20260930b_ticket.sql): tutti scrivono, il

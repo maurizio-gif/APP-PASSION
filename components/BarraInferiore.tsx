@@ -15,13 +15,22 @@ const SCELTE: { chiave: string; testo: string }[] = [
   { chiave: '/dashboard/cerca', testo: 'Cerca' },
 ]
 
+// Per chi lavora solo da istruttore (non ha le sezioni dei consulenti): le sue due cose.
+const SCELTE_ISTRUTTORE: { chiave: string; testo: string }[] = [
+  { chiave: '/dashboard/azioni-istruttori', testo: 'Azioni' },
+  { chiave: '/dashboard/appello', testo: 'Appello' },
+]
+
 export function BarraInferiore({ voci }: { voci: { href: string; testo: string; icona?: string }[] }) {
   const percorso = usePathname()
   const chiave = (v: { href: string; icona?: string }) => v.icona ?? v.href
-  const presenti = SCELTE.flatMap((s) => {
-    const v = voci.find((x) => chiave(x) === s.chiave)
-    return v ? [{ ...s, href: v.href }] : []
-  })
+  const trova = (scelte: { chiave: string; testo: string }[]) =>
+    scelte.flatMap((s) => {
+      const v = voci.find((x) => chiave(x) === s.chiave)
+      return v ? [{ ...s, href: v.href }] : []
+    })
+  let presenti = trova(SCELTE)
+  if (presenti.length < 2) presenti = trova(SCELTE_ISTRUTTORE)
   if (presenti.length < 2) return null
   return (
     <nav className="barra-inferiore" aria-label="Sezioni principali">

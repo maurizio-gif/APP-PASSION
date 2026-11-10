@@ -9,7 +9,7 @@ import { IconaTitolo } from '@/components/IconaTitolo'
 import { Indietro } from '@/components/Indietro'
 import { crm } from '@/lib/crm'
 import { formatoGiornoLungo, oggiRoma } from '@/lib/formato'
-import { eAdmin, ha, puoRiunioni, puoVedere, SEZIONI, testoRuolo } from '@/lib/permessi'
+import { eAdmin, ha, puoRiunioni, puoVedere, SEZIONI, soloIstruttore, testoRuolo } from '@/lib/permessi'
 import { cerca } from './azioni'
 
 export const dynamic = 'force-dynamic'
@@ -21,7 +21,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
   if (!io) redirect('/login?error=non-autorizzato')
 
   const voci = [
-    { href: '/dashboard', testo: 'Dashboard consulente' },
+    // Chi lavora solo da istruttore non ha la dashboard dei consulenti: la sua home e' Azioni istruttore.
+    ...(soloIstruttore(io) ? [] : [{ href: '/dashboard', testo: 'Dashboard consulente' }]),
     ...SEZIONI.filter((s) => puoVedere(io, s.chiave)).map(({ href, testo }) => ({ href, testo })),
     ...(puoVedere(io, 'lead') ? [{ href: '/dashboard/senza-consulente', testo: 'Senza consulente' }] : []),
     ...(ha(io, 'gestione_utenti') ? [{ href: '/dashboard/utenti', testo: 'Utenti' }] : []),

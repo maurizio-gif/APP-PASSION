@@ -16,6 +16,27 @@ export type Aggiornamento = {
 
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
+    data: '2026-11-10',
+    titolo: 'Impostazioni automazioni: decidi tu quando nascono le azioni',
+    testo:
+      'Nuova pagina con le regole delle azioni che il CRM crea da solo. Per il benvenuto ai nuovi iscritti puoi cambiare dopo quanti giorni nasce l’azione (oggi 7), da quale giorno guardare gli iscritti, quale abbonamento conta (Wellhub e simili si possono escludere) e quale categoria di lezione si controlla (oggi Formula 8). Vedi anche quante azioni al giorno ne verrebbero fuori. Un cambio vale per le azioni nuove, quelle già create restano.',
+    dove: 'Impostazioni automazioni (la vedono gli admin)',
+  },
+  {
+    data: '2026-11-10',
+    titolo: 'Utenti: il cluster «Istruttori · nuovi iscritti»',
+    testo:
+      'Nella scheda di ogni utente c’è un nuovo gruppo, Cluster. Spuntando «Istruttori · nuovi iscritti» la persona riceve le azioni dedicate ai nuovi iscritti e nel menu compare «Azioni istruttore». Se un istruttore viene tolto o disattivato, le sue azioni aperte tornano libere per gli altri.',
+    dove: 'Utenti, scheda dell’utente',
+  },
+  {
+    data: '2026-11-10',
+    titolo: 'Nuova sezione «Azioni istruttore»: il benvenuto ai nuovi iscritti',
+    testo:
+      'Dopo 7 giorni dall’iscrizione, il CRM crea un’azione per chi non ha mai avuto un abbonamento e non ha prenotato nessuna lezione Formula 8 (Wellhub e simili non contano come abbonamento). Le azioni nascono libere: l’istruttore ne sceglie una con «Prendi in carico», contatta la persona e la chiude con come è andata (ha prenotato, da richiamare, non risponde, non interessata). Sul telefono ogni persona diventa una scheda. Sta nel menu «Istruttori», a parte dal lavoro dei consulenti: chi lavora solo da istruttore apre direttamente le sue azioni e non vede la Dashboard consulente.',
+    dove: 'Menu Istruttori → Azioni istruttore (per chi è nel cluster «Istruttori · nuovi iscritti» e per gli admin)',
+  },
+  {
     data: '2026-11-05',
     titolo: 'Nome, email e telefono sono quelli di Perfect Gym',
     testo:
