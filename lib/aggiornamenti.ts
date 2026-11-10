@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-11-10',
+    titolo: 'Azioni istruttore: la lista «Recupero Formula 8»',
+    testo:
+      'Dentro Azioni istruttore c’è un secondo contenitore, a parte da «Nuovi iscritti»: sono gli iscritti di prima che hanno un abbonamento vero attivo e non hanno mai prenotato una lezione Formula 8, da riportare a provare. Sono migliaia, create tutte insieme: si lavorano un po’ alla volta, come le libere da prendere (prendi in carico, contatta, chiudi con l’esito). Si cerca per nome, telefono o email. Nelle Impostazioni automazioni se ne possono creare altre quando le regole cambiano.',
+    dove: 'Azioni istruttore → Recupero Formula 8; Impostazioni automazioni',
+  },
+  {
+    data: '2026-11-10',
     titolo: 'Impostazioni automazioni: decidi tu quando nascono le azioni',
     testo:
       'Nuova pagina con le regole delle azioni che il CRM crea da solo. Per il benvenuto ai nuovi iscritti puoi cambiare dopo quanti giorni nasce l’azione (oggi 7), da quale giorno guardare gli iscritti, quale abbonamento conta (Wellhub e simili si possono escludere) e quale categoria di lezione si controlla (oggi Formula 8). Vedi anche quante azioni al giorno ne verrebbero fuori. Un cambio vale per le azioni nuove, quelle già create restano.',

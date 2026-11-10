@@ -46,13 +46,13 @@ export function TabellaAzioniIstruttori({ azioni, io, torna }: { azioni: AzioneI
                   <div className="riga-dati">
                     <Persona id={a.utente_id} nome={a.nome} cognome={a.cognome} nuovaScheda />
                     <Contatti telefono={a.telefono} email={a.email} />
-                    <span className="muto">Iscritto il {formatoData(a.iscritto_il)} · {giorniFa(a.iscritto_il)}</span>
+                    {a.iscritto_il >= '2010-01-01' && <span className="muto">Iscritto il {formatoData(a.iscritto_il)} · {giorniFa(a.iscritto_il)}</span>}
                   </div>
                 </td>
                 <td>
                   <div className="riga-dati">
                     <span className="normale">{situazione(a)}</span>
-                    {!a.completato_il && (
+                    {!a.completato_il && a.tipo === 'benvenuto' && (
                       <span className="etichetta-riga">
                         {a.giorni_ritardo > 0 ? <span className="bollino rosso">In ritardo di {a.giorni_ritardo} {a.giorni_ritardo === 1 ? 'giorno' : 'giorni'}</span> : <span className="bollino grigio">Oggi</span>}
                       </span>

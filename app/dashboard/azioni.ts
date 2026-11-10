@@ -489,16 +489,17 @@ export async function completaAzioneIstruttore(f: FormData) {
   await esegui(f, () => rpc('crm_azione_istruttore_completa', { p_id: testo(f, 'azione'), p_esito: testo(f, 'esito'), p_nota: testo(f, 'nota') }))
 }
 
-// Le regole di un'automazione: il database controlla ogni valore e dice cosa non va.
+// Le regole di un'automazione: il database controlla ogni valore e dice cosa non va. Il recupero non ha
+// giorni e data di partenza (il modulo non li manda).
 export async function salvaAutomazione(f: FormData) {
   const categoria = testo(f, 'categoria_lezione')
+  const giorni = testo(f, 'giorni')
   try {
     await rpc('crm_automazione_salva', {
       p_chiave: testo(f, 'automazione'),
       p_attiva: f.get('attiva') === 'on',
       p_parametri: {
-        giorni: Number(testo(f, 'giorni')),
-        iscritti_dal: testo(f, 'iscritti_dal'),
+        ...(giorni != null ? { giorni: Number(giorni), iscritti_dal: testo(f, 'iscritti_dal') } : {}),
         abbonamento: testo(f, 'abbonamento'),
         lezioni: testo(f, 'lezioni'),
         categoria_lezione: categoria ? Number(categoria) : null,
@@ -510,4 +511,17 @@ export async function salvaAutomazione(f: FormData) {
   }
   revalidatePath('/dashboard', 'layout')
   redirect(`/dashboard/automazioni?ok=${encodeURIComponent('Impostazioni salvate')}`)
+}
+
+// Crea un gruppo (300) di azioni di recupero Formula 8: si ripete finche' ne restano.
+export async function creaAzioniRecupero() {
+  let messaggio: string
+  try {
+    const r = await rpc<{ create: number; restano: number }>('crm_azioni_recupero_genera')
+    messaggio = `Create ${r.create} azioni di recupero${r.restano > 0 ? `, ne restano ${r.restano} da creare` : ': non ne restano altre'}`
+  } catch (e) {
+    redirect(`/dashboard/automazioni?errore=${encodeURIComponent(e instanceof Error ? e.message : 'Operazione non riuscita')}`)
+  }
+  revalidatePath('/dashboard', 'layout')
+  redirect(`/dashboard/automazioni?ok=${encodeURIComponent(messaggio)}`)
 }

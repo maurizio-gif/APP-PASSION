@@ -790,7 +790,7 @@ export type ReportMarketing = { dimensione: string; totale: PercorsoMarketing; r
 // Le azioni per gli istruttori (20261110a) e le impostazioni delle automazioni che le creano.
 export type AzioneIstruttore = {
   id: string
-  tipo: 'benvenuto'
+  tipo: 'benvenuto' | 'recupero_formula8'
   utente_id: string
   nome: string | null
   cognome: string | null
@@ -810,11 +810,22 @@ export type AzioneIstruttore = {
   nota: string | null
 }
 export type EsitoAzioneIstruttore = 'prenotata' | 'da_richiamare' | 'non_risponde' | 'non_interessata'
-export type NumeriAzioniIstruttori = { mie_da_fare: number; mie_in_ritardo: number; libere: number; fatte_settimana: number }
+export type NumeriAzioniIstruttori = {
+  mie_da_fare: number
+  mie_in_ritardo: number
+  libere: number
+  fatte_settimana: number
+  // Il contenitore «Recupero Formula 8» (20261110c)
+  recupero_mie: number
+  recupero_libere: number
+  recupero_fatte_settimana: number
+  recupero_fatte_totale: number
+}
 
 export type ParametriAutomazione = {
-  giorni: number
-  iscritti_dal: string
+  // Solo il benvenuto: il recupero guarda tutti gli iscritti di prima.
+  giorni?: number
+  iscritti_dal?: string
   abbonamento: 'attivo' | 'mai' | 'nessuno_attivo' | 'non_controllare'
   piani_esclusi: number[]
   lezioni: 'nessuna' | 'almeno_una' | 'non_controllare'
@@ -904,8 +915,9 @@ export const crm = {
   reportMarketing: (dimensione: string, dal: string | null, al: string | null, fonte: string | null) =>
     rpc<ReportMarketing>('crm_report_marketing', { p_dimensione: dimensione, p_dal: dal, p_al: al, p_fonte: fonte }),
   utenti: () => rpc<Utente[]>('crm_utenti'),
-  azioniIstruttori: (chi: string, quando: string) =>
-    rpc<AzioneIstruttore[]>('crm_azioni_istruttori', { p_chi: chi, p_quando: quando }),
+  azioniIstruttori: (chi: string, quando: string, lista: 'benvenuto' | 'recupero' = 'benvenuto', testo: string | null = null) =>
+    rpc<AzioneIstruttore[]>('crm_azioni_istruttori', { p_chi: chi, p_quando: quando, p_lista: lista, p_testo: testo }),
+  anteprimaRecupero: () => rpc<{ da_creare: number; create: number; aperte: number }>('crm_azioni_recupero_anteprima'),
   numeriAzioniIstruttori: () => rpc<NumeriAzioniIstruttori>('crm_azioni_istruttori_numeri'),
   automazioni: () => rpc<Automazione[]>('crm_automazioni'),
   opzioniAutomazioni: () => rpc<OpzioniAutomazioni>('crm_automazioni_opzioni'),
