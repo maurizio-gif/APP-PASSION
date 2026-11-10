@@ -89,11 +89,12 @@ export const puoVedere = (io: Io, sezione: Sezione) =>
     (eAdmin(io) && !SEZIONI_PER_PERSONA.includes(sezione)) ||
     (sezione === 'appello_tutte' && Boolean(io?.assegnabile)) ||
     (sezione === 'azioni_istruttori' && Boolean(io?.cluster?.includes('istruttori_nuovi_iscritti'))))
-// Chi lavora solo da istruttore: e' nel cluster, non e' admin e non ha nessuna sezione dei consulenti. Per
+// Chi lavora solo da istruttore: e' nel cluster, non e' admin e non ha nessuna sezione dei consulenti (le sezioni
+// sospese, come Nuovi contratti, non contano: nessuno le vede). Per
 // lui il menu e la home sono quelli degli istruttori (Azioni istruttore, Appello), a parte dal lavoro dei consulenti.
 const SEZIONI_CONSULENTE: readonly Sezione[] = ['lead', 'prove', 'contratti', 'disdette', 'rinnovi', 'task', 'cerca', 'debitori', 'abbonamenti', 'marketing']
 export const soloIstruttore = (io: Io) =>
-  Boolean(io) && !eAdmin(io) && Boolean(io?.cluster?.includes('istruttori_nuovi_iscritti')) && !io!.sezioni.some((s) => SEZIONI_CONSULENTE.some((c) => c === s))
+  Boolean(io) && !eAdmin(io) && Boolean(io?.cluster?.includes('istruttori_nuovi_iscritti')) && !io!.sezioni.some((s) => SEZIONI_CONSULENTE.some((c) => c === s && !SOSPESE.includes(c)))
 export const ha = (io: Io, autorizzazione: Autorizzazione) => eAdmin(io) || Boolean(io?.autorizzazioni.includes(autorizzazione))
 
 // I ticket (supabase/migrations/20260930b_ticket.sql): tutti scrivono, il
