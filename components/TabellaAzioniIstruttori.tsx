@@ -17,11 +17,10 @@ const giorniFa = (giorno: string) => {
   return n <= 0 ? 'oggi' : n === 1 ? '1 giorno fa' : `${n} giorni fa`
 }
 
-// Cosa ha fatto finora la persona: il suo ultimo pass di prova, o niente.
+// L'abbonamento vero attivo della persona, e da quando.
 function situazione(a: AzioneIstruttore) {
-  if (!a.pass_nome) return 'Nessun pass e nessun contratto'
-  const nome = a.pass_nome.replace(/^#\s*/, '')
-  return a.pass_fine && a.pass_fine < oggiRoma() ? `${nome} finito il ${formatoData(a.pass_fine)}` : `${nome} in corso`
+  if (!a.piano_nome) return 'Abbonamento attivo'
+  return `${a.piano_nome.replace(/^\^\s*/, '')}${a.piano_inizio ? ` · dal ${formatoData(a.piano_inizio)}` : ''}`
 }
 
 // Le azioni degli istruttori: una riga per persona (sul telefono diventa una scheda). Libera: si prende in
@@ -53,7 +52,6 @@ export function TabellaAzioniIstruttori({ azioni, io, torna }: { azioni: AzioneI
                 <td>
                   <div className="riga-dati">
                     <span className="normale">{situazione(a)}</span>
-                    {a.abbonato_ora && <span className="etichetta-riga"><span className="bollino verde">Si è abbonato</span></span>}
                     {!a.completato_il && (
                       <span className="etichetta-riga">
                         {a.giorni_ritardo > 0 ? <span className="bollino rosso">In ritardo di {a.giorni_ritardo} {a.giorni_ritardo === 1 ? 'giorno' : 'giorni'}</span> : <span className="bollino grigio">Oggi</span>}

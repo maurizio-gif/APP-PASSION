@@ -6,6 +6,7 @@ import { BottoneInvio } from '@/components/BottoneInvio'
 import { salvaAutomazione } from '../azioni'
 
 const ABBONAMENTO = [
+  { chiave: 'attivo', testo: 'Ha un abbonamento vero attivo adesso' },
   { chiave: 'mai', testo: 'Non ha mai avuto un abbonamento' },
   { chiave: 'nessuno_attivo', testo: 'Non ha un abbonamento attivo adesso' },
   { chiave: 'non_controllare', testo: 'Non controllare l’abbonamento' },

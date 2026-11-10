@@ -33,7 +33,7 @@ export const AGGIORNAMENTI: Aggiornamento[] = [
     data: '2026-11-10',
     titolo: 'Nuova sezione «Azioni istruttore»: il benvenuto ai nuovi iscritti',
     testo:
-      'Dopo 7 giorni dall’iscrizione, il CRM crea un’azione per chi non ha mai avuto un abbonamento e non ha prenotato nessuna lezione Formula 8 (Wellhub e simili non contano come abbonamento). Le azioni nascono libere: l’istruttore ne sceglie una con «Prendi in carico», contatta la persona e la chiude con come è andata (ha prenotato, da richiamare, non risponde, non interessata). Sul telefono ogni persona diventa una scheda. Sta nel menu «Istruttori», a parte dal lavoro dei consulenti: chi lavora solo da istruttore apre direttamente le sue azioni e non vede la Dashboard consulente.',
+      'Dopo 7 giorni dall’iscrizione, il CRM crea un’azione per i nuovi iscritti che hanno già un abbonamento vero attivo e non hanno ancora prenotato nessuna lezione Formula 8: l’istruttore li contatta per farli provare. Pass, prove, Guest Pass e Wellhub e simili non contano come abbonamento. Le azioni nascono libere: l’istruttore ne sceglie una con «Prendi in carico», contatta la persona e la chiude con come è andata (ha prenotato, da richiamare, non risponde, non interessata). Sul telefono ogni persona diventa una scheda. Sta nel menu «Istruttori», a parte dal lavoro dei consulenti: chi lavora solo da istruttore apre direttamente le sue azioni e non vede la Dashboard consulente.',
     dove: 'Menu Istruttori → Azioni istruttore (per chi è nel cluster «Istruttori · nuovi iscritti» e per gli admin)',
   },
   {

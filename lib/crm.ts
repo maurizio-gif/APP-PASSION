@@ -801,11 +801,9 @@ export type AzioneIstruttore = {
   giorni_ritardo: number
   assegnato_a: string | null
   assegnato_nome: string | null
-  // L'ultimo pass di prova (Guest Pass...) e quando finisce; vuoti se non ne ha mai avuti.
-  pass_nome: string | null
-  pass_fine: string | null
-  // Si e' abbonato dopo che l'azione e' nata.
-  abbonato_ora: boolean
+  // L'abbonamento vero attivo della persona e da quando.
+  piano_nome: string | null
+  piano_inizio: string | null
   completato_il: string | null
   completato_da_nome: string | null
   esito: EsitoAzioneIstruttore | null
@@ -817,7 +815,7 @@ export type NumeriAzioniIstruttori = { mie_da_fare: number; mie_in_ritardo: numb
 export type ParametriAutomazione = {
   giorni: number
   iscritti_dal: string
-  abbonamento: 'mai' | 'nessuno_attivo' | 'non_controllare'
+  abbonamento: 'attivo' | 'mai' | 'nessuno_attivo' | 'non_controllare'
   piani_esclusi: number[]
   lezioni: 'nessuna' | 'almeno_una' | 'non_controllare'
   categoria_lezione: number | null
