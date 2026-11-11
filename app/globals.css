@@ -12190,3 +12190,45 @@ a.pf-tessera.pf-link:focus-visible { outline: 2px solid var(--rosso); outline-of
     padding-top: 2px;
   }
 }
+
+/* --- Testata della barra piu' compatta (solo computer): logo, saluto e ricerca occupano meno spazio ---- */
+@media (min-width: 861px) {
+  .barra {
+    padding: 14px 12px 12px;
+    gap: 8px;
+  }
+  .barra-logo img {
+    width: 112px;
+  }
+  :root:root:root .barra-saluto {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 6px;
+    padding: 7px 12px 7px 14px;
+    border-radius: 10px;
+  }
+  :root:root:root .barra-saluto::before {
+    top: 8px;
+    bottom: 8px;
+  }
+  :root:root:root .barra-saluto-ciao {
+    font-size: 0.8rem;
+  }
+  :root:root:root .barra-saluto strong {
+    font-size: 1rem;
+  }
+  :root:root:root .barra-saluto-data {
+    flex-basis: 100%;
+    margin-top: 1px;
+    font-size: 0.72rem;
+  }
+  .barra-cerca {
+    margin-bottom: 4px;
+  }
+  .barra .barra-cerca input[type='search'] {
+    min-height: 34px;
+    padding-block: 6px;
+    font-size: 0.82rem;
+  }
+}
