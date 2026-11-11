@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-11-11',
+    titolo: 'Menu laterale più compatto',
+    testo:
+      'Le voci del menu a sinistra e le loro categorie sono più piccole e vicine, così se ne vedono di più senza scorrere. Su telefono il menu resta com’era.',
+    dove: 'Il menu a sinistra, in tutte le pagine',
+  },
+  {
+    data: '2026-11-11',
     titolo: 'Efficacia azioni: stesso aspetto delle altre pagine',
     testo:
       'Le tabelle di questa pagina ora stanno nei riquadri con la testata scura, come nel resto del CRM. I numeri non cambiano.',
