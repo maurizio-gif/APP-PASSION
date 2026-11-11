@@ -17,9 +17,9 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-11-11',
-    titolo: 'Ticket: «Da lavorare» e «Riaperti» si vedono sempre',
+    titolo: 'Ticket: interruttore «Da lavorare» / «Riaperti» sempre visibile',
     testo:
-      'Nelle schede Per R2D, Per Passion e Aperti da me i ticket sono sempre divisi in due parti: «Da lavorare» e «Riaperti, già risolti». Prima la divisione compariva solo quando c’era un ticket riaperto. Se una parte è vuota, lo dice.',
+      'Nelle schede Per R2D, Per Passion e Aperti da me c’è sempre un interruttore con due voci, «Da lavorare» e «Riaperti, già risolti», ognuna con il numero dei ticket. Si vede una parte alla volta. Prima la divisione compariva solo quando c’era un ticket riaperto.',
     dove: 'Ticket → Per R2D, Per Passion, Aperti da me',
   },
   {
