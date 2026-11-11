@@ -24,6 +24,13 @@ export const AGGIORNAMENTI: Aggiornamento[] = [
   },
   {
     data: '2026-11-11',
+    titolo: 'Nuova categoria del menu: Marketing',
+    testo:
+      'Nel menu a sinistra c’è una categoria nuova, Marketing, con dentro le Liste newsletter e la pagina che prima si chiamava Marketing e ora si chiama Campagne (da dove arrivano le opportunità). Anche la spunta in Utenti ora si chiama Campagne. I numeri e chi li vede non cambiano.',
+    dove: 'Menu a sinistra → Marketing',
+  },
+  {
+    data: '2026-11-11',
     titolo: 'Efficacia azioni: stesso aspetto delle altre pagine',
     testo:
       'Le tabelle di questa pagina ora stanno nei riquadri con la testata scura, come nel resto del CRM. I numeri non cambiano.',
@@ -35,13 +42,6 @@ export const AGGIORNAMENTI: Aggiornamento[] = [
     testo:
       'Le voci del menu a sinistra e le loro categorie sono più piccole e vicine, così se ne vedono di più senza scorrere. Su telefono il menu resta com’era.',
     dove: 'Il menu a sinistra, in tutte le pagine',
-  },
-  {
-    data: '2026-11-11',
-    titolo: 'Nuova categoria del menu: Marketing',
-    testo:
-      'Nel menu a sinistra c’è una categoria nuova, Marketing, con dentro le Liste newsletter e la pagina che prima si chiamava Marketing e ora si chiama Campagne (da dove arrivano le opportunità). Anche la spunta in Utenti ora si chiama Campagne. I numeri e chi li vede non cambiano.',
-    dove: 'Menu a sinistra → Marketing',
   },
   {
     data: '2026-11-11',
