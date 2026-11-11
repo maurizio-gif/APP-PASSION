@@ -17,31 +17,10 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-11-11',
-    titolo: 'Impostazioni automazioni: stesso aspetto delle altre pagine',
+    titolo: 'Liste newsletter: le liste di persone da scaricare per le campagne',
     testo:
-      'Ogni automazione sta ora in un riquadro con la testata scura, come nel resto del CRM. Le impostazioni e il loro funzionamento non cambiano.',
-    dove: 'Team → Impostazioni automazioni',
-  },
-  {
-    data: '2026-11-11',
-    titolo: 'Ticket: interruttore «Da lavorare» / «Riaperti» sempre visibile',
-    testo:
-      'Nelle schede Per R2D, Per Passion e Aperti da me c’è sempre un interruttore con due voci, «Da lavorare» e «Riaperti, già risolti», ognuna con il numero dei ticket. Si vede una parte alla volta. Prima la divisione compariva solo quando c’era un ticket riaperto.',
-    dove: 'Ticket → Per R2D, Per Passion, Aperti da me',
-  },
-  {
-    data: '2026-11-11',
-    titolo: 'Nuova categoria del menu: Marketing',
-    testo:
-      'Nel menu a sinistra c’è una categoria nuova, Marketing, con dentro le Liste newsletter e la pagina che prima si chiamava Marketing e ora si chiama Campagne (da dove arrivano le opportunità). Anche la spunta in Utenti ora si chiama Campagne. I numeri e chi li vede non cambiano.',
-    dove: 'Menu a sinistra → Marketing',
-  },
-  {
-    data: '2026-11-11',
-    titolo: 'Menu laterale più compatto',
-    testo:
-      'Le voci del menu a sinistra e le loro categorie sono più piccole e vicine, così se ne vedono di più senza scorrere. Su telefono il menu resta com’era.',
-    dove: 'Il menu a sinistra, in tutte le pagine',
+      'Nuova pagina con le liste per le campagne email: Attivi (tutti), Soci, Terminati, Lead, Guest Pass attivi e Tutto il database. Si aggiornano da sole con i dati di Perfect Gym. Ogni lista si scarica in un file con la sola colonna UserNumber, pronto da caricare su Perfect Gym. In alto si sceglie se scaricare tutti o solo chi ha dato il consenso marketing. Nei file ci sono solo le persone con un’email.',
+    dove: 'Marketing → Liste newsletter (la vedono gli admin e chi ha la sezione Campagne)',
   },
   {
     data: '2026-11-11',
@@ -52,10 +31,31 @@ export const AGGIORNAMENTI: Aggiornamento[] = [
   },
   {
     data: '2026-11-11',
-    titolo: 'Liste newsletter: le liste di persone da scaricare per le campagne',
+    titolo: 'Menu laterale più compatto',
     testo:
-      'Nuova pagina con le liste per le campagne email: Attivi (tutti), Soci, Terminati, Lead, Guest Pass attivi e Tutto il database. Si aggiornano da sole con i dati di Perfect Gym. Ogni lista si scarica in un file con la sola colonna UserNumber, pronto da caricare su Perfect Gym. In alto si sceglie se scaricare tutti o solo chi ha dato il consenso marketing. Nei file ci sono solo le persone con un’email.',
-    dove: 'Marketing → Liste newsletter (la vedono gli admin e chi ha la sezione Campagne)',
+      'Le voci del menu a sinistra e le loro categorie sono più piccole e vicine, così se ne vedono di più senza scorrere. Su telefono il menu resta com’era.',
+    dove: 'Il menu a sinistra, in tutte le pagine',
+  },
+  {
+    data: '2026-11-11',
+    titolo: 'Nuova categoria del menu: Marketing',
+    testo:
+      'Nel menu a sinistra c’è una categoria nuova, Marketing, con dentro le Liste newsletter e la pagina che prima si chiamava Marketing e ora si chiama Campagne (da dove arrivano le opportunità). Anche la spunta in Utenti ora si chiama Campagne. I numeri e chi li vede non cambiano.',
+    dove: 'Menu a sinistra → Marketing',
+  },
+  {
+    data: '2026-11-11',
+    titolo: 'Ticket: interruttore «Da lavorare» / «Riaperti» sempre visibile',
+    testo:
+      'Nelle schede Per R2D, Per Passion e Aperti da me c’è sempre un interruttore con due voci, «Da lavorare» e «Riaperti, già risolti», ognuna con il numero dei ticket. Si vede una parte alla volta. Prima la divisione compariva solo quando c’era un ticket riaperto.',
+    dove: 'Ticket → Per R2D, Per Passion, Aperti da me',
+  },
+  {
+    data: '2026-11-11',
+    titolo: 'Impostazioni automazioni: stesso aspetto delle altre pagine',
+    testo:
+      'Ogni automazione sta ora in un riquadro con la testata scura, come nel resto del CRM. Le impostazioni e il loro funzionamento non cambiano.',
+    dove: 'Team → Impostazioni automazioni',
   },
   {
     data: '2026-11-11',
