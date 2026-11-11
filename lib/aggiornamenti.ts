@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-11-11',
+    titolo: 'Efficacia azioni: stesso aspetto delle altre pagine',
+    testo:
+      'Le tabelle di questa pagina ora stanno nei riquadri con la testata scura, come nel resto del CRM. I numeri non cambiano.',
+    dove: 'Analisi → Efficacia azioni',
+  },
+  {
+    data: '2026-11-11',
     titolo: 'Liste newsletter: le liste di persone da scaricare per le campagne',
     testo:
       'Nuova pagina con le liste per le campagne email: Attivi (tutti), Soci, Terminati, Lead, Guest Pass attivi e Tutto il database. Si aggiornano da sole con i dati di Perfect Gym. Ogni lista si scarica in un file con la sola colonna UserNumber, pronto da caricare su Perfect Gym. In alto si sceglie se scaricare tutti o solo chi ha dato il consenso marketing. Nei file ci sono solo le persone con un’email.',
