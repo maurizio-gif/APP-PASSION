@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-11-11',
+    titolo: 'Ticket: «Da lavorare» e «Riaperti» si vedono sempre',
+    testo:
+      'Nelle schede Per R2D, Per Passion e Aperti da me i ticket sono sempre divisi in due parti: «Da lavorare» e «Riaperti, già risolti». Prima la divisione compariva solo quando c’era un ticket riaperto. Se una parte è vuota, lo dice.',
+    dove: 'Ticket → Per R2D, Per Passion, Aperti da me',
+  },
+  {
+    data: '2026-11-11',
     titolo: 'Nuova categoria del menu: Marketing',
     testo:
       'Nel menu a sinistra c’è una categoria nuova, Marketing, con dentro le Liste newsletter e la pagina che prima si chiamava Marketing e ora si chiama Campagne (da dove arrivano le opportunità). Anche la spunta in Utenti ora si chiama Campagne. I numeri e chi li vede non cambiano.',
