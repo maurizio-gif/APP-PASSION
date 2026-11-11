@@ -12149,3 +12149,44 @@ a.pf-tessera.pf-link:focus-visible { outline: 2px solid var(--rosso); outline-of
   font-size: 0.9rem;
   color: #6b717d;
 }
+
+/* --- Barra piu' compatta (solo computer): voci e categorie piu' piccole, cosi' si vedono tutte senza scorrere ---- */
+@media (min-width: 861px) {
+  .barra nav {
+    gap: 1px;
+  }
+  .barra nav a {
+    gap: 9px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 0.84rem;
+  }
+  .barra nav a svg {
+    width: 16px;
+    height: 16px;
+  }
+  .barra nav .gruppo-menu-titolo {
+    gap: 8px;
+    margin-top: 4px;
+    padding: 6px 8px;
+    border-radius: 9px;
+    font-size: 0.74rem;
+  }
+  .gruppo-menu-icona {
+    width: 24px;
+    height: 24px;
+    border-radius: 7px;
+  }
+  .gruppo-menu-icona svg {
+    width: 14px;
+    height: 14px;
+  }
+  .gruppo-menu-titolo .gruppo-menu-freccia {
+    width: 13px;
+    height: 13px;
+  }
+  .gruppo-menu + .gruppo-menu {
+    margin-top: 0;
+    padding-top: 2px;
+  }
+}
