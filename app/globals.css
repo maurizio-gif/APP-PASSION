@@ -12046,3 +12046,189 @@ a.pf-tessera.pf-link:focus-visible { outline: 2px solid var(--rosso); outline-of
 .riaperto-avviso {
   border-left: 3px solid var(--serie);
 }
+
+/* --- Liste newsletter (20261111c): una scheda chiara per lista (come le altre schede del CRM), in due colonne --- */
+.liste-news {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 20px;
+}
+@media (max-width: 760px) {
+  .liste-news {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.lista-news {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px 24px 22px 28px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: linear-gradient(180deg, #ffffff, #fdf4f6);
+  color: #15171c;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -2px 0 rgba(92, 11, 30, 0.07),
+    0 3px 6px rgba(42, 11, 20, 0.08),
+    0 14px 24px -8px rgba(42, 11, 20, 0.22);
+  overflow: hidden;
+}
+.lista-news::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 5px;
+  background: linear-gradient(180deg, #e3032d, #ff6a80);
+}
+.lista-news.prima {
+  background: linear-gradient(135deg, #ffe9ed, #fff7f8 70%);
+}
+.lista-news-nome {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #b50224;
+}
+.lista-news-numero {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: #15171c;
+  font-variant-numeric: tabular-nums;
+}
+.lista-news-numero small {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: #3b414d;
+  margin-left: 8px;
+}
+.lista-news-barra {
+  height: 7px;
+  border-radius: 999px;
+  background: #ecdde1;
+  overflow: hidden;
+}
+.lista-news-barra span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #e3032d, #ff3a58);
+}
+.lista-news-sotto {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #3b414d;
+}
+.lista-news-chi {
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: #4d5360;
+  flex: 1;
+}
+.lista-news .bottone {
+  align-self: flex-start;
+  gap: 8px;
+  margin-top: 4px;
+}
+.lista-news .bottone svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.lista-news-vuota {
+  font-size: 0.9rem;
+  color: #6b717d;
+}
+
+/* --- Barra piu' compatta (solo computer): voci e categorie piu' piccole, cosi' si vedono tutte senza scorrere ---- */
+@media (min-width: 861px) {
+  .barra nav {
+    gap: 1px;
+  }
+  .barra nav a {
+    gap: 9px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 0.84rem;
+  }
+  .barra nav a svg {
+    width: 16px;
+    height: 16px;
+  }
+  .barra nav .gruppo-menu-titolo {
+    gap: 8px;
+    margin-top: 4px;
+    padding: 6px 8px;
+    border-radius: 9px;
+    font-size: 0.74rem;
+  }
+  .gruppo-menu-icona {
+    width: 24px;
+    height: 24px;
+    border-radius: 7px;
+  }
+  .gruppo-menu-icona svg {
+    width: 14px;
+    height: 14px;
+  }
+  .gruppo-menu-titolo .gruppo-menu-freccia {
+    width: 13px;
+    height: 13px;
+  }
+  .gruppo-menu + .gruppo-menu {
+    margin-top: 0;
+    padding-top: 2px;
+  }
+}
+
+/* --- Testata della barra piu' compatta (solo computer): logo, saluto e ricerca occupano meno spazio ---- */
+@media (min-width: 861px) {
+  .barra {
+    padding: 14px 12px 12px;
+    gap: 8px;
+  }
+  .barra-logo img {
+    width: 112px;
+  }
+  :root:root:root .barra-saluto {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 6px;
+    padding: 7px 12px 7px 14px;
+    border-radius: 10px;
+  }
+  :root:root:root .barra-saluto::before {
+    top: 8px;
+    bottom: 8px;
+  }
+  :root:root:root .barra-saluto-ciao {
+    font-size: 0.8rem;
+  }
+  :root:root:root .barra-saluto strong {
+    font-size: 1rem;
+  }
+  :root:root:root .barra-saluto-data {
+    flex-basis: 100%;
+    margin-top: 1px;
+    font-size: 0.72rem;
+  }
+  .barra-cerca {
+    margin-bottom: 4px;
+  }
+  .barra .barra-cerca input[type='search'] {
+    min-height: 34px;
+    padding-block: 6px;
+    font-size: 0.82rem;
+  }
+}

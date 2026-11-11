@@ -1,6 +1,7 @@
 import { crm, richiediSezione } from '@/lib/crm'
 import type { RigaEfficacia } from '@/lib/crm'
 import { SchedeMulti, Vuoto } from '@/components/Ui'
+import { Riquadro } from '@/components/FaseRighe'
 import { ESITI_AZIONE } from '@/components/TabellaAzioniIstruttori'
 
 const FINESTRE = [
@@ -103,8 +104,7 @@ export default async function EfficaciaAzioni({ searchParams }: { searchParams: 
           const no = righe.find((r) => !r.lavorata)
           const vuota: RigaEfficacia = { azioni: 0, prenotata: 0, addon: 0, abbonamento: 0, attivato: 0 }
           return (
-            <section className="scheda" key={tipo}>
-              <h2>{NOME_LISTA[tipo] ?? tipo}</h2>
+            <Riquadro titolo={NOME_LISTA[tipo] ?? tipo} key={tipo}>
               <div className="tabella-scorre">
                 <table className="schede-mobile tabella-colonne tabella-uniforme">
                   <Testata primo="Azioni" />
@@ -114,14 +114,13 @@ export default async function EfficaciaAzioni({ searchParams }: { searchParams: 
                   </tbody>
                 </table>
               </div>
-            </section>
+            </Riquadro>
           )
         })
       )}
 
       {esiti.length > 0 && (
-        <section className="scheda">
-          <h2>Per come è andata</h2>
+        <Riquadro titolo="Per come è andata">
           <div className="tabella-scorre">
             <table className="schede-mobile tabella-colonne tabella-uniforme">
               <Testata primo="Esito" />
@@ -132,12 +131,11 @@ export default async function EfficaciaAzioni({ searchParams }: { searchParams: 
               </tbody>
             </table>
           </div>
-        </section>
+        </Riquadro>
       )}
 
       {d.per_istruttore.length > 0 && (
-        <section className="scheda">
-          <h2>Per istruttore</h2>
+        <Riquadro titolo="Per istruttore">
           <p className="piccolo attenuato sotto-titolo">Le azioni che ha chiuso, di tutti i contenitori.</p>
           <div className="tabella-scorre">
             <table className="schede-mobile tabella-colonne tabella-uniforme">
@@ -149,7 +147,7 @@ export default async function EfficaciaAzioni({ searchParams }: { searchParams: 
               </tbody>
             </table>
           </div>
-        </section>
+        </Riquadro>
       )}
 
       <p className="piccolo attenuato">

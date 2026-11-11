@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { crm, richiediSezione, type ResocontoMese } from '@/lib/crm'
 import { NATURA_TICKET, traduci } from '@/lib/formato'
 import { assiste, smista } from '@/lib/permessi'
-import { type GruppoSchede, Avviso, LinkGuida, Schede, Vuoto } from '@/components/Ui'
+import { type GruppoSchede, Avviso, LinkGuida, Schede, SchedeMulti, Vuoto } from '@/components/Ui'
 import { TabellaTicket } from '@/components/Ticket'
 import { filtraTicket, testoCercato } from '@/lib/ricerca'
 
@@ -18,7 +18,7 @@ const VUOTI: Record<string, string> = {
 // I ticket di assistenza: il desk scrive, il supporto verifica e manda a R2D,
 // R2D lavora e chiude con causa e soluzione. Le modifiche le scrive R2D dopo
 // la riunione settimanale col titolare.
-export default async function Ticket({ searchParams }: { searchParams: { vista?: string; errore?: string; q?: string } }) {
+export default async function Ticket({ searchParams }: { searchParams: { vista?: string; errore?: string; q?: string; parte?: string } }) {
   const io = await richiediSezione('ticket')
   const conti = await crm.ticketConti()
   const viste = [
@@ -73,36 +73,53 @@ export default async function Ticket({ searchParams }: { searchParams: { vista?:
         </form>
       )}
 
-      {vista === 'resoconto' ? <Resoconto mesi={await crm.ticketResoconto(6)} /> : <Elenco vista={vista} q={q} />}
+      {vista === 'resoconto' ? <Resoconto mesi={await crm.ticketResoconto(6)} /> : <Elenco vista={vista} q={q} riaperti={searchParams.parte === 'riaperti'} />}
     </>
   )
 }
 
-async function Elenco({ vista, q }: { vista: string; q: string | null }) {
+async function Elenco({ vista, q, riaperti: vediRiaperti }: { vista: string; q: string | null; riaperti: boolean }) {
   const ticket = filtraTicket(await crm.ticketElenco(vista), q)
   // I ticket gia' risolti e poi riaperti stanno in una parte a parte: non sono nuovi.
   const riaperti = ticket.filter((t) => t.riaperto_il)
   const altri = ticket.filter((t) => !t.riaperto_il)
+  // Nelle schede dei ticket aperti c'e' sempre l'interruttore «Da lavorare / Riaperti», con i numeri.
+  const divisi = ['r2d', 'in_attesa', 'miei'].includes(vista)
+  if (!divisi) {
+    return (
+      <div className="scheda">
+        {ticket.length === 0 ? <Vuoto>{q ? `Nessun ticket trovato per «${q}» in questa scheda.` : VUOTI[vista] ?? 'Nessun ticket.'}</Vuoto> : <TabellaTicket ticket={ticket} />}
+      </div>
+    )
+  }
+  const href = (parte: string) => `/dashboard/ticket?vista=${vista}${q ? `&q=${encodeURIComponent(q)}` : ''}${parte === 'riaperti' ? '&parte=riaperti' : ''}`
+  const mostrati = vediRiaperti ? riaperti : altri
   return (
-    <div className="scheda">
-      {ticket.length === 0 ? (
-        <Vuoto>{q ? `Nessun ticket trovato per «${q}» in questa scheda.` : VUOTI[vista] ?? 'Nessun ticket.'}</Vuoto>
-      ) : riaperti.length === 0 ? (
-        <TabellaTicket ticket={ticket} />
-      ) : (
-        <>
-          <h3 className="titoletto">Riaperti, già risolti <span className="conta-titolo">{riaperti.length}</span></h3>
-          <p className="piccolo attenuato">Erano già risolti: sono tornati qui perché qualcuno li ha riaperti. Se la soluzione vale ancora, richiudili senza scriverne un'altra.</p>
-          <TabellaTicket ticket={riaperti} />
-          {altri.length > 0 && (
-            <>
-              <h3 className="titoletto">Da lavorare <span className="conta-titolo">{altri.length}</span></h3>
-              <TabellaTicket ticket={altri} />
-            </>
-          )}
-        </>
-      )}
-    </div>
+    <>
+      <SchedeMulti gruppi={[
+        {
+          testo: 'Mostra',
+          tono: 'prova',
+          voci: [
+            { testo: 'Da lavorare', href: href('lavorare'), attivo: !vediRiaperti, n: altri.length },
+            { testo: 'Riaperti, già risolti', href: href('riaperti'), attivo: vediRiaperti, n: riaperti.length },
+          ],
+        },
+      ]} />
+      <div className="scheda">
+        {mostrati.length > 0 ? (
+          <TabellaTicket ticket={mostrati} />
+        ) : (
+          <Vuoto>
+            {q
+              ? `Nessun ticket trovato per «${q}» in questa parte.`
+              : vediRiaperti
+                ? 'Nessun ticket riaperto.'
+                : VUOTI[vista] ?? 'Nessun ticket.'}
+          </Vuoto>
+        )}
+      </div>
+    </>
   )
 }
 

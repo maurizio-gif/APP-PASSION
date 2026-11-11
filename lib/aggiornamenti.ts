@@ -17,6 +17,48 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-11-11',
+    titolo: 'Liste newsletter: le liste di persone da scaricare per le campagne',
+    testo:
+      'Nuova pagina con le liste per le campagne email: Attivi (tutti), Soci, Terminati, Lead, Guest Pass attivi e Tutto il database. Si aggiornano da sole con i dati di Perfect Gym. Ogni lista si scarica in un file con la sola colonna UserNumber, pronto da caricare su Perfect Gym. In alto si sceglie se scaricare tutti o solo chi ha dato il consenso marketing. Nei file ci sono solo le persone con un’email.',
+    dove: 'Marketing → Liste newsletter (la vedono gli admin e chi ha la sezione Campagne)',
+  },
+  {
+    data: '2026-11-11',
+    titolo: 'Nuova categoria del menu: Marketing',
+    testo:
+      'Nel menu a sinistra c’è una categoria nuova, Marketing, con dentro le Liste newsletter e la pagina che prima si chiamava Marketing e ora si chiama Campagne (da dove arrivano le opportunità). Anche la spunta in Utenti ora si chiama Campagne. I numeri e chi li vede non cambiano.',
+    dove: 'Menu a sinistra → Marketing',
+  },
+  {
+    data: '2026-11-11',
+    titolo: 'Efficacia azioni: stesso aspetto delle altre pagine',
+    testo:
+      'Le tabelle di questa pagina ora stanno nei riquadri con la testata scura, come nel resto del CRM. I numeri non cambiano.',
+    dove: 'Analisi → Efficacia azioni',
+  },
+  {
+    data: '2026-11-11',
+    titolo: 'Menu laterale più compatto',
+    testo:
+      'Le voci del menu a sinistra e le loro categorie sono più piccole e vicine, così se ne vedono di più senza scorrere. Su telefono il menu resta com’era.',
+    dove: 'Il menu a sinistra, in tutte le pagine',
+  },
+  {
+    data: '2026-11-11',
+    titolo: 'Ticket: interruttore «Da lavorare» / «Riaperti» sempre visibile',
+    testo:
+      'Nelle schede Per R2D, Per Passion e Aperti da me c’è sempre un interruttore con due voci, «Da lavorare» e «Riaperti, già risolti», ognuna con il numero dei ticket. Si vede una parte alla volta. Prima la divisione compariva solo quando c’era un ticket riaperto.',
+    dove: 'Ticket → Per R2D, Per Passion, Aperti da me',
+  },
+  {
+    data: '2026-11-11',
+    titolo: 'Impostazioni automazioni: stesso aspetto delle altre pagine',
+    testo:
+      'Ogni automazione sta ora in un riquadro con la testata scura, come nel resto del CRM. Le impostazioni e il loro funzionamento non cambiano.',
+    dove: 'Team → Impostazioni automazioni',
+  },
+  {
+    data: '2026-11-11',
     titolo: 'Efficacia azioni: quanti attivano Formula 8 dopo l’azione',
     testo:
       'Nuova pagina nel menu Analisi. Per le azioni degli istruttori dice quante persone, dopo l’azione, hanno prenotato una lezione Formula 8, attivato l’add on Formula 8 o l’abbonamento Formula 8. Le azioni lavorate si confrontano con quelle non ancora lavorate, si divide per esito e per istruttore, e si sceglie quanti giorni dopo l’azione guardare (14, 30, 60 o fino a oggi). Per ora i numeri sono a zero: si riempiono man mano che le azioni vengono chiuse.',

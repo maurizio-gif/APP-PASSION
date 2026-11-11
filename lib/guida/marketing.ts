@@ -2,12 +2,12 @@ import type { Argomento } from '.'
 
 export const marketing: Argomento = {
   chiave: 'marketing',
-  titolo: 'Marketing',
+  titolo: 'Campagne',
   sezione: 'marketing',
   inBreve: 'Da dove arrivano le opportunità, fin dove arrivano (hanno risposto, hanno attivato la prova, si sono iscritti) e come vengono lavorate. Per fonte, campagna, gruppo di inserzioni, modulo, attività e mese.',
   testo: `
 ## Chi la vede
-La sezione **non la vede nessuno in automatico, nemmeno gli admin**: compare solo a chi la riceve. Si dà o si toglie da **Utenti**, con la spunta **Marketing** nella scheda di ogni persona.
+La sezione **non la vede nessuno in automatico, nemmeno gli admin**: compare solo a chi la riceve. Si dà o si toglie da **Utenti**, con la spunta **Campagne** nella scheda di ogni persona.
 
 ## A cosa serve
 Dice **quali fonti portano persone che si iscrivono**, non solo quante ne portano. Per ogni fonte, campagna o mese vedi quante opportunità sono arrivate e quanti hanno fatto ogni passo.
