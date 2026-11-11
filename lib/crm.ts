@@ -831,6 +831,10 @@ export type EfficaciaAzioni = {
   per_istruttore: (RigaEfficacia & { staff_id: string | null; nome: string | null })[]
 }
 
+// Le liste newsletter (20261111c): quante persone (con un'email) ha ogni lista, in tutto e con il consenso marketing.
+export type ChiaveListaNewsletter = 'attivi' | 'soci' | 'terminati' | 'lead' | 'guest_pass_attivi' | 'tutto'
+export type NumeriListaNewsletter = { chiave: ChiaveListaNewsletter; tutti: number; con_consenso: number }
+
 export type ParametriAutomazione = {
   // Solo il benvenuto: il recupero guarda tutti gli iscritti di prima.
   giorni?: number
@@ -930,6 +934,9 @@ export const crm = {
   automazioni: () => rpc<Automazione[]>('crm_automazioni'),
   opzioniAutomazioni: () => rpc<OpzioniAutomazioni>('crm_automazioni_opzioni'),
   efficaciaAzioni: (giorni: number) => rpc<EfficaciaAzioni>('crm_efficacia_azioni', { p_giorni: giorni }),
+  listeNewsletter: () => rpc<NumeriListaNewsletter[]>('crm_liste_newsletter'),
+  listaNewsletterCsv: (lista: ChiaveListaNewsletter, soloConsenso: boolean) =>
+    rpc<string>('crm_lista_newsletter_csv', { p_lista: lista, p_solo_consenso: soloConsenso }),
   anteprimaAutomazione: (chiave: string, parametri: ParametriAutomazione) =>
     rpc<{ persone_30_giorni: number; al_giorno: number }>('crm_automazione_anteprima', { p_chiave: chiave, p_parametri: parametri }),
   // Gli utenti con la sola sezione Appello che hanno lezioni future in calendario (20261027j).

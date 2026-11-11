@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-11-11',
+    titolo: 'Liste newsletter: le liste di persone da scaricare per le campagne',
+    testo:
+      'Nuova pagina con le liste per le campagne email: Attivi (tutti), Soci, Terminati, Lead, Guest Pass attivi e Tutto il database. Si aggiornano da sole con i dati di Perfect Gym. Ogni lista si scarica in un file con la sola colonna UserNumber, pronto da caricare su Perfect Gym. In alto si sceglie se scaricare tutti o solo chi ha dato il consenso marketing. Nei file ci sono solo le persone con un’email.',
+    dove: 'Analisi → Liste newsletter (la vedono gli admin e chi ha la sezione Marketing)',
+  },
+  {
+    data: '2026-11-11',
     titolo: 'Efficacia azioni: quanti attivano Formula 8 dopo l’azione',
     testo:
       'Nuova pagina nel menu Analisi. Per le azioni degli istruttori dice quante persone, dopo l’azione, hanno prenotato una lezione Formula 8, attivato l’add on Formula 8 o l’abbonamento Formula 8. Le azioni lavorate si confrontano con quelle non ancora lavorate, si divide per esito e per istruttore, e si sceglie quanti giorni dopo l’azione guardare (14, 30, 60 o fino a oggi). Per ora i numeri sono a zero: si riempiono man mano che le azioni vengono chiuse.',
