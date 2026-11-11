@@ -12046,3 +12046,97 @@ a.pf-tessera.pf-link:focus-visible { outline: 2px solid var(--rosso); outline-of
 .riaperto-avviso {
   border-left: 3px solid var(--serie);
 }
+
+/* --- Liste newsletter (20261111c): una scheda per lista, con il numero grande ----------------- */
+.liste-news {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  margin-bottom: 20px;
+}
+.lista-news {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 22px;
+  border-radius: var(--raggio);
+  border: 1px solid rgba(127, 127, 127, 0.28);
+  background: rgba(127, 127, 127, 0.07);
+  overflow: hidden;
+}
+.lista-news::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--rosso), rgba(227, 3, 45, 0.25));
+}
+.lista-news.prima {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, rgba(227, 3, 45, 0.16), rgba(227, 3, 45, 0.04));
+  border-color: rgba(227, 3, 45, 0.4);
+}
+.lista-news-nome {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+.lista-news-numero {
+  font-size: 2.6rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.lista-news.prima .lista-news-numero {
+  font-size: 3.4rem;
+}
+.lista-news-numero small {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  opacity: 0.7;
+  margin-left: 8px;
+}
+.lista-news-barra {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(127, 127, 127, 0.25);
+  overflow: hidden;
+}
+.lista-news-barra span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--rosso), #ff3a58);
+}
+.lista-news-sotto {
+  font-size: 0.86rem;
+  opacity: 0.8;
+}
+.lista-news-chi {
+  font-size: 0.86rem;
+  line-height: 1.4;
+  opacity: 0.72;
+  flex: 1;
+}
+.lista-news .bottone {
+  align-self: flex-start;
+  gap: 8px;
+}
+.lista-news .bottone svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.lista-news-vuota {
+  font-size: 0.86rem;
+  opacity: 0.6;
+}

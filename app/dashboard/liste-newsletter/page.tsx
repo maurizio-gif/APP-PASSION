@@ -5,14 +5,15 @@ import { SchedeMulti } from '@/components/Ui'
 // Le liste di persone per le newsletter (20261111c): sempre calcolate sui dati di Perfect Gym, da scaricare
 // in CSV con la sola colonna UserNumber, il formato che Perfect Gym legge per le campagne.
 const LISTE: { chiave: ChiaveListaNewsletter; nome: string; chi: string }[] = [
+  { chiave: 'tutto', nome: 'Tutto il database', chi: 'Tutte le persone: soci, ex soci, lead e guest.' },
   { chiave: 'attivi', nome: 'Attivi (tutti)', chi: 'Chi ha un abbonamento in corso di qualunque tipo: soci, Wellhub, Fitprime, Employee e Pass. Per le comunicazioni di servizio.' },
   { chiave: 'soci', nome: 'Soci', chi: 'Chi ha un abbonamento vero in corso. Niente Wellhub, Fitprime, Employee e Pass. Per le attività referral.' },
   { chiave: 'terminati', nome: 'Terminati', chi: 'Ex soci senza più nessun abbonamento in corso, e chi ha fatto un Guest Pass finito senza poi abbonarsi.' },
   { chiave: 'lead', nome: 'Lead', chi: 'Le persone registrate come lead che non sono diventate socie.' },
   { chiave: 'guest_pass_attivi', nome: 'Guest Pass attivi', chi: 'Chi ha un Guest Pass in corso adesso.' },
-  { chiave: 'tutto', nome: 'Tutto il database', chi: 'Tutte le persone: soci, ex soci, lead e guest.' },
 ]
-const numero = (n: number) => n.toLocaleString('it-IT')
+// Con il punto delle migliaia sempre (anche per i numeri a 4 cifre).
+const numero = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 
 export default async function ListeNewsletter({ searchParams }: { searchParams: { consenso?: string } }) {
   await richiediSezione('liste_newsletter')
@@ -47,49 +48,41 @@ export default async function ListeNewsletter({ searchParams }: { searchParams: 
         },
       ]} />
 
-      <section className="scheda">
-        <div className="tabella-scorre">
-          <table className="schede-mobile tabella-colonne tabella-uniforme">
-            <thead>
-              <tr>
-                <th>Lista</th>
-                <th>Persone</th>
-                <th>{soloConsenso ? 'Tutte (con email)' : 'Con consenso marketing'}</th>
-                <th>File</th>
-              </tr>
-            </thead>
-            <tbody>
-              {LISTE.map((l) => {
-                const n = numeri.find((x) => x.chiave === l.chiave)
-                const tutti = n?.tutti ?? 0
-                const conConsenso = n?.con_consenso ?? 0
-                const scaricabili = soloConsenso ? conConsenso : tutti
-                return (
-                  <tr key={l.chiave}>
-                    <td>
-                      <div className="riga-dati">
-                        <strong>{l.nome}</strong>
-                        <span className="muto">{l.chi}</span>
-                      </div>
-                    </td>
-                    <td><div className="riga-dati"><strong>{numero(scaricabili)}</strong></div></td>
-                    <td><span className="muto">{numero(soloConsenso ? tutti : conConsenso)}</span></td>
-                    <td>
-                      {scaricabili > 0 ? (
-                        <a className="bottone piccolo" href={`/dashboard/liste-newsletter/${l.chiave}${soloConsenso ? '?consenso=1' : ''}`} download>
-                          Scarica CSV
-                        </a>
-                      ) : (
-                        <span className="muto">Lista vuota</span>
-                      )}
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
-      </section>
+      <div className="liste-news">
+        {LISTE.map((l, i) => {
+          const n = numeri.find((x) => x.chiave === l.chiave)
+          const tutti = n?.tutti ?? 0
+          const conConsenso = n?.con_consenso ?? 0
+          const scaricabili = soloConsenso ? conConsenso : tutti
+          const perc = tutti > 0 ? Math.round((conConsenso * 100) / tutti) : 0
+          return (
+            <section className={`lista-news${i === 0 ? ' prima' : ''}`} key={l.chiave}>
+              <div className="lista-news-nome">{l.nome}</div>
+              <div className="lista-news-numero">
+                {numero(scaricabili)}
+                <small>persone</small>
+              </div>
+              <div className="lista-news-barra" role="img" aria-label={`${perc}% con consenso marketing`}>
+                <span style={{ width: `${perc}%` }} />
+              </div>
+              <div className="lista-news-sotto">
+                {soloConsenso
+                  ? `su ${numero(tutti)} con email · consenso marketing ${perc}%`
+                  : `${numero(conConsenso)} con consenso marketing (${perc}%)`}
+              </div>
+              <div className="lista-news-chi">{l.chi}</div>
+              {scaricabili > 0 ? (
+                <a className="bottone" href={`/dashboard/liste-newsletter/${l.chiave}${soloConsenso ? '?consenso=1' : ''}`} download>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14" /></svg>
+                  Scarica CSV
+                </a>
+              ) : (
+                <span className="lista-news-vuota">Lista vuota</span>
+              )}
+            </section>
+          )
+        })}
+      </div>
 
       <p className="piccolo attenuato">
         Nei file ci sono solo le persone con un’email valida. «In corso» vuol dire un abbonamento attivo, in pausa o non ancora partito, con la fine non passata.
