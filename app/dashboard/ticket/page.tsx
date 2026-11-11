@@ -107,9 +107,6 @@ async function Elenco({ vista, q, riaperti: vediRiaperti }: { vista: string; q: 
         },
       ]} />
       <div className="scheda">
-        {vediRiaperti && (
-          <p className="piccolo attenuato">Erano già risolti: sono tornati qui perché qualcuno li ha riaperti. Se la soluzione vale ancora, richiudili senza scriverne un'altra.</p>
-        )}
         {mostrati.length > 0 ? (
           <TabellaTicket ticket={mostrati} />
         ) : (
