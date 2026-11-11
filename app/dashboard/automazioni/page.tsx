@@ -3,6 +3,7 @@ import type { Automazione, OpzioniAutomazioni } from '@/lib/crm'
 import { formatoDataOra } from '@/lib/formato'
 import { Avviso } from '@/components/Ui'
 import { BottoneInvio } from '@/components/BottoneInvio'
+import { Riquadro } from '@/components/FaseRighe'
 import { salvaAutomazione } from '../azioni'
 
 const ABBONAMENTO = [
@@ -23,8 +24,7 @@ function ModuloAutomazione({ a, opzioni, stima }: { a: Automazione; opzioni: Opz
   const p = a.parametri
   const eBenvenuto = p.giorni != null
   return (
-    <section className="scheda">
-      <h2>{a.nome}</h2>
+    <Riquadro titolo={a.nome}>
       <p className="piccolo attenuato sotto-titolo">
         {a.descrizione} Le azioni per gli istruttori stanno in <strong>Azioni istruttore</strong>.
         Un cambio vale per le azioni nuove: quelle già create restano come sono.
@@ -115,7 +115,7 @@ function ModuloAutomazione({ a, opzioni, stima }: { a: Automazione; opzioni: Opz
           <> Con le regole salvate sarebbero circa <strong>{String(stima.al_giorno).replace('.', ',')} al giorno</strong> ({stima.persone_30_giorni} persone fra gli iscritti degli ultimi 30 giorni, guardando la situazione di oggi).</>
         )}
       </p>
-    </section>
+    </Riquadro>
   )
 }
 

@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-11-11',
+    titolo: 'Impostazioni automazioni: stesso aspetto delle altre pagine',
+    testo:
+      'Ogni automazione sta ora in un riquadro con la testata scura, come nel resto del CRM. Le impostazioni e il loro funzionamento non cambiano.',
+    dove: 'Team → Impostazioni automazioni',
+  },
+  {
+    data: '2026-11-11',
     titolo: 'Ticket: interruttore «Da lavorare» / «Riaperti» sempre visibile',
     testo:
       'Nelle schede Per R2D, Per Passion e Aperti da me c’è sempre un interruttore con due voci, «Da lavorare» e «Riaperti, già risolti», ognuna con il numero dei ticket. Si vede una parte alla volta. Prima la divisione compariva solo quando c’era un ticket riaperto.',
