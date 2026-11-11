@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-11-11',
+    titolo: 'Nuova categoria del menu: Marketing',
+    testo:
+      'Nel menu a sinistra c’è una categoria nuova, Marketing, con dentro le Liste newsletter e la pagina che prima si chiamava Marketing e ora si chiama Campagne (da dove arrivano le opportunità). Anche la spunta in Utenti ora si chiama Campagne. I numeri e chi li vede non cambiano.',
+    dove: 'Menu a sinistra → Marketing',
+  },
+  {
+    data: '2026-11-11',
     titolo: 'Menu laterale più compatto',
     testo:
       'Le voci del menu a sinistra e le loro categorie sono più piccole e vicine, così se ne vedono di più senza scorrere. Su telefono il menu resta com’era.',
@@ -34,7 +41,7 @@ export const AGGIORNAMENTI: Aggiornamento[] = [
     titolo: 'Liste newsletter: le liste di persone da scaricare per le campagne',
     testo:
       'Nuova pagina con le liste per le campagne email: Attivi (tutti), Soci, Terminati, Lead, Guest Pass attivi e Tutto il database. Si aggiornano da sole con i dati di Perfect Gym. Ogni lista si scarica in un file con la sola colonna UserNumber, pronto da caricare su Perfect Gym. In alto si sceglie se scaricare tutti o solo chi ha dato il consenso marketing. Nei file ci sono solo le persone con un’email.',
-    dove: 'Analisi → Liste newsletter (la vedono gli admin e chi ha la sezione Marketing)',
+    dove: 'Marketing → Liste newsletter (la vedono gli admin e chi ha la sezione Campagne)',
   },
   {
     data: '2026-11-11',

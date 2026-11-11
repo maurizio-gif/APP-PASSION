@@ -15,7 +15,7 @@ export const SEZIONI = [
   { chiave: 'cerca', href: '/dashboard/cerca', testo: 'Cerca' },
   { chiave: 'debitori', href: '/dashboard/debitori', testo: 'Debitori' },
   { chiave: 'abbonamenti', href: '/dashboard/abbonamenti', testo: 'Abbonamenti' },
-  { chiave: 'marketing', href: '/dashboard/marketing', testo: 'Marketing' },
+  { chiave: 'marketing', href: '/dashboard/marketing', testo: 'Campagne' },
   { chiave: 'ticket', href: '/dashboard/ticket', testo: 'Ticket' },
   { chiave: 'curriculum', href: '/dashboard/curriculum', testo: 'Curriculum' },
   // L'appello (20261027i): l'istruttore segna le presenze delle sue lezioni; l'appello complessivo
@@ -29,7 +29,7 @@ export const SEZIONI = [
   { chiave: 'automazioni', href: '/dashboard/automazioni', testo: 'Impostazioni automazioni' },
   // Quante persone, dopo un'azione degli istruttori, attivano Formula 8 (20261111a): gli admin, e chi la riceve.
   { chiave: 'efficacia_azioni', href: '/dashboard/efficacia-azioni', testo: 'Efficacia azioni' },
-  // Le liste di persone da scaricare per le newsletter (20261111c): gli admin, chi ha la sezione Marketing e chi la riceve.
+  // Le liste di persone da scaricare per le newsletter (20261111c): gli admin, chi ha la sezione Campagne e chi la riceve.
   { chiave: 'liste_newsletter', href: '/dashboard/liste-newsletter', testo: 'Liste newsletter' },
 ] as const
 

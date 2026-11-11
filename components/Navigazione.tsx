@@ -37,6 +37,7 @@ export const ICONE: Record<string, string> = {
 const ICONE_GRUPPO: Record<string, string> = {
   Clienti: 'M16 11a4 4 0 10-8 0 4 4 0 008 0zM4 20c0-3.3 3.6-6 8-6s8 2.7 8 6',
   Analisi: 'M4 20V10M10 20V4M16 20v-7M22 20H2',
+  Marketing: 'M3 11v2a1 1 0 001 1h2l5 4V6L6 10H4a1 1 0 00-1 1zM15 9a4 4 0 010 6M18 6.5a8 8 0 010 11',
   Istruttori: 'M9 4h6M9 4a2 2 0 00-2 2v14h10V6a2 2 0 00-2-2M9 11h6M9 15h4',
   Team: 'M9 11a3.5 3.5 0 100-7 3.5 3.5 0 000 7zM2 20c0-3 3-5 7-5s7 2 7 5M17 4.5a3.5 3.5 0 010 6.5M19 15c2 .6 3 2.2 3 4',
   Assistenza: 'M12 21a9 9 0 100-18 9 9 0 000 18zM12 15a3 3 0 100-6 3 3 0 000 6zM5.6 5.6l3.5 3.5M14.9 14.9l3.5 3.5M18.4 5.6l-3.5 3.5M9.1 14.9l-3.5 3.5',
@@ -48,7 +49,8 @@ const ICONE_GRUPPO: Record<string, string> = {
 const GRUPPI: { titolo?: string; voci: string[] }[] = [
   { voci: ['/dashboard'] },
   { titolo: 'Clienti', voci: ['/dashboard/lead', '/dashboard/prove', '/dashboard/senza-consulente', '/dashboard/contratti', '/dashboard/rinnovi', '/dashboard/disdette', '/dashboard/debitori', '/dashboard/task', '/dashboard/cerca'] },
-  { titolo: 'Analisi', voci: ['/dashboard/abbonamenti', '/dashboard/marketing', '/dashboard/liste-newsletter', '/dashboard/report-giornaliero', '/dashboard/efficacia-azioni', '/dashboard/riunioni'] },
+  { titolo: 'Analisi', voci: ['/dashboard/abbonamenti', '/dashboard/report-giornaliero', '/dashboard/efficacia-azioni', '/dashboard/riunioni'] },
+  { titolo: 'Marketing', voci: ['/dashboard/marketing', '/dashboard/liste-newsletter'] },
   { titolo: 'Istruttori', voci: ['/dashboard/azioni-istruttori', '/dashboard/appello', '/dashboard/appello-tutte'] },
   { titolo: 'Team', voci: ['/dashboard/curriculum', '/dashboard/utenti', '/dashboard/automazioni'] },
   { titolo: 'Assistenza', voci: ['/dashboard/ticket', '/dashboard/guida', '/dashboard/aggiornamenti'] },

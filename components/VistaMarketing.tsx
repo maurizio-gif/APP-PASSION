@@ -45,7 +45,7 @@ export function VistaMarketing({ r, lente, vista, dal, al, fonte, oggi, periodi 
       <div className="testata">
         <div>
           <div className="titolo-riga">
-            <h1>Marketing</h1>
+            <h1>Campagne</h1>
             <span className="aiuto-titolo" tabIndex={0} role="note" aria-label="Cos'è questa sezione">
               <span className="aiuto-punto" aria-hidden="true">?</span>
               <span className="aiuto-testo">Da dove arrivano le opportunità e fin dove arrivano: hanno risposto, hanno attivato la prova, si sono iscritti.{' '}<LinkGuida argomento="marketing" /></span>
