@@ -56,6 +56,8 @@ export default async function Task({ searchParams }: { searchParams: { chi?: str
         ) : (
           <TabellaTask task={task} chi={chi} torna={qui} completa={completaTask} />
         )}
+        {/* crm_task ne da' al massimo 300 per scheda */}
+        <p className="piccolo attenuato conteggio">{task.length >= 300 ? 'I primi 300 task' : `${task.length} task`}</p>
       </div>
     </>
   )

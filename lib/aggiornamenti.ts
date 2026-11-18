@@ -16,6 +16,13 @@ export type Aggiornamento = {
 
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
+    data: '2026-11-18',
+    titolo: 'In Task c’è il numero dei task di ogni scheda',
+    testo:
+      'Sotto l’elenco dei task c’è quanti sono, per esempio «12 task», come già in Opportunità, Prove, Rinnovi e Disdette. Cambia con la scheda che apri (I miei, Di tutti, Arretrati, Oggi…) e con la ricerca.',
+    dove: 'Task',
+  },
+  {
     data: '2026-11-11',
     titolo: 'Liste newsletter: le liste di persone da scaricare per le campagne',
     testo:
