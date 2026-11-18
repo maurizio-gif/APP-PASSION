@@ -18,7 +18,7 @@ Ogni cosa da fare con una persona è un **task**: chiamarla, scriverle, vederla 
 - **Chi**: **I miei** (si apre qui), **Di tutti**, **Senza assegnatario**; o un collega con **Tutti i consulenti**;
 - **Quando**: **Arretrati** (da ieri indietro), **Oggi** (si apre qui), **Prossimi**, **Fatti**.
 
-Un task di oggi già passato di orario resta in **Oggi**, in rosso. Il nome apre la scheda della persona in un'altra scheda del browser, così non perdi l'elenco.
+Un task di oggi già passato di orario resta in **Oggi**, in rosso. Il nome apre la scheda della persona, nella stessa scheda del browser: per tornare all'elenco c'è la freccia indietro in cima alla scheda.
 
 ## Chiudere un task
 Scrivi **«Com'è andata»** e poi:

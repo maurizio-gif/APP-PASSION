@@ -325,7 +325,7 @@ export function VistaReportGiornaliero({
                     </td>
                     <td>
                       <div className="riga-dati">
-                        <Persona id={e.utente_id} nome={e.nome} cognome={e.cognome} nuovaScheda />
+                        <Persona id={e.utente_id} nome={e.nome} cognome={e.cognome} />
                         <Contatti telefono={e.telefono} email={e.email} />
                       </div>
                     </td>

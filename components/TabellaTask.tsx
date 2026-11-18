@@ -26,7 +26,7 @@ export function TabellaTask({ task, chi = 'miei', torna, compatta = false, compl
               <tr key={t.id}>
                 <td>
                   <div className="riga-dati">
-                    <Persona id={t.utente_id} nome={t.nome} cognome={t.cognome} nuovaScheda />
+                    <Persona id={t.utente_id} nome={t.nome} cognome={t.cognome} />
                     {!compatta && <Contatti telefono={t.telefono} email={null} />}
                   </div>
                 </td>

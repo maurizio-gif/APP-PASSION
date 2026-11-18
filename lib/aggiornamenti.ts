@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-11-18',
+    titolo: 'La scheda della persona si apre sempre nella stessa scheda del browser',
+    testo:
+      'Cliccando sul nome di una persona (in Opportunità, Task, Contratti, Azioni istruttore e Report giornaliero) la scheda si apre al posto dell’elenco, nella stessa scheda del browser, come già negli altri elenchi. Prima in queste pagine si apriva una scheda nuova, riconoscibile dalla freccia ↗. Per tornare all’elenco c’è la freccia indietro in cima alla scheda.',
+    dove: 'Opportunità, Task, Contratti, Azioni istruttore, Report giornaliero',
+  },
+  {
+    data: '2026-11-18',
     titolo: 'Debitori: chi segue il recupero resta lo stesso quando il socio torna in negativo',
     testo:
       'Prima, quando un socio pagava e poi tornava in negativo (per esempio all’addebito del mese dopo), tornava «Da assegnare» e il consulente perdeva il caso. Adesso, se torna in negativo entro 90 giorni, il debito riparte dallo stesso consulente, e ogni debito che si chiude fa ripartire i 90 giorni. Vale per i debiti nuovi. Inoltre nella scheda della persona, se ha un debito aperto, c’è il riquadro Debito: si vede chi lo segue e si può prenderlo in carico, passarlo a un collega o rimetterlo da assegnare. Come per opportunità, disdette e rinnovi, un debito in carico a un collega lo cambia solo chi ha l’autorizzazione «Opportunità degli altri» (gli admin ce l’hanno): prima, dall’elenco Debitori, chiunque poteva toglierlo a un collega.',

@@ -98,23 +98,15 @@ export function Schede({ voci, attiva, base, gruppi }: { voci: Voce[]; attiva: s
   )
 }
 
-// `nuovaScheda`: la scheda della persona si apre in un'altra scheda del
-// browser (dai Task, per non perdere l'elenco).
-export function Persona({ id, nome, cognome, nuovaScheda = false }: {
+// Il nome apre la scheda della persona, nella stessa scheda del browser.
+export function Persona({ id, nome, cognome }: {
   id: string | null
   nome: string | null
   cognome: string | null
-  nuovaScheda?: boolean
 }) {
   const n = nomeCompleto(nome, cognome)
   if (!id) return <strong>{n}</strong>
-  return nuovaScheda ? (
-    <a href={`/dashboard/persone/${id}`} target="_blank" rel="noopener" title="Apri la scheda in un’altra scheda">
-      <strong>{n}</strong> <span className="piccolo">↗</span>
-    </a>
-  ) : (
-    <Link href={`/dashboard/persone/${id}`}><strong>{n}</strong></Link>
-  )
+  return <Link href={`/dashboard/persone/${id}`}><strong>{n}</strong></Link>
 }
 
 // `grande`: in cima alla scheda persona il telefono si legge da lontano, e
