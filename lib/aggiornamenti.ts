@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-11-18',
+    titolo: 'Debitori: chi segue il recupero resta lo stesso quando il socio torna in negativo',
+    testo:
+      'Prima, quando un socio pagava e poi tornava in negativo (per esempio all’addebito del mese dopo), tornava «Da assegnare» e il consulente perdeva il caso. Adesso, se torna in negativo entro 90 giorni, il debito riparte dallo stesso consulente, e ogni debito che si chiude fa ripartire i 90 giorni. Vale per i debiti nuovi. Inoltre nella scheda della persona, se ha un debito aperto, c’è il riquadro Debito: si vede chi lo segue e si può prenderlo in carico, passarlo a un collega o rimetterlo da assegnare.',
+    dove: 'Debitori e scheda della persona → Debito',
+  },
+  {
+    data: '2026-11-18',
     titolo: 'In Task c’è il numero dei task di ogni scheda',
     testo:
       'Sotto l’elenco dei task c’è quanti sono, per esempio «12 task», come già in Opportunità, Prove, Rinnovi e Disdette. Cambia con la scheda che apri (I miei, Di tutti, Arretrati, Oggi…) e con la ricerca.',
