@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-11-18',
+    titolo: 'Le tendine «Assegnata a» mostrano sempre il consulente giusto',
+    testo:
+      'In Prove (e in Opportunità, Disdette, Rinnovi e Debitori) la tendina del consulente poteva mostrare un nome diverso da quello scritto sotto il cliente («segue …»), perché il browser ripristinava i valori di una visita precedente. Adesso mostra sempre il consulente che segue davvero, e non c’è più il rischio di assegnare per sbaglio la persona sbagliata premendo Salva.',
+    dove: 'Prove, Opportunità, Disdette, Rinnovi, Debitori',
+  },
+  {
+    data: '2026-11-18',
     titolo: 'La scheda della persona si apre sempre nella stessa scheda del browser',
     testo:
       'Cliccando sul nome di una persona (in Opportunità, Task, Contratti, Azioni istruttore e Report giornaliero) la scheda si apre al posto dell’elenco, nella stessa scheda del browser, come già negli altri elenchi. Prima in queste pagine si apriva una scheda nuova, riconoscibile dalla freccia ↗. Per tornare all’elenco c’è la freccia indietro in cima alla scheda.',

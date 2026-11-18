@@ -142,7 +142,7 @@ function Azione({ l, io, staff, torna }: { l: Lead; io: Io; staff: Operatore[]; 
         <form action={assegnaLead} className="azioni-riga">
           <input type="hidden" name="lead" value={l.id} />
           <input type="hidden" name="torna" value={torna} />
-          <select name="staff" defaultValue={l.assegnato_a ?? ''} aria-label="Assegna a" className="piccola">
+          <select name="staff" defaultValue={l.assegnato_a ?? ''} aria-label="Assegna a" className="piccola" autoComplete="off">
             {staff.map((s) => <option key={s.id} value={s.id}>{s.nome} {s.cognome ?? ''}</option>)}
           </select>
           <button className="bottone secondario piccolo">Assegna</button>

@@ -27,7 +27,7 @@ export function TabellaProve({ prove, pagamenti, staff, torna }: { prove: Prova[
                   <input type="hidden" name="prova" value={p.id} />
                   <input type="hidden" name="torna" value={torna} />
                   {/* Iscritto non si sceglie: resta solo se c'e' gia'. */}
-                  <select name="esito" defaultValue={p.esito ?? ''} aria-label="Esito">
+                  <select name="esito" defaultValue={p.esito ?? ''} aria-label="Esito" autoComplete="off">
                     <option value="">Ancora aperta</option>
                     {p.esito === 'iscritto' && <option value="iscritto">Iscritto</option>}
                     <option value="non_iscritto">Non iscritto</option>

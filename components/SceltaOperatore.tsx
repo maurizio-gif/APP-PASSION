@@ -11,7 +11,7 @@ export function SceltaOperatore({ staff, attuale, attualeNome, etichetta = 'Asse
 }) {
   const fuori = attuale && !staff.some((o) => o.id === attuale)
   return (
-    <select name="assegnato" defaultValue={attuale ?? ''} aria-label={etichetta}>
+    <select name="assegnato" defaultValue={attuale ?? ''} aria-label={etichetta} autoComplete="off">
       <option value="">{etichetta}…</option>
       {fuori && <option value={attuale}>{attualeNome ?? 'Operatore'}</option>}
       {staff.map((o) => <option key={o.id} value={o.id}>{o.nome} {o.cognome ?? ''}</option>)}

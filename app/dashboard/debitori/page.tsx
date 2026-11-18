@@ -131,7 +131,7 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
                                 <input type="hidden" name="torna" value={qui} />
                                 {d.assegnato_a ? (
                                   <>
-                                    <select name="staff" defaultValue={d.assegnato_a} aria-label="Chi segue il recupero" className="piccola">
+                                    <select name="staff" defaultValue={d.assegnato_a} aria-label="Chi segue il recupero" className="piccola" autoComplete="off">
                                       {staff.map((s) => <option key={s.id} value={s.id}>{s.nome} {s.cognome ?? ''}</option>)}
                                     </select>
                                     <button className="bottone secondario piccolo">Assegna</button>
