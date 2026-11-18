@@ -69,7 +69,7 @@ export function TabellaContratti({ righe, io, staff, qui }: { righe: Iscrizione[
               <tr key={r.contract_id}>
                 <td>
                   <div className="riga-dati">
-                    <Persona id={r.utente_id} nome={r.nome} cognome={r.cognome} nuovaScheda />
+                    <Persona id={r.utente_id} nome={r.nome} cognome={r.cognome} />
                     <Contatti telefono={r.telefono} email={r.email} />
                   </div>
                 </td>

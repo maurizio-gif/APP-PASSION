@@ -378,6 +378,9 @@ export type OrigineTask = 'lead' | 'prova' | 'rinnovo' | 'disdetta' | 'debito'
 
 export type TipoTask = 'telefonata' | 'in_sede' | 'whatsapp' | 'email' | 'customer_care' | 'richiamare' | 'appuntamento'
 
+// Il debito aperto di una persona (20261118a), per la sua scheda.
+export type DebitoPersona = { saldo: number | null; negativo_da: string | null; assegnato_a: string | null; assegnato_nome: string | null }
+
 export type Scheda = {
   persona: {
     id: string
@@ -934,6 +937,7 @@ export const crm = {
   automazioni: () => rpc<Automazione[]>('crm_automazioni'),
   opzioniAutomazioni: () => rpc<OpzioniAutomazioni>('crm_automazioni_opzioni'),
   efficaciaAzioni: (giorni: number) => rpc<EfficaciaAzioni>('crm_efficacia_azioni', { p_giorni: giorni }),
+  debitoPersona: (member: number) => rpc<DebitoPersona | null>('crm_debito_persona', { p_member: member }),
   listeNewsletter: () => rpc<NumeriListaNewsletter[]>('crm_liste_newsletter'),
   listaNewsletterCsv: (lista: ChiaveListaNewsletter, soloConsenso: boolean) =>
     rpc<string>('crm_lista_newsletter_csv', { p_lista: lista, p_solo_consenso: soloConsenso }),

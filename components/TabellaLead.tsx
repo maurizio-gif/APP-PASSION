@@ -16,12 +16,11 @@ import { puoGestire } from '@/lib/permessi'
 // Nelle schede Prove in corso, Prove scadute e Vinte (`contratti` presente) al
 // posto di attivita' e note ci sono il nome del contratto, l'inizio e il
 // consulente.
-// Il nome apre la scheda in una nuova tab; la freccia in alto a destra lo dice.
+// Il nome apre la scheda nella stessa scheda del browser.
 function NomeScheda({ href, l }: { href: string; l: Lead }) {
   return (
-    <Link href={href} target="_blank" rel="noopener noreferrer" title="Apre la scheda in una nuova tab">
+    <Link href={href}>
       <strong>{nomeCompleto(l.nome, l.cognome)}</strong>
-      <sup aria-hidden="true" className="attenuato"> ↗</sup>
     </Link>
   )
 }
@@ -72,7 +71,7 @@ export function TabellaLead({ lead, io, staff, torna, contratti, pagamenti, firm
                   </td>
                   <td>
                     <div className="riga-dati">
-                      <Link href={scheda} target="_blank" rel="noopener noreferrer" className="normale">{firma ? (c?.data_firma ? formatoData(c.data_firma) : '–') : formatoData(l.creato_il)}</Link>
+                      <Link href={scheda} className="normale">{firma ? (c?.data_firma ? formatoData(c.data_firma) : '–') : formatoData(l.creato_il)}</Link>
                       {!firma && <span className="muto">{formatoOra(l.creato_il)}</span>}
                     </div>
                   </td>
@@ -143,7 +142,7 @@ function Azione({ l, io, staff, torna }: { l: Lead; io: Io; staff: Operatore[]; 
         <form action={assegnaLead} className="azioni-riga">
           <input type="hidden" name="lead" value={l.id} />
           <input type="hidden" name="torna" value={torna} />
-          <select name="staff" defaultValue={l.assegnato_a ?? ''} aria-label="Assegna a" className="piccola">
+          <select name="staff" defaultValue={l.assegnato_a ?? ''} aria-label="Assegna a" className="piccola" autoComplete="off">
             {staff.map((s) => <option key={s.id} value={s.id}>{s.nome} {s.cognome ?? ''}</option>)}
           </select>
           <button className="bottone secondario piccolo">Assegna</button>

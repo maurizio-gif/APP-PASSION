@@ -4,6 +4,7 @@ import { formatoData, formatoDataOra, formatoEuro, formatoFa, STATO_CONTRATTO, T
 import { Avviso, Contatti, LinkGuida, Persona, SchedeMulti, Vuoto } from '@/components/Ui'
 import { FiltroConsulente, consulenteScelto } from '@/components/FiltroConsulente'
 import { filtraTesto, testoCercato } from '@/lib/ricerca'
+import { puoGestire } from '@/lib/permessi'
 import { debitoAssegna, debitoTask } from '../azioni'
 
 const VISTE = [
@@ -121,7 +122,7 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
                       </td>
                       <td className="recupero">
                         <div className="riga-dati">
-                          {rientrati ? (
+                          {rientrati || (d.assegnato_a && !puoGestire(io, d.assegnato_a)) ? (
                             <span className="normale">{d.assegnato_nome ?? '—'}</span>
                           ) : (
                             <div className="azioni-gruppo">
@@ -130,7 +131,7 @@ export default async function Debitori({ searchParams }: { searchParams: { vista
                                 <input type="hidden" name="torna" value={qui} />
                                 {d.assegnato_a ? (
                                   <>
-                                    <select name="staff" defaultValue={d.assegnato_a} aria-label="Chi segue il recupero" className="piccola">
+                                    <select name="staff" defaultValue={d.assegnato_a} aria-label="Chi segue il recupero" className="piccola" autoComplete="off">
                                       {staff.map((s) => <option key={s.id} value={s.id}>{s.nome} {s.cognome ?? ''}</option>)}
                                     </select>
                                     <button className="bottone secondario piccolo">Assegna</button>

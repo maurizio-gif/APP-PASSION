@@ -44,7 +44,7 @@ export function TabellaAzioniIstruttori({ azioni, io, torna }: { azioni: AzioneI
               <tr key={a.id}>
                 <td>
                   <div className="riga-dati">
-                    <Persona id={a.utente_id} nome={a.nome} cognome={a.cognome} nuovaScheda />
+                    <Persona id={a.utente_id} nome={a.nome} cognome={a.cognome} />
                     <Contatti telefono={a.telefono} email={a.email} />
                     {a.iscritto_il >= '2010-01-01' && <span className="muto">Iscritto il {formatoData(a.iscritto_il)} · {giorniFa(a.iscritto_il)}</span>}
                   </div>

@@ -241,6 +241,15 @@ export async function debitoAssegna(f: FormData) {
   await esegui(f, () => rpc('crm_debito_assegna', { p_member: Number(testo(f, 'socio')), p_staff: testo(f, 'staff') }))
 }
 
+// Dalla scheda della persona (InCarico): `id` e' il numero del socio su PerfectGym.
+export async function assegnaDebito(f: FormData) {
+  await esegui(f, () => rpc('crm_debito_assegna', { p_member: Number(testo(f, 'id')), p_staff: testo(f, 'staff') }))
+}
+
+export async function rilasciaDebito(f: FormData) {
+  await esegui(f, () => rpc('crm_debito_rilascia', { p_member: Number(testo(f, 'id')) }))
+}
+
 // --- Ticket -------------------------------------------------------------------
 // Le regole (chi invia, chi chiude, cosa serve per chiudere) le controlla il
 // database: supabase/migrations/20260930b_ticket.sql.

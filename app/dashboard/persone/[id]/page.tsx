@@ -16,8 +16,8 @@ import { Accordion, Col, Fase, FaseVuota, Storico, StoricoPiede } from '@/compon
 import { puoGestire, puoVedere } from '@/lib/permessi'
 import { TabellaTicket } from '@/components/Ticket'
 import {
-  aggiornaDisdetta, aggiornaProva, aggiornaRinnovo, assegnaDisdetta, assegnaLead, assegnaRinnovo, chiudiLead, completaTask,
-  leadSuPerfectGym, prendiLead, riapriLead, rilasciaDisdetta, rilasciaLead, rilasciaRinnovo,
+  aggiornaDisdetta, aggiornaProva, aggiornaRinnovo, assegnaDebito, assegnaDisdetta, assegnaLead, assegnaRinnovo, chiudiLead, completaTask,
+  leadSuPerfectGym, prendiLead, riapriLead, rilasciaDebito, rilasciaDisdetta, rilasciaLead, rilasciaRinnovo,
 } from '../../azioni'
 
 // I commenti da questa data in poi sono del CRM; prima sono quelli di Airtable.
@@ -31,6 +31,8 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
   const p = s.persona
   // I ticket della persona, per chi vede la sezione Ticket.
   const ticket = puoVedere(io, 'ticket') ? await crm.ticketElenco('tutti', p.id) : null
+  // Il debito aperto, per chi vede la sezione Debitori.
+  const debito = p.member_id && puoVedere(io, 'debitori') ? await crm.debitoPersona(p.member_id).catch(() => null) : null
   const qui = `/dashboard/persone/${p.id}`
   const task = s.storia.filter((e): e is Extract<Scheda['storia'][number], { tipo: 'task' }> => e.tipo === 'task')
   // I commenti scritti nel CRM (il «Primo commento» del modulo Nuova opportunita'), dal piu' recente.
@@ -412,6 +414,31 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
               ) : undefined}
             />
           </div>
+        )}
+
+        {/* Il debito aperto: chi lo segue si prende o si passa da qui, come per rinnovi e disdette. */}
+        {debito && p.member_id && (
+          <Fase nome="Debito">
+            <Col titolo="Debito">
+              <dl className="dati">
+                <dt>Saldo</dt><dd><strong className="negativo">{formatoEuro(debito.saldo)}</strong></dd>
+                {debito.negativo_da && (<><dt>In negativo dal</dt><dd>{formatoData(debito.negativo_da)}</dd></>)}
+                <dt>Stato</dt>
+                <dd><span className="bollino giallo">{debito.assegnato_a ? 'In gestione' : 'Da gestire'}</span></dd>
+              </dl>
+            </Col>
+            <Col titolo="Gestione">
+              <dl className="dati">
+                <dt>Lo segue</dt><dd>{debito.assegnato_nome ?? <span className="attenuato">nessuno</span>}</dd>
+              </dl>
+            </Col>
+            <Col titolo="Azioni">
+              <div className="fase-azioni">
+                <InCarico id={String(p.member_id)} assegnatoA={debito.assegnato_a} assegnatoNome={debito.assegnato_nome} aperto io={io} staff={staff}
+                  torna={qui} assegna={assegnaDebito} rilascia={rilasciaDebito} completo />
+              </div>
+            </Col>
+          </Fase>
         )}
 
         {/* Rinnovi e disdette si gestiscono qui, come i lead: si prendono in

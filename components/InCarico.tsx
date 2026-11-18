@@ -46,7 +46,7 @@ export function InCarico({ id, assegnatoA, assegnatoNome, aperto, io, staff, tor
       <div className="azioni-gruppo">
         <form action={assegna} className="azioni-riga">
           {campi}
-          <select name="staff" defaultValue={assegnatoA ?? ''} aria-label="Assegna a" className="piccola" required>
+          <select name="staff" defaultValue={assegnatoA ?? ''} aria-label="Assegna a" className="piccola" required autoComplete="off">
             <option value="" disabled>Assegna a…</option>
             {fuori && <option value={assegnatoA}>{assegnatoNome ?? 'Operatore'}</option>}
             {staff.map((o) => <option key={o.id} value={o.id}>{o.nome} {o.cognome ?? ''}</option>)}
