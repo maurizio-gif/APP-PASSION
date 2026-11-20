@@ -17,6 +17,13 @@ export type Aggiornamento = {
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
     data: '2026-11-20',
+    titolo: 'La stessa persona non resta più divisa in due quando il telefono arriva dopo',
+    testo:
+      'Se un’opportunità ha un’email scritta male e la scheda su Perfect Gym viene creata senza telefono, il CRM creava due persone: l’opportunità su una, la prova sull’altra. Adesso, quando il telefono arriva su Perfect Gym ed è lo stesso dell’opportunità, con lo stesso nome, il CRM unisce da solo le due persone in una, con tutto quello che avevano. Due persone diverse con lo stesso numero (per esempio madre e figlio) restano separate.',
+    dove: 'Scheda della persona, Opportunità e Prove',
+  },
+  {
+    data: '2026-11-20',
     titolo: 'Prove: nuovo esito «Iscritto con Wellhub/Fitprime»',
     testo:
       'Fra gli esiti di una prova c’è anche «Iscritto con Wellhub/Fitprime», da scegliere a mano quando dopo la prova la persona entra con Wellhub o Fitprime. È un esito a parte: la prova è chiusa, ma non conta fra gli iscritti e non va fra le Perse. Se poi la persona fa un abbonamento vero, la prova diventa «Iscritto» da sola.',
