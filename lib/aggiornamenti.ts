@@ -16,6 +16,13 @@ export type Aggiornamento = {
 
 export const AGGIORNAMENTI: Aggiornamento[] = [
   {
+    data: '2026-11-20',
+    titolo: 'Prove: nuovo esito «Iscritto con Wellhub/Fitprime»',
+    testo:
+      'Fra gli esiti di una prova c’è anche «Iscritto con Wellhub/Fitprime», da scegliere a mano quando dopo la prova la persona entra con Wellhub o Fitprime. È un esito a parte: la prova è chiusa, ma non conta fra gli iscritti e non va fra le Perse. Se poi la persona fa un abbonamento vero, la prova diventa «Iscritto» da sola.',
+    dove: 'Prove (tendina dell’esito) e scheda della persona → Prova',
+  },
+  {
     data: '2026-11-18',
     titolo: 'Le tendine «Assegnata a» mostrano sempre il consulente giusto',
     testo:
