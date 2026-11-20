@@ -137,7 +137,8 @@ export type Prova = {
   giorni_rimasti: number | null
   gestito_da: string | null
   gestito_nome: string | null
-  esito: 'iscritto' | 'non_iscritto' | null
+  // wellhub: dopo la prova entra con Wellhub o Fitprime (20261120a), a parte dagli iscritti.
+  esito: 'iscritto' | 'non_iscritto' | 'wellhub' | null
   obiezione: string | null
   note: string | null
   ingressi: number

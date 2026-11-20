@@ -165,7 +165,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
             <dt>Stato</dt>
             <dd>
               <span className={`bollino ${pr.esito === 'iscritto' ? 'verde' : pr.esito ? 'grigio' : 'giallo'}`}>
-                {pr.esito === 'iscritto' ? 'Iscritto' : pr.esito === 'non_iscritto' ? 'Non iscritto' : 'In corso / senza esito'}
+                {pr.esito === 'iscritto' ? 'Iscritto' : pr.esito === 'non_iscritto' ? 'Non iscritto' : pr.esito === 'wellhub' ? 'Iscritto con Wellhub/Fitprime' : 'In corso / senza esito'}
               </span>
             </dd>
             <dt>Dal</dt><dd>{pr.data_fine ? `${formatoData(pr.data_inizio)} al ${formatoData(pr.data_fine)}` : `richiesta del ${formatoData(pr.data_inizio)}, senza pass su PerfectGym`}</dd>
@@ -200,7 +200,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                   avviso={
                     pr.esito === 'iscritto'
                       ? "riaprendo la prova si toglie l'esito «Iscritto» e torna aperta; Iscritto non si rimette a mano, torna da solo se su PerfectGym c'è l'abbonamento. Lo storico cambia."
-                      : "riaprendo la prova si toglie l'esito «Non iscritto» e torna aperta. Lo storico cambia."
+                      : `riaprendo la prova si toglie l'esito «${pr.esito === 'wellhub' ? 'Iscritto con Wellhub/Fitprime' : 'Non iscritto'}» e torna aperta. Lo storico cambia.`
                   }
                 />
               </div>
@@ -213,6 +213,7 @@ export default async function SchedaPersona({ params, searchParams }: { params: 
                 <select name="esito" defaultValue="" aria-label="Esito">
                   <option value="">Ancora aperta</option>
                   <option value="non_iscritto">Non iscritto</option>
+                  <option value="wellhub">Iscritto con Wellhub/Fitprime</option>
                 </select>
                 <SceltaOperatore staff={staff} attuale={pr.gestito_da} attualeNome={pr.gestito_nome} etichetta="Da assegnare" />
                 <BottoneInvio testo="Salva la prova" inCorso="Salvataggio…" classe="piccolo" />

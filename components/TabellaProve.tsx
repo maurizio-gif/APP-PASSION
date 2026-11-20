@@ -31,6 +31,7 @@ export function TabellaProve({ prove, pagamenti, staff, torna }: { prove: Prova[
                     <option value="">Ancora aperta</option>
                     {p.esito === 'iscritto' && <option value="iscritto">Iscritto</option>}
                     <option value="non_iscritto">Non iscritto</option>
+                    <option value="wellhub">Iscritto con Wellhub/Fitprime</option>
                   </select>
                   <SceltaOperatore staff={staff} attuale={p.gestito_da} attualeNome={p.gestito_nome} />
                   <button className="bottone piccolo">Salva</button>
